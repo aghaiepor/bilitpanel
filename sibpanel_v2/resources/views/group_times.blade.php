@@ -1,0 +1,473 @@
+@extends('MainLayout')
+
+@section('title')
+    <title>
+        مدیریت سانس ها
+    </title>
+    <style>
+        .bootstrap-select{
+            width: 100% !important;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/seance.css') }}">
+
+@endsection
+
+@section('content')
+<div class="content">
+    <div id="loader" style="position: fixed;z-index: 35;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+        <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+    </div>
+    <div class="container-fluid">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show text-right" role="alert">
+                {{ session('success') }}
+                <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        @elseif(session('error'))
+
+            <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+                {{ session('error') }}
+                <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        @endif
+    <div class="modal fade" id="location_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >انتخاب مکان</h5>
+                </div>
+                <div class="modal-body">
+                    <table class=" table table-striped " style="text-align: right" id="modal_data">
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-icon card-header-rose titleStyle">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="card-icon float-right ml-3 mr-0">
+                                        <i class="material-icons"> watch_later </i>
+                                    </div>
+                                    <h4 class="card-title text-right font-weight-bold ">     مدیریت سانس ها </h4>
+                                </div>
+                                <div class="col-sm">
+                                    <a href="{{ route('add_group_time_index') }}"  class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </a>
+                                    <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="container-fluid table-responsive" >
+                                    @php
+                                    $i = 0 ;
+                                    @endphp
+                                    @foreach( $result_data as $item)
+
+                                    <div class="card card-2" style="width: 100%;height: auto;padding: 20px;text-align: right;background: #f7f7f7">
+                                        <div class="form-row align-items-center">
+                                            <div class="col-md">
+                                                <h5 class="font-weight-bold my-0">{{$item['group_name']}}</h5>
+                                            </div>
+                                            <div class="col-md text-left">
+                                                <a class="pull-right" onclick="edit_group({{ $item['time_group_id'] }})" ><button class="btn btn-danger ">ویرایش</button></a>
+                                            </div>
+                                        </div>
+                                            <div id="div_all_locations_{{ $item['time_group_id'] }}">
+                                            </div>
+
+                                        @php
+                                        $i++ ;
+                                        @endphp
+                                        <div style="margin-top: 30px">
+                                            <button class="btn btn-primary" onclick="open_location_modal({{ $item['time_group_id'] }})"><i class="fa fa-plus"></i> مکان جدید </button>
+                                            <button class="btn btn-success" onclick="save_send('{{ $item['time_group_id'] }}','{{ $item['group_name'] }}')"><i class="fa fa-save"></i> ذخیره </button>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <form method="post" id="form" enctype="multipart/form-data" action="/apply_edit_group_time">
+                                    @csrf
+                                    <input type="hidden" name="service_times" id="data_form" />
+                                </form>
+                                <form action="{{ route('edit_group_time') }}" method="post" id="edit" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" id="edit_info_ids" name="voucher_info_ids">
+                                    <input type="hidden" id="edit_group_times" name="group_times">
+                                    <input type="hidden" id="edit_group_name" name="group_name">
+                                    <input type="hidden" id="edit_group_id" name="group_id">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+@section('AddJs')
+    <script>
+
+        let tagsToReplace = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;'
+        };
+
+        function replaceTag(tag) {
+            return tagsToReplace[tag] || tag;
+        }
+
+        function safe_escape(str) {
+            return str.replace(/[&<>]/g, replaceTag);
+        }
+
+
+        let locations = JSON.parse('@json($locations)');
+        for (let i =0 ; i<locations.length;i++){
+            let obj = locations[i];
+            let id = obj['id'];
+            let name = obj['name'];
+
+            $("#modal_data").append('<tr>' +
+                '<td style="cursor: pointer" onclick="select_location('+id+','+"'"+name+"'"+')">'+name+'</td>' +
+                '</tr>');
+        }
+
+
+        var group_id=-1;
+
+        function open_location_modal(id){
+            group_id = id;
+            $('#location_modal').modal('show');
+
+        }
+
+        function select_location(location_id,location_name) {
+
+            //structure => div_location_groupId_locationId_serviceId_voucherInfoId
+
+            //console.log(location_id);
+            $('#location_modal').modal('hide');
+
+            // check if location not exists
+            if(!$('#div_location_'+group_id+'_'+location_id).length) {
+                $('#div_all_locations_' + group_id).append('<div class="location" id="div_location_' + group_id + '_' + location_id + '" >' + '<div style="font-size: 17px"> ' + location_name + '</div>' + '</div>');
+
+
+                let services = get_service(location_id);
+                for (let i = 0; i < services.length; i++) {
+                    let service = services[i];
+                    let service_name = service['service_name'];
+                    let service_id = service['service_id'];
+                    //console.log(service_name + ":" + service_id);
+                    $('#div_location_' + group_id + '_' + location_id).append(
+                        '<div  class="service" id="div_service_' + group_id + '_' + location_id + '_' + service_id + '">' +
+                        '<div style="font-size:15px">' +
+                        '<span id="name_service_' + group_id + '_' + location_id + '_' + service_id + '">' + service_name + '</span>' +
+                        '<input class="capacity" id="capacity_service_' + group_id + '_' + location_id + '_' + service_id + '" placeholder="ظرفیت" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');" />' +
+                        '</div>' +
+                        '</div>');
+
+                    let type_amounts = service['type_amounts'];
+                    for (let j = 0; j < type_amounts.length; j++) {
+                        let type_amount = type_amounts[j];
+
+                        let type_name = type_amount['voucher_type'];
+                        let info_id = type_amount['voucherinfo_id'];
+
+                        $('#div_service_' + group_id + '_' + location_id + '_' + service_id).append(
+                            '<div  class="voucher_info" style="float: right;padding-right: 25px;margin-top: 10px" id="div_info_' + group_id + '_' + location_id + '_' + service_id + '_' + info_id + '">' +
+                            '<input type="checkbox" value="-1"  id="chk_info_' + group_id + '_' + location_id + '_' + service_id + '_' + info_id + '">' +
+                            '<span style="font-size:14px"> ' + type_name + ' </span>' +
+                            '</div>'
+                        );
+
+
+                    }
+
+                }
+            }
+
+
+        }
+
+
+        function get_service(location_id) {
+            for (let i =0 ; i<locations.length;i++){
+                let obj = locations[i];
+                let id = obj['id'];
+                if (id==location_id){
+                    return obj['services'];
+                }
+            }
+
+        }
+
+
+        function save_send(gpId,gpName) {
+            let service_times=[];
+            let data_remove=[];
+            $("div[id^='div_service_"+gpId+"']").each(function () {
+                let id = this.id.split("_");
+                let location_id = id[3];
+                let service_id = id[4];
+
+                let name = $("#name_service_"+gpId+"_"+location_id+"_"+service_id).text();
+                let capacity = $("#capacity_service_"+gpId+"_"+location_id+"_"+service_id).val();
+                if(capacity=='')
+                    capacity = -1;
+                else
+                    capacity = parseInt(capacity);
+
+                let voucher_info_ids=[];
+
+                $("input[id^='chk_info_"+gpId+"_"+location_id+"_"+service_id+"']").each(function () {
+
+                    let info_id = parseInt(this.id.split("_")[5]);
+
+                    if(this.checked ){
+                        voucher_info_ids.push(info_id);
+                    }else if(!this.checked && this.value != -1){
+                        let rm = get_delete(location_id,service_id,info_id);
+                        data_remove = data_remove.concat(rm);
+                    }
+
+                });
+
+                if (voucher_info_ids.length>0)
+                {
+
+                    let item = {
+                        'service_time_capacity':capacity,
+                        'voucherinfo_ids':voucher_info_ids
+                    };
+                    service_times.push(item)
+
+                }
+
+            });
+
+
+
+
+
+            let data = {
+                'time_group_id':gpId,
+                'time_group_name':gpName,
+                'service_time_voucher_info':service_times,
+                'add':[],
+                'edit':[],
+                'delete':data_remove
+            };
+
+            //console.log(JSON.stringify(send_data));
+            $("#data_form").val(JSON.stringify(data));
+            $('#form').submit();
+        }
+
+
+        let group_times = JSON.parse('@json($result_data)');
+
+        function show(){
+
+            for(let i=0; i<group_times.length;i++){
+
+                let group_time = group_times[i];
+                let templates = group_time['time_templates'];
+                let group_id = group_time['time_group_id'];
+
+                for(let j=0;j<templates.length;j++){
+                    let template = templates[j];
+                    let times = template['times'];
+
+                    for(let k=0;k<times.length;k++){
+                        let time = times[k];
+                        let template_id = time['time_template_id'];
+                        find_groups(group_id,template_id);
+                    }
+
+                }
+            }
+
+        }
+
+        function find_groups(gp_id,template_id){
+
+            // search on all locations
+            for(let i=0;i<locations.length;i++){
+                let location = locations[i];
+
+                let location_id = location['id'];
+                let location_name = location['name'];
+
+                let services = location['services'];
+                for (let j=0;j<services.length;j++){
+                    let service = services[j];
+
+                    let service_id = service['service_id'];
+                    let service_name = service['service_name'];
+
+                    let type_amounts = service['type_amounts'];
+                    for(let k=0;k<type_amounts.length;k++){
+                        let type_amount = type_amounts[k];
+
+                        let info_id = type_amount['voucherinfo_id'];
+                        let type_name = type_amount['voucher_type'];
+
+
+                        let service_times = type_amount['service_times'];
+                        for(let l=0;l<service_times.length;l++){
+                            let service_time = service_times[l];
+                            let times = service_time['times'];
+
+                            for (let m=0;m<times.length;m++){
+                                let time = times[m];
+
+                                let service_time_id = time['service_time_id'];
+                                let time_template_id = time['time_template_id'];
+
+                                if(template_id == time_template_id){
+
+                                    let capacity = time['capacity'];
+                                    console.log(capacity);
+                                    $('#capacity_service_'+gp_id+"_"+location_id+"_"+service_id).val(capacity);
+                                    group_id=gp_id;
+                                    select_location(location_id+"",location_name);
+                                    $('#chk_info_'+gp_id+"_"+location_id+"_"+service_id+"_"+info_id).prop('checked', true);
+                                    $('#chk_info_'+gp_id+"_"+location_id+"_"+service_id+"_"+info_id).val(service_time_id);
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+        function get_delete(locationId,serviceId,infoId){
+            let data =[];
+            for(let i=0;i<locations.length;i++){
+                let location = locations[i];
+
+                let location_id = location['id'];
+                if (location_id != locationId)
+                    continue;
+
+                let services = location['services'];
+                for (let j=0;j<services.length;j++){
+                    let service = services[j];
+
+                    let service_id = service['service_id'];
+
+                    if (service_id != serviceId)
+                        continue;
+
+                    let type_amounts = service['type_amounts'];
+                    for(let k=0;k<type_amounts.length;k++){
+                        let type_amount = type_amounts[k];
+
+                        let info_id = type_amount['voucherinfo_id'];
+                        if (info_id != infoId)
+                            continue;
+
+                        let service_times = type_amount['service_times'];
+                        for(let l=0;l<service_times.length;l++){
+                            let service_time = service_times[l];
+                            let times = service_time['times'];
+
+                            for (let m=0;m<times.length;m++){
+                                let time = times[m];
+
+                                let service_time_id = time['service_time_id'];
+                                data.push(service_time_id);
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return data;
+
+        }
+
+        function edit_group(gp_id){
+
+            let info_ids = [];
+            let selected_group_times ;
+            let name;
+            $('#div_all_locations_'+gp_id).find(".service").each(function() {
+
+                let id = $(this).attr('id').split("_");
+                let ids = [];
+                $(this).find("input[type='checkbox']").each(function () {
+
+                    let val = $(this).val();
+                    if (val != -1){
+                        let info_id = $(this).attr('id').split("_")[5];
+                        ids.push(Number(info_id));
+                    }
+                });
+
+
+                let capacity = $('#capacity_service_'+id[2]+'_'+id[3]+'_'+id[4]).val();
+                if (ids.length>0)
+                    info_ids.push({'voucherinfo_ids':ids,'service_time_capacity':Number(capacity)});
+
+
+            });
+
+            for(let i=0;i<group_times.length;i++) {
+                let group_time = group_times[i];
+                let id = group_time['time_group_id'];
+                if (id == gp_id) {
+                    selected_group_times = group_time['time_templates'];
+                    name = group_time['group_name'];
+                }
+
+            }
+
+            $("#edit_group_times").val(JSON.stringify(selected_group_times));
+            $("#edit_info_ids").val(JSON.stringify(info_ids));
+            $("#edit_group_name").val(name);
+            $("#edit_group_id").val(gp_id);
+
+            document.getElementById("edit").submit();
+
+
+
+        }
+
+
+
+        $(document).ready(function(){
+            show();
+        });
+
+    </script>
+@endsection
