@@ -1,30 +1,37 @@
 version: "3.7"
 services:
-  sib-panel-v2:
+  sib-panel-v2-app:
     build:
-      args:
-        user: mehdimj
-        uid: 1000
-      context: ./
-      dockerfile: Dockerfile
+      context: .
     image: sib-panel-v2
     container_name: sib-panel-v2
     restart: unless-stopped
     working_dir: /var/www/
-    ports:
-      - 8000:80
     volumes:
-      - ./sibpanel_v2:/var/www
-      - ./nginx.conf:/etc/nginx/site-avalibale/default
+      - ./sibpanel_v2:/var/www/
     env_file:
       - variables.env
+    networks:
+      - app_network
 
-        #  sib-panel-v2-nginx:
-        #    image: nginx:alpine
-        #    container_name: sib-panel-v2-nginx
-        #    restart: unless-stopped
-        #    ports:
-        #      - 8000:80
-        #    volumes:
-        #      - ./sib-panel-v2:/var/www
-        #      - ./ssls:/etc/ssl/
+  sib-panel-v2-nginx:
+    build:
+      context: ./nginx/.
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    environment:
+      NGINX_FPM_HOST: sib-panel-v2-app
+      NGINX_ROOT: /var/www/public
+    volumes:
+      - ./sibpanel_v2/public:/var/www/public
+      - ./nginx.conf:/etc/nginx/site-avalibale/default
+      - ./ssls:/etc/ssl/
+    depends_on:
+      - sib-panel-v2-app
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
