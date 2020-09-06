@@ -133,7 +133,7 @@
                 </div>
             </li>
             @php
-            $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' ] ;
+                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' ] ;
             @endphp
             <li class="nav-item @if(in_array(Route::current()->getName(),$serviceUrl))  active  @endif">
                 <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
@@ -144,7 +144,7 @@
                 </a>
                 <div class="collapse @if(in_array(Route::current()->getName(),$serviceUrl))  show  @endif" id="componentsExamples">
                     <ul class="nav">
-                        <li class="nav-item ">
+                        <li class="nav-item @if(Route::current()->getName() === 'terminals' )  active  @endif">
                             <a class="nav-link" href="{{Route('terminals')}}">
                                 <span class="sidebar-mini"> <i class="material-icons">dvr</i> </span>
                                 <span class="sidebar-normal"> مدیریت ترمینال ها </span>
