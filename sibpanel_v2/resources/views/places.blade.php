@@ -112,6 +112,9 @@
                                             مدیریت جاذبه
                                         </th>
                                         <th >
+                                           پنل شهروندی
+                                        </th>
+                                        <th >
                                             چاپ QR
                                         </th>
                                         <th >
@@ -148,6 +151,12 @@
                                                     <a href="{{Route('GetService' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-info btn-simple">
                                                         <i class="material-icons">domain </i>
                                                         مدیریت جاذبه
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{Route('citizenPanel' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-warning btn-simple">
+                                                        <i class="material-icons">perm_contact_calendar</i>
+                                                        پنل شهروندی
                                                     </a>
                                                 </td>
                                                 <td>

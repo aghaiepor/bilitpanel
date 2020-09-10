@@ -173,7 +173,10 @@
                                     <thead class=" text-primary">
                                     <tr>
                                         <th class="text-left" colspan="10">
-                                            <button onclick="export2excel()" class="btn btn-success  mt-2 "> دانلود اکسل <i class="material-icons"> vertical_align_bottom </i>  </button>
+                                            @php
+                                                $url = str_replace("GetTransaction","transactionToExcel",\Illuminate\Support\Facades\URL::full())
+                                            @endphp
+                                            <a id="excelBtn" href="{{$url}}" target="_blank" anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل <i class="material-icons"> vertical_align_bottom </i>  </a>
                                         </th>
                                     </tr>
                                     <tr class="">
@@ -284,7 +287,7 @@
                             <ul class="pagination justify-content-center">
                                 @if($data != null /*|| count($data['log']) != 0 */)
                                     @php
-                                        $result = new \Illuminate\Pagination\LengthAwarePaginator( $data['log'],$data['total_pages'], 2,  \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage(),array('path' => \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPath()));
+                                        $result = new \Illuminate\Pagination\LengthAwarePaginator( $data['log'],$data['total_pages'], 1,  \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage(),array('path' => \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPath()));
                                         $page = (int)request('page') ;
                                         $result->withPath(url()->full());
                                     @endphp
@@ -514,10 +517,22 @@
 
             $('.selectpicker').selectpicker('refresh');
 
+            $("#excelBtn").click(function (e)
+            {
+                e.preventDefault();
+                Swal.fire(
+                    'در حال دانلود... ',
+                    ' این در خواست ممکن است کمی طول بکشد ، لطفا صبور باشید. ',
+                    'info'
+                )
+               let href = $("#excelBtn").attr("href") ;
+                setTimeout(function () {
+                    window.open(href, "_blank");
+                } , 1500)
+
+            });
+
             // $('#TransationTable').DataTable();
         });
-        function export2excel() {
-            TableToExcel.convert(document.getElementById("TransationTable"));
-        }
     </script>
 @endsection

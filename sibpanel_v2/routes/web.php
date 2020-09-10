@@ -58,6 +58,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/LocationActivation' ,'LocationController@LocationActivation' )->name('LocationActivation');
         Route::post('/PosPrintActivation' ,'LocationController@PosPrintActivation' )->name('PosPrintActivation');
         Route::post('/QRActivation' ,'LocationController@QRActivation' )->name('QRActivation');
+        Route::get('/citizenPanel/{id}' , 'LocationController@citizenPanel')->name('citizenPanel');
 
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');
@@ -101,6 +102,7 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // Transaction Route
         Route::get('/transaction' ,'ReportController@transaction')->name('transaction');
+        Route::get('/transactionToExcel' ,'ReportController@transactionToExcel')->name('transactionToExcel');
 
         // Place & Province Route
         Route::get('/stateMg' , 'provinceController@index')->name('stateMg');
