@@ -285,7 +285,7 @@ class LocationController extends Controller
     }
 
     public function citizenPanel(Request $request , $id){
-        return "ok" ;
+        return view("citizen") ;
     }
 
 
