@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Hekmatinasser\Verta\Verta;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -14,6 +16,7 @@ class ReportController extends Controller
     public function __construct()
     {
         $this->api = new Api();
+        set_time_limit(8000000);
     }
 
     public function index(Request $request){
@@ -140,6 +143,79 @@ class ReportController extends Controller
         $SellerUsersList = Cache::get('SellerUserList');
 //        return $SellerUsersList ;
         return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList , 'report_type'=>$report_type , 'data'=> null , 'SaleTypeList'=>$SaleTypeList ]);
+    }
+    public function transactionToExcel(Request $request){
+        $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
+        if (!session('UserInfo')['presell'] )
+            $report_type = 0;
+
+        $location_id = $request->get('location_id' , '');
+        if($location_id == 0)
+            $location_id = '';
+
+        $values = ['amount' , 'count'];
+        $status_code= $request->get('status_code');
+        $status_codeArray = [] ;
+        if($status_code == 1 ){
+            $status_codeArray = ['1','10'];
+        }else if($status_code == 5){
+            $status_codeArray = ['5','11'];
+        }
+        else {
+            $status_codeArray = ['1','10','5','11'];
+        }
+        $key = $request->get('key' , 'province');
+        $service_id = (int)$request->get('service_id','');
+        if($service_id == 0)
+            $service_id = '';
+        $operator_id = (int)$request->get('operator_id' , '');
+        if($operator_id == 0)
+            $operator_id = '';
+        $sale_type_id = (int)$request->get('pre_sale');
+        if($sale_type_id == 0)
+            $sale_type_id = '';
+        $sell_type_id = (int)$request->get('sell_type_id' , '');
+        if($sell_type_id == 0)
+            $sell_type_id = '';
+        $voucher_type_id = (int)$request->get('voucher_type_id' , '');
+        if($voucher_type_id == 0)
+            $voucher_type_id = '';
+
+        $start_date = $request->get('startDate','');
+        $end_date = $request->get('endDate','');
+
+        if ($start_date !='')
+            $start_date = Verta::parse($this->fa2en($start_date).' 00:00:00')->timestamp;
+        if ($end_date !='')
+            $end_date = Verta::parse($this->fa2en($end_date).' 23:59:59')->timestamp;
+
+        $date = [$start_date,$end_date];
+        $province_id = (int)$request->get('province_id' , '');
+        if($province_id == 0)
+            $province_id = '';
+        $city_id = (int)$request->get('city_id' ,'') ;
+        if($city_id == 0)
+            $city_id = '';
+
+        /*
+        $page = (int)$request->get('page',1);
+        if($page == 0)
+            $page = 1;
+        */
+        $test = [] ;
+        $data = $this->api->GetTransaction(1,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+//        echo  "ok";
+        $total_page = (int)$data['ContentData']["total_pages"] ;
+//        $data = $data['ContentData']["log"] ;
+//        return $data['ContentData']["log"] ;
+
+        for ($i = 1 ; $i <= $total_page  ;$i++ )
+        {
+            $GetStat = $this->api->GetTransaction($i,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+            $test = array_merge($test,$GetStat['ContentData']["log"]);
+        }
+            return Excel::download(new UsersExport($test), 'tansacion.xlsx');
+
     }
 
     // GetTransaction
