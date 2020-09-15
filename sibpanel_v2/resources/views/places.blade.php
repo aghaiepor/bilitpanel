@@ -60,7 +60,7 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-4">
-                                    <select id="province_filter" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <select id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
                                         <option disabled selected> انتخاب استان </option>
                                         <option value="0" >همه</option>
                                         <option value="1">فارس</option>
@@ -85,7 +85,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <select id="cityList_filter" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <select id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
                                         <option disabled selected> انتخاب شهر </option>
                                         <option value="2"> همه </option>
                                     </select>
