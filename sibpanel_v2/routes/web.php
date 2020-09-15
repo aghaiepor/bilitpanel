@@ -59,6 +59,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/PosPrintActivation' ,'LocationController@PosPrintActivation' )->name('PosPrintActivation');
         Route::post('/QRActivation' ,'LocationController@QRActivation' )->name('QRActivation');
         Route::get('/citizenPanel/{id}' , 'LocationController@citizenPanel')->name('citizenPanel');
+        Route::post('/GetVoucherTextLoc'  , 'LocationController@GetVoucherText' )->name('GetVoucherTextLoc');
 
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');

@@ -241,14 +241,14 @@
                                                                         </div>--}}
                                                                         <div class="col-md text-right">
                                                                             <label for=""> انتخاب متن </label>
-                                                                            <select name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                                                                <option disabled> انتخاب متن </option>
-                                                                                <option @if($location['text']['id'] == 2) selected @endif value="2">اماکن گردشگری شهر کاشان</option>
-                                                                                <option @if($location['text']['id'] == 3) selected @endif value="3">تست</option>
-                                                                                <option @if($location['text']['id'] == 5) selected @endif value="5">سال رونق تولید مبارک</option>
-                                                                                <option @if($location['text']['id'] == 1) selected @endif value="1">سال جهش تولید</option>
-                                                                                <option @if($location['text']['id'] == 4) selected @endif value="4">ستاد گردشگری شهرداری تهران</option>
-                                                                                <option @if($location['text']['id'] == 6) selected @endif value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
+                                                                            <select name="text_id" class="selectpicker changeText" data-style="btn btn-primary border-dark" title="Single Select">
+                                                                                @foreach($GetVoucherText as $text)
+                                                                                    @if( $location['text']['id'] == $text['id'])
+                                                                                        <option selected value="{{$text['id']}}"> {{$text['top_text']}}</option>
+                                                                                    @else
+                                                                                        <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
+                                                                                    @endif
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -262,27 +262,24 @@
                                                                             <textarea  style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3">{{$location['location_english_address']}}</textarea>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-row mt-2">
-
-                                                                    </div>
-                                                                    <div class="form-row mt-2">
+                                                                    <div class="form-row mt-2 texts">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['top_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_top_text" name="" cols="30" rows="3">{{$location['text']['top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_bottom_text" name="" id="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_top_text" name="" id="" cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_bottom_text" name="" id="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
                                                                         </div>
 
                                                                     </div>
@@ -371,7 +368,7 @@
                     </div>
                     <div class="col-md text-right">
                         <label for=""> انتخاب متن </label>
-                        <select name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                        <select id="voucherText" name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled selected> انتخاب متن </option>
                             @foreach($GetVoucherText as $text)
                                 <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
@@ -392,7 +389,7 @@
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  آدرس به انگلیسی </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3"></textarea>
+                        <textarea style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -401,21 +398,21 @@
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                        <textarea disabled  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="top_text_persian" disabled  style="height: 64px !important;" class="form-control" name=""  cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                        <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="bottom_text_persian" disabled style="height: 64px !important;" class="form-control" name="" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                        <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="top_text_english" disabled style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                        <textarea disabled  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="bottom_text_english" disabled  style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
                     </div>
 
                 </div>
@@ -438,6 +435,46 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            let top_text ,bottom_text, english_top_text, english_bottom_text  ;
+            $('.changeText').change(function () {
+                let element = $(this);
+                var voucherText = element.val();
+                console.log(element);
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('GetVoucherTextLoc')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'id' : voucherText ,
+                    },
+                    success:function(data) {
+                        let key = data["array_keys"][0];
+                        let data_content = data["GetText"][key];
+                        // element.parent().parent().parent().find(".persian_bottom_text").text("");
+                        if(data_content != null){
+                            top_text = data_content.top_text ;
+                            bottom_text = data_content.bottom_text ;
+                            english_top_text = data_content.english_top_text ;
+                            english_bottom_text = data_content.english_bottom_text ;
+                        }
+                        // element.parent().parent().parent().find(".persian_top_text").text("awdaowidj");
+                        element.parent().parent().parent().find(".persian_top_text").text(top_text);
+                        element.parent().parent().parent().find(".persian_bottom_text").text(bottom_text);
+                        element.parent().parent().parent().find(".english_top_text").text(english_top_text);
+                        element.parent().parent().parent().find(".english_bottom_text").text(english_bottom_text);
+                        /*.find("persian_top_text").text()*/
+                        /*
+                        $("#top_text_persian").text(data_content.top_text);
+                        $("#bottom_text_persian").text(data_content.bottom_text);
+                        $("#top_text_english").text(data_content.english_top_text);
+                        $("#bottom_text_english").text(data_content.english_bottom_text);
+*/
+                    }
+                });
+            });
+
             $('#province').change(function () {
                 console.log("ok");
                 var province_id = $('#province').val();
@@ -459,6 +496,28 @@
                     }
                 });
             });
+            $('#voucherText').change(function () {
+                    var voucherText = $('#voucherText').val();
+                    $.ajax({
+                        type:'POST',
+                        url:"{{Route('GetVoucherTextLoc')}}",
+                        dataType:'json',
+                        data:{
+                            '_token ': '<?php echo csrf_token() ?>',
+                            'id' : voucherText ,
+                        },
+                        success:function(data) {
+                            let key = data["array_keys"][0];
+                            let data_content = data["GetText"][key];
+
+                           $("#top_text_persian").text(data_content.top_text);
+                            $("#bottom_text_persian").text(data_content.bottom_text);
+                            $("#top_text_english").text(data_content.english_top_text);
+                            $("#bottom_text_english").text(data_content.english_bottom_text);
+
+                        }
+                    });
+                });
 
             $('#province_filter').change(function () {
                 var province_id = $('#province_filter').val();

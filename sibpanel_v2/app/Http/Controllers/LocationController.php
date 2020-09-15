@@ -284,6 +284,20 @@ class LocationController extends Controller
 
     }
 
+    public function GetVoucherText(Request $request){
+        $text = Cache::get("GetVoucherText");
+        $text_id = $request->get("id") ;
+        $GetText = array_filter($text, function ($event) use ($text_id) {
+            return $event['id'] == $text_id;
+        });
+        $array_keys = array_keys($GetText) ;
+        return [
+            "GetText" =>$GetText ,
+            "array_keys"=>$array_keys
+        ] ;
+//        return $text ;
+    }
+
     public function citizenPanel(Request $request , $id){
         return view("citizen") ;
     }

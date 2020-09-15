@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 class VoucherController extends Controller
@@ -76,8 +77,8 @@ class VoucherController extends Controller
 
     public function GetVoucherText()
     {
-        $GetVoucherText = $this->api->GetVoucherText();
-        return view('voucherText' , ['voucherTexts' => $GetVoucherText['ContentData']]);
+        $GetVoucherText = Cache::get("GetVoucherText");
+        return view('voucherText' , ['voucherTexts' => $GetVoucherText]);
 //        return $GetVoucherText ;
     }
     public function AddVoucherText(Request $request)
