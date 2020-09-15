@@ -55,12 +55,12 @@
                                         <i class="material-icons"> add_circle_outline </i>
                                         افزودن مکان جدید
                                     </span>
-                                    <a onclick="history.go(-1);" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-4">
-                                    <select class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <select id="province_filter" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                         <option disabled selected> انتخاب استان </option>
                                         <option value="0" >همه</option>
                                         <option value="1">فارس</option>
@@ -85,7 +85,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <select class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <select id="cityList_filter" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                         <option disabled selected> انتخاب شهر </option>
                                         <option value="2"> همه </option>
                                     </select>
@@ -202,13 +202,16 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-row mt-2 justify-content-center align-items-center">
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> نام  مکان  </label>
                                                                             <input value="{{$location['location_name']}}" name="location_name" type="text" class="form-control" id="nameStateFa" placeholder="نام  مکان">
                                                                         </div>
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> نام  انگلیسی مکان </label>
                                                                             <input value="{{$location['location_english_name']}}" name="location_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                                                                         </div>
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> شناسه مکان </label>
                                                                             <input {{--value="{{$location['location_english_name']}}"--}} type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                                                                         </div>
                                                                         <div class="col-md">
@@ -236,7 +239,8 @@
 
                                                                             </select>
                                                                         </div>--}}
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> انتخاب متن </label>
                                                                             <select name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                                                                 <option disabled> انتخاب متن </option>
                                                                                 <option @if($location['text']['id'] == 2) selected @endif value="2">اماکن گردشگری شهر کاشان</option>
@@ -326,13 +330,16 @@
                 @csrf
             <div class="modal-body">
                 <div class="form-row mt-2 justify-content-center align-items-center">
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> نام مکان </label>
                         <input type="text" name="location_name" class="form-control" id="nameStateFa" placeholder="نام  مکان">
                     </div>
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> نام  انگلیسی مکان </label>
                         <input type="text" name="location_english_name" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                     </div>
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> شناسه مکان </label>
                         <input name="officeNo" type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                     </div>
                     <div class="col-md">
@@ -346,21 +353,24 @@
                     </div>
                 </div>
                 <div class="form-row mt-2">
-                    <div class="col-md">
-                            <select name="province_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب استان </label>
+                            <select id="province" name="province_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option disabled selected> انتخاب استان </option>
                                 @foreach($province as $item )
                                     <option value="{{$item['id']}}"> {{$item['province_name']}}</option>
                                 @endforeach
                             </select>
                 </div>
-                    <div class="col-md">
-                        <select name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب شهر </label>
+                        <select id="cityList" name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled selected> انتخاب شهر </option>
                             <option value="1">شیراز</option>
                         </select>
                     </div>
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب متن </label>
                         <select name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled selected> انتخاب متن </option>
                             @foreach($GetVoucherText as $text)
@@ -428,6 +438,49 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            $('#province').change(function () {
+                console.log("ok");
+                var province_id = $('#province').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('CityList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                    },
+                    success:function(data) {
+                        $("#cityList").html('');
+                        $("#cityList").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+
+            $('#province_filter').change(function () {
+                var province_id = $('#province_filter').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('CityList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                    },
+                    success:function(data) {
+                        $("#cityList_filter").html('');
+                        $("#cityList_filter").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+
             $('input[name=Locationactivation]').change(function () {
                 var location =$(this).attr('data-location') ;
                 var value = ($(this).is(':checked'));
