@@ -401,21 +401,21 @@
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea disabled  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                        <textarea style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea disabled  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
                     </div>
 
                 </div>
@@ -462,6 +462,7 @@
 
             $('#province_filter').change(function () {
                 var province_id = $('#province_filter').val();
+                $('#loader').css('display' , 'flex');
                 $.ajax({
                     type:'POST',
                     url:"{{Route('CityList')}}",
@@ -477,6 +478,7 @@
                             $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh');
+                        $('#loader').hide();
                     }
                 });
             });
