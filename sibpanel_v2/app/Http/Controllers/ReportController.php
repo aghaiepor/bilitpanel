@@ -76,26 +76,36 @@ class ReportController extends Controller
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
         $status_codeArray = [] ;
-        if($status_code == 1 ){
-            $status_codeArray = ['1','10'];
-        }else if($status_code == 5){
-            $status_codeArray = ['5','11'];
+        if($status_code != 225 ){
+            if($status_code == 1 ){
+                $status_codeArray = [1,10];
+            }else if($status_code == 5){
+                $status_codeArray = [5,11];
+            }else if ($status_code == 3){
+                $status_codeArray = [3];
+            }
         }
         else {
-            $status_codeArray = ['1','10','5','11'];
+            $status_codeArray = ["1","10","5","11"];
         }
+//        return $status_codeArray ;
         $service_id = (int)$request->get('service_id','');
         if($service_id == 0)
             $service_id = '';
         $operator_id = (int)$request->get('operator_id' , '');
         if($operator_id == 0)
             $operator_id = '';
-        $sale_type_id = (int)$request->get('pre_sale');
+        $sale_type_id = (int)$request->get('pre_sale') ; // type Forosh
         if($sale_type_id == 0)
             $sale_type_id = '';
-        $sell_type_id = (int)$request->get('sell_type_id' , '');
+        if($report_type == 1){
+            $sale_type_id == 1 ;
+        }
+
+        $sell_type_id = (int)$request->get('sell_type_id' , ''); // type Pay
         if($sell_type_id == 0)
             $sell_type_id = '';
+
         $voucher_type_id = (int)$request->get('voucher_type_id' , '');
         if($voucher_type_id == 0)
             $voucher_type_id = '';
@@ -115,10 +125,11 @@ class ReportController extends Controller
         $city_id = (int)$request->get('city_id' ,'') ;
         if($city_id == 0)
             $city_id = '';
-        $GetStat = $this->api->GetStat($location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+        $GetStat = $this->api->GetStat($location_id, $key, $values, $status_codeArray, $service_id, $operator_id,  $sell_type_id , $sale_type_id, $voucher_type_id, $date, $province_id, $city_id);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
         $SaleTypeList = Cache::get('SaleTypeList');
+
         $tikcetType = Cache::get('VoucherTypeList');
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList =  Cache::get('SellerUserList');
@@ -154,13 +165,17 @@ class ReportController extends Controller
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
         $status_codeArray = [] ;
-        if($status_code == 1 ){
-            $status_codeArray = ['1','10'];
-        }else if($status_code == 5){
-            $status_codeArray = ['5','11'];
+        if($status_code != 225 ){
+            if($status_code == 1 ){
+                $status_codeArray = [1,10];
+            }else if($status_code == 5){
+                $status_codeArray = [5,11];
+            }else if ($status_code == 3){
+                $status_codeArray = [3];
+            }
         }
         else {
-            $status_codeArray = ['1','10','5','11'];
+            $status_codeArray = ["1","10","5","11"];
         }
         $key = $request->get('key' , 'province');
         $service_id = (int)$request->get('service_id','');
@@ -218,7 +233,7 @@ class ReportController extends Controller
 
     // GetTransaction
     public function GetTransaction(Request $request){
-        $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
+        $report_type     = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
         if (!session('UserInfo')['presell'] )
             $report_type = 0;
 
@@ -229,13 +244,17 @@ class ReportController extends Controller
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
         $status_codeArray = [] ;
-        if($status_code == 1 ){
-            $status_codeArray = ['1','10'];
-        }else if($status_code == 5){
-            $status_codeArray = ['5','11'];
+        if($status_code != 225){
+            if($status_code == 1 ){
+                $status_codeArray = [1,10];
+            }else if($status_code == 5){
+                $status_codeArray = [5,11];
+            }else if ($status_code == 3){
+                $status_codeArray = [3];
+            }
         }
         else {
-            $status_codeArray = ['1','10','5','11'];
+            $status_codeArray = ["1","10","5","11"];
         }
         $key = $request->get('key' , 'province');
         $service_id = (int)$request->get('service_id','');
@@ -274,7 +293,7 @@ class ReportController extends Controller
         if($page == 0)
             $page = 1;
 
-        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
         $SaleTypeList = Cache::get('SaleTypeList');
