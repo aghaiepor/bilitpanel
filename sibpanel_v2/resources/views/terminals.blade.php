@@ -53,7 +53,7 @@
                                     <h4 class="card-title text-right font-weight-bold ">اطلاعات ترمینال های موجود</h4>
                                 </div>
                                 <div class="col-sm">
-                                    <a onclick="history.go(-1);" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a {{--onclick="history.go(-1);"--}} href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
 
                                 </div>
                             </div>

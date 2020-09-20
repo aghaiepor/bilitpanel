@@ -93,8 +93,7 @@
                                     <h4 class="card-title text-right font-weight-bold "> تخصیص سطح دسترسی به کاربر </h4>
                                 </div>
                                 <div class="col-sm">
-                                    <a onclick="history.go(-1);" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
-
+                                    <a href="{{Route("UserManager")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <!-- Modal -->
@@ -108,7 +107,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div id="accordion" role="tablist">
-
                                         <div class="card card-collapse">
                                             <div class="card-header" role="tab" id="headingOne">
                                                 <h5 class="mb-0">
@@ -122,10 +120,12 @@
                                             <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                                                 <div class="card-body">
                                                     @php
-                                                    $project_ids = (is_null($GetUserPermission)) ?  $GetUserPermission['project_id'] : [];
+                                                    if(count($GetUserPermission) != 0){
+                                                        $project_ids = (!is_null($GetUserPermission)) ?  $GetUserPermission['project_ids'] : [];
+                                                    }
                                                     @endphp
                                                     @foreach($projectList as $project)
-                                                        @if(in_array( $project['project_id'] , $project_ids ) || ( count($project_ids) != 0 ) ?  $project_ids[0] == '*' : '')
+                                                        @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || ( count($project_ids) != 0 ) ?  $project_ids[0] == '*' : ''))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value=" {{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked value="">
@@ -162,12 +162,13 @@
                                                 </h5>
                                             </div>
                                             @php
-                                            $terminal_type_ids =(is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
+                                                if(count($GetUserPermission) != 0)
+                                                    $terminal_type_ids =(!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
                                             @endphp
                                             <div id="collapseTwo" class="collapse show" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                                                 <div class="card-body">
                                                     @foreach($TerminalTypeList as $TerminalType)
-                                                        @if(in_array($TerminalType['id'] , $terminal_type_ids) || (count($project_ids) != 0 ) ? $project_ids[0] == '*' : '')
+                                                        @if( count($GetUserPermission) != 0 && (in_array($TerminalType['id'] , $terminal_type_ids) || (count($project_ids) != 0 ) ? $project_ids[0] == '*' : '') )
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$TerminalType['id']}}" name="Terminal" class="form-check-input" type="checkbox" checked value="">
@@ -204,10 +205,11 @@
                                             <div id="collapseThree" class="collapse show" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
                                                 <div class="card-body">
                                                     @php
-                                                        $voucher_types = (is_null($GetUserPermission)) ?  $GetUserPermission['voucher_type_id'] : [];
+                                                        if(count($GetUserPermission) != 0)
+                                                           $voucher_types = (!is_null($GetUserPermission)) ?  $GetUserPermission['voucher_types'] : [];
                                                     @endphp
                                                     @foreach($VoucherTypeList as $VoucherType)
-                                                        @if(in_array( $VoucherType['voucher_type_id'], $voucher_types) || (count($voucher_types) != 0 ) ? $voucher_types[0] == '*' : '')
+                                                        @if(count($GetUserPermission) != 0 && (in_array( $VoucherType['voucher_type_id'], $voucher_types) || (count($voucher_types) != 0 ) ? $voucher_types[0] == '*' : ''))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$VoucherType['voucher_type_id']}}" name="VoucherType" class="form-check-input" type="checkbox" checked value=""> {{$VoucherType['voucher_type']}}
@@ -240,13 +242,14 @@
                                                 </h5>
                                             </div>
                                             @php
-                                                 $sale_types =(is_null($GetUserPermission)) ?  $GetUserPermission['sale_type_id'] : [];
+                                                if(count($GetUserPermission) != 0)
+                                                     $sale_types =(!is_null($GetUserPermission)) ?  $GetUserPermission['sale_types'] : [];
                                             @endphp
                                             <div id="collapseFour" class="collapse show" role="tabpanel" aria-labelledby="headingFour" data-parent="#accordion">
                                                 <div class="card-body">
 
                                                 @foreach($SaleTypeList as $SaleType)
-                                                        @if(in_array($SaleType['sale_type_id'],$sale_types)  ||   (count($sale_types) != 0 ) ? $sale_types[0] == '*' : '')
+                                                        @if(count($GetUserPermission) != 0 && (in_array($SaleType['sale_type_id'],$sale_types)  ||   (count($sale_types) != 0 ) ? $sale_types[0] == '*' : '') )
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$SaleType['sale_type_id']}}" name="SaleType" class="form-check-input" type="checkbox" checked value="">  {{$SaleType['sale_type']}}
@@ -354,7 +357,8 @@
         })
 
         let service = data['service_ids'] ;
-        if(service[0] == '*')
+        console.log(service==null)  ;
+        if(service!=null && service[0] == '*')
             $("#jstree").jstree().check_all();
         else
             $("#jstree").jstree().check_node(service);
@@ -379,7 +383,6 @@
             $("#jstree").on("changed.jstree", function (e, data) {
                 console.log("The selected nodes are:");
                 let x  = $("#jstree").jstree().get_checked();
-
 
                 for(let i = 0 ; i <  data.selected.length ; i++){
                     if (data.selected[i][0] == 'L'){
@@ -499,13 +502,22 @@
                         'sib_user_id' : sib_user_id ,
                     },
                     success:function(data) {
+                        console.clear();
                         if(data['Header']['Status'] == 0 ){
                             Swal.fire(
                                 'تغییر مورد نظر اعمال گردید',
                                 '',
                                 'success'
                             )
-                        }else
+                        }
+                        else if(data['Header']['Status'] == 2){
+                            Swal.fire(
+                                ' خطا ! ',
+                                'شما مجاز به انجام چنین کاری نمی باشید .',
+                                'warning'
+                            )
+                        }
+                        else
                             Swal.fire(
                                 'خطا در اعمال تغییرات',
                                 '',

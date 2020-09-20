@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="col-sm">
                                     <a href="{{ route('add_group_time_index') }}"  class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </a>
-                                    <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a href="{{Route("dashboard")}}" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
 
                                 </div>
                             </div>

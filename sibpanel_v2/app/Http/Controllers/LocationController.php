@@ -81,9 +81,8 @@ class LocationController extends Controller
             });
             return redirect()->back()->with('success' , ' مکان مورد ویرایش گردید . ');
         }
-
         else
-            return json_encode($EditLocation);
+            return redirect()->back()->with('error' , ' خطا در ویرایش مکان ! ');
 
 
     }
@@ -282,6 +281,20 @@ class LocationController extends Controller
         else
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
 
+    }
+
+    public function GetVoucherText(Request $request){
+        $text = Cache::get("GetVoucherText");
+        $text_id = $request->get("id") ;
+        $GetText = array_filter($text, function ($event) use ($text_id) {
+            return $event['id'] == $text_id;
+        });
+        $array_keys = array_keys($GetText) ;
+        return [
+            "GetText" =>$GetText ,
+            "array_keys"=>$array_keys
+        ] ;
+//        return $text ;
     }
 
     public function citizenPanel(Request $request , $id){

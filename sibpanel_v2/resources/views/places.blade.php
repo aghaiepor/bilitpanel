@@ -55,12 +55,12 @@
                                         <i class="material-icons"> add_circle_outline </i>
                                         افزودن مکان جدید
                                     </span>
-                                    <a onclick="history.go(-1);" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-4">
-                                    <select class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <select id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
                                         <option disabled selected> انتخاب استان </option>
                                         <option value="0" >همه</option>
                                         <option value="1">فارس</option>
@@ -85,7 +85,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <select class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <select id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
                                         <option disabled selected> انتخاب شهر </option>
                                         <option value="2"> همه </option>
                                     </select>
@@ -202,13 +202,16 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-row mt-2 justify-content-center align-items-center">
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> نام  مکان  </label>
                                                                             <input value="{{$location['location_name']}}" name="location_name" type="text" class="form-control" id="nameStateFa" placeholder="نام  مکان">
                                                                         </div>
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> نام  انگلیسی مکان </label>
                                                                             <input value="{{$location['location_english_name']}}" name="location_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                                                                         </div>
-                                                                        <div class="col-md">
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> شناسه مکان </label>
                                                                             <input {{--value="{{$location['location_english_name']}}"--}} type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                                                                         </div>
                                                                         <div class="col-md">
@@ -236,15 +239,16 @@
 
                                                                             </select>
                                                                         </div>--}}
-                                                                        <div class="col-md">
-                                                                            <select name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                                                                <option disabled> انتخاب متن </option>
-                                                                                <option @if($location['text']['id'] == 2) selected @endif value="2">اماکن گردشگری شهر کاشان</option>
-                                                                                <option @if($location['text']['id'] == 3) selected @endif value="3">تست</option>
-                                                                                <option @if($location['text']['id'] == 5) selected @endif value="5">سال رونق تولید مبارک</option>
-                                                                                <option @if($location['text']['id'] == 1) selected @endif value="1">سال جهش تولید</option>
-                                                                                <option @if($location['text']['id'] == 4) selected @endif value="4">ستاد گردشگری شهرداری تهران</option>
-                                                                                <option @if($location['text']['id'] == 6) selected @endif value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> انتخاب متن </label>
+                                                                            <select name="text_id" class="selectpicker changeText" data-style="btn btn-primary border-dark" title="Single Select">
+                                                                                @foreach($GetVoucherText as $text)
+                                                                                    @if( $location['text']['id'] == $text['id'])
+                                                                                        <option selected value="{{$text['id']}}"> {{$text['top_text']}}</option>
+                                                                                    @else
+                                                                                        <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
+                                                                                    @endif
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -258,34 +262,31 @@
                                                                             <textarea  style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3">{{$location['location_english_address']}}</textarea>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-row mt-2">
-
-                                                                    </div>
-                                                                    <div class="form-row mt-2">
+                                                                    <div class="form-row mt-2 texts">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['top_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_top_text" name="" cols="30" rows="3">{{$location['text']['top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_bottom_text" name="" id="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_top_text" name="" id="" cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_bottom_text" name="" id="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
                                                                         </div>
 
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer mt-4">
                                                                     {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                                                                    <button  type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش  </button>
+                                                                    <button  type="submit" class="btn btn-success px-5 ml-0 mr-auto form_submit"> ویرایش  </button>
                                                                 </div>
                                                             </div>
                                                             </form>
@@ -326,13 +327,16 @@
                 @csrf
             <div class="modal-body">
                 <div class="form-row mt-2 justify-content-center align-items-center">
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> نام مکان </label>
                         <input type="text" name="location_name" class="form-control" id="nameStateFa" placeholder="نام  مکان">
                     </div>
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> نام  انگلیسی مکان </label>
                         <input type="text" name="location_english_name" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                     </div>
-                    <div class="col-md">
+                    <div class="col-md text-right">
+                        <label for=""> شناسه مکان </label>
                         <input name="officeNo" type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                     </div>
                     <div class="col-md">
@@ -346,22 +350,25 @@
                     </div>
                 </div>
                 <div class="form-row mt-2">
-                    <div class="col-md">
-                            <select name="province_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب استان </label>
+                            <select id="province" name="province_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option disabled selected> انتخاب استان </option>
                                 @foreach($province as $item )
                                     <option value="{{$item['id']}}"> {{$item['province_name']}}</option>
                                 @endforeach
                             </select>
                 </div>
-                    <div class="col-md">
-                        <select name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب شهر </label>
+                        <select id="cityList" name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled selected> انتخاب شهر </option>
                             <option value="1">شیراز</option>
                         </select>
                     </div>
-                    <div class="col-md">
-                        <select name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب متن </label>
+                        <select id="voucherText" name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled selected> انتخاب متن </option>
                             @foreach($GetVoucherText as $text)
                                 <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
@@ -382,7 +389,7 @@
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  آدرس به انگلیسی </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3"></textarea>
+                        <textarea style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -391,21 +398,21 @@
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="top_text_persian" disabled  style="height: 64px !important;" class="form-control" name=""  cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                        <textarea style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="bottom_text_persian" disabled style="height: 64px !important;" class="form-control" name="" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="top_text_english" disabled style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                        <textarea  style="height: 64px !important;" class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                        <textarea id="bottom_text_english" disabled  style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
                     </div>
 
                 </div>
@@ -421,6 +428,7 @@
 @endsection
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="../assets/js/plugins/sweetalert2.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -428,6 +436,113 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            let top_text ,bottom_text, english_top_text, english_bottom_text  ;
+            $('.changeText').change(function () {
+                let element = $(this);
+                var voucherText = element.val();
+                console.log(element);
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('GetVoucherTextLoc')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'id' : voucherText ,
+                    },
+                    success:function(data) {
+                        let key = data["array_keys"][0];
+                        let data_content = data["GetText"][key];
+                        // element.parent().parent().parent().find(".persian_bottom_text").text("");
+                        if(data_content != null){
+                            top_text = data_content.top_text ;
+                            bottom_text = data_content.bottom_text ;
+                            english_top_text = data_content.english_top_text ;
+                            english_bottom_text = data_content.english_bottom_text ;
+                        }
+                        // element.parent().parent().parent().find(".persian_top_text").text("awdaowidj");
+                        element.parent().parent().parent().find(".persian_top_text").text(top_text);
+                        element.parent().parent().parent().find(".persian_bottom_text").text(bottom_text);
+                        element.parent().parent().parent().find(".english_top_text").text(english_top_text);
+                        element.parent().parent().parent().find(".english_bottom_text").text(english_bottom_text);
+                        /*.find("persian_top_text").text()*/
+                        /*
+                        $("#top_text_persian").text(data_content.top_text);
+                        $("#bottom_text_persian").text(data_content.bottom_text);
+                        $("#top_text_english").text(data_content.english_top_text);
+                        $("#bottom_text_english").text(data_content.english_bottom_text);
+*/
+                    }
+                });
+            });
+
+            $('#province').change(function () {
+                console.log("ok");
+                var province_id = $('#province').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('CityList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                    },
+                    success:function(data) {
+                        $("#cityList").html('');
+                        $("#cityList").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+            $('#voucherText').change(function () {
+                    var voucherText = $('#voucherText').val();
+                    $.ajax({
+                        type:'POST',
+                        url:"{{Route('GetVoucherTextLoc')}}",
+                        dataType:'json',
+                        data:{
+                            '_token ': '<?php echo csrf_token() ?>',
+                            'id' : voucherText ,
+                        },
+                        success:function(data) {
+                            let key = data["array_keys"][0];
+                            let data_content = data["GetText"][key];
+
+                           $("#top_text_persian").text(data_content.top_text);
+                            $("#bottom_text_persian").text(data_content.bottom_text);
+                            $("#top_text_english").text(data_content.english_top_text);
+                            $("#bottom_text_english").text(data_content.english_bottom_text);
+
+                        }
+                    });
+                });
+
+            $('#province_filter').change(function () {
+                var province_id = $('#province_filter').val();
+                $('#loader').css('display' , 'flex');
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('CityList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                    },
+                    success:function(data) {
+                        $("#cityList_filter").html('');
+                        $("#cityList_filter").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                        $('#loader').hide();
+                    }
+                });
+            });
+
             $('input[name=Locationactivation]').change(function () {
                 var location =$(this).attr('data-location') ;
                 var value = ($(this).is(':checked'));
@@ -560,7 +675,27 @@
                     }
                 })
             });
-
+            $(".form_submit").click(function (e) {
+                e.preventDefault();
+                let element = $(this).parent().parent();
+                let location_name =  $(this).parent().parent().find('input[name=location_name]').val();
+                let location_english_name =  $(this).parent().parent().find('input[name=location_english_name]').val();
+                let location_address = $(this).parent().parent().find('textarea[name=location_address]').val();
+                let location_english_address =  $(this).parent().parent().find('textarea[name=location_english_address]').val();
+                if (location_name.length  == 0 ) {
+                    swal({ title:"خطا!", text: "لطفا فیلد نام مکان را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }else if(location_english_name.length  == 0){
+                    swal({ title:"خطا!", text: "لطفا فیلد نام انگلیسی مکان را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }
+                else if ( location_address.length  == 0){
+                    swal({ title:"خطا!", text: "لطفا فیلد آدرس را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }
+                else if (location_english_address.length  == 0){
+                    swal({ title:"خطا!", text: "لطفا فیلد آدرس به انگلیسی را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }
+                else
+                    $(this).parent().parent().parent().submit();
+            });
         });
     </script>
 @endsection

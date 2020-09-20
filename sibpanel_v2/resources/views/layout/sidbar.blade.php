@@ -1,3 +1,6 @@
+<div id="loader" style="position: fixed;z-index: 35;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+    <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+</div>
 <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-3.jpg">
     <div style="z-index: 100;position: absolute;left: 22px;top: 7px;  " class="navbar-wrapper">
         <div class="navbar-minimize">
@@ -320,8 +323,6 @@
 </div>
 <div class="modal fade" id="deleteVoucher" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="{{Route('CancelVoucher')}}" method="post">
-            @csrf
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title  font-weight-bold" id="testLabel"> حذف بلیت </h5>
@@ -333,17 +334,68 @@
                     <div class="form-row mt-3">
                         <div class="col-sm-12">
                             <h5 class="text-right"> برای حذف بلیت شماره بلیت مورد نظر را وارد کنید: </h5>
-                            <input name="voucher_number" type="text" class="form-control" placeholder="شماره بلیت">
+                            <input id="voucher_number" name="voucher_number" type="text" class="form-control" placeholder="شماره بلیت">
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer mt-4">
                     {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن </button>--}}
-                    <button type="submit" class="btn px-5  btn-danger ml-0 mr-auto"> حذف </button>
+                    <button id="deleteVoucherBtn" type="button" class="btn px-5  btn-danger ml-0 mr-auto"> حذف </button>
                 </div>
             </div>
-        </form>
+
 
     </div>
 </div>
+<script src="{{asset('')}}assets/js/core/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $("#deleteVoucherBtn").click(function (e) {
+            $('#loader').css('display' , 'flex');
+            let voucher_number = $("#voucher_number").val();
+            console.log(voucher_number);
+            $.ajax({
+                type:'POST',
+                url:"{{Route('CancelVoucher')}}",
+                dataType:'json',
+                data:{
+                    '_token ': '<?php echo csrf_token() ?>',
+                    'voucher_number' : voucher_number ,
+                },
+                success:function(data) {
+                    if(data.Header.Status == 0 )
+                    {
+                        swal({
+                            title:" شماره بلیت مورد نظر حذف گردید. ",
+                            type: "success",
+                            buttonsStyling: false,
+                            confirmButtonClass: "btn btn-success"
+                        })
+                    }else if (data.Header.MessageCode == 72){
+                        swal({
+                            title:" شماره بلیت وارد شده موجود نمی باشد ",
+                            type: "warning",
+                            buttonsStyling: false,
+                            confirmButtonClass: "btn btn-success"
+                        })
+                    }else{
+                        swal({
+                            title:" لطفا شماره بلیت را وارد نمایید. ",
+                            type: "error",
+                            buttonsStyling: false,
+                            confirmButtonClass: "btn btn-primary"
+                        })
+                    }
+                    $('#loader').hide();
+
+                }
+            });
+        });
+    });
+</script>
