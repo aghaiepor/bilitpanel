@@ -536,6 +536,14 @@
             purple: 'rgb(153, 102, 255)',
             grey: 'rgb(231,233,237)'
         };
+        var inputs = {
+            min: -100,
+            max: 100,
+            count: 8,
+            decimals: 2,
+            continuity: 1
+        };
+
         let colors = [] ;
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
@@ -545,6 +553,7 @@
                 // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: false,
+                    maxBarThickness : 80 ,
                     data: @json($count),
 
                     // data: [12, 19, 3, 5, 2, 3],
@@ -576,6 +585,9 @@
                     }],
                     yAxes: [{
                         display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
                     }]
                 }
             }

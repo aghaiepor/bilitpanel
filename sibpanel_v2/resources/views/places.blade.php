@@ -286,7 +286,7 @@
                                                                 </div>
                                                                 <div class="modal-footer mt-4">
                                                                     {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                                                                    <button  type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش  </button>
+                                                                    <button  type="submit" class="btn btn-success px-5 ml-0 mr-auto form_submit"> ویرایش  </button>
                                                                 </div>
                                                             </div>
                                                             </form>
@@ -428,6 +428,7 @@
 @endsection
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="../assets/js/plugins/sweetalert2.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -674,7 +675,27 @@
                     }
                 })
             });
-
+            $(".form_submit").click(function (e) {
+                e.preventDefault();
+                let element = $(this).parent().parent();
+                let location_name =  $(this).parent().parent().find('input[name=location_name]').val();
+                let location_english_name =  $(this).parent().parent().find('input[name=location_english_name]').val();
+                let location_address = $(this).parent().parent().find('textarea[name=location_address]').val();
+                let location_english_address =  $(this).parent().parent().find('textarea[name=location_english_address]').val();
+                if (location_name.length  == 0 ) {
+                    swal({ title:"خطا!", text: "لطفا فیلد نام مکان را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }else if(location_english_name.length  == 0){
+                    swal({ title:"خطا!", text: "لطفا فیلد نام انگلیسی مکان را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }
+                else if ( location_address.length  == 0){
+                    swal({ title:"خطا!", text: "لطفا فیلد آدرس را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }
+                else if (location_english_address.length  == 0){
+                    swal({ title:"خطا!", text: "لطفا فیلد آدرس به انگلیسی را پر نمایید . ", buttonsStyling: false, confirmButtonClass: "btn btn-success"})
+                }
+                else
+                    $(this).parent().parent().parent().submit();
+            });
         });
     </script>
 @endsection

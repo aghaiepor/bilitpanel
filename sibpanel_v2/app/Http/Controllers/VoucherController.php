@@ -24,8 +24,9 @@ class VoucherController extends Controller
     public function CancelVoucher(Request $request){
         $voucher_number = $request->get("voucher_number");
         $CancelVoucher  = $this->api->CancelVoucher($voucher_number);
-//        return  $CancelVoucher ;
-       if ($CancelVoucher['Header']['Status'] == 0){
+        return  $CancelVoucher ;
+       /*
+        if ($CancelVoucher['Header']['Status'] == 0){
             return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
         }
        elseif($CancelVoucher['Header']['MessageCode'] == 72)
@@ -34,6 +35,7 @@ class VoucherController extends Controller
        }
         else
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
+       */
     }
 
     public function AddVoucherType(Request $request)
@@ -49,10 +51,10 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($AddVoucherType['Header']['Status'] == 0)
         {
-            return redirect()->back()->with('success' , 'نوع بلیط ایجاد گردید');
+            return redirect()->back()->with('success' , 'نوع بلیت ایجاد گردید.');
         }
         else
-            return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
+            return redirect()->back()->with('error' , 'خطا در ایجاد نوع بلیت تغییرات! ');
     }
     public function EditVoucherType(Request $request , $id)
     {
@@ -67,7 +69,7 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($AddVoucherType['Header']['Status'] == 0)
         {
-            return redirect()->back()->with('success' , ' تغییرات اعمال گردید. ');
+            return redirect()->back()->with('success' , ' نوع بلیت ویرایش گردید. ');
         }
         else
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
@@ -91,10 +93,10 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($AddVoucherText['Header']['Status'] == 0)
         {
-            return redirect()->back()->with('success' , 'نوع بلیط ایجاد گردید');
+            return redirect()->back()->with('success' , 'متن بلیت ایجاد گردید.');
         }
         else
-            return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
+            return redirect()->back()->with('error' , 'خطا در ایجاد متن بلیت! ');
     }
     public function EditVoucherText(Request $request , $id)
     {
@@ -106,10 +108,15 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($EditVoucherText['Header']['Status'] == 0)
         {
-            return redirect()->back()->with('success' , 'نوع بلیط ایجاد گردید');
+            Cache::forget('GetVoucherText');
+            $value = Cache::rememberForever('GetVoucherText', function(){
+                $GetInfo  = $this->api->GetVoucherText();
+                return $GetInfo['ContentData'];
+            });
+            return redirect()->back()->with('success' , 'متن بلیت ویرایش گردید.');
         }
         else
-            return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
+            return redirect()->back()->with('error' , 'خطا در اعمال تغییرات متن بلیت ! ');
     }
     public function DeleteVoucherText(Request $request , $id)
     {
@@ -118,7 +125,7 @@ class VoucherController extends Controller
 //        return  $DelVoucherText ;
         if ($DelVoucherText['Header']['Status'] == 0)
         {
-            return redirect()->back()->with('success' , 'متن بلیط حذف گردید');
+            return redirect()->back()->with('success' , 'متن بلیت حذف گردید');
         }
         else
             return redirect()->back()->with('error' , 'خطا در حذف بلیت ! ');

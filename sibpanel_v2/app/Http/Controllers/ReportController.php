@@ -128,8 +128,6 @@ class ReportController extends Controller
             return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!', 'SaleTypeList'=>$SaleTypeList]);
         }
 
-
-
     }
 
     // transaction

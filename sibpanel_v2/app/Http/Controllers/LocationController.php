@@ -81,9 +81,8 @@ class LocationController extends Controller
             });
             return redirect()->back()->with('success' , ' مکان مورد ویرایش گردید . ');
         }
-
         else
-            return json_encode($EditLocation);
+            return redirect()->back()->with('error' , ' خطا در ویرایش مکان ! ');
 
 
     }

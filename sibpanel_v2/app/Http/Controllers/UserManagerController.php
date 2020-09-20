@@ -50,6 +50,8 @@ class UserManagerController extends Controller
         return $user_activation ;
     }
     public function RegisterUser(Request $request , $id=null){
+        if($id == null)
+            $id="";
         $name = $request->get('name'); //
         $last_name = $request->get('last_name'); //
         $cellphone = $request->get('cellphone'); //
@@ -77,7 +79,8 @@ class UserManagerController extends Controller
                 return redirect()->back()->with('success' , $success_message);
         }
         else
-            return redirect()->back()->with('error' , $error_message);
+            return  $SellerUserList ;
+//            return redirect()->back()->with('error' , $error_message);
     }
     public function GetUserInfo(Request $request  ){
         $id = $request->get('UserId');
@@ -86,11 +89,12 @@ class UserManagerController extends Controller
     }
     public function setUserPermission($id){
         $projectList = $this->api->ProjectList();
+//        return $projectList;
         $TerminalTypeList = $this->api->TerminalTypeList();
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
-//        return $GetUserPermission ;
-
+//        return $GetUserPermission['ContentData'];
+//        http://127.0.0.1:8000/setUserPermission/533
 //        return is_null($GetUserPer  ) ;
         $GetInfo = Cache::get('GetInfo');
 //        return $GetInfo ;
@@ -103,14 +107,14 @@ class UserManagerController extends Controller
     }
     public function AssignPermission(Request $request)
     {
-        $province_id = implode(",",$request->get('province_id'));
-        $city_id = implode(",",$request->get('city_id'));
-        $location_id =  implode(",",$request->get('location_id'));
-        $service_id = implode(",",$request->get('service_id'));
-        $voucher_type_id = implode(",",$request->get('voucher_type_id'));
-        $project_id = implode(",",$request->get('project_id'));
-        $sale_type_id = implode(",",$request->get('sale_type_id'));
-        $terminal_type_id = implode(",",$request->get('terminal_type_id'));
+        $province_id = (is_null($request->get('province_id'))) ? "" : implode(",",$request->get('province_id'));
+        $city_id = (is_null($request->get('city_id'))) ? "" : implode(",",$request->get('city_id'));
+        $location_id =  (is_null($request->get('location_id'))) ? "" : implode(",",$request->get('location_id'));
+        $service_id = (is_null($request->get('service_id'))) ? "" : implode(",",$request->get('service_id'));
+        $voucher_type_id = (is_null($request->get('voucher_type_id'))) ? "" : implode(",",$request->get('voucher_type_id'));
+        $project_id = (is_null($request->get('project_id'))) ? "" : implode(",",$request->get('project_id'));
+        $sale_type_id = (is_null($request->get('sale_type_id'))) ? "" : implode(",",$request->get('sale_type_id'));
+        $terminal_type_id = (is_null($request->get('terminal_type_id'))) ? "" : implode(",",$request->get('terminal_type_id'));
         $sib_user_id = $request->get('sib_user_id');
         /*$data =  [
         '$province_id' => $province_id,
