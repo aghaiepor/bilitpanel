@@ -132,10 +132,10 @@
                                                     </div>
 
                                                 </div>
-                                                <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
+                                               {{-- <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
                                                     <i class="material-icons">close</i>
                                                     حدف
-                                                </button>
+                                                </button>--}}
                                             </td>
 
                                         </tr>

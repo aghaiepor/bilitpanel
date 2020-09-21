@@ -397,10 +397,10 @@
                                 $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id , true));
                             else
                                 $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
-
                         }
                         $('.selectpicker').selectpicker('refresh');
                     }
+
                 });
             }
             if(cityList != ''){

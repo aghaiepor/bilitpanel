@@ -58,43 +58,30 @@
                                     <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-md-4">
-                                    <select id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
-                                        <option disabled selected> انتخاب استان </option>
-                                        <option value="0" >همه</option>
-                                        <option value="1">فارس</option>
-                                        <option value="2">اصفهان</option>
-                                        <option value="3">تهران</option>
-                                        <option value="6">کرمانشاه</option>
-                                        <option value="7">خراسان رضوی</option>
-                                        <option value="9">قزوین</option>
-                                        <option value="10">همدان</option>
-                                        <option value="11">کرمان</option>
-                                        <option value="12">یزد</option>
-                                        <option value="13">سازمان محیط زیست</option>
-                                        <option value="14">آذربایجان شرقی</option>
-                                        <option value="15">آذربایجان غربی</option>
-                                        <option value="16">اردبیل</option>
-                                        <option value="17">زنجان</option>
-                                        <option value="18">کردستان</option>
-                                        <option value="19">گلستان</option>
-                                        <option value="34">خوزستان</option>
-                                        <option value="35">لرستان</option>
-                                        <option value="36">اصفهان ( شهرداری)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <select id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
-                                        <option disabled selected> انتخاب شهر </option>
-                                        <option value="2"> همه </option>
-                                    </select>
-                                </div>
-                                <div class="col-md-auto ml-auto">
-                                    <button class="btn bgPer"> فیلتر
-                                    </button>
-                                </div>
-                            </div>
+                                <form  class="form-row mt-2" action="{{Route("getLocationFilter")}}" method="get">
+                                    <div class="col-md-4">
+                                        <select name="province_id" id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
+                                            <option disabled selected> انتخاب استان </option>
+                                            <option value="0" >همه</option>
+                                            @foreach($province as $item )
+                                                @if(request('province_id') ==  $item['id'])
+                                                    <option selected value="{{$item['id']}}"> {{$item['province_name']}}</option>
+                                                @else
+                                                    <option value="{{$item['id']}}"> {{$item['province_name']}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select name="city_id" id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
+                                            <option disabled selected> انتخاب شهر </option>
+                                            <option value="2"> همه </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-auto ml-auto">
+                                        <button type="submit" class="btn bgPer"> فیلتر </button>
+                                    </div>
+                                </form>
                             <!-- Modal -->
                         </div>
                         <div class="card-body">
@@ -134,7 +121,7 @@
                                     @endphp
                                     @if(count($locations) <=0)
                                         <tr>
-                                            <td colspan="7">
+                                            <td colspan="8">
                                             <h6 class="text-center py-5"> اطلاعات مکانی وجود ندارد.  </h6>
                                             </td>
                                         </tr>
@@ -255,11 +242,11 @@
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> آدرس </label>
-                                                                            <textarea style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3">{{$location['location_address']}}</textarea>
+                                                                            <textarea style="height: 64px !important;" class="form-control" name="location_address" cols="30" rows="3">{{$location['location_address']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  آدرس به انگلیسی </label>
-                                                                            <textarea  style="height: 64px !important;" class="form-control" name="location_english_address" id="" cols="30" rows="3">{{$location['location_english_address']}}</textarea>
+                                                                            <textarea  style="height: 64px !important;" class="form-control" name="location_english_address" cols="30" rows="3">{{$location['location_english_address']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-2 texts">
@@ -269,17 +256,17 @@
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_bottom_text" name="" id="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_bottom_text" name="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_top_text" name="" id="" cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_top_text" name=""  cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_bottom_text" name="" id="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
+                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_bottom_text" name="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
                                                                         </div>
 
                                                                     </div>
@@ -476,8 +463,34 @@
                 });
             });
 
+            let pro_id = "{{request('province_id')}} ";
+            if(pro_id != ''){
+                var province_id = pro_id;
+                // $('#loader').css('display' , 'flex');
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('CityList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                    },
+                    success:function(data) {
+                        $("#cityList_filter").html('');
+                        $("#cityList_filter").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            if (data.data[i].id == pro_id){
+                                $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id , true));
+                            }else
+                                $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                        // $('#loader').hide();
+                    }
+                });
+            }
+
             $('#province').change(function () {
-                console.log("ok");
                 var province_id = $('#province').val();
                 $.ajax({
                     type:'POST',

@@ -49,6 +49,9 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/terminals' , 'terminalController@index' )->name('terminals');
         Route::post('/AddClearingAccount/{id}' , 'terminalController@AddClearingAccount' )->name('AddClearingAccount');
         Route::get('/terminalInfo/{id}' , 'terminalController@TerminalInfo' )->name('terminalInfo');
+        Route::get('/TerminalLocationList/{id}' , 'terminalController@TerminalLocationList' )->name('TerminalLocationList');
+        Route::post('/AssignTerminal/{id}' , 'terminalController@AssignTerminal' )->name('AssignTerminal');
+        Route::post('/EditAssignTerminal/{id}' , 'terminalController@EditAssignTerminal' )->name('EditAssignTerminal');
 
         // Location or Place Route
         Route::get('/places' , 'LocationController@index' )->name('places');
@@ -59,6 +62,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/PosPrintActivation' ,'LocationController@PosPrintActivation' )->name('PosPrintActivation');
         Route::post('/QRActivation' ,'LocationController@QRActivation' )->name('QRActivation');
         Route::get('/citizenPanel/{id}' , 'LocationController@citizenPanel')->name('citizenPanel');
+        Route::get('/getLocationFilter' , 'LocationController@getLocationFilter')->name('getLocationFilter');
         Route::post('/GetVoucherTextLoc'  , 'LocationController@GetVoucherText' )->name('GetVoucherTextLoc');
 
         // services Route
