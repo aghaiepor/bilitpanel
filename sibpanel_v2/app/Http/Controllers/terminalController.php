@@ -40,7 +40,7 @@ class terminalController extends Controller
         $TerminalLocationList = $this->Api->TerminalLocationList($terminal_id);
         $projectList = $this->Api->ProjectList();
         $TerminalTypeList = $this->Api->TerminalTypeList();
-//        return $TerminalTypeList;
+//        return $TerminalLocationList;
         return view('terminalInfo' , ['TerminalLocationList' => $TerminalLocationList['ContentData'] , 'projectList' => $projectList['ContentData'] , 'id'=>$id , 'TerminalTypeList' => $TerminalTypeList['ContentData'] ]);
         /*$terminal_number = $$request->get('project_name');
         $serial_number = $$request->get('owner_name');

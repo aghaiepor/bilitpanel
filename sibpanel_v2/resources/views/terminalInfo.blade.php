@@ -2,7 +2,7 @@
 
 @section('title')
     <title>
-        مدیریت استان
+        مدیریت ترمینال
     </title>
     <style>
         .bootstrap-select{
@@ -46,6 +46,32 @@
                                         افزودن ترمینال جدید
                                     </span>
                                     <a href="{{Route("terminals")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row text-black mt-3">
+                                <div class="col-sm text-dark text-center border-left" >
+                                    <h6>
+                                    شماره حساب
+                                    </h6>
+                                    <span>26-0100-0040-5802-6201-6253-30</span>
+                                </div>
+                                <div class="col-sm text-dark text-center border-left">
+                                    <h6>
+                                        شناسه پرداخت
+                                    </h6>
+                                    <span>
+                                        356-02625814-01250-300000-00000000
+                                    </span>
+
+                                </div>
+                                <div class="col-sm text-dark text-center">
+                                    <h6>
+                                        زمان تعریف حساب
+                                    </h6>
+                                    <span>
+                                    00:00:00 1398/04/31
+                                    </span>
 
                                 </div>
                             </div>
@@ -112,7 +138,7 @@
                                                     <button data-toggle="modal" id="statebtn" data-target="#edit_modal{{$i}}"  type="submit" class="btn btn-success px-5 ml-0 mr-auto form_submit"> ویرایش  </button>
                                                     <div class="modal fade" id="edit_modal{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
-                                                            <form action="{{Route('EditAssignTerminal' , ['id'=>])}}" method="post">
+                                                            <form action="{{Route('EditAssignTerminal' , ['id'=>$TerminalLocation['id']])}}" method="post">
                                                                 @csrf
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
