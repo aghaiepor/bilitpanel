@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use App\Rules\Captcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use ReCaptcha\ReCaptcha;
 
 class AuthController extends Controller
 {
@@ -18,6 +21,28 @@ class AuthController extends Controller
     }
 
     public function login(Request $request){
+
+
+        $validator = Validator::make($request->all(), [
+            'g-recaptcha-response' => new Captcha(),
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('error' , 'لطفا قسمت امنیتی را تایید نماید.');
+        }
+/*
+        $secret = "6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj";
+//        return $request->get('captcha') ;
+        $response = (new ReCaptcha($secret))
+            ->setExpectedAction('login')
+            ->verify($request->get('g-captcha-response'), $request->ip());
+
+        if (!$response->isSuccess()) {
+            return redirect()->back()->with('error' , 'لطفا قسمت امنیتی را تایید نماید . ');
+        }*/
+    /*    if ($response->getScore() < 0.6) {
+            return "not ok !";
+        }*/
+
         $username = $request->get('username');
         $password = $request->get('password');
         $cont = new Api();

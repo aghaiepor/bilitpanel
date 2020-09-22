@@ -1,14 +1,3 @@
-<!--
-=========================================================
-Material Dashboard PRO - v2.1.2
-=========================================================
-
-Product Page: https://www.creative-tim.com/product/material-dashboard-pro
-Copyright 2020 Creative Tim (https://www.creative-tim.com)
-Coded by Creative Tim
-
-=========================================================
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,6 +17,13 @@ The above copyright notice and this permission notice shall be included in all c
     <link href="../assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <script src='https://www.google.com/recaptcha/api.js?hl=fa'></script>
+    <style>
+        .g-recaptcha iframe{
+            margin-top: 12px;
+            width: 100%;
+        }
+    </style>
 </head>
 
 
@@ -79,8 +75,15 @@ The above copyright notice and this permission notice shall be included in all c
                                     </div>
                                 </span>
 
+                                {{--<div class="form-row">
+                                    <div class="col-md">
+                                        <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                                    </div>
+                                </div>
+                                --}}
                                 <div class="card-footer justify-content-end mt-2 ml-0">
-                                    <button {{--class="g-recaptcha" data-sitekey="" data-callback='onSubmit' data-action='submit'--}} type="submit" class="btn btn-primary px-5"> ورود </button>
+{{--                                    <button class="g-recaptcha" data-sitekey="reCAPTCHA_site_key" data-callback='onSubmit' data-action='submit'>Submit</button>--}}
+                                    <button class="btn btn-primary px-5" {{--class="g-recaptcha btn btn-primary px-5" data-sitekey="6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj" data-callback='onSubmit' data-action='submit'--}} type="submit" > ورود </button>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +140,7 @@ The above copyright notice and this permission notice shall be included in all c
 {{--<script src="https://www.google.com/recaptcha/api.js"></script>--}}
 <script>
     function onSubmit(token) {
-        document.getElementById("loginForm").submit();
+        document.getElementById("demo-form").submit();
     }
 </script>
 <script>
