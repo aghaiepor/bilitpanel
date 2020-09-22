@@ -147,7 +147,7 @@
                                                                             <div class="form-row mt-2">
                                                                                 <div class="col-md text-right">
                                                                                     <label for="" > شماره حساب </label>
-                                                                                    <input type="shaba" class="form-control" placeholder="شماره حساب">
+                                                                                    <input type="text" name="shaba" class="form-control" placeholder="شماره حساب">
                                                                                 </div>
                                                                                 <div class="col-md text-right">
                                                                                     <label for="" > شماره حسابشناسه پرداخت </label>

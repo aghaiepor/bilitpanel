@@ -911,10 +911,10 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function TerminalLocationList($location_id=null){
+    public function TerminalLocationList($location_id){
         $data = [
-            "location_id" => 1 /* $location_id*/
-        ] ;
+            "location_id" =>  $location_id
+        ];
         $client = new Client();
         $result = $client->post($this->url . 'TerminalLocationList' ,[
                 'headers'=>$this->getHeader(),
@@ -941,6 +941,50 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+    public function AssignTerminal($terminal_id, $imei, $domain, $serial_number, $type_id, $location_id, $project_name)
+    {
+        $terminal_serial_type = [
+            "terminal_id" => $terminal_id,
+            "imei" => $imei,
+            "domain" => $domain,
+            "serial_number" => $serial_number,
+            "type_id" => $type_id
+        ];
+        $data = [
+            "terminal_serial_type" => $terminal_serial_type,
+            "project_name" => $project_name,
+            "location_id" => $location_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'AssignTerminal', [
+                'headers' => $this->getHeader(),
+                'json' => $data
+            ]
+        );
+        $response = json_decode($result->getBody(), true);
+
+        $this->checkError($response);
+        return $response;
+    }
+    public function EditAssignTerminal($location_terminal_id, $terminal_id, $serial_number, $type_id)
+    {
+        $data = [
+            "location_terminal_id"=> $location_terminal_id,
+            "terminal_id"=> $terminal_id,
+            "type_id"=> $type_id,
+            "serial_number"=> $serial_number
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'EditAssignTerminal', [
+                'headers' => $this->getHeader(),
+                'json' => $data
+            ]
+        );
+        $response = json_decode($result->getBody(), true);
 
         $this->checkError($response);
         return $response;

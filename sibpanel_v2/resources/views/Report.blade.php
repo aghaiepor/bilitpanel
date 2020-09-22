@@ -179,6 +179,8 @@
                                                 <option @if(request('pre_sale') == "1") selected @endif value="1"> پیش فروش </option>
                                             </select>
                                         </div>
+                                    @else
+                                        <input type="hidden" name="pre_sale" value="1" >
                                     @endif
                                     <div class="col-md-3 mr-auto">
                                         <label for="" class="text-white"> .</label>
@@ -395,10 +397,10 @@
                                 $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id , true));
                             else
                                 $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
-
                         }
                         $('.selectpicker').selectpicker('refresh');
                     }
+
                 });
             }
             if(cityList != ''){

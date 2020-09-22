@@ -15,7 +15,7 @@ class LocationController extends Controller
     {
         $this->api = new Api();
     }
-
+    // ******* Location
     public function index()
     {
         $locations = Cache::get('LocationList') ;
@@ -23,7 +23,6 @@ class LocationController extends Controller
         $GetVoucherText = Cache::get("GetVoucherText");
         return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText ]);
     }
-
     public function AddLocation(Request $request){
         $location_name = $request->get('location_name') ;
         $location_english_name = $request->get('location_english_name') ;
@@ -61,7 +60,6 @@ class LocationController extends Controller
 //            return redirect()->back()->with('error' , ' خطا در ایجاد مکان . ');
 //        return json_encode($addLocation);
     }
-
     public function EditLocation(Request $request , $id){
 
         $location_name = $request->get('location_name') ;
@@ -149,6 +147,16 @@ class LocationController extends Controller
             return $data;
     }
 
+    public function getLocationFilter(Request $request){
+        $city_id = $request->get("city_id");
+        $province_id = $request->get("province_id");
+        $locations = $this->api->location_list( $province_id , $city_id);
+        $province = Cache::get('ProvinceList') ;
+        $GetVoucherText = Cache::get("GetVoucherText");
+//        return $locations;
+        return view('places' , ['locations' => $locations['ContentData'], 'province' => $province , 'GetVoucherText' => $GetVoucherText ]);
+    }
+    // ******* Service
     public function GetService($id){
         $GetServices = Cache::get('ServiceList');
         $locationID = $id ;
@@ -240,6 +248,8 @@ class LocationController extends Controller
                     return $data ;
 //        return $EditService ;
     }
+
+    // ******* Voucher
     public function VoucherInfoList($service_id , $location_id){
 
         $GetServices = Cache::get('ServiceList');
