@@ -29,12 +29,14 @@ class LocationController extends Controller
         $location_address = $request->get('location_address') ;
         $location_english_address = $request->get('location_english_address') ;
         $province_id = $request->get('province_id') ;
-        $city_id = $request->get('city_id') ;
-        $text_id = $request->get('text_id') ;
+        $city_id = $request->get('city_id');
+        $text_id = $request->get('text_id');
+        $longitude= $request->get('longitude');
+        $latitude = $request->get('latitude');
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
 //        Log::info( 'mandatory_entrance' . $mandatory_entrance);
-        $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance);
-        /*
+        $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude);
+    /*
         // **** for shahdari project *****
         $location_id = (int)locationId;
         $project_name = "shahrdari";
@@ -43,6 +45,7 @@ class LocationController extends Controller
        $payment_id = $request->get("officeNo"); ;
         $AddClearingAccount = $this->api->AddClearingAccount($location_id,$project_name,$owner_name,$shaba,$payment_id);
 */
+//        return $addLocation;
         if ($addLocation['Header']['MessageCode'] == 0){
             $api = new Api();
             Cache::forget('LocationList');
@@ -69,8 +72,9 @@ class LocationController extends Controller
         $location_id = $id ;
         $text_id = $request->get('text_id') ;
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
-
-        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance);
+        $longitude= $request->get('longitude');
+        $latitude = $request->get('latitude');
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude);
         if ($EditLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){
@@ -251,7 +255,6 @@ class LocationController extends Controller
 
     // ******* Voucher
     public function VoucherInfoList($service_id , $location_id){
-
         $GetServices = Cache::get('ServiceList');
         $locationID = $location_id ;
         $GetServices = array_filter($GetServices, function ($event) use ($locationID , $service_id) {
@@ -308,7 +311,9 @@ class LocationController extends Controller
     }
 
     public function citizenPanel(Request $request , $id){
-        return view("citizen") ;
+//        $GetPicture = $this->api->GetPicture($id);
+//        return $GetPicture;
+        return view("citizen" ) ;
     }
 
 
