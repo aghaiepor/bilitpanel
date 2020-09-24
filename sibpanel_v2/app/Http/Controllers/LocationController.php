@@ -64,7 +64,6 @@ class LocationController extends Controller
 //        return json_encode($addLocation);
     }
     public function EditLocation(Request $request , $id){
-
         $location_name = $request->get('location_name') ;
         $location_english_name = $request->get('location_english_name') ;
         $location_address = $request->get('location_address') ;
@@ -313,7 +312,13 @@ class LocationController extends Controller
     public function citizenPanel(Request $request , $id){
 //        $GetPicture = $this->api->GetPicture($id);
 //        return $GetPicture;
-        return view("citizen" ) ;
+        $locations = Cache::get('LocationList');
+        $GetLocations = array_filter($locations, function ($event) use ($id) {
+            return $event['id'] == $id;
+        });
+        $array_keys = array_keys($GetLocations) ;
+        $index =  $array_keys[0];
+        return view("citizen" , ['GetLocations' => $GetLocations[$index] ] ) ;
     }
 
 

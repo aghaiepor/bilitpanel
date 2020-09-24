@@ -153,7 +153,7 @@
 
                                         </td>
                                         <td >
-                                            54.25186157 , 31.89563149
+                                            {{$GetLocations['longitude']}},{{$GetLocations['latitude']}}
                                         </td>
                                         <td >
                                             <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">
