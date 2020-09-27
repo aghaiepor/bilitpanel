@@ -243,7 +243,15 @@
                                                     {{$result['sale_type_name']}}
                                                 </td>
                                                 <td>
-                                                    {{$result['procedure_status']}}
+
+                                                    @if($result['procedure_status'] == 1 || $result['procedure_status'] == 10 )
+                                                        <span class="badge badge-sm badge-secondary"> استفاده نشده </span>
+                                                        @elseif($result['procedure_status'] == 11 || $result['procedure_status'] == 5)
+                                                        <span class="badge badge-sm badge-success"> استفاده شده </span>
+                                                        @elseif($result['procedure_status'] == 3)
+                                                        <span class="badge badge-sm badge-danger"> حذف شده </span>
+
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     {{ number_format($result['ticket_number'] , 0 , '.' , ',')}}

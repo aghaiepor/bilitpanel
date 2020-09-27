@@ -241,6 +241,16 @@
                                                                     </div>
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
+                                                                            <label for=""> طول جغرافیایی </label>
+                                                                            <input name="longitude" type="text" value="{{$location['longitude']}}" class="form-control" placeholder="طول جغرافیایی">
+                                                                        </div>
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> عرض جغرافیایی </label>
+                                                                            <input name="latitude" type="text" value="{{$location['latitude']}}" class="form-control"  placeholder="عرض جغرافیایی">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row mt-2">
+                                                                        <div class="col-md text-right">
                                                                             <label for="" class="text-right"> آدرس </label>
                                                                             <textarea style="height: 64px !important;" class="form-control" name="location_address" cols="30" rows="3">{{$location['location_address']}}</textarea>
                                                                         </div>
@@ -367,6 +377,16 @@
                             <option value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
                         --}}
                         </select>
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-md text-right">
+                        <label for=""> طول جغرافیایی </label>
+                        <input name="longitude" type="text" class="form-control" placeholder="طول جغرافیایی">
+                    </div>
+                    <div class="col-md text-right">
+                        <label for=""> عرض جغرافیایی </label>
+                        <input name="latitude" type="text" class="form-control"  placeholder="عرض جغرافیایی">
                     </div>
                 </div>
                 <div class="form-row mt-2">

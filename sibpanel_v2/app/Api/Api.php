@@ -77,7 +77,6 @@ class Api
         return $response;
     }
 
-
     public function AllLocationServiceList($id = null){
         $data=null;
         if ( $id != null )
@@ -109,8 +108,7 @@ class Api
 
         return array_values($locations);
     }
-
-    public function AddLocation($location_name, $province_id, $text_id, $city_id, $location_english_name, $location_address, $location_english_address,$mandatory_entrance){
+    public function AddLocation($location_name, $province_id, $text_id, $city_id, $location_english_name, $location_address, $location_english_address,$mandatory_entrance ,$longitude , $latitude){
         $data = [
             "location_name"=> $location_name,
             "location_english_name"=> $location_english_name,
@@ -120,6 +118,8 @@ class Api
             "city_id"=> $city_id,
             "text_id"=> $text_id,
             "mandatory_entrance"=> $mandatory_entrance,
+            "latitude" => $latitude ,
+            "longitude" => $longitude ,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddLocation' ,[
@@ -132,7 +132,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function EditLocation($location_name, $text_id, $location_english_name, $location_english_address, $location_address, $location_id,$mandatory_entrance){
+    public function EditLocation($location_name, $text_id, $location_english_name, $location_english_address, $location_address, $location_id,$mandatory_entrance , $longitude , $latitude){
         $data = [
             "location_name"=> $location_name,
             "location_english_name"=> $location_english_name,
@@ -141,6 +141,8 @@ class Api
             "location_id"=> $location_id,
             "text_id"=> $text_id,
             "mandatory_entrance"=> $mandatory_entrance,
+            "longitude"=> $longitude,
+            "latitude"=> $latitude,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'EditLocation' ,[
@@ -394,7 +396,40 @@ class Api
         return $response;
     }
 
+    // **** citizen panel ******
+    public  function GetPicture($location_id){
+        $data = null;
+        $client = new Client();
+        $result = $client->get($this->url . 'GetPicture/'.$location_id ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+//        $this->checkError($response);
+        return $result;
+    }
+    public  function GetPicturesInfo($location_id,$service_id,$project_id,$voucher_info_id){
+        $data = [
+            "project_id"=> $project_id,
+            "location_id"=> $location_id,
+            "service_id"=> $service_id,
+            "voucher_info_id"=> $voucher_info_id
+        ];
+        $client = new Client();
+        $result = $client->Post($this->url . 'GetPicturesInfo' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
 
+        $this->checkError($response);
+        return $response;
+    }
+
+
+    //****** CancelVoucher ******
     public function CancelVoucher($voucher_number){
         $data = [
             "voucher_number" => $voucher_number,
@@ -467,7 +502,6 @@ class Api
     }
 
     // VoucherText
-
     public function GetVoucherText(){
         $data = null ;
         $client = new Client();
@@ -825,6 +859,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
+
     // Province and City
     public function AddProvince($name_fa, $name_en, $projects){
         $data = [
@@ -861,7 +896,6 @@ class Api
         $this->checkError($response);
         return $response;
     }
-
     public function AddCity($city, $city_english_name, $provinceId){
         $data = [
             'city' => $city,
@@ -1005,7 +1039,6 @@ class Api
         $this->checkError($response);
         return $response;
     }
-
     public function EditServiceTime($data)
     {
         $client = new Client();
@@ -1019,7 +1052,6 @@ class Api
         $this->checkError($response);
         return $response;
     }
-
     public function AddTimeTemplate($times_template){
         $data = [
             'times_template' => $times_template
@@ -1035,7 +1067,6 @@ class Api
         $this->checkError($response);
         return $response;
     }
-
     public function AddTimeGroup($name,$time_template_ids){
         $data = [
             'name' => $name,
@@ -1052,7 +1083,6 @@ class Api
         $this->checkError($response);
         return $response;
     }
-
     public function EditTimeGroup($time_group_id,$name,$time_template_ids){
         $data = [
             'time_group_id' => $time_group_id,
