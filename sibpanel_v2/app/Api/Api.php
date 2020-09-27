@@ -406,6 +406,23 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
+//        $this->checkError($response);
+        return $result;
+    }
+    public  function GetPicturesInfo($location_id,$service_id,$project_id,$voucher_info_id){
+        $data = [
+            "project_id"=> $project_id,
+            "location_id"=> $location_id,
+            "service_id"=> $service_id,
+            "voucher_info_id"=> $voucher_info_id
+        ];
+        $client = new Client();
+        $result = $client->Post($this->url . 'GetPicturesInfo' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
 
         $this->checkError($response);
         return $response;

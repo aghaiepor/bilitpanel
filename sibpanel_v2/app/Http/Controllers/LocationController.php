@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Api\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class LocationController extends Controller
@@ -310,15 +311,28 @@ class LocationController extends Controller
     }
 
     public function citizenPanel(Request $request , $id){
-//        $GetPicture = $this->api->GetPicture($id);
-//        return $GetPicture;
+        $GetPicture = $this->api->GetPicture($id);
+//        $test = "http://185.129.170.10:5002/GetPicture/".$id;
+//        $res = Http::get($test);
+        return $GetPicture;
+
         $locations = Cache::get('LocationList');
         $GetLocations = array_filter($locations, function ($event) use ($id) {
             return $event['id'] == $id;
         });
         $array_keys = array_keys($GetLocations) ;
         $index =  $array_keys[0];
-        return view("citizen" , ['GetLocations' => $GetLocations[$index] ] ) ;
+        $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,$id,null);
+        $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
+        $project_pics = $GetPicturesInfo['ContentData']['project_pics'];
+        if($project_pics != null){
+            $project_pics_picture_id  = $this->api->GetPicture($project_pics[0]['picture_id']) ;
+            return $project_pics_picture_id;
+        }
+//        $voucher_info_pics = $GetPicturesInfo['ContentData']['voucher_info_pics'];
+//        $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
+//        return $project_pics;
+        return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'project_pics' => $project_pics ] ) ;
     }
 
 
