@@ -321,6 +321,7 @@
     <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+
             $('#FromDate').persianDatepicker({
                 initialValue: true,
                 autoClose : true ,
@@ -334,8 +335,6 @@
                         enabled:false
                     }
                 }
-
-
             });
             $('#ToDate').persianDatepicker({
                 initialValue: true,
@@ -355,14 +354,12 @@
                         btnPrevText:'قبلی'
                     }
                 }
-
             });
-
             let start = "{{request('startDate')}}";
             if(start != '')
                 $("#FromDate").val(start);
 
-            let end = "{{request('endDate')}}";
+            let end = "{{request('endtDate')}}";
             if(end != '')
                 $("#ToDate").val(end);
         });
@@ -374,7 +371,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             province= "{{request('province_id')}}";
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
@@ -541,7 +537,6 @@
                 } , 1500)
 
             });
-
             // $('#TransationTable').DataTable();
         });
     </script>

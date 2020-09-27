@@ -75,14 +75,14 @@
                                     </div>
                                 </span>
 
-                                <div class="form-row">
+                               {{-- <div class="form-row">
                                     <div class="col-md">
                                         <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
                                     </div>
-                                </div>
+                                </div>--}}
                                 <div class="card-footer justify-content-end mt-2 ml-0">
 {{--                                    <button class="g-recaptcha" data-sitekey="reCAPTCHA_site_key" data-callback='onSubmit' data-action='submit'>Submit</button>--}}
-                                    <button {{--class="btn btn-primary px-5"--}} {{--class="g-recaptcha btn btn-primary px-5" data-sitekey="6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj" data-callback='onSubmit' data-action='submit'--}} type="submit" > ورود </button>
+                                    <button class="btn btn-primary px-5" {{--class="g-recaptcha btn btn-primary px-5" data-sitekey="6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj" data-callback='onSubmit' data-action='submit'--}} type="submit" > ورود </button>
                                 </div>
                             </div>
                         </div>

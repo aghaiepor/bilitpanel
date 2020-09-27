@@ -320,6 +320,7 @@
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
     <script type="text/javascript">
+        console.log("ok")
         $(document).ready(function() {
             $('#FromDate').persianDatepicker({
                 initialValue: true,
