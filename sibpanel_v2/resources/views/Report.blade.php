@@ -192,6 +192,11 @@
 
                             <!-- Modal -->
                         </div>
+                        @php
+                            $City = [] ;
+                            $count = [] ;
+                        @endphp
+                        @if(Route::current()->getName() == "GetStat")
                         <div class="card-body">
                             <div class="table-responsive table-striped">
                                 <table id="reportTable" class="table text-center">
@@ -225,10 +230,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @php
-                                      $City = [] ;
-                                      $count = [] ;
-                                    @endphp
+
                                     @if($data == null || count($data['result']) == 0 )
                                         <tr>
                                             <td colspan="4">
@@ -283,9 +285,11 @@
                                 </table>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
+                @if(Route::current()->getName() == "GetStat")
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -311,6 +315,7 @@
                     </div>
                 </div>
             </div>
+                    @endif
         </div>
     </div>
 @endsection

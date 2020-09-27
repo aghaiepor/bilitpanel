@@ -1,7 +1,7 @@
 <div id="loader" style="position: fixed;z-index: 35;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
     <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
 </div>
-<div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-3.jpg">
+<div style="z-index: 10" class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-3.jpg">
     <div style="z-index: 100;position: absolute;left: 22px;top: 7px;  " class="navbar-wrapper">
         <div class="navbar-minimize">
             <button id="minimizeSidebar" class="btn btn-just-icon btn-primary btn-fab btn-round">

@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             <div class="row" id="div_seance" style="display: none">
-                                <div class="col-lg-6 panel panel-default">
+                                <div class="col-lg-8 panel panel-default">
                                     <div class="panel-body" style="font-family: iransans !important;">
                                         <div class="form-group">
                                             <div id="inline2">
@@ -103,7 +103,7 @@
                                         <button onclick="submit()" class="btn btn-success c-font-bold btn-lg">تایید نهایی و اعمال تغییرات</button>
                                     </div>
                                 </div>
-                                <div class="col-lg-6" style="margin-top: 30px">
+                                <div class="col-lg-4" style="margin-top: 30px">
                                     <div class="col-md-5 mr-3 text-center pull-right"
                                          style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                         <div class="row justify-content-center">

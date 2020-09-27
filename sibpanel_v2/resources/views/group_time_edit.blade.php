@@ -25,14 +25,18 @@
         #plotId .header{
             margin-bottom: 5px;
         }
+
         .datepicker-plot-area .datepicker-day-view .table-days td div:hover{
+            background-color: #ce3166 !important;
+        }
+
+        .datepicker-plot-area .datepicker-day-view .table-days td div:not(.dt-selected):hover{
             background-color: #ececec !important;
         }
+
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
-
-
 @endsection
 
 @section('content')
@@ -102,7 +106,7 @@
                                         </div>
                                     </div>
                                     <div class="row" id="div_seance" style="display: none">
-                                        <div class="col-lg-6 panel panel-default">
+                                        <div class="col-lg-8 panel panel-default">
                                             <div class="panel-body">
                                                 <div class="form-group">
                                                     <div id="inline2">
@@ -118,30 +122,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 " style="margin-top: 30px">
-                                            <div class="col-md-5 mr-3 text-center pull-right"
-                                                 style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
-                                                <div class="row justify-content-center">
-                                                    <span style="font-size: 16px">ساعت پایان</span>
-                                                </div>
-                                                <div class="row justify-content-center time-select" style="margin-top: 10px">
-                                                    <button onclick="changeMin('end_minute','add')" class="btn btn-info btn-time"
-                                                            style="margin-left: 4px"><i class="fa fa-chevron-up"></i></button>
-                                                    <button onclick="changeHour('end_hour','add')" class="btn btn-info btn-time"
-                                                            style="margin-right: 4px"><i class="fa fa-chevron-up"></i></button>
-                                                </div>
-                                                <div class="row justify-content-center time-select" style="margin-top: 4px;margin-bottom: 4px">
-                                                    <input id="end_minute" value="00" disabled>
-                                                    <span style="font-size: 20px">:</span>
-                                                    <input id="end_hour" value="9" disabled>
-                                                </div>
-                                                <div class="row justify-content-center time-select">
-                                                    <button onclick="changeMin('end_minute','minus')" class="btn btn-info btn-time"
-                                                            style=";margin-left: 4px"><i class="fa fa-chevron-down"></i></button>
-                                                    <button onclick="changeHour('end_hour','minus')" class="btn btn-info btn-time"
-                                                            style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
-                                                </div>
-                                            </div>
+                                        <div class="col-lg-4 " style="margin-top: 30px">
                                             <div class="col-md-5 mr-3 text-center pull-right"
                                                  style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                                 <div class="row justify-content-center">
@@ -162,6 +143,29 @@
                                                     <button onclick="changeMin('start_minute','minus')" class="btn btn-info btn-time"
                                                             style=";margin-left: 4px"><i class="fa fa-chevron-down"></i></button>
                                                     <button onclick="changeHour('start_hour','minus')" class="btn btn-info btn-time"
+                                                            style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 mr-3 text-center pull-right"
+                                                 style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
+                                                <div class="row justify-content-center">
+                                                    <span style="font-size: 16px">ساعت پایان</span>
+                                                </div>
+                                                <div class="row justify-content-center time-select" style="margin-top: 10px">
+                                                    <button onclick="changeMin('end_minute','add')" class="btn btn-info btn-time"
+                                                            style="margin-left: 4px"><i class="fa fa-chevron-up"></i></button>
+                                                    <button onclick="changeHour('end_hour','add')" class="btn btn-info btn-time"
+                                                            style="margin-right: 4px"><i class="fa fa-chevron-up"></i></button>
+                                                </div>
+                                                <div class="row justify-content-center time-select" style="margin-top: 4px;margin-bottom: 4px">
+                                                    <input id="end_minute" value="00" disabled>
+                                                    <span style="font-size: 20px">:</span>
+                                                    <input id="end_hour" value="9" disabled>
+                                                </div>
+                                                <div class="row justify-content-center time-select">
+                                                    <button onclick="changeMin('end_minute','minus')" class="btn btn-info btn-time"
+                                                            style=";margin-left: 4px"><i class="fa fa-chevron-down"></i></button>
+                                                    <button onclick="changeHour('end_hour','minus')" class="btn btn-info btn-time"
                                                             style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
                                                 </div>
                                             </div>
@@ -205,11 +209,13 @@
                                                     <input type="hidden" id="edit_template_id" value="">
                                                     <br>
                                                 </div>--}}
-
+                                                <div class="form-row justify-content-center">
                                                     <button onclick="addSeance()" id="btn_add_seance" class="btn btn-info" >اضافه کردن سانس</button>
                                                     <button onclick="deleteAllSeance()" id="btn_delete_all_seances" class="btn btn-danger ">حذف همه سانس ها</button>
                                                     <button onclick="do_edit_seance()" id="btn_edit_seance" class="btn btn-primary" style="display:none">ویرایش سانس</button>
                                                     <button onclick="cancel_edit_seance()" id="btn_cancel_edit" class="btn btn-success" style="display:none">لغو</button>
+
+                                                </div>
 
                                             </div>
                                             {{--<div class="card-2" style="margin-right: 5px;display: inline-block">
@@ -219,13 +225,14 @@
 
                                             </div>--}}
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div id="seances" style="margin-bottom: 15px;display: flow-root;">
-                                                    </div>
-                                                </div>
-                                            </div>
 
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="seances" style="margin-bottom: 15px;display: flow-root;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -758,7 +765,7 @@
                 return;
             }
 
-            $('#seances').append("<div class=\"col-md-2 pull-left seance\" style=\"margin-right: 20px;margin-top:20px;border-radius: 5px;text-align: right;background-color: #c7c7c7;padding: 10px;color: black;font-size: 12px\">\n" +
+            $('#seances').append("<div class=\"col-md-1 pull-left seance\" style=\"margin-right: 20px;margin-top:20px;border-radius: 5px;text-align: right;background-color: #c7c7c7;padding: 10px;color: black;font-size: 12px\">\n" +
                 "                <div onclick='removeSeance(this)' class=\"delete\" ><i  class=\"fa fa-trash dot\"></i></div>\n" +
                 "                <input type='hidden' class=\"guid\" value=" + uuidv4() + ">\n" +
                 "                <div class=\"items\"><span class=\"seance_start\" value=" + start + ">شروع: " + start + "</span></div>\n" +
