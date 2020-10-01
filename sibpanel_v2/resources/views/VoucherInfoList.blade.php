@@ -8,6 +8,39 @@
         .bootstrap-select{
             width: 100% !important;
         }
+        .citzen_main_img{
+            width: 70px;
+            height: 70px;
+            border-radius: 20%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: 0.3s all;
+        }
+        .citzen_main_img:hover{
+            filter: brightness(1.2);
+            transform: scale(1.1);
+        }
+        .citzen_main_img:active{
+            filter: brightness(1.8);
+            transition: .1s filter;
+        }
+        #herf_modal_image{
+            display: block;
+            margin: 0 auto;
+        }
+        .citzen_img_lib{
+            padding: 8px;
+            border-radius: 5px;
+            border: solid 2px #FF9800;
+            font-size: 29pt !important;
+            color: #FF9800;
+            cursor: pointer;
+            transition: .3s all;
+        }
+        .citzen_img_lib:hover{
+            border: solid 2px #de8400;
+            color: #de8400;
+        }
     </style>
 @endsection
 
@@ -67,6 +100,9 @@
                                             نوع بلیت
                                         </th>
                                         <th >
+                                            عکس بلیت
+                                        </th>
+                                        <th >
                                             ویرایش
                                         </th>
                                     </tr>
@@ -92,6 +128,9 @@
                                                 </td>
                                                 <td>
                                                     {{$VoucherInfo[$i]['voucher_type_name']}}
+                                                </td>
+                                                <td>
+                                                    <img data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">
                                                 </td>
                                                 <td>
                                                     <button data-toggle="modal" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn  btn-success btn-simple">
@@ -205,7 +244,41 @@
 
     </div>
 </div>
+
+{{--  modal for singel images   --}}
+<div class="modal fade" id="image_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                &nbsp;
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="img-fluid rounded" id="herf_modal_image" src="" alt="">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success px-3">
+                    افزودن عکس
+                </button>
+                <button class="btn btn-danger px-3">
+                     حذف عکس
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('AddJs')
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".citzen_main_img").click(function () {
+                let src = $(this).attr("src") ;
+                $("#herf_modal_image").attr('src' ,src );
+            });
+        });
+
+    </script>
 @endsection

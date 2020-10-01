@@ -73,18 +73,6 @@ class AuthController extends Controller
     }
 
     public function test(){
-        Cache::forget('LocationList');
-        $value = Cache::rememberForever('LocationList', function(){
-            $Api = new Api();
-            $Locations  = $Api->LocationList();
-            return $Locations;
-        });
-        return Cache::get('LocationList') ;
-
-        /*$value = Cache::rememberForever('LocationList', function(){
-
-        });*/
-//        return $Locations ;
 
 
     }

@@ -309,33 +309,66 @@ class LocationController extends Controller
         ] ;
 //        return $text ;
     }
-
+    // ***** Citizen
     public function citizenPanel(Request $request , $id){
         $GetPicture = $this->api->GetPicture($id);
+        $GetEvent = $this->api->GetEvent($id);
+//        return $GetEvent;
 //        $test = "http://185.129.170.10:5002/GetPicture/".$id;
 //        $res = Http::get($test);
-        return $GetPicture;
-
+        /*$image = $this->data_uri($GetPicture['content'] , $GetPicture['type']);
+        return '<img src="'.$image.'" alt="An elephant" />';*/
         $locations = Cache::get('LocationList');
         $GetLocations = array_filter($locations, function ($event) use ($id) {
             return $event['id'] == $id;
         });
         $array_keys = array_keys($GetLocations) ;
         $index =  $array_keys[0];
+        $images = [];
         $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,$id,null);
-        $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
-        $project_pics = $GetPicturesInfo['ContentData']['project_pics'];
-        if($project_pics != null){
-            $project_pics_picture_id  = $this->api->GetPicture($project_pics[0]['picture_id']) ;
-            return $project_pics_picture_id;
+//        return $GetPicturesInfo;
+        if(array_key_exists("location_pics" , $GetPicturesInfo['ContentData'])){
+            $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
         }
-//        $voucher_info_pics = $GetPicturesInfo['ContentData']['voucher_info_pics'];
-//        $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
+
+        if(array_key_exists("project_pics" , $GetPicturesInfo['ContentData'])){
+            $project_pics = $GetPicturesInfo['ContentData']['project_pics'];
+            if($project_pics != null){
+                $project_pics_picture_id  = $this->api->GetPicture($project_pics[0]['picture_id']) ;
+                $project_pics_picture_id =  $this->data_uri($project_pics_picture_id);
+                array_push($project_pics_picture_id,$images);
+            }
+        }
+        if(array_key_exists("voucher_info_pics" , $GetPicturesInfo['ContentData'])){
+            $voucher_info_pics = $GetPicturesInfo['ContentData']['voucher_info_pics'];
+        }
+
+        if(array_key_exists("service_pics" , $GetPicturesInfo['ContentData'])){
+            $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
+        }
+
+
 //        return $project_pics;
-        return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'project_pics' => $project_pics ] ) ;
+        return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'images' => $images , 'GetEvents' => $GetEvent['ContentData'] ] ) ;
     }
 
+    public function FullDescription(Request $request , $id=null)
+    {
+        $FullDescription =$request->get('FullDescription');
+        return $FullDescription ;
+    }
+    public function ShortDescription(Request $request , $id=null)
+    {
+        $FullDescription =$request->get('ShortDescription');
+        return $FullDescription ;
+    }
 
-
+    function data_uri($image)
+    {
+        $mime = $image['type'];
+        $content = $image['content'];
+        $base64   = base64_encode($content);
+        return ('data:' . $mime . ';base64,' . $base64);
+    }
 
 }

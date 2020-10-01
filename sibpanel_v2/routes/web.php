@@ -65,6 +65,10 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/getLocationFilter' , 'LocationController@getLocationFilter')->name('getLocationFilter');
         Route::post('/GetVoucherTextLoc'  , 'LocationController@GetVoucherText' )->name('GetVoucherTextLoc');
 
+        // Citizen
+        Route::post('/FullDescription/{id?}' , 'LocationController@FullDescription')->name('FullDescription');
+        Route::post('/ShortDescription/{id?}' , 'LocationController@ShortDescription')->name('ShortDescription');
+
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');
         Route::get('/VoucherInfoList/{service_id}/{location_id}' ,'LocationController@VoucherInfoList' )->name('VoucherInfoList');

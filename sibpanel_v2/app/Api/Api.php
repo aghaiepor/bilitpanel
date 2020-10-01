@@ -405,9 +405,13 @@ class Api
                 'json'=>$data
             ]
         );
-        $response = json_decode($result->getBody(),true);
+//        $response = json_decode($result->getBody(),true);
 //        $this->checkError($response);
-        return $result;
+//        return $result->getBody()->getContents();
+        return $result = [
+            'type' => $result->getHeader("Content-Type")[0] ,
+            'content' => $result->getBody()->getContents() ,
+        ];
     }
     public  function GetPicturesInfo($location_id,$service_id,$project_id,$voucher_info_id){
         $data = [
@@ -424,6 +428,20 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
+        $this->checkError($response);
+        return $response;
+    }
+    public  function GetEvent($location_id){
+        $data = [
+            "location_id" => $location_id ,
+        ];
+        $client = new Client();
+        $result = $client->Post($this->url . 'GetEvent',[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
         $this->checkError($response);
         return $response;
     }
