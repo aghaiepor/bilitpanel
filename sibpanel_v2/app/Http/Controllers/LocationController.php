@@ -386,10 +386,46 @@ class LocationController extends Controller
 
     }
 
-    public function FullDescription(Request $request , $id=null)
+    public function FullDescription(Request $request , $id)
     {
-        $FullDescription =$request->get('FullDescription');
-        return $FullDescription ;
+        $GetLocation = $this->api->GetLocation($id);
+//        return $GetLocation;
+        $data = [
+            'location' => $GetLocation['ContentData'] ,
+            'location_id' => $id,
+            'lat' => $request->get('latitude'),
+            'long' => $request->get('longitude')
+        ];
+        $location_name = $GetLocation['ContentData'][0]['location_name'] ;
+        $location_english_name = $GetLocation['ContentData'][0]['location_english_name'] ;
+        $location_address = $GetLocation['ContentData'][0]['address'] ;
+        $location_english_address = $GetLocation['ContentData'][0]['location_address'] ;
+        $location_id = $id ;
+        $text_id = $GetLocation['ContentData'][0]['text']['id'] ;
+//      $introduction =  htmlentities($request->get('ShortDescription')) ;
+        $introduction =  $GetLocation['ContentData'][0]['introduction'];
+        $description =  htmlentities($request->get('FullDescription'));
+        $mandatory_entrance = $GetLocation['ContentData'][0]['mandatory_entrance'] ;
+        $longitude = $GetLocation['ContentData'][0]['longitude'];
+        $latitude = $GetLocation['ContentData'][0]['latitude'];
+
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+//        return $EditLocation;
+        if ($EditLocation['Header']['MessageCode'] == 0){
+            Cache::forget('LocationList');
+            Cache::rememberForever('LocationList', function(){
+                $Locations  = $this->api->LocationList();
+                return $Locations['ContentData'];
+            });
+            return redirect()->back()->with('success' , ' توضیحات کامل ویرایش گردید . ');
+        }
+        else
+            return redirect()->back()->with('error' , ' خطا در ویرایش توضیحات کامل ! ');
+
+//        $FullDescription =$request->get('ShortDescription');
+//        return $FullDescription ;
+
+
     }
     public function ShortDescription(Request $request , $id)
     {
@@ -415,7 +451,7 @@ class LocationController extends Controller
         $latitude = $GetLocation['ContentData'][0]['latitude'];
 
         $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
-        return $EditLocation;
+//        return $EditLocation;
         if ($EditLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){

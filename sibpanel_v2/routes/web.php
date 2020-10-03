@@ -66,7 +66,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/GetVoucherTextLoc'  , 'LocationController@GetVoucherText' )->name('GetVoucherTextLoc');
 
         // Citizen
-        Route::post('/FullDescription/{id?}' , 'LocationController@FullDescription')->name('FullDescription');
+        Route::post('/FullDescription/{id}' , 'LocationController@FullDescription')->name('FullDescription');
         Route::post('/ShortDescription/{id}' , 'LocationController@ShortDescription')->name('ShortDescription');
         Route::post('/AddLatLong/{id}' , 'LocationController@AddLatLong')->name('AddLatLong');
 

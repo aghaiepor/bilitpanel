@@ -214,7 +214,7 @@
                                         </form>
                                     </div>
                                     <div class="col-md-7 text-right">
-                                        <form action="{{Route("FullDescription")}}" method="post">
+                                        <form action="{{Route("FullDescription" , ['id' => $location_id] )}}" method="post">
                                             @csrf
                                             <label> توضیحات کامل </label>
                                             <textarea name="FullDescription" id="FullDescription">
