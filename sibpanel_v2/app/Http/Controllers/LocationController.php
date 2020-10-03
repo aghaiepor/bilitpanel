@@ -65,6 +65,7 @@ class LocationController extends Controller
 //        return json_encode($addLocation);
     }
     public function EditLocation(Request $request , $id){
+        $getLoction = $this->api->GetLocation($id);
         $location_name = $request->get('location_name') ;
         $location_english_name = $request->get('location_english_name') ;
         $location_address = $request->get('location_address') ;
@@ -74,7 +75,9 @@ class LocationController extends Controller
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
         $longitude= $request->get('longitude');
         $latitude = $request->get('latitude');
-        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude);
+        $introduction = $getLoction['ContentData'][0]['introduction'];
+        $description =  $getLoction['ContentData'][0]['description'];
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
         if ($EditLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){
@@ -311,13 +314,13 @@ class LocationController extends Controller
     }
     // ***** Citizen
     public function citizenPanel(Request $request , $id){
-        $GetPicture = $this->api->GetPicture($id);
         $GetEvent = $this->api->GetEvent($id);
-//        return $GetEvent;
-//        $test = "http://185.129.170.10:5002/GetPicture/".$id;
-//        $res = Http::get($test);
-        /*$image = $this->data_uri($GetPicture['content'] , $GetPicture['type']);
-        return '<img src="'.$image.'" alt="An elephant" />';*/
+//      $GetPicture = $this->api->GetPicture($id);
+//       return $GetEvent;
+        /*
+        $image = $this->GetImageAddress($GetPicture['content'] , $GetPicture['type']);
+        return '<img src="'.$image.'" alt="An elephant" />';
+        */
         $locations = Cache::get('LocationList');
         $GetLocations = array_filter($locations, function ($event) use ($id) {
             return $event['id'] == $id;
@@ -325,7 +328,7 @@ class LocationController extends Controller
         $array_keys = array_keys($GetLocations) ;
         $index =  $array_keys[0];
         $images = [];
-        $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,$id,null);
+        $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,null,null);
 //        return $GetPicturesInfo;
         if(array_key_exists("location_pics" , $GetPicturesInfo['ContentData'])){
             $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
@@ -334,8 +337,7 @@ class LocationController extends Controller
         if(array_key_exists("project_pics" , $GetPicturesInfo['ContentData'])){
             $project_pics = $GetPicturesInfo['ContentData']['project_pics'];
             if($project_pics != null){
-                $project_pics_picture_id  = $this->api->GetPicture($project_pics[0]['picture_id']) ;
-                $project_pics_picture_id =  $this->data_uri($project_pics_picture_id);
+                $project_pics_picture_id  = $this->GetImageAddress($project_pics[0]['picture_id']) ;
                 array_push($project_pics_picture_id,$images);
             }
         }
@@ -347,9 +349,41 @@ class LocationController extends Controller
             $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
         }
 
+//        return $GetLocations[$index];
+        return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'images' => $images , 'GetEvents' => $GetEvent['ContentData'] , 'location_id'=>$id ] ) ;
+    }
+    public function AddLatLong(Request $request , $id){
+        $GetLocation = $this->api->GetLocation($id);
+//        return $GetLocation['ContentData'][0]['text']['id'];
+        $data = [
+            'location' => $GetLocation['ContentData'] ,
+            'location_id' => $id,
+            'lat' => $request->get('latitude'),
+            'long' => $request->get('longitude')
+        ];
+        $location_name = $GetLocation['ContentData'][0]['location_name'] ;
+        $location_english_name = $GetLocation['ContentData'][0]['location_english_name'] ;
+        $location_address = $GetLocation['ContentData'][0]['address'] ;
+        $location_english_address = $GetLocation['ContentData'][0]['location_address'] ;
+        $location_id = $id ;
+        $text_id = $GetLocation['ContentData'][0]['text']['id'] ;
+        $mandatory_entrance = $GetLocation['ContentData'][0]['mandatory_entrance'] ;
+        $longitude= $request->get('longitude');
+        $latitude = $request->get('latitude');
+        $introduction =  $GetLocation['ContentData'][0]['introduction'] ;
+        $description = $GetLocation['ContentData'][0]['description'];
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+        if ($EditLocation['Header']['MessageCode'] == 0){
+            Cache::forget('LocationList');
+            Cache::rememberForever('LocationList', function(){
+                $Locations  = $this->api->LocationList();
+                return $Locations['ContentData'];
+            });
+            return redirect()->back()->with('success' , ' طول و عرض جغرافیایی ویرایش گردید . ');
+        }
+        else
+            return redirect()->back()->with('error' , ' خطا در ویرایش طول و عرض جغرافیایی ! ');
 
-//        return $project_pics;
-        return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'images' => $images , 'GetEvents' => $GetEvent['ContentData'] ] ) ;
     }
 
     public function FullDescription(Request $request , $id=null)
@@ -357,16 +391,51 @@ class LocationController extends Controller
         $FullDescription =$request->get('FullDescription');
         return $FullDescription ;
     }
-    public function ShortDescription(Request $request , $id=null)
+    public function ShortDescription(Request $request , $id)
     {
-        $FullDescription =$request->get('ShortDescription');
-        return $FullDescription ;
+        $GetLocation = $this->api->GetLocation($id);
+//        return $GetLocation;
+        $data = [
+            'location' => $GetLocation['ContentData'] ,
+            'location_id' => $id,
+            'lat' => $request->get('latitude'),
+            'long' => $request->get('longitude')
+        ];
+        $location_name = $GetLocation['ContentData'][0]['location_name'] ;
+        $location_english_name = $GetLocation['ContentData'][0]['location_english_name'] ;
+        $location_address = $GetLocation['ContentData'][0]['address'] ;
+        $location_english_address = $GetLocation['ContentData'][0]['location_address'] ;
+        $location_id = $id ;
+        $text_id = $GetLocation['ContentData'][0]['text']['id'] ;
+//        $introduction =  htmlentities($request->get('ShortDescription')) ;
+        $introduction =  htmlentities($request->get('ShortDescription'));
+        $description = $GetLocation['ContentData'][0]['description'];
+        $mandatory_entrance = $GetLocation['ContentData'][0]['mandatory_entrance'] ;
+        $longitude = $GetLocation['ContentData'][0]['longitude'];
+        $latitude = $GetLocation['ContentData'][0]['latitude'];
+
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+        return $EditLocation;
+        if ($EditLocation['Header']['MessageCode'] == 0){
+            Cache::forget('LocationList');
+            Cache::rememberForever('LocationList', function(){
+                $Locations  = $this->api->LocationList();
+                return $Locations['ContentData'];
+            });
+            return redirect()->back()->with('success' , ' توضیحات کوتاه ویرایش گردید . ');
+        }
+        else
+            return redirect()->back()->with('error' , ' خطا در ویرایش توضیحات کوتاه ! ');
+
+//        $FullDescription =$request->get('ShortDescription');
+//        return $FullDescription ;
     }
 
-    function data_uri($image)
+    function GetImageAddress($id)
     {
-        $mime = $image['type'];
-        $content = $image['content'];
+        $GetPicture = $this->api->GetPicture($id);
+        $mime = $GetPicture['type'];
+        $content = $GetPicture['content'];
         $base64   = base64_encode($content);
         return ('data:' . $mime . ';base64,' . $base64);
     }

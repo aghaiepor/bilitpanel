@@ -67,7 +67,8 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // Citizen
         Route::post('/FullDescription/{id?}' , 'LocationController@FullDescription')->name('FullDescription');
-        Route::post('/ShortDescription/{id?}' , 'LocationController@ShortDescription')->name('ShortDescription');
+        Route::post('/ShortDescription/{id}' , 'LocationController@ShortDescription')->name('ShortDescription');
+        Route::post('/AddLatLong/{id}' , 'LocationController@AddLatLong')->name('AddLatLong');
 
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');

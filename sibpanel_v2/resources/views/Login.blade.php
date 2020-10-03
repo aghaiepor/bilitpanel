@@ -63,7 +63,7 @@
                             <div class="card-header card-header-rose text-center">
                                 <h4 class="card-title"> ورود  </h4>
                             </div>
-
+                            <input type="hidden" value="{{$previous_url}}" name="previous_url">
                             <div class="card-body ">
                                 <span class="bmd-form-group">
                                     <div class="input-group">
@@ -86,11 +86,13 @@
                                     </div>
                                 </span>
 
+                                @if(env('HAS_CAPTCHA'))
                                 <div class="form-row">
                                     <div class="col-md">
                                         <div class="g-recaptcha" {{--data-theme="dark"--}} data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="card-footer justify-content-end mt-2 ml-0">
 {{--                                    <button class="g-recaptcha" data-sitekey="reCAPTCHA_site_key" data-callback='onSubmit' data-action='submit'>Submit</button>--}}
                                     <button class="btn btn-primary px-5" {{--class="g-recaptcha btn btn-primary px-5" data-sitekey="6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj" data-callback='onSubmit' data-action='submit'--}} type="submit" > ورود </button>

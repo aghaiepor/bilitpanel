@@ -605,8 +605,12 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                             currentNumber++;
                                                                                                             $('#current').text(currentNumber);
                                                                                                             $('#LoadingText').text(' در حال ورود ');
+                                                                                                            let url = "{{session()->get('previous_url')}}";
+                                                                                                            console.log(url);
+                                                                                                            if(url == "")
+                                                                                                                url = "{{Route('dashboard')}}";
                                                                                                            setTimeout(function(){
-                                                                                                                window.location.href = "{{Route('dashboard')}}";
+                                                                                                                window.location.href = url ;
                                                                                                             }, 600);
                                                                                                         }
                                                                                                     }

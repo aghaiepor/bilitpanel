@@ -41,7 +41,20 @@ class Api
         }
         return $response;
     }
-
+    public function GetLocation($location_id){
+        $data = [
+            'location_id' => $location_id,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetLocation' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        ) ;
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response);
+        return $response;
+    }
     public function LocationList($id = null){
         $data=null;
         if ( $id != null )
@@ -55,8 +68,6 @@ class Api
         ) ;
 
         $response = json_decode($result->getBody(),true);
-        Log::info('locarion response',$response);
-
         $this->checkError($response);
         return $response;
     }
@@ -132,7 +143,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function EditLocation($location_name, $text_id, $location_english_name, $location_english_address, $location_address, $location_id,$mandatory_entrance , $longitude , $latitude){
+    public function EditLocation($location_name, $text_id, $location_english_name, $location_english_address, $location_address, $location_id,$mandatory_entrance , $longitude , $latitude , $introduction,$description){
         $data = [
             "location_name"=> $location_name,
             "location_english_name"=> $location_english_name,
@@ -143,6 +154,8 @@ class Api
             "mandatory_entrance"=> $mandatory_entrance,
             "longitude"=> $longitude,
             "latitude"=> $latitude,
+            "introduction"=> $introduction,
+            "description"=> $description,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'EditLocation' ,[

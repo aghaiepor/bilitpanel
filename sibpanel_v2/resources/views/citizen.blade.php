@@ -70,6 +70,25 @@
         </div>
         <div class="container-fluid">
             <div class="row">
+                    @if (session('success'))
+                    <div class="col-md-12">
+                        <div class="alert alert-success alert-dismissible fade show text-right" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                    @elseif(session('error'))
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                @endif
                 <div class="col-md-3">
                     <div class="row">
                         <div class="card card-profile mb-2">
@@ -85,7 +104,7 @@
                                         تصویر اصلی
                                     </b>
                                 </h4>
-                                <h6 class="card-category text-gray">CEO / Co-Founder</h6>
+{{--                                <h6 class="card-category text-gray">CEO / Co-Founder</h6>--}}
                             </div>
                             <div class="card-footer justify-content-center">
                                 {{--<a href="javascript:;" class="btn btn-just-icon btn-twitter btn-round">
@@ -97,8 +116,12 @@
                                 <a href="javascript:;" class="btn btn-just-icon btn-google btn-round">
                                     <i class="fa fa-google"></i>
                                 </a>--}}
-                                <button class="btn btn-rose">
-                                    ثبت تغییرات
+                                <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#main_location_image">
+                                    <i class="material-icons">edit</i>
+                                    <div class="ripple-container"></div>
+                                </button>
+                                <button type="button" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="">
+                                    <i class="material-icons">close</i>
                                 </button>
                             </div>
                         </div>
@@ -119,7 +142,7 @@
                                         </h5>
                                         {{--                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
                                         <div class="row">
-                                            <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-original-title="" title="">
+                                            <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#logo_images">
                                                 <i class="material-icons">edit</i>
                                                 <div class="ripple-container"></div>
                                             </button>
@@ -137,19 +160,22 @@
                     <div class="row">
                         <div class="card mt-0">
                             <div class="card-body">
+                                <form action="{{Route('AddLatLong' , ['id' => $location_id ])}}" method="post">
+                                    @csrf
                                 <div class="form-row">
                                     <div class="col-md text-right">
                                         <label for=""> طول جغرافیایی </label>
-                                        <input type="number" class="form-control" value="{{$GetLocations['latitude']}}">
+                                        <input name="latitude" type="text" class="form-control" value="{{$GetLocations['latitude']}}">
                                     </div>
                                     <div class="col-md text-right">
                                         <label for=""> عرض جغرافیایی </label>
-                                        <input type="number" class="form-control" value="{{$GetLocations['longitude']}}">
+                                        <input name="longitude" type="text" class="form-control" value="{{$GetLocations['longitude']}}">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-rose">
                                     ثبت تغییرات
                                 </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -176,26 +202,24 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     <div class="col-md-5 text-right">
-
-                                        <form action="{{Route('ShortDescription')}}" method="post">
+                                        <form action="{{Route('ShortDescription' , ['id' => $location_id])}}" method="post">
                                             @csrf
                                             <label for=""> توضیحات کوتاه </label>
                                             <textarea name="ShortDescription" id="ShortDescription">
-                                        این متن  توضیحات کوتاه است .
-                                    </textarea>
+                                                {{$GetLocations['introduction']}}
+                                            </textarea>
                                             <button type="submit" class="btn btn-rose">
                                                 ثبت تغییرات
                                             </button>
                                         </form>
                                     </div>
-
                                     <div class="col-md-7 text-right">
                                         <form action="{{Route("FullDescription")}}" method="post">
                                             @csrf
                                             <label> توضیحات کامل </label>
                                             <textarea name="FullDescription" id="FullDescription">
-                                         سلام خوبی ؟! این متن  توضیحات کامل است .
-                                    </textarea>
+                                                {{$GetLocations['description']}}
+                                            </textarea>
                                             <button type="submit" class="btn btn-rose">
                                                 ایجاد تغییرات
                                             </button>
@@ -241,6 +265,10 @@
                                         <b>
                                             گالری مکان
                                         </b>
+                                        <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2 mr-2" data-toggle="modal" data-target="#image_gallery">
+                                            <i class="material-icons">add</i>
+                                            <div class="ripple-container"></div>
+                                        </button>
                                     </h4>
                                     <div class="row">
                                         {{-- image in galary image --}}
@@ -249,13 +277,13 @@
                                                 <div class="col-md-4">
                                                     <img src="../assets/img/card-2.jpg" class="card-img" alt="...">
                                                 </div>
-                                                <div class="col-md">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Card title</h5>
-                                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-auto \">
+{{--                                                <div class="col-md">--}}
+{{--                                                    <div class="card-body">--}}
+{{--                                                        <h5 class="card-title">Card title</h5>--}}
+{{--                                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+                                                <div class="col-md-2 mr-auto d-flex justify-content-center align-items-center">
                                                     {{--<button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-original-title="" title="">
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
@@ -277,6 +305,10 @@
                                 <div class="card-body text-center">
                                     <h4 class="card-title border-bottom pb-2 mb-2">
                                        <b> عکس رویداد اصلی </b>
+                                        <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2 mr-2" data-toggle="modal" data-target="#main_event_image">
+                                            <i class="material-icons">add</i>
+                                            <div class="ripple-container"></div>
+                                        </button>
                                     </h4>
                                     <div class="row">
                                         {{-- image in galary image --}}
@@ -292,11 +324,7 @@
                                                             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-auto \">
-                                                        {{--<button type="button" rel="tooltip" class="btn btn-sm btn-success" data-original-title="" title="">
-                                                            <i class="material-icons">edit</i>
-                                                            <div class="ripple-container"></div>
-                                                        </button>--}}
+                                                    <div class="col-md-2 d-flex justify-content-center align-items-center \">
                                                         <button type="button" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="">
                                                             <i class="material-icons">close</i>
                                                         </button>
@@ -586,7 +614,7 @@
                                 توضیحات کوتاه
                                 </b>
                             </label>
-                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3"></textarea>
+                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3">{{$GetLocations['introduction']}}</textarea>
                         </div>
                         <div class="col-sm text-right">
                             <label for="">
@@ -594,7 +622,7 @@
                                     توضیحات کامل
                                 </b>
                             </label>
-                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3"></textarea>
+                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3">{{$GetLocations['description']}}</textarea>
                         </div>
                     </div>
 
@@ -643,13 +671,129 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    &nbsp;
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <img class="img-fluid rounded" id="herf_modal_image" src="" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for main event images   --}}
+    <div class="modal fade" id="main_event_image" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن عکس رویداد اصلی</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> تصویر رویداد اصلی  </label>
+                            <input name="main_image_event" type="file" class="form-control">
+                        </div>
+                        <div class="col-md text-right">
+                            <label for=""> رویداد </label>
+                            <select name="event_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب رویداد">
+
+                                @foreach($GetEvents as $GetEvent)
+                                    <option value="{{$GetEvent['location_id']}}"> {{$GetEvent['location_name']}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button class="btn btn-success px-5">
+                        افزودن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for logo location   --}}
+    <div class="modal fade" id="logo_images" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن آیکون مکان</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> لوگوی مکان  </label>
+                            <input name="logo_image" type="file" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button class="btn btn-success px-5">
+                        افزودن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for main image   --}}
+    <div class="modal fade" id="main_location_image" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن تصویر اصلی </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> تصویری اصلی  </label>
+                            <input name="main_image" type="file" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button class="btn btn-success px-5">
+                        افزودن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for image_gallery   --}}
+    <div class="modal fade" id="image_gallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن تصویر مکان</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> تصویر مکان  </label>
+                            <input name="location_imgae" type="file" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button class="btn btn-success px-5">
+                        افزودن
+                    </button>
                 </div>
             </div>
         </div>
@@ -760,6 +904,9 @@
             });
 
             $(".citzen_main_img").click(function () {
+                let src = $(this).attr("src") ;
+                $("#herf_modal_image").attr('src' ,src );
+            }); $(".citzen_main_img").click(function () {
                 let src = $(this).attr("src") ;
                 $("#herf_modal_image").attr('src' ,src );
             });
