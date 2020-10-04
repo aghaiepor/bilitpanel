@@ -206,7 +206,7 @@
                                             @csrf
                                             <label for=""> توضیحات کوتاه </label>
                                             <textarea name="ShortDescription" id="ShortDescription">
-                                                {{$GetLocations['introduction']}}
+                                                {!!  $GetLocations['introduction'] !!}
                                             </textarea>
                                             <button type="submit" class="btn btn-rose">
                                                 ثبت تغییرات
@@ -218,7 +218,7 @@
                                             @csrf
                                             <label> توضیحات کامل </label>
                                             <textarea name="FullDescription" id="FullDescription">
-                                                {{$GetLocations['description']}}
+                                                {!!  $GetLocations['description'] !!}
                                             </textarea>
                                             <button type="submit" class="btn btn-rose">
                                                 ایجاد تغییرات
@@ -692,6 +692,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <form action="{{Route('AddMainEventPicture' , ['id' => $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="col-md text-right">
@@ -701,7 +703,6 @@
                         <div class="col-md text-right">
                             <label for=""> رویداد </label>
                             <select name="event_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب رویداد">
-
                                 @foreach($GetEvents as $GetEvent)
                                     <option value="{{$GetEvent['location_id']}}"> {{$GetEvent['location_name']}} </option>
                                 @endforeach
@@ -710,10 +711,11 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button class="btn btn-success px-5">
+                    <button type="submit" class="btn btn-success px-5">
                         افزودن
                     </button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -728,6 +730,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <form action="{{Route('AddLogoPicture' , ['id'=> $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="col-md text-right">
@@ -737,10 +741,11 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button class="btn btn-success px-5">
+                    <button type="submit" class="btn btn-success px-5">
                         افزودن
                     </button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -755,19 +760,22 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-row">
-                        <div class="col-md text-right">
-                            <label for=""> تصویری اصلی  </label>
-                            <input name="main_image" type="file" class="form-control">
+                <form action="{{Route('AddMainPicture', ['id' => $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-md text-right">
+                                <label for=""> تصویری اصلی  </label>
+                                <input name="main_image" type="file" class="form-control">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer mt-4">
-                    <button class="btn btn-success px-5">
-                        افزودن
-                    </button>
-                </div>
+                    <div class="modal-footer mt-4">
+                        <button type="submit" class="btn btn-success px-5">
+                            افزودن
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -782,6 +790,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <form action="{{Route('AddGalleryPicture' , ['id'=> $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="col-md text-right">
@@ -791,10 +801,11 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button class="btn btn-success px-5">
+                    <button type="submit" class="btn btn-success px-5">
                         افزودن
                     </button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

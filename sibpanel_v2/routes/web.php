@@ -69,6 +69,10 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/FullDescription/{id}' , 'LocationController@FullDescription')->name('FullDescription');
         Route::post('/ShortDescription/{id}' , 'LocationController@ShortDescription')->name('ShortDescription');
         Route::post('/AddLatLong/{id}' , 'LocationController@AddLatLong')->name('AddLatLong');
+        Route::post('/AddMainPicture/{id}' , 'LocationController@AddMainPicture')->name('AddMainPicture');
+        Route::post('/AddLogoPicture/{id}' , 'LocationController@AddLogoPicture')->name('AddLogoPicture');
+        Route::post('/AddGalleryPicture/{id}' , 'LocationController@AddGalleryPicture')->name('AddGalleryPicture');
+        Route::post('/AddMainEventPicture/{id}' , 'LocationController@AddMainEventPicture')->name('AddMainEventPicture');
 
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');
@@ -107,6 +111,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/CityList'  , 'ReportController@CityList' )->name('CityList');
         Route::post('/location_list'  , 'ReportController@location_list' )->name('location_list');
         Route::post('/ServiceListReport'  , 'ReportController@ServiceList' )->name('ServiceListReport');
+        Route::post('/ReportTerminalLocationList'  , 'ReportController@TerminalLocationList' )->name('ReportTerminalLocationList');
         Route::get('/GetStat'  , 'ReportController@GetStat' )->name('GetStat');
         Route::get('/GetTransaction'  , 'ReportController@GetTransaction' )->name('GetTransaction');
 

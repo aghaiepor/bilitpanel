@@ -30,7 +30,7 @@
     <div class="sidebar-wrapper">
         <div class="user">
             <div class="photo">
-                <img src="{{asset('')}}assets/img/faces/card-profile1-square.jpg" />
+                <img src="{{asset('')}}assets/img/avatar5.png" />
             </div>
             <div class="user-info">
                 <a data-toggle="collapse" href="#collapseExample" class="username">
@@ -147,12 +147,14 @@
                 </a>
                 <div class="collapse @if(in_array(Route::current()->getName(),$serviceUrl))  show  @endif" id="componentsExamples">
                     <ul class="nav">
+                        @if(env('HAS_TERMINAL'))
                         <li class="nav-item @if(Route::current()->getName() === 'terminals' )  active  @endif">
                             <a class="nav-link" href="{{Route('terminals')}}">
                                 <span class="sidebar-mini"> <i class="material-icons">dvr</i> </span>
                                 <span class="sidebar-normal"> مدیریت ترمینال ها </span>
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item @if(Route::current()->getName() === 'places' )  active  @endif">
                             <a class="nav-link" href="{{Route('places')}}">
                                 <span class="sidebar-mini"> <i class="material-icons">room</i> </span>

@@ -64,6 +64,7 @@
                             <form action="{{Route('GetStat')}}" method="get">
                                 <input type="hidden" name="reportType" value="{{$report_type}}">
                                 <div class="row mt-3">
+                                    {{--  category --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> نحوه دسته بندی </label>
                                         <select name="key" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
@@ -77,6 +78,7 @@
                                             <option @if(request('key') == "service") selected @endif value="service">موزه</option>
                                         </select>
                                     </div>
+                                    {{--  province --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب استان  </label>
                                         <select name="province_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
@@ -91,26 +93,37 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    {{--  City --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب شهر  </label>
                                         <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
                                             <option value=""> همه </option>
                                         </select>
                                     </div>
+                                    {{--  location --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب مکان   </label>
                                         <select name="location_id" id="locationList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
                                             <option value=""> همه </option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row mt-3">
+                                    {{--  museum --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب موزه </label>
                                         <select name="service_id" id="ServiceList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه ">
                                             <option value=""> همه </option>
                                         </select>
                                     </div>
+                                    @if(env("HAS_TERMINAL"))
+                                    {{--  Terminal --}}
+                                    <div class="col-md-3 text-right">
+                                        <label for="">  ترمینال </label>
+                                        <select id="terminal_id" name="terminal_id" class="selectpicker"  data-style="btn btn-primary border-dark" title="Single Select">
+                                            <option selected value="">همه</option>
+                                        </select>
+                                    </div>
+                                    @endif
+                                    {{--  Voucher --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  نوع بلیت </label>
                                         <select name="voucher_type_id" class="selectpicker"  data-style="btn btn-primary border-dark" title="Single Select">
@@ -124,6 +137,7 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    {{--  type payement --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  نوع پرداخت </label>
                                         <select name="sell_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع پرداخت ">
@@ -138,6 +152,7 @@
 
                                         </select>
                                     </div>
+                                    {{--  State voucher --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  وضعیت بلیت </label>
                                         <select name="status_code" class="selectpicker" data-style="btn btn-primary border-dark" title="وضعیت بلیت">
@@ -147,8 +162,7 @@
                                             <option @if(request('status_code') == "5") selected @endif value="5">استفاده شده</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row mt-3">
+                                    {{--  Operator --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  اپراتور </label>
                                         <select name="operator_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
@@ -162,15 +176,18 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    {{--  Start Date --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  تاریخ شروع  </label>
                                         <input autocomplete="off" value="" name="startDate" id="FromDate" type="text" class="form-control" placehrequester="از تاریخ">
                                     </div>
+                                    {{--  End Date --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  تاریخ پایان  </label>
                                         <input autocomplete="off"  value="{{request('endDate')}}" name="endDate" id="ToDate" type="text" class="form-control" placehrequester="تا تاریخ">
                                     </div>
                                     @if($report_type == 0)
+                                        {{-- sale type --}}
                                         <div class="col-md-3 text-right">
                                             <label for="">  نوع فروش  </label>
                                             <select name="pre_sale" class="selectpicker" data-style="btn btn-primary border-dark" title="ییش فروش">
@@ -180,13 +197,13 @@
                                             </select>
                                         </div>
                                     @else
-                                        <input type="hidden" name="pre_sale" value="1" >
+                                        <input type="hidden" name="pre_sale" value="1">
                                     @endif
+                                    {{-- Search btn --}}
                                     <div class="col-md-3 mr-auto">
                                         <label for="" class="text-white"> .</label>
                                         <button class="btn bgPer btn-block"> جست و جو <i class="material-icons"> search</i> </button>
                                     </div>
-
                                 </div>
                             </form>
 
@@ -506,6 +523,7 @@
             });
             $('#cityList , #province , #locationList').change(function () {
                 var locationID = $('#locationList').val();
+                console.log("in the terminal location id is :  " + locationID)
                 $.ajax({
                     type:'POST',
                     url:"{{Route('ServiceListReport')}}",
@@ -521,6 +539,24 @@
                             $("#ServiceList").append(new Option( data.data[[data.array_keys[i]]].service_name , data.data[[data.array_keys[i]]].service_id));
                         }
 
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('ReportTerminalLocationList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'locationID' : locationID ,
+                    },
+                    success:function(data) {
+                        console.log(data.data)
+                        $("#terminal_id").html('');
+                        $("#terminal_id").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i< data.data.length ; i++){
+                            $("#terminal_id").append(new Option( data.data[i].service_name , data.data[i].id));
+                        }
                         $('.selectpicker').selectpicker('refresh');
                     }
                 });

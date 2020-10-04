@@ -409,7 +409,7 @@ class Api
         return $response;
     }
 
-    // **** citizen panel ******
+    // ******************* citizen panel *******************
     public  function GetPicture($location_id){
         $data = null;
         $client = new Client();
@@ -458,9 +458,28 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag){
+        $data = [
+            "project_id" => $project_id,
+            "location_id" => $location_id,
+            "service_id" => $service_id,
+            "voucher_info_id" => $voucher_info_id,
+            "pic_str" => $pic_str ,
+            "tag" => $tag ,
+        ];
+        $client = new Client();
+        $result = $client->Post($this->url . 'AddPicture',[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response);
+        return $response;
+    }
 
 
-    //****** CancelVoucher ******
+    // ******************* CancelVoucher *******************
     public function CancelVoucher($voucher_number){
         $data = [
             "voucher_number" => $voucher_number,
@@ -477,7 +496,7 @@ class Api
         return $response;
     }
 
-    // voucherTypeList
+    // ******************* voucherTypeList *******************
     public function VoucherTypeList(){
         $data = null ;
         $client = new Client();
@@ -532,7 +551,7 @@ class Api
         return $response;
     }
 
-    // VoucherText
+    // ******************* VoucherText *******************
     public function GetVoucherText(){
         $data = null ;
         $client = new Client();
@@ -598,7 +617,7 @@ class Api
         return $response;
     }
 
-    //UserManagement
+    // ******************* UserManagement *******************
     public function ProjectList(){
         $data=null;
         $client = new Client();
@@ -756,7 +775,7 @@ class Api
         return $response;
     }
 
-    // Get Report Lists
+    // ******************* Get Report Lists *******************
     public function ProvinceList(){
         $data=null;
         $client = new Client();
@@ -891,7 +910,7 @@ class Api
         return $response;
     }
 
-    // Province and City
+    // ******************* Province and City *******************
     public function AddProvince($name_fa, $name_en, $projects){
         $data = [
             'province'=> $name_fa,
@@ -962,7 +981,7 @@ class Api
         return $response;
     }
 
-    // terminals
+    // ******************* terminals *******************
     public function TerminalTypeList(){
         $data=null;
         $client = new Client();
@@ -976,7 +995,8 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function TerminalLocationList($location_id){
+    public function TerminalLocationList($location_id)
+    {
         $data = [
             "location_id" =>  $location_id
         ];
@@ -987,7 +1007,6 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
         $this->checkError($response);
         return $response;
     }
@@ -1055,7 +1074,7 @@ class Api
         return $response;
     }
 
-    // Sans
+    // ******************* Sans *******************
     public function GetTimeGroup()
     {
         $data=null;
@@ -1132,8 +1151,7 @@ class Api
         return $response;
     }
 
-
-    // Alerts
+    // ******************* Alerts *******************
     public function GetLocationAlerts($location_id)
     {
         $data = [
@@ -1212,7 +1230,7 @@ class Api
         return $response;
     }
 
-    //Methods
+    // ******************* Methods *******************
     private function getHeader(){
         $this->session_id = (session()->has('SessionId')) ?  session('SessionId') : null ;
         $header = [
