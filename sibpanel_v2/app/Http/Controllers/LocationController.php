@@ -320,6 +320,7 @@ class LocationController extends Controller
 
         try {
             $GetEvent = $this->api->GetEvent($id);
+            $projectList = $this->api->ProjectList();
 //      $GetPicture = $this->api->GetPicture($id);
 //       return $GetEvent;
             /*
@@ -334,9 +335,11 @@ class LocationController extends Controller
             $index =  $array_keys[0];
             $images = [];
             $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,null,null);
+//            return $GetPicturesInfo;
 //        return $GetPicturesInfo;
             if(array_key_exists("location_pics" , $GetPicturesInfo['ContentData'])){
                 $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
+//                return $location_pic;
             }
 
             if(array_key_exists("project_pics" , $GetPicturesInfo['ContentData'])){
@@ -354,10 +357,13 @@ class LocationController extends Controller
                 $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
             }
 //        return $GetLocations[$index];
-            return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'images' => $images , 'GetEvents' => $GetEvent['ContentData'] , 'location_id'=>$id ] ) ;
+//            dd(count($location_pic) == 0);
+            return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic ,
+                'images' => $images , 'GetEvents' => $GetEvent['ContentData'] , 'location_id'=>$id , 'projectList' => $projectList['ContentData'] ] ) ;
 
         } catch (\Exception $e) {
-            abort(404);
+            return $e->getMessage();
+//            abort(404);
         }
 
     }
@@ -475,12 +481,21 @@ class LocationController extends Controller
 //        return $FullDescription ;
     }
     public function AddMainPicture(Request $request, $id){
-        $data = [
-            'id' => $id ,
-            'tag' => 'main' ,
-            'image' => base64_encode(file_get_contents($request->file('main_image')->path())),
-        ];
-        return $data ;
+
+        $project_id = (int)$request->get('project_id');
+        if ($request->hasFile('main_image')){
+            $image = base64_encode(file_get_contents($request->file('main_image')->path()));
+            $addPicture = $this->api->AddPicture($project_id , $id , 0 , 0 , $image , "main");
+            if($addPicture['Header']['Status'] == 0){
+                return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
+//                return $addPicture['ContentData']['picture_id'];
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در آپلود تصویر !');
+        }
+        else
+            return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
+
     }
     public function AddLogoPicture(Request $request, $id){
         $data = [
@@ -506,6 +521,9 @@ class LocationController extends Controller
             'image' => base64_encode(file_get_contents($request->file('main_image_event')->path())),
         ];
         return $data ;
+    }
+    public function imageRemove($id){
+        return $id ;
     }
 
     function GetImageAddress($id)

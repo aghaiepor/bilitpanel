@@ -1257,5 +1257,13 @@ class Api
             }
         }
     }
+    function GetImageAddress($id)
+    {
+        $GetPicture = $this->GetPicture($id);
+        $mime = $GetPicture['type'];
+        $content = $GetPicture['content'];
+        $base64   = base64_encode($content);
+        return ('data:' . $mime . ';base64,' . $base64);
+    }
 
 }

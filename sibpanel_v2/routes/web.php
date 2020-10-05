@@ -73,6 +73,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/AddLogoPicture/{id}' , 'LocationController@AddLogoPicture')->name('AddLogoPicture');
         Route::post('/AddGalleryPicture/{id}' , 'LocationController@AddGalleryPicture')->name('AddGalleryPicture');
         Route::post('/AddMainEventPicture/{id}' , 'LocationController@AddMainEventPicture')->name('AddMainEventPicture');
+        Route::get('/imageRemove/{id}' , 'LocationController@imageRemove')->name('imageRemove');
 
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');

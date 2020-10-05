@@ -1,5 +1,7 @@
 @extends('MainLayout')
-
+@php
+    $api = new \App\Api\Api();
+@endphp
 @section('title')
     <title>
         پنل شهروندی
@@ -94,7 +96,24 @@
                         <div class="card card-profile mb-2">
                             <div class="card-header card-header-image">
                                 <a href="javascript:;">
-                                    <img class="img" src="../assets/img/card-2.jpg" rel="nofollow">
+                                    @php
+                                        $main_image_id = null ;
+                                    @endphp
+                                    @if(count($location_pic) == 0 )
+                                        <img class="img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                    @else
+                                        @foreach($location_pic as $pic)
+                                            @if($pic['tag'] == 'main')
+                                                @php
+                                                    $main_image_id = $pic['picture_id'];
+                                                     $main_image_address = $api->GetImageAddress($main_image_id)
+                                                @endphp
+                                                    <img class="img" src="{{$main_image_address}}" rel="main_image">
+                                            @else
+                                                <img class="img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </a>
                             </div>
 
@@ -116,13 +135,15 @@
                                 <a href="javascript:;" class="btn btn-just-icon btn-google btn-round">
                                     <i class="fa fa-google"></i>
                                 </a>--}}
-                                <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#main_location_image">
+                                <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#main_location_image" title="اضافه یا ویرایش">
                                     <i class="material-icons">edit</i>
                                     <div class="ripple-container"></div>
                                 </button>
-                                <button type="button" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="">
-                                    <i class="material-icons">close</i>
-                                </button>
+                                @if($main_image_id != null)
+                                    <a href="{{Route('imageRemove' , ['id'=>$main_image_id])}}" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="حذف">
+                                        <i class="material-icons">close</i>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -767,6 +788,14 @@
                             <div class="col-md text-right">
                                 <label for=""> تصویری اصلی  </label>
                                 <input name="main_image" type="file" class="form-control">
+                            </div>
+                            <div class="col-md text-right">
+                                <label for=""> پروژه <small>(اختیاری)</small> </label>
+                                <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                    @foreach($projectList as $project)
+                                        <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
