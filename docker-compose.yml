@@ -13,6 +13,7 @@ services:
       - variables.env
     networks:
       - app_network
+    command: composer install
 
   sib-panel-v2-nginx:
     build:
@@ -31,6 +32,8 @@ services:
       - sib-panel-v2-app
     networks:
       - app_network
+    command: sed -i "s|# Gzip Settings|server_tokens off;|g" /etc/nginx/nginx.conf
+    
 
 networks:
   app_network:
