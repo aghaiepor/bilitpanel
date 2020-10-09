@@ -30,6 +30,7 @@ RUN apt-get update \
         libzip-dev \
         unzip \
         zip \
+        sed \
         nodejs \
     && docker-php-ext-configure gd \
     && docker-php-ext-configure zip \
