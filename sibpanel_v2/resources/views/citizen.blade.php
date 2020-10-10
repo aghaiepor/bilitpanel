@@ -1,5 +1,7 @@
 @extends('MainLayout')
-
+@php
+    $api = new \App\Api\Api();
+@endphp
 @section('title')
     <title>
         پنل شهروندی
@@ -54,8 +56,13 @@
             color: #0d47a1;
             font-weight: bold;
         }
+        .ck-editor__editable {
+            height: 200px;
+        }
+
 
     </style>
+    <script src="{{asset('')}}assets/js/ckeditor.js"></script>
 @endsection
 
 @section('content')
@@ -63,6 +70,505 @@
         <div id="loader" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
             <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
         </div>
+        <div class="container-fluid">
+            <div class="row">
+                    @if (session('success'))
+                    <div class="col-md-12">
+                        <div class="alert alert-success alert-dismissible fade show text-right" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                    @elseif(session('error'))
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                @endif
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="card card-profile mb-2">
+                            <div class="card-header card-header-image">
+                                <a href="javascript:;">
+                                    @php
+                                        $main_image_id = null ;
+                                    @endphp
+                                    @if(count($location_pic) == 0 )
+                                        <img class="img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                    @else
+                                        @foreach($location_pic as $pic)
+                                            @if($pic['tag'] == 'main')
+                                                @php
+                                                    $main_image_id = $pic['picture_id'];
+                                                     $main_image_address = $api->GetImageAddress($main_image_id)
+                                                @endphp
+                                                    <img class="img" src="{{$main_image_address}}" rel="main_image">
+                                            @endif
+                                        @endforeach
+                                            @if($main_image_id == null)
+                                                <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                            @endif
+                                    @endif
+                                </a>
+                            </div>
+
+                            <div class="card-body ">
+                                <h4 class="card-title">
+                                    <b>
+                                        تصویر اصلی
+                                    </b>
+                                </h4>
+{{--                                <h6 class="card-category text-gray">CEO / Co-Founder</h6>--}}
+                            </div>
+                            <div class="card-footer justify-content-center">
+                                {{--<a href="javascript:;" class="btn btn-just-icon btn-twitter btn-round">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-just-icon btn-facebook btn-round">
+                                    <i class="fa fa-facebook-square"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-just-icon btn-google btn-round">
+                                    <i class="fa fa-google"></i>
+                                </a>--}}
+                                <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#main_location_image" title="">
+                                    <i class="material-icons">edit</i>
+                                    <div class="ripple-container"></div>
+                                </button>
+                                @if($main_image_id != null)
+                                    <button data-url="{{Route('imageRemove' , ['id'=>$main_image_id])}}" rel="tooltip" class="btn btn-sm btn-danger px-2 btn_main_remove" data-original-title="" title="">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{-- image in galary image --}}
+                        <div class="card mx-auto mt-2 mb-3" >
+                            <div class="row no-gutters">
+                                <div class="col-lg-6">
+                                    @php
+                                        $logo_image_id = null ;
+                                    @endphp
+                                    @if(count($location_pic) == 0  )
+                                        <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                    @else
+                                        @foreach($location_pic as $pic)
+                                            @if($pic['tag'] == 'logo')
+                                                @php
+                                                    $logo_image_id = $pic['picture_id'];
+                                                     $main_image_address = $api->GetImageAddress($logo_image_id)
+                                                @endphp
+                                                <img class="card-img" src="{{$main_image_address}}" rel="main_image">
+                                            @endif
+                                        @endforeach
+                                        @if($logo_image_id == null)
+                                                <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                        @endif
+                                    @endif
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card-body text-right">
+                                        <h5 class="card-title mb-4">
+                                            <b>
+                                                لوگوی مکان
+                                            </b>
+                                        </h5>
+                                        {{--                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
+                                        <div class="row">
+                                            <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#logo_images">
+                                                <i class="material-icons">edit</i>
+                                                <div class="ripple-container"></div>
+                                            </button>
+                                            @if($logo_image_id != null)
+                                                <button data-url="{{Route('imageRemove' , ['id' => $logo_image_id])}}" type="button" rel="tooltip" class="btn btn-sm btn-danger px-2 btn_main_remove" data-original-title="" title="">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            @endif
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card mt-0">
+                            <div class="card-body">
+                                <form action="{{Route('AddLatLong' , ['id' => $location_id ])}}" method="post">
+                                    @csrf
+                                <div class="form-row">
+                                    <div class="col-md text-right">
+                                        <label for=""> طول جغرافیایی </label>
+                                        <input name="latitude" type="text" class="form-control" value="{{$GetLocations['latitude']}}">
+                                    </div>
+                                    <div class="col-md text-right">
+                                        <label for=""> عرض جغرافیایی </label>
+                                        <input name="longitude" type="text" class="form-control" value="{{$GetLocations['longitude']}}">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-rose">
+                                    ثبت تغییرات
+                                </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-row">
+                        <div class="card mb-3">
+                            <div class="card-header card-header-icon card-header-rose">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="card-icon float-right ml-3 mr-0">
+                                            <i class="material-icons">format_size</i>
+                                        </div>
+                                        <h4 class="card-title text-right font-weight-bold "> پنل شهروندی </h4>
+                                    </div>
+                                    <div class="col-sm">
+                                        {{--                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> متن جدید </span>--}}
+                                        <a href="{{Route('places')}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-5 text-right">
+                                        <form action="{{Route('ShortDescription' , ['id' => $location_id])}}" method="post">
+                                            @csrf
+                                            <label for=""> توضیحات کوتاه </label>
+                                            <textarea name="ShortDescription" id="ShortDescription">
+                                                {!!  $GetLocations['introduction'] !!}
+                                            </textarea>
+                                            <button type="submit" class="btn btn-rose">
+                                                ثبت تغییرات
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-7 text-right">
+                                        <form action="{{Route("FullDescription" , ['id' => $location_id] )}}" method="post">
+                                            @csrf
+                                            <label> توضیحات کامل </label>
+                                            <textarea name="FullDescription" id="FullDescription">
+                                                {!!  $GetLocations['description'] !!}
+                                            </textarea>
+                                            <button type="submit" class="btn btn-rose">
+                                                ایجاد تغییرات
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        @php
+                            $gallery_image_id = null ;
+                        @endphp
+                        <div class="col-md-4">
+                            <div class="card mt-0 mb-3">
+                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                    {{--<ol class="carousel-indicators">
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                                    </ol>--}}
+                                    <div class="carousel-inner">
+
+                                        @if(count($location_pic) == 0 )
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100 card-img-top" src="../assets/img/image_placeholder.jpg" alt="Second slide">
+                                            </div>
+                                        @else
+                                            @php
+                                                $i = 0 ;
+                                            @endphp
+                                            @foreach($location_pic as $pic)
+                                                @if($pic['tag'] == 'other')
+                                                    @php
+                                                          $gallery_image_id = $pic['picture_id'];
+                                                           $main_image_address = $api->GetImageAddress($gallery_image_id)
+                                                    @endphp
+                                                        <div class="carousel-item  @if($i == 0) active @endif">
+                                                            <img class="d-block w-100 card-img-top" src="{{$main_image_address}}" alt="gallery image">
+                                                        </div>
+                                                    @php
+                                                        $i++;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                            @if($gallery_image_id == null)
+                                                    <div class="carousel-item active">
+                                                        <img class="d-block w-100 card-img-top" src="../assets/img/image_placeholder.jpg" alt="Second slide">
+                                                    </div>
+                                            @endif
+                                        @endif
+                                        {{--<div class="carousel-item active">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/login.jpg" alt="First slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/register.jpg" alt="Second slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/lock.jpg" alt="Third slide">
+                                        </div>--}}
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+{{--                                <img class="card-img-top" src="../assets/img/card-2.jpg" alt="Card image cap" rel="nofollow">--}}
+                                <div class="card-body text-center">
+                                    <h4 class="card-title border-bottom pb-2 mb-2">
+                                        <b>
+                                            گالری مکان
+                                        </b>
+                                        <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2 mr-2" data-toggle="modal" data-target="#image_gallery">
+                                            <i class="material-icons">add</i>
+                                            <div class="ripple-container"></div>
+                                        </button>
+                                    </h4>
+                                    <div class="row">
+                                        @if(count($location_pic) != 0 )
+                                            @foreach($location_pic as $pic)
+                                                @if($pic['tag'] == 'other')
+                                                    @php
+                                                        $gallery_image_id = $pic['picture_id'];
+                                                         $main_image_address = $api->GetImageAddress($gallery_image_id)
+                                                    @endphp
+                                                    <div class="card mx-auto my-1" style="max-width: 540px;">
+                                                        <div class="row no-gutters">
+                                                            <div class="col-md-4">
+                                                                <img src="{{$main_image_address}}" class="card-img" alt="...">
+                                                            </div>
+                                                            <div class="col-md-2 mr-auto d-flex justify-content-center align-items-center">
+                                                                <button data-url="{{Route('imageRemove' , ['id' => $gallery_image_id])}}" type="button" rel="tooltip" class="btn btn-sm btn-danger px-2 btn_main_remove " data-original-title="" title="">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card mt-0 mb-3">
+{{--                                <img class="card-img-top" src="../assets/img/card-2.jpg" alt="Card image cap" rel="nofollow">--}}
+                                <div class="card-body text-center">
+                                    <h4 class="card-title border-bottom pb-2 mb-2">
+                                       <b> عکس رویداد اصلی </b>
+
+                                    </h4>
+                                    <div class="row">
+                                        {{-- image in galary image --}}
+                                        @if(count($GetEvents) == 0)
+                                            <div class="col">
+                                                <h6 class="text-center py-5 text-secondary" >
+                                                    رویدادی یافت نشد .
+                                                </h6>
+                                            </div>
+
+                                        @else
+                                            @foreach($GetEvents as $GetEvent)
+                                                <div class="card mx-auto my-1" style="max-width: 540px;">
+                                                    <div class="row no-gutters">
+                                                        <div class="col-md-4">
+                                                            @php
+                                                                $event_image_id = null ;
+                                                            @endphp
+                                                            @if(count($service_id_image) == 0  )
+                                                                <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                            @else
+                                                                @foreach($service_id_image as $pic)
+                                                                    @if($pic['service_id'] == $GetEvent['service_id'])
+                                                                        @php
+                                                                            $event_image_id = $pic['picture_id'];
+                                                                             $main_image_address = $api->GetImageAddress($event_image_id)
+                                                                        @endphp
+                                                                        <img class="card-img" src="{{$main_image_address}}" rel="main_image">
+                                                                    @endif
+                                                                @endforeach
+                                                                @if($event_image_id == null)
+                                                                    <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                                @endif
+                                                            @endif
+                                                            {{--                                                        <img src="../assets/img/card-2.jpg" class="card-img" alt="...">--}}
+                                                        </div>
+                                                        <div class="col-md d-flex align-items-center">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title"> {{ $GetEvent['service_name'] }}</h5>
+{{--                                                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 d-flex justify-content-center align-items-center \">
+                                                            @if($event_image_id == null)
+                                                                <button data-url="{{Route('AddServicePicture' , ['id'=>$GetEvent['service_id']] )}}" type="button" rel="tooltip" class="btn btn-sm btn-success px-2 btn_add_event " data-toggle="modal" data-target="#main_event_image">
+                                                                    <i class="material-icons">add</i>
+                                                                </button>
+                                                            @else
+                                                                <button data-url="{{Route('imageRemove' , ['id'=>$event_image_id])}}" class="btn btn-sm btn-danger px-2 btn_main_remove" data-original-title="" title="">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            @endif
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+
+
+                                    </div>
+{{--                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
+                                </div>
+                            </div>
+                        </div>
+                     {{--   <div class="col-md-3">
+                            <div class="card mt-0 mb-3">
+                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/login.jpg" alt="First slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/register.jpg" alt="Second slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/lock.jpg" alt="Third slide">
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+--}}{{--                                <img class="card-img-top" src="../assets/img/card-2.jpg" alt="Card image cap" rel="nofollow">--}}{{--
+                                <div class="card-body text-center">
+                                    <h4 class="card-title"> گالری مکان </h4>
+                                    <div class="row">
+                                        --}}{{-- image in galary image --}}{{--
+                                        <div class="card my-1" style="max-width: 540px;">
+                                            <div class="row no-gutters">
+                                                <div class="col-md-4">
+                                                    <img src="../assets/img/card-2.jpg" class="card-img" alt="...">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Card title</h5>
+                                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 \">
+                                                    <button type="button" rel="tooltip" class="btn btn-sm btn-success" data-original-title="" title="">
+                                                        <i class="material-icons">edit</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-sm btn-danger" data-original-title="" title="">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+--}}{{--                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}{{--
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mt-0 mb-3">
+                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/login.jpg" alt="First slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/register.jpg" alt="Second slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100 card-img-top" src="../../../assets/img/lock.jpg" alt="Third slide">
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+--}}{{--                                <img class="card-img-top" src="../assets/img/card-2.jpg" alt="Card image cap" rel="nofollow">--}}{{--
+                                <div class="card-body text-center">
+                                    <h4 class="card-title"> گالری مکان </h4>
+                                    <div class="row">
+                                        --}}{{-- image in galary image --}}{{--
+                                        <div class="card my-1" style="max-width: 540px;">
+                                            <div class="row no-gutters">
+                                                <div class="col-md-4">
+                                                    <img src="../assets/img/card-2.jpg" class="card-img" alt="...">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Card title</h5>
+                                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 \">
+                                                    <button type="button" rel="tooltip" class="btn btn-sm btn-success" data-original-title="" title="">
+                                                        <i class="material-icons">edit</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-sm btn-danger" data-original-title="" title="">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+--}}{{--                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}{{--
+                                </div>
+                            </div>
+                        </div>--}}
+                        </div>
+
+                </div>
+            </div>
+        </div>
+        {{--
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -131,20 +637,9 @@
                                         <th >
                                            لوکوی مکان
                                         </th>
-                                        <th >
-                                            ویرایش
-                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody class="citizen_tbody">
-                                    @if($location_pic == null)
-                                        <tr>
-                                            <td colspan="10">
-                                                <h6 class="text-center py-5"> موردی یافت نشد ! </h6>
-                                            </td>
-                                        </tr>
-                                    @else
-                                    @foreach($location_pic as $loc_pic)
                                         <tr>
                                             <td>
                                                 <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/card-2.jpg" alt="">
@@ -157,7 +652,6 @@
                                             </td>
                                             <td class="text_table more" >
                                                 لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیردلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                                                {{--                                            <a href="#" class="link more"> <span class="material-icons">launch</span> </a>--}}
                                             </td>
                                             <td >
                                                 {{$GetLocations['longitude']}},{{$GetLocations['latitude']}}
@@ -174,188 +668,7 @@
                                             <td >
                                                 <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/default-avatar.png" alt="">
                                             </td>
-                                            <td >
-                                                <button type="submit" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
-                                                    <i class="material-icons">close</i>
-                                                    حدف
-                                                </button>
-                                            </td>
                                         </tr>
-                                    @endforeach
-                                    @endif
-
-                                   {{-- <tr>
-                                        <td>
-                                            <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/card-2.jpg" alt="">
-                                        </td>
-                                        <td>
-                                           <span data-toggle="modal" data-target="#image_lib" class="material-icons citzen_img_lib"> photo_library </span>
-                                        </td>
-                                        <td class="text_table more" >
-                                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.
-                                        </td>
-                                        <td class="text_table more" >
-                                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیردلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
---}}{{--                                            <a href="#" class="link more"> <span class="material-icons">launch</span> </a>--}}{{--
-                                        </td>
-                                        <td >
-                                            {{$GetLocations['longitude']}},{{$GetLocations['latitude']}}
-                                        </td>
-                                        <td >
-                                            <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">
-                                        </td>
-                                        <td >
-                                            <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/bg3.jpg" alt="">
-                                        </td>
-                                        <td >
-                                            <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/bg9.jpg" alt="">
-                                        </td>
-                                        <td >
-                                            <img data-toggle="modal" data-target="#image_modal"class="citzen_main_img" src="{{asset("")}}assets/img/default-avatar.png" alt="">
-                                        </td>
-                                        <td >
-                                            <button type="submit" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
-                                                <i class="material-icons">close</i>
-                                                حدف
-                                            </button>
-                                        </td>
-                                    </tr>--}}
-                                   {{-- @if(count($array_keys) == 0)
-                                        <tr>
-                                            <td colspan="8" >
-                                                <h6 class="py-5">
-                                                    جاذبه ای یافت نشد .
-                                                </h6>
-                                            </td>
-                                        </tr>
-                                    @else
-                                        @for($i = 0 ; $i < count($array_keys) ; $i++)
-                                            <tr>
-                                                <td>
-                                                    @if($GetServices[$array_keys[$i]]['model_name'] == 'Entrance')
-                                                        ورودی
-                                                        @elseif($GetServices[$array_keys[$i]]['model_name'] == 'Event')
-                                                        رویداد
-                                                        @elseif($GetServices[$array_keys[$i]]['model_name'] == 'Service')
-                                                        جاذبه
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    {{ $GetServices[$array_keys[$i]]['service_name'] }}
-                                                </td>
-                                                <td>
-                                                    {{$GetServices[$array_keys[$i]]['english_name']}}
-                                                </td>
-                                                <td>
-                                                    {{$GetServices[$array_keys[$i]]['description']}}
-                                                </td>
-                                                <td>
-                                                    @if($GetServices[$array_keys[$i]]['capacity'] == "")
-                                                        نامحدود
-                                                    @else
-                                                        {{$GetServices[$array_keys[$i]]['capacity']}}
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    <a href="{{ Route('VoucherInfoList' , ['service_id' => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id'] ])}}" rel="tooltip" class="btn  btn-info btn-simple">
-                                                        <i class="material-icons">location_city</i>
-                                                        مدیریت بلیت ها
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <div class="togglebutton text-center">
-                                                        <label dir="ltr">
-                                                            <input name="activation" data-service="{{$GetServices[$array_keys[$i]]['service_id']}}" type="checkbox" @if($GetServices[$array_keys[$i]]['activation']) checked @endif>
-                                                            <span class="toggle"></span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button data-toggle="modal" data-target="#edit1{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn btn-success btn-simple">
-                                                        <i class="material-icons">edit</i>
-                                                        ویرایش
-                                                    </button>
-                                                    <div class="modal fade" id="edit1{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <form method="post" action="{{Route('EditService' , [ 'service_id'=> $GetServices[$array_keys[$i]]['service_id'] ,'location_id'=> $GetServices[$array_keys[$i]]['location_id']   ])}}">
-                                                                @csrf
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title " id=edit{{$i}}Label">  ویرایش جاذبه </h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="form-row mt-3">
-                                                                        <div class="col-sm text-right">
-                                                                            <label for="">  نام جاذبه </label>
-                                                                            <input value="{{ $GetServices[$array_keys[$i]]['service_name'] }}" name="service_name" type="text" class="form-control" id="nameStateFa" placeholder="نام جاذبه">
-                                                                        </div>
-                                                                        <div class="col-sm text-right">
-                                                                            <label for="">  نام انگلیسی جاذبه </label>
-                                                                            <input value="{{$GetServices[$array_keys[$i]]['english_name']}}" name="service_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام انگلیسی جاذبه">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row mt-4">
-                                                                        <div class="col-sm text-right">
-                                                                            <label for="">  ظرفیت جاذبه </label>
-                                                                            <input value="{{$GetServices[$array_keys[$i]]['capacity']}}" name="capacity" type="text" class="form-control" id="nameStateEn" placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
-                                                                        </div>
-                                                                        <div class="col-sm text-right">
-                                                                            <label for="">  عکس جاذبه </label>
-                                                                            <input type="file" class="form-control" id="nameStateEn" placeholder=" عکس جاذبه">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row mt-4">
-                                                                        <div class="col-sm text-right">
-                                                                            <label for=""> توضیحات </label>
-                                                                            <textarea style="height: 64px !important;" class="form-control" name="description" id="" cols="30" rows="3"> {{$GetServices[$array_keys[$i]]['description']}}</textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row mt-4">
-                                                                        <div class="col-sm text-right">
-                                                                            <select name="model_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
-                                                                                <option disabled> نوع سرویس </option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Entrance') selected @endif value="1">ورودی مکان</option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Event') selected @endif value="3">رویداد</option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Service') selected @endif value="2"> جاذبه مکان</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-sm text-right">
-                                                                            <div class="togglebutton text-center">
-                                                                                <label dir="ltr">
-                                                                                    <input name="normal_sale" type="checkbox" @if($GetServices[$array_keys[$i]]['normal_sale']) checked @endif>
-                                                                                    <span class="toggle"></span>
-                                                                                    شامل سانس
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer mt-4">
-                                                                    --}}{{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}{{--
-                                                                    <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> ویرایش </button>
-                                                                </div>
-                                                            </div>
-                                                            </form>
-                                                        </div>
-
-                                                    </div>
-                                                    <form action="{{Route('DeleteService' , ['service_id' => $GetServices[$array_keys[$i]]['service_id']])}}" method="post">
-                                                        @csrf
-                                                        <button type="submit" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
-                                                            <i class="material-icons">close</i>
-                                                            حدف
-                                                        </button>
-                                                    </form>
-
-                                                </td>
-                                            </tr>
-                                        @endfor
-                                    @endif--}}
-
                                     </tbody>
                                 </table>
                             </div>
@@ -364,6 +677,7 @@
                 </div>
             </div>
         </div>
+        --}}
     </div>
     {{--  modal for add picture  --}}
     <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
@@ -400,12 +714,20 @@
                     </div>
                     <div class="form-row mt-3">
                         <div class="col-sm text-right">
-                            <label for=""> توضیحات کوتاه </label>
-                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3"></textarea>
+                            <label for="">
+                                <b>
+                                توضیحات کوتاه
+                                </b>
+                            </label>
+                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3">{{$GetLocations['introduction']}}</textarea>
                         </div>
                         <div class="col-sm text-right">
-                            <label for=""> توضیحات کامل </label>
-                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3"></textarea>
+                            <label for="">
+                                <b>
+                                    توضیحات کامل
+                                </b>
+                            </label>
+                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3">{{$GetLocations['description']}}</textarea>
                         </div>
                     </div>
 
@@ -454,7 +776,6 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    &nbsp;
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -462,6 +783,158 @@
                 <div class="modal-body">
                     <img class="img-fluid rounded" id="herf_modal_image" src="" alt="">
                 </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for main event images   --}}
+    <div class="modal fade" id="main_event_image" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن عکس رویداد اصلی</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="event_image" action="" method="post" enctype="multipart/form-data">
+                    @csrf
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> تصویر رویداد اصلی  </label>
+                            <input name="service_image" type="file" class="form-control">
+                        </div>
+                        <div class="col-md text-right">
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="submit" class="btn btn-success px-5">
+                        افزودن
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for logo location   --}}
+    <div class="modal fade" id="logo_images" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن آیکون مکان</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{Route('AddLogoPicture' , ['id'=> $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> لوگوی مکان  </label>
+                            <input name="logo_image" type="file" class="form-control">
+                        </div>
+                        <div class="col-md text-right">
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="submit" class="btn btn-success px-5">
+                        افزودن
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for main image   --}}
+    <div class="modal fade" id="main_location_image" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن تصویر اصلی </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{Route('AddMainPicture', ['id' => $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-md text-right">
+                                <label for=""> تصویری اصلی  </label>
+                                <input name="main_image" type="file" class="form-control">
+                            </div>
+                            <div class="col-md text-right">
+                                <label for=""> پروژه <small>(اختیاری)</small> </label>
+                                <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                    @foreach($projectList as $project)
+                                        <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="submit" class="btn btn-success px-5">
+                            افزودن
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{--  modal for image_gallery   --}}
+    <div class="modal fade" id="image_gallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">&nbsp;افزودن تصویر مکان</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{Route('AddGalleryPicture' , ['id'=> $location_id])}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md text-right">
+                            <label for=""> تصویر مکان  </label>
+                            <input name="location_imgae" type="file" class="form-control">
+                        </div>
+                        <div class="col-md text-right">
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="submit" class="btn btn-success px-5">
+                        افزودن
+                    </button>
+                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -511,6 +984,35 @@
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script>
+        ClassicEditor
+            .create( document.querySelector( '#FullDescription' )
+                , {
+                    toolbar: [ 'undo','redo' , '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'  , '|', 'alignment:left', 'alignment:right', 'alignment:center', 'alignment:justify'],
+                    language: {
+                        ui: 'en',
+                        content : 'fa'
+                    },
+                } )
+            .catch( error => {
+                console.error( error );
+            }
+            );
+
+        ClassicEditor
+            .create( document.querySelector( '#ShortDescription' )
+                , {
+                    toolbar: [ 'undo','redo' , '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'  , '|',  'alignment:left', 'alignment:right', 'alignment:center' ],
+                    language: {
+                        ui: 'en',
+                        content : 'fa'
+                    },
+                } )
+            .catch( error => {
+                    console.error( error );
+                }
+            );
+    </script>
+    <script>
 
         $(document).ready(function () {
             $.ajaxSetup({
@@ -541,7 +1043,37 @@
                 });
             });
 
+            $(".btn_add_event").click(function () {
+                let url = $(this).attr("data-url");
+                $("#event_image").attr("action" ,url );
+            });
+
+            $(".btn_main_remove").click(function () {
+                let url = $(this).attr('data-url');
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = url ;
+                        /*Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )*/
+                    }
+                })
+            });
+
             $(".citzen_main_img").click(function () {
+                let src = $(this).attr("src") ;
+                $("#herf_modal_image").attr('src' ,src );
+            }); $(".citzen_main_img").click(function () {
                 let src = $(this).attr("src") ;
                 $("#herf_modal_image").attr('src' ,src );
             });

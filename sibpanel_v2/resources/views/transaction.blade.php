@@ -169,6 +169,7 @@
                             <!-- Modal -->
                             </form>
                         </div>
+                        @if(Route::current()->getName() == "GetTransaction")
                         <div class="card-body">
                             <div class="table-responsive table-striped">
                                 <table id="TransationTable"  class="table text-center">
@@ -178,7 +179,8 @@
                                             @php
                                                 $url = str_replace("GetTransaction","transactionToExcel",\Illuminate\Support\Facades\URL::full())
                                             @endphp
-                                            <a id="excelBtn" href="{{$url}}" target="_blank" anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل <i class="material-icons"> vertical_align_bottom </i>  </a>
+                                            <button @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) disabled @endif onclick="export2excel()" class="btn btn-info  mt-2 "> دانلود اکسل این صفحه<i class="material-icons"> vertical_align_bottom </i>  </button>
+                                            <a @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) href="no" @else href="{{$url}}" @endif id="excelBtn"  target="_blank" anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل تمامی صفحات<i class="material-icons"> vertical_align_bottom </i>  </a>
                                         </th>
                                     </tr>
                                     <tr class="">
@@ -243,20 +245,17 @@
                                                     {{$result['sale_type_name']}}
                                                 </td>
                                                 <td>
-
                                                     @if($result['procedure_status'] == 1 || $result['procedure_status'] == 10 )
                                                         <span class="badge badge-sm badge-secondary"> استفاده نشده </span>
                                                         @elseif($result['procedure_status'] == 11 || $result['procedure_status'] == 5)
                                                         <span class="badge badge-sm badge-success"> استفاده شده </span>
                                                         @elseif($result['procedure_status'] == 3)
                                                         <span class="badge badge-sm badge-danger"> حذف شده </span>
-
                                                     @endif
                                                 </td>
                                                 <td>
                                                     {{ number_format($result['ticket_number'] , 0 , '.' , ',')}}
                                                 </td>
-
                                                 <td>
                                                     {{$result['get_voucher_date_jalali'] }}
                                                 </td>
@@ -267,17 +266,14 @@
                                                         {{number_format($result['amount'] , 0 ,'.' , ',' )}}
                                                     @endif
                                                 </td>
-
                                             </tr>
                                         @endforeach
-
                                         <tr class="bg-light">
                                             <th colspan="6" class="text-right" >
                                                 جمع
                                             </th>
                                             <th colspan="2" class="text-center" >
                                                 {{ number_format($data['total_count'] , 0 , '.' , ',')}}
-
                                             </th>
                                             <th colspan="2" class="text-center">
                                                 @if(request('reportType') == 1)
@@ -287,18 +283,18 @@
                                                 @endif
                                             </th>
                                         </tr>
-
                                     @endif
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        @endif
                         <div class="card-footer justify-content-center">
                             <ul class="pagination justify-content-center">
                                 @if($data != null /*|| count($data['log']) != 0 */)
                                     @php
                                         $result = new \Illuminate\Pagination\LengthAwarePaginator( $data['log'],$data['total_pages'], 1,  \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage(),array('path' => \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPath()));
-                                        $page = (int)request('page') ;
+                                        $page = (int)request('page');
                                         $result->withPath(url()->full());
                                     @endphp
                                     {{$result->render()}}
@@ -321,6 +317,7 @@
     <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+
             $('#FromDate').persianDatepicker({
                 initialValue: true,
                 autoClose : true ,
@@ -334,8 +331,6 @@
                         enabled:false
                     }
                 }
-
-
             });
             $('#ToDate').persianDatepicker({
                 initialValue: true,
@@ -355,14 +350,12 @@
                         btnPrevText:'قبلی'
                     }
                 }
-
             });
-
             let start = "{{request('startDate')}}";
             if(start != '')
                 $("#FromDate").val(start);
 
-            let end = "{{request('endDate')}}";
+            let end = "{{request('endtDate')}}";
             if(end != '')
                 $("#ToDate").val(end);
         });
@@ -374,7 +367,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             province= "{{request('province_id')}}";
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
@@ -530,19 +522,34 @@
             $("#excelBtn").click(function (e)
             {
                 e.preventDefault();
-                Swal.fire(
-                    'در حال دانلود... ',
-                    ' این در خواست ممکن است کمی طول بکشد ، لطفا صبور باشید. ',
-                    'info'
-                )
-               let href = $("#excelBtn").attr("href") ;
-                setTimeout(function () {
-                    window.open(href, "_blank");
-                } , 1500)
+                let href = $("#excelBtn").attr("href") ;
+                if (href == "no"){
+                    Swal.fire(
+                        'خطا ... ',
+                        'اطلاعاتی جهت دانلود یافت نشد ! ',
+                        'warning'
+                    )
+                }else{
+                    Swal.fire(
+                        'در حال دانلود... ',
+                        ' این در خواست ممکن است کمی طول بکشد ، لطفا صبور باشید. ',
+                        'info'
+                    )
+                    setTimeout(function () {
+                        window.open(href, "_blank");
+                    } , 1500)
+                }
 
             });
-
             // $('#TransationTable').DataTable();
         });
+        function export2excel() {
+            Swal.fire(
+                'در حال دانلود... ',
+                ' این در خواست ممکن است کمی طول بکشد ، لطفا صبور باشید. ',
+                'info'
+            )
+            TableToExcel.convert(document.getElementById("TransationTable"));
+        }
     </script>
 @endsection

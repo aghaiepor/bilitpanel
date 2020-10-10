@@ -60,8 +60,7 @@
                             </div>
                                 <form  class="form-row mt-2" action="{{Route("getLocationFilter")}}" method="get">
                                     <div class="col-md-4">
-                                        <select name="province_id" id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
-                                            <option disabled selected> انتخاب استان </option>
+                                        <select name="province_id" id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب استان">
                                             <option value="0" >همه</option>
                                             @foreach($province as $item )
                                                 @if(request('province_id') ==  $item['id'])
@@ -73,7 +72,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <select name="city_id" id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
+                                        <select name="city_id" id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
                                             <option disabled selected> انتخاب شهر </option>
                                             <option value="2"> همه </option>
                                         </select>
@@ -332,10 +331,12 @@
                         <label for=""> نام  انگلیسی مکان </label>
                         <input type="text" name="location_english_name" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                     </div>
+                    @if(env("HAS_OFFICE_NO"))
                     <div class="col-md text-right">
                         <label for=""> شناسه مکان </label>
                         <input name="officeNo" type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                     </div>
+                    @endif
                     <div class="col-md">
                         <div class="togglebutton text-right">
                             <label dir="ltr">

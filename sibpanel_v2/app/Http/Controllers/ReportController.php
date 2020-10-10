@@ -63,6 +63,14 @@ class ReportController extends Controller
         ];
         return $content ;
     }
+    public function TerminalLocationList(Request $request){
+        $locationID = (int)$request->get('locationID');
+        $GetTerminal = $this->api->TerminalLocationList($locationID);
+        $content = [
+            'data' => $GetTerminal['ContentData'],
+        ];
+        return $content ;
+    }
     public function GetStat(Request $request){
 
         $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only

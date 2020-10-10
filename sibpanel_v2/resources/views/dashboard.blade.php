@@ -146,17 +146,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">dvr</i>
+                @if(env("HAS_TERMINAL"))
+                    <div class="col-lg-3 cards">
+                        <div class="card card-pricing card-raised">
+                            <div class="card-body">
+                                <div class="card-icon icon-rose">
+                                    <i class="material-icons">dvr</i>
+                                </div>
+                                <h5 class="card-title mt-2 font-weight-normal"> مدیریت ترمینال </h5>
+                                <a href="{{Route('terminals')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
                             </div>
-                            <h5 class="card-title mt-2 font-weight-normal"> مدیریت ترمینال </h5>
-                            <a href="{{Route('terminals')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
                         </div>
                     </div>
-                </div>
+                @endif
 
             </div>
         </div>

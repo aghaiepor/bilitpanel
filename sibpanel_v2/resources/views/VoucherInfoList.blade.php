@@ -8,6 +8,39 @@
         .bootstrap-select{
             width: 100% !important;
         }
+        .citzen_main_img{
+            width: 70px;
+            height: 70px;
+            border-radius: 20%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: 0.3s all;
+        }
+        .citzen_main_img:hover{
+            filter: brightness(1.2);
+            transform: scale(1.1);
+        }
+        .citzen_main_img:active{
+            filter: brightness(1.8);
+            transition: .1s filter;
+        }
+        #herf_modal_image{
+            display: block;
+            margin: 0 auto;
+        }
+        .citzen_img_lib{
+            padding: 8px;
+            border-radius: 5px;
+            border: solid 2px #FF9800;
+            font-size: 29pt !important;
+            color: #FF9800;
+            cursor: pointer;
+            transition: .3s all;
+        }
+        .citzen_img_lib:hover{
+            border: solid 2px #de8400;
+            color: #de8400;
+        }
     </style>
 @endsection
 
@@ -44,7 +77,7 @@
                                 </div>
                                 <div class="col-sm">
                                     <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i>  تعریف بلیت </span>
-                                    <a href="{{Route("GetService" , ['id' => $GetServices['service_id']])}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a href="{{Route("GetService" , ['id' => $location_id])}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <!-- Modal -->
@@ -67,6 +100,9 @@
                                             نوع بلیت
                                         </th>
                                         <th >
+                                            عکس بلیت
+                                        </th>
+                                        <th >
                                             ویرایش
                                         </th>
                                     </tr>
@@ -74,7 +110,7 @@
                                     <tbody>
                                     @if(count($VoucherInfo) == 0)
                                         <tr>
-                                            <td colspan="5">
+                                            <td colspan="6">
                                                 <h6 class="py-5 text-center"> بلیتی یافت نشد ! </h6>
                                             </td>
                                         </tr>
@@ -92,6 +128,29 @@
                                                 </td>
                                                 <td>
                                                     {{$VoucherInfo[$i]['voucher_type_name']}}
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $voucher_image = null  ;
+                                                        $api = new \App\Api\Api();
+                                                    @endphp
+                                                    @if(count($voucher_id_image) == 0 )
+                                                        <img voucher_id="{{ $VoucherInfo[$i]['id'] }}" image_id="0" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="../../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                    @else
+                                                        @foreach($voucher_id_image as $pic)
+                                                            @if($pic['voucher_id'] == $VoucherInfo[$i]['id'])
+                                                                @php
+                                                                    $voucher_image = $pic['picture_id'];
+                                                                     $main_image_address = $api->GetImageAddress($voucher_image)
+                                                                @endphp
+                                                                <img voucher_id="{{ $VoucherInfo[$i]['id'] }}" image_id="{{$pic['picture_id']}}" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{$main_image_address}}" rel="main_image">
+                                                            @endif
+                                                        @endforeach
+                                                        @if($voucher_image == null)
+                                                            <img voucher_id="{{ $VoucherInfo[$i]['id'] }}" data-toggle="modal" image_id="0" data-target="#image_modal" class="citzen_main_img" src="../../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                        @endif
+                                                    @endif
+{{--                                                    <img data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">--}}
                                                 </td>
                                                 <td>
                                                     <button data-toggle="modal" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn  btn-success btn-simple">
@@ -205,7 +264,102 @@
 
     </div>
 </div>
+
+{{-- Modal for singel images   --}}
+<div class="modal fade" id="image_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="img-fluid rounded" id="herf_modal_image" data-voucher-id="" data-image-id="" src="" alt="">
+            </div>
+            <div class="modal-footer">
+                <button id="insertBtn" class="btn btn-success px-3" data-toggle="modal" data-target="#insetImage">
+                    افزودن عکس
+                </button>
+                <a id="DelBtn" href="" class="btn btn-danger px-3">
+                    حذف عکس
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal for add service image   --}}
+<div class="modal fade" id="insetImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" id="addImageForm" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-row">
+                        <input type="hidden" value="{{$location_id}}" name="location_id">
+                        <div class="col text-right">
+                            <label for=""> عکس آپلود </label>
+                            <input type="file" name="service_image" class="form-control">
+                        </div>
+                        <div class="col text-right">
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success px-5" data-toggle="modal" data-target="">
+                        افزودن
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @section('AddJs')
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // for show image and id on modal
+            $(".citzen_main_img").click(function () {
+                let src = $(this).attr("src") ;
+                let voucher_id = $(this).attr("voucher_id");
+                let image_id = $(this).attr("image_id");
+                if(image_id == '0'){
+                    $("#DelBtn").attr('href','#');
+                    $("#DelBtn").hide();
+
+                }else{
+                    $("#DelBtn").show();
+                    let deleteUrl = "{{Route("imageRemove")}}/" + image_id ;
+                    $("#DelBtn").attr('href',deleteUrl);
+                }
+
+                $("#herf_modal_image").attr('src' ,src );
+                $("#herf_modal_image").attr('data-voucher-id' ,voucher_id );
+
+            });
+            // for add url on action form
+            $("#insertBtn").click(function () {
+                let voucher_id = $("#herf_modal_image").attr('data-voucher-id');
+                let image_id = $("#herf_modal_image").attr('data-image-id');
+                let url = "{{Route("AddVoucherPicture")}}/"+ voucher_id;
+                $("#addImageForm").attr('action',url);
+
+            });
+        });
+
+    </script>
 @endsection

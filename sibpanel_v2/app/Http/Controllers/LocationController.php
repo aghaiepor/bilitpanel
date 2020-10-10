@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\CustomException;
 
 class LocationController extends Controller
 {
@@ -37,23 +38,25 @@ class LocationController extends Controller
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
 //        Log::info( 'mandatory_entrance' . $mandatory_entrance);
         $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude);
-    /*
-        // **** for shahdari project *****
-        $location_id = (int)locationId;
-        $project_name = "shahrdari";
-        $owner_name = "shahrdari";
-        $shaba = "123";
-       $payment_id = $request->get("officeNo"); ;
-        $AddClearingAccount = $this->api->AddClearingAccount($location_id,$project_name,$owner_name,$shaba,$payment_id);
-*/
+
 //        return $addLocation;
         if ($addLocation['Header']['MessageCode'] == 0){
-            $api = new Api();
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){
                 $Locations  = $this->api->LocationList();
                 return $Locations['ContentData'];
             });
+
+            if(env("HAS_OFFICE_NO")) {
+                // **** for shahdari project *****
+                $location_id = $addLocation['ContentData']['location_id'];
+                $project_name = "shahrdari";
+                $owner_name = "shahrdari";
+                $shaba = "123";
+                $payment_id = $request->get("officeNo");
+                $AddClearingAccount = $this->api->AddClearingAccount($location_id, $project_name, $owner_name, $shaba, $payment_id);
+                return $AddClearingAccount ;
+            }
             return redirect()->back()->with('success' , ' مکان مورد نظر اضافه گردید . ');
         }
 
@@ -65,6 +68,7 @@ class LocationController extends Controller
 //        return json_encode($addLocation);
     }
     public function EditLocation(Request $request , $id){
+        $getLoction = $this->api->GetLocation($id);
         $location_name = $request->get('location_name') ;
         $location_english_name = $request->get('location_english_name') ;
         $location_address = $request->get('location_address') ;
@@ -74,7 +78,9 @@ class LocationController extends Controller
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
         $longitude= $request->get('longitude');
         $latitude = $request->get('latitude');
-        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude);
+        $introduction = $getLoction['ContentData'][0]['introduction'];
+        $description =  $getLoction['ContentData'][0]['description'];
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
         if ($EditLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){
@@ -163,13 +169,41 @@ class LocationController extends Controller
     // ******* Service
     public function GetService($id){
         $GetServices = Cache::get('ServiceList');
+        $projectList = $this->api->ProjectList();
         $locationID = $id ;
         $GetServices = array_filter($GetServices, function ($event) use ($locationID) {
             return $event['location_id'] == $locationID;
         });
-
         $array_keys = array_keys($GetServices) ;
-        return view('services' , ['GetServices'=> $GetServices , 'array_keys' => $array_keys , 'location_id'=>$locationID  ]);
+        $service_pics = [];
+        $service_id_image = [];
+        for($i = 0 ; $i < count($array_keys) ; $i++){
+            $GetPicturesInfo = $this->api->GetPicturesInfo(null,$GetServices[$array_keys[$i]]['service_id'],null,null);
+            if(array_key_exists("service_pics" , $GetPicturesInfo['ContentData'])){
+                $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
+                foreach ($service_pics as $pic){
+                    if($pic['tag'] == 'main')
+                    {
+                        $image = [
+                            'service_id' => $GetServices[$array_keys[$i]]['service_id'] ,
+                            'picture_id' =>$pic['picture_id']
+                        ];
+                        array_push($service_id_image,$image);
+                    }
+
+                }
+            }
+        }
+//        $image = $this->api->GetImageAddress($service_id_image[0]['picture_id']);
+//        return $image;
+//        return $GetServices ;
+//        $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,null,null);
+//        $GetPicturesInfo = $this->api->GetPicturesInfo($id,263,null,null);
+//        return $GetPicturesInfo;
+//        if(array_key_exists("service_pics" , $GetPicturesInfo['ContentData'])){
+//            $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
+//        }
+        return view('services' , ['GetServices'=> $GetServices , 'array_keys' => $array_keys , 'service_pics'=>$service_id_image , 'location_id' => $locationID , 'projectList' => $projectList['ContentData'] ]);
 
     }
     public function AddService(Request $request ,$location_id ){
@@ -178,20 +212,22 @@ class LocationController extends Controller
             $service_english_name = $request->get("service_english_name");
             $model_id = $request->get("model_id");
             $description = $request->get("description");
-            $capacity = $request->get("capacity");
+            $capacity = (int)$request->get("capacity");
+            if ($capacity == 0 )
+                $capacity = "";
             $normal_sale = ($request->get("normal_sale") == 'on') ? 1 : 0 ;
-
             $AddService  = $this->api->AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id, $normal_sale);
-                if ($AddService['Header']['Status'] == 0){
-                    Cache::forget('ServiceList');
-                    Cache::rememberForever('ServiceList', function(){
-                        $Locations  = $this->api->ServiceList();
-                        return $Locations['ContentData'];
-                    });
-                    return redirect()->back()->with('success' , 'جاذبه مورد نظر ایحاد گردید');
-                }
-                else
-                    return redirect()->back()->with('error' , 'خطا در ایجاد جاذبه جدید ');
+//            return $AddService;
+            if ($AddService['Header']['Status'] == 0){
+                Cache::forget('ServiceList');
+                Cache::rememberForever('ServiceList', function(){
+                    $Locations  = $this->api->ServiceList();
+                    return $Locations['ContentData'];
+                });
+                return redirect()->back()->with('success' , 'جاذبه مورد نظر ایحاد گردید');
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در ایجاد جاذبه جدید ');
 
     }
     public function EditService(Request $request ,$service_id,$location_id ){
@@ -252,10 +288,34 @@ class LocationController extends Controller
                     return $data ;
 //        return $EditService ;
     }
+    public function AddServicePicture(Request $request, $id){
+        $location_id = $request->get('location_id');
+        $service_id = $id ;
+        $project_id = (int)$request->get('project_id');
+        if ($request->hasFile('service_image')){
+            $image = base64_encode(file_get_contents($request->file('service_image')->path()));
+//            return $image;
+            $addPicture = $this->api->AddPicture($project_id , 0 , $service_id , 0 , $image , "main");
+//            return $addPicture;
+            if($addPicture['Header']['Status'] == 0){
+                return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
+//                return $addPicture['ContentData']['picture_id'];
+            }
+            else if($addPicture['Header']['Status'] == 2){
+                return redirect()->back()->with('error' , ' تصویر موجود می باشد . برای تعویض تصویر ، تصویر قبلی را حذف نمایید .');
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در آپلود تصویر !');
+        }
+        else
+            return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
+
+    }
 
     // ******* Voucher
     public function VoucherInfoList($service_id , $location_id){
         $GetServices = Cache::get('ServiceList');
+        $projectList = $this->api->ProjectList();
         $locationID = $location_id ;
         $GetServices = array_filter($GetServices, function ($event) use ($locationID , $service_id) {
             return $event['location_id'] == $locationID && $event['service_id'] == $service_id ;
@@ -263,8 +323,53 @@ class LocationController extends Controller
         $array_keys = array_keys($GetServices) ;
         $GetServices = $GetServices[$array_keys[0]] ;
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
-        return view('VoucherInfoList' , ['VoucherInfo'=> $VoucherInfoList['ContentData'] , 'GetServices' =>$GetServices , 'service_id'=> $service_id , 'location_id' =>$location_id ]);
+//        return $VoucherInfoList['ContentData'][0]['id']; // 985 for 147 service_id
+        $voucher_id_image = [];
+        foreach ($VoucherInfoList['ContentData'] as $voucher){
+            $GetPicturesInfo = $this->api->GetPicturesInfo(null,null,null,$voucher['id']);
+            if(array_key_exists("voucher_info_pics" , $GetPicturesInfo['ContentData'])){
+                $voucher_pics = $GetPicturesInfo['ContentData']['voucher_info_pics'];
+                foreach ($voucher_pics as $pic){
+                    if($pic['tag'] == 'main')
+                    {
+                        $image = [
+                            'voucher_id' => $voucher['id'] ,
+                            'picture_id' =>$pic['picture_id']
+                        ];
+                        array_push($voucher_id_image,$image);
+                    }
+
+                }
+            }
+        }
+//        return $voucher_id_image;
+        return view('VoucherInfoList' , ['VoucherInfo'=> $VoucherInfoList['ContentData'] ,
+            'GetServices' =>$GetServices , 'service_id'=> $service_id , 'location_id' =>$location_id ,
+            'voucher_id_image'=> $voucher_id_image ,  'projectList' => $projectList['ContentData'] ]);
 //        return $VoucherInfoList ;
+
+    }
+    public function AddVoucherPicture(Request $request, $id){
+        $location_id = $request->get('location_id');
+        $voucher_id = $id ;
+        $project_id = (int)$request->get('project_id');
+        if ($request->hasFile('service_image')){
+            $image = base64_encode(file_get_contents($request->file('service_image')->path()));
+//            return $image;
+            $addPicture = $this->api->AddPicture($project_id , 0 , 0 , $voucher_id , $image , "main");
+//            return $addPicture;
+            if($addPicture['Header']['Status'] == 0){
+                return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
+//                return $addPicture['ContentData']['picture_id'];
+            }
+            else if($addPicture['Header']['Status'] == 2){
+                return redirect()->back()->with('error' , ' تصویر موجود می باشد . برای تعویض تصویر ، تصویر قبلی را حذف نمایید .');
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در آپلود تصویر !');
+        }
+        else
+            return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
 
     }
     public function AddVoucherInfo(Request $request , $service_id , $location_id){
@@ -295,7 +400,6 @@ class LocationController extends Controller
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
 
     }
-
     public function GetVoucherText(Request $request){
         $text = Cache::get("GetVoucherText");
         $text_id = $request->get("id") ;
@@ -310,32 +414,259 @@ class LocationController extends Controller
 //        return $text ;
     }
 
+    // ***** Citizen
     public function citizenPanel(Request $request , $id){
-        $GetPicture = $this->api->GetPicture($id);
-//        $test = "http://185.129.170.10:5002/GetPicture/".$id;
-//        $res = Http::get($test);
-        return $GetPicture;
 
-        $locations = Cache::get('LocationList');
-        $GetLocations = array_filter($locations, function ($event) use ($id) {
-            return $event['id'] == $id;
-        });
-        $array_keys = array_keys($GetLocations) ;
-        $index =  $array_keys[0];
-        $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,$id,null);
-        $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
-        $project_pics = $GetPicturesInfo['ContentData']['project_pics'];
-        if($project_pics != null){
-            $project_pics_picture_id  = $this->api->GetPicture($project_pics[0]['picture_id']) ;
-            return $project_pics_picture_id;
+        try {
+            $GetEvent = $this->api->GetEvent($id);
+            $projectList = $this->api->ProjectList();
+//      $GetPicture = $this->api->GetPicture($id);
+//       return $GetEvent;
+            /*
+            $image = $this->GetImageAddress($GetPicture['content'] , $GetPicture['type']);
+            return '<img src="'.$image.'" alt="An elephant" />';
+            */
+            $locations = Cache::get('LocationList');
+            $GetLocations = array_filter($locations, function ($event) use ($id) {
+                return $event['id'] == $id;
+            });
+            $array_keys = array_keys($GetLocations) ;
+            $index =  $array_keys[0];
+//            return $GetEvent['ContentData'][0]['services'];
+            $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,null,null);
+//            return $GetPicturesInfo;
+//        return $GetPicturesInfo;
+            if(array_key_exists("location_pics" , $GetPicturesInfo['ContentData'])){
+                $location_pic = $GetPicturesInfo['ContentData']['location_pics'];
+//                return $location_pic;
+            }
+
+//            return $GetEvent['ContentData']['service_id'];
+            $service_id_image = [];
+            $services = $GetEvent['ContentData'];
+            foreach ($services as $service){
+
+                $GetPicturesInfo = $this->api->GetPicturesInfo(null,$service['service_id'],null,null);
+                if(array_key_exists("service_pics" , $GetPicturesInfo['ContentData'])){
+                    $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
+                    foreach ($service_pics as $pic){
+                        if($pic['tag'] == 'main')
+                        {
+                            $image = [
+                                'service_id' => $service['service_id'] ,
+                                'picture_id' =>$pic['picture_id']
+                            ];
+                            array_push($service_id_image,$image);
+                        }
+
+                    }
+                }
+            }
+            return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'service_id_image' =>$service_id_image ,
+                    'GetEvents' => $GetEvent['ContentData'] , 'location_id'=>$id , 'projectList' => $projectList['ContentData'] ] ) ;
+
+        } catch (\Exception $e) {
+//            return $e->getMessage();
+            abort(404);
         }
-//        $voucher_info_pics = $GetPicturesInfo['ContentData']['voucher_info_pics'];
-//        $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
-//        return $project_pics;
-        return view("citizen" , ['GetLocations' => $GetLocations[$index] , 'location_pic' => $location_pic , 'project_pics' => $project_pics ] ) ;
     }
+    public function AddLatLong(Request $request , $id){
+        $GetLocation = $this->api->GetLocation($id);
+//        return $GetLocation['ContentData'][0]['text']['id'];
+        $data = [
+            'location' => $GetLocation['ContentData'] ,
+            'location_id' => $id,
+            'lat' => $request->get('latitude'),
+            'long' => $request->get('longitude')
+        ];
+        $location_name = $GetLocation['ContentData'][0]['location_name'] ;
+        $location_english_name = $GetLocation['ContentData'][0]['location_english_name'] ;
+        $location_address = $GetLocation['ContentData'][0]['address'] ;
+        $location_english_address = $GetLocation['ContentData'][0]['location_address'] ;
+        $location_id = $id ;
+        $text_id = $GetLocation['ContentData'][0]['text']['id'] ;
+        $mandatory_entrance = $GetLocation['ContentData'][0]['mandatory_entrance'] ;
+        $longitude= $request->get('longitude');
+        $latitude = $request->get('latitude');
+        $introduction =  $GetLocation['ContentData'][0]['introduction'] ;
+        $description = $GetLocation['ContentData'][0]['description'];
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+        if ($EditLocation['Header']['MessageCode'] == 0){
+            Cache::forget('LocationList');
+            Cache::rememberForever('LocationList', function(){
+                $Locations  = $this->api->LocationList();
+                return $Locations['ContentData'];
+            });
+            return redirect()->back()->with('success' , ' طول و عرض جغرافیایی ویرایش گردید . ');
+        }
+        else
+            return redirect()->back()->with('error' , ' خطا در ویرایش طول و عرض جغرافیایی ! ');
+
+    }
+    public function FullDescription(Request $request , $id)
+    {
+        $GetLocation = $this->api->GetLocation($id);
+//        return $GetLocation;
+        $data = [
+            'location' => $GetLocation['ContentData'] ,
+            'location_id' => $id,
+            'lat' => $request->get('latitude'),
+            'long' => $request->get('longitude')
+        ];
+        $location_name = $GetLocation['ContentData'][0]['location_name'] ;
+        $location_english_name = $GetLocation['ContentData'][0]['location_english_name'] ;
+        $location_address = $GetLocation['ContentData'][0]['address'] ;
+        $location_english_address = $GetLocation['ContentData'][0]['location_address'] ;
+        $location_id = $id ;
+        $text_id = $GetLocation['ContentData'][0]['text']['id'] ;
+//      $introduction =  htmlentities($request->get('ShortDescription')) ;
+        $introduction =  $GetLocation['ContentData'][0]['introduction'];
+        $description =  htmlentities($request->get('FullDescription'));
+        $mandatory_entrance = $GetLocation['ContentData'][0]['mandatory_entrance'] ;
+        $longitude = $GetLocation['ContentData'][0]['longitude'];
+        $latitude = $GetLocation['ContentData'][0]['latitude'];
+
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+//        return $EditLocation;
+        if ($EditLocation['Header']['MessageCode'] == 0){
+            Cache::forget('LocationList');
+            Cache::rememberForever('LocationList', function(){
+                $Locations  = $this->api->LocationList();
+                return $Locations['ContentData'];
+            });
+            return redirect()->back()->with('success' , ' توضیحات کامل ویرایش گردید . ');
+        }
+        else
+            return redirect()->back()->with('error' , ' خطا در ویرایش توضیحات کامل ! ');
+
+//        $FullDescription =$request->get('ShortDescription');
+//        return $FullDescription ;
 
 
+    }
+    public function ShortDescription(Request $request , $id)
+    {
+        $GetLocation = $this->api->GetLocation($id);
+//        return $GetLocation;
+        $data = [
+            'location' => $GetLocation['ContentData'] ,
+            'location_id' => $id,
+            'lat' => $request->get('latitude'),
+            'long' => $request->get('longitude')
+        ];
+        $location_name = $GetLocation['ContentData'][0]['location_name'] ;
+        $location_english_name = $GetLocation['ContentData'][0]['location_english_name'] ;
+        $location_address = $GetLocation['ContentData'][0]['address'] ;
+        $location_english_address = $GetLocation['ContentData'][0]['location_address'] ;
+        $location_id = $id ;
+        $text_id = $GetLocation['ContentData'][0]['text']['id'] ;
+//        $introduction =  htmlentities($request->get('ShortDescription')) ;
+        $introduction =  htmlentities($request->get('ShortDescription'));
+        $description = $GetLocation['ContentData'][0]['description'];
+        $mandatory_entrance = $GetLocation['ContentData'][0]['mandatory_entrance'] ;
+        $longitude = $GetLocation['ContentData'][0]['longitude'];
+        $latitude = $GetLocation['ContentData'][0]['latitude'];
 
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+//        return $EditLocation;
+        if ($EditLocation['Header']['MessageCode'] == 0){
+            Cache::forget('LocationList');
+            Cache::rememberForever('LocationList', function(){
+                $Locations  = $this->api->LocationList();
+                return $Locations['ContentData'];
+            });
+            return redirect()->back()->with('success' , ' توضیحات کوتاه ویرایش گردید . ');
+        }
+        else
+            return redirect()->back()->with('error' , ' خطا در ویرایش توضیحات کوتاه ! ');
 
+//        $FullDescription =$request->get('ShortDescription');
+//        return $FullDescription ;
+    }
+    public function AddMainPicture(Request $request, $id){
+
+        $project_id = (int)$request->get('project_id');
+        if ($request->hasFile('main_image')){
+            $image = base64_encode(file_get_contents($request->file('main_image')->path()));
+            $addPicture = $this->api->AddPicture($project_id , $id , 0 , 0 , $image , "main");
+            if($addPicture['Header']['Status'] == 0){
+                return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
+//                return $addPicture['ContentData']['picture_id'];
+            }
+            else if($addPicture['Header']['Status'] == 2){
+                return redirect()->back()->with('error' , ' تصویر موجود می باشد . برای تعویض تصویر ، تصویر قبلی را حذف نمایید .');
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در آپلود تصویر !');
+        }
+        else
+            return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
+
+    }
+    public function AddLogoPicture(Request $request, $id){
+
+        $project_id = (int)$request->get('project_id');
+//            return base64_encode(file_get_contents($request->get('logo_image')->path())) ;
+        if ($request->hasFile('logo_image')){
+            $image = base64_encode(file_get_contents($request->file('logo_image')->path()));
+            $addPicture = $this->api->AddPicture($project_id , $id , 0 , 0 , $image , "logo");
+//            return $addPicture ;
+            if($addPicture['Header']['Status'] == 0){
+                return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
+//                return $addPicture['ContentData']['picture_id'];
+            }
+            else if($addPicture['Header']['Status'] == 2){
+                return redirect()->back()->with('error' , ' تصویر موجود می باشد . برای تعویض تصویر ، تصویر قبلی را حذف نمایید .');
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در آپلود تصویر !');
+        }
+        else
+            return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
+    }
+    public function AddGalleryPicture(Request $request, $id){
+
+        $project_id = (int)$request->get('project_id');
+//            return base64_encode(file_get_contents($request->get('logo_image')->path())) ;
+        if ($request->hasFile('location_imgae')){
+            $image = base64_encode(file_get_contents($request->file('location_imgae')->path()));
+            $addPicture = $this->api->AddPicture($project_id , $id , 0 , 0 , $image , "other");
+//            return $addPicture ;
+            if($addPicture['Header']['Status'] == 0){
+                return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
+            }
+            else if($addPicture['Header']['Status'] == 2){
+                return redirect()->back()->with('error' , ' تصویر موجود می باشد . برای تعویض تصویر ، تصویر قبلی را حذف نمایید .');
+            }
+            else
+                return redirect()->back()->with('error' , 'خطا در آپلود تصویر !');
+        }
+        else
+            return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
+
+        /*
+         $data = [
+            'id' => $id ,
+            'tag' => 'other' ,
+            'image' => base64_encode(file_get_contents($request->file('location_imgae')->path())),
+        ];
+        return $data ;
+        */
+    }
+    public function AddMainEventPicture(Request $request, $id){
+        $data = [
+            'id' => $id ,
+            'tag' => 'main' ,
+            'event_id' => $request->get('event_id'),
+            'image' => base64_encode(file_get_contents($request->file('main_image_event')->path())),
+        ];
+        return $data ;
+    }
+    public function imageRemove($id){
+        $del = $this->api->DeletePicture($id);
+        if($del['Header']['Status'] == 0)
+            return redirect()->back()->with('success' , ' تصویر مورد نظر حذف گردید . ');
+        else
+            return redirect()->back()->with('error' , ' خطا در حذف تصویر . ');
+    }
 }

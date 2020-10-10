@@ -14,21 +14,28 @@ class AuthController extends Controller
 {
 
     public function loginPage(){
+        if(isset($_SERVER['HTTP_REFERER']))
+            $previous_url = $_SERVER['HTTP_REFERER'];
+        else
+            $previous_url = null;
+
         if (!session()->has('SessionId') || !session()->has('UserInfo') ) {
-            return view('Login');
+            return view('Login' , ['previous_url'=>$previous_url]);
         }else
             return redirect('/');
     }
 
     public function login(Request $request){
 
-
-        $validator = Validator::make($request->all(), [
-            'g-recaptcha-response' => new Captcha(),
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->with('error' , 'لطفا قسمت امنیتی را تایید نماید.');
+        if (env('HAS_CAPTCHA')){
+            $validator = Validator::make($request->all(), [
+                'g-recaptcha-response' => new Captcha(),
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->with('error' , 'لطفا قسمت امنیتی را تایید نماید.');
+            }
         }
+
 /*
         $secret = "6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj";
 //        return $request->get('captcha') ;
@@ -42,13 +49,13 @@ class AuthController extends Controller
     /*    if ($response->getScore() < 0.6) {
             return "not ok !";
         }*/
-
+        $previous_url = $request->get('previous_url');
         $username = $request->get('username');
         $password = $request->get('password');
         $cont = new Api();
         $response = $cont->login($username,$password);
         if ($response['Header']['Status'] == 0 && $response['ContentData']['panel_access']){
-            return redirect()->Route('loading');
+            return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
         }else
         {
             return redirect()->back()->with('error' , ' نام کاربری یا رمز عبور وارد شده معتبر نیست . ');
@@ -73,18 +80,6 @@ class AuthController extends Controller
     }
 
     public function test(){
-        Cache::forget('LocationList');
-        $value = Cache::rememberForever('LocationList', function(){
-            $Api = new Api();
-            $Locations  = $Api->LocationList();
-            return $Locations;
-        });
-        return Cache::get('LocationList') ;
-
-        /*$value = Cache::rememberForever('LocationList', function(){
-
-        });*/
-//        return $Locations ;
 
 
     }
