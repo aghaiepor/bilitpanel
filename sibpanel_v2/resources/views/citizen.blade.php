@@ -109,10 +109,11 @@
                                                      $main_image_address = $api->GetImageAddress($main_image_id)
                                                 @endphp
                                                     <img class="img" src="{{$main_image_address}}" rel="main_image">
-                                            @else
-                                                <img class="img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
                                             @endif
                                         @endforeach
+                                            @if($main_image_id == null)
+                                                <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                            @endif
                                     @endif
                                 </a>
                             </div>
@@ -135,14 +136,14 @@
                                 <a href="javascript:;" class="btn btn-just-icon btn-google btn-round">
                                     <i class="fa fa-google"></i>
                                 </a>--}}
-                                <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#main_location_image" title="اضافه یا ویرایش">
+                                <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-toggle="modal" data-target="#main_location_image" title="">
                                     <i class="material-icons">edit</i>
                                     <div class="ripple-container"></div>
                                 </button>
                                 @if($main_image_id != null)
-                                    <a href="{{Route('imageRemove' , ['id'=>$main_image_id])}}" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="حذف">
+                                    <button data-url="{{Route('imageRemove' , ['id'=>$main_image_id])}}" rel="tooltip" class="btn btn-sm btn-danger px-2 btn_main_remove" data-original-title="" title="">
                                         <i class="material-icons">close</i>
-                                    </a>
+                                    </button>
                                 @endif
                             </div>
                         </div>
@@ -152,7 +153,25 @@
                         <div class="card mx-auto mt-2 mb-3" >
                             <div class="row no-gutters">
                                 <div class="col-lg-6">
-                                    <img src="../assets/img/card-2.jpg" class="card-img" alt="...">
+                                    @php
+                                        $logo_image_id = null ;
+                                    @endphp
+                                    @if(count($location_pic) == 0  )
+                                        <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                    @else
+                                        @foreach($location_pic as $pic)
+                                            @if($pic['tag'] == 'logo')
+                                                @php
+                                                    $logo_image_id = $pic['picture_id'];
+                                                     $main_image_address = $api->GetImageAddress($logo_image_id)
+                                                @endphp
+                                                <img class="card-img" src="{{$main_image_address}}" rel="main_image">
+                                            @endif
+                                        @endforeach
+                                        @if($logo_image_id == null)
+                                                <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                        @endif
+                                    @endif
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="card-body text-right">
@@ -167,9 +186,11 @@
                                                 <i class="material-icons">edit</i>
                                                 <div class="ripple-container"></div>
                                             </button>
-                                            <button type="button" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="">
-                                                <i class="material-icons">close</i>
-                                            </button>
+                                            @if($logo_image_id != null)
+                                                <button data-url="{{Route('imageRemove' , ['id' => $logo_image_id])}}" type="button" rel="tooltip" class="btn btn-sm btn-danger px-2 btn_main_remove" data-original-title="" title="">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            @endif
 
                                         </div>
 
@@ -252,16 +273,48 @@
                         </div>
                     </div>
                     <div class="form-row">
+                        @php
+                            $gallery_image_id = null ;
+                        @endphp
                         <div class="col-md-4">
                             <div class="card mt-0 mb-3">
                                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                                    <ol class="carousel-indicators">
+                                    {{--<ol class="carousel-indicators">
                                         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                                         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                                         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                                    </ol>
+                                    </ol>--}}
                                     <div class="carousel-inner">
-                                        <div class="carousel-item active">
+
+                                        @if(count($location_pic) == 0 )
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100 card-img-top" src="../assets/img/image_placeholder.jpg" alt="Second slide">
+                                            </div>
+                                        @else
+                                            @php
+                                                $i = 0 ;
+                                            @endphp
+                                            @foreach($location_pic as $pic)
+                                                @if($pic['tag'] == 'other')
+                                                    @php
+                                                          $gallery_image_id = $pic['picture_id'];
+                                                           $main_image_address = $api->GetImageAddress($gallery_image_id)
+                                                    @endphp
+                                                        <div class="carousel-item  @if($i == 0) active @endif">
+                                                            <img class="d-block w-100 card-img-top" src="{{$main_image_address}}" alt="gallery image">
+                                                        </div>
+                                                    @php
+                                                        $i++;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                            @if($gallery_image_id == null)
+                                                    <div class="carousel-item active">
+                                                        <img class="d-block w-100 card-img-top" src="../assets/img/image_placeholder.jpg" alt="Second slide">
+                                                    </div>
+                                            @endif
+                                        @endif
+                                        {{--<div class="carousel-item active">
                                             <img class="d-block w-100 card-img-top" src="../../../assets/img/login.jpg" alt="First slide">
                                         </div>
                                         <div class="carousel-item">
@@ -269,7 +322,7 @@
                                         </div>
                                         <div class="carousel-item">
                                             <img class="d-block w-100 card-img-top" src="../../../assets/img/lock.jpg" alt="Third slide">
-                                        </div>
+                                        </div>--}}
                                     </div>
                                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -292,31 +345,29 @@
                                         </button>
                                     </h4>
                                     <div class="row">
-                                        {{-- image in galary image --}}
-                                        <div class="card mx-auto my-1" style="max-width: 540px;">
-                                            <div class="row no-gutters">
-                                                <div class="col-md-4">
-                                                    <img src="../assets/img/card-2.jpg" class="card-img" alt="...">
-                                                </div>
-{{--                                                <div class="col-md">--}}
-{{--                                                    <div class="card-body">--}}
-{{--                                                        <h5 class="card-title">Card title</h5>--}}
-{{--                                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-                                                <div class="col-md-2 mr-auto d-flex justify-content-center align-items-center">
-                                                    {{--<button type="button" rel="tooltip" class="btn btn-sm btn-success px-2" data-original-title="" title="">
-                                                        <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>--}}
-                                                    <button type="button" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @if(count($location_pic) != 0 )
+                                            @foreach($location_pic as $pic)
+                                                @if($pic['tag'] == 'other')
+                                                    @php
+                                                        $gallery_image_id = $pic['picture_id'];
+                                                         $main_image_address = $api->GetImageAddress($gallery_image_id)
+                                                    @endphp
+                                                    <div class="card mx-auto my-1" style="max-width: 540px;">
+                                                        <div class="row no-gutters">
+                                                            <div class="col-md-4">
+                                                                <img src="{{$main_image_address}}" class="card-img" alt="...">
+                                                            </div>
+                                                            <div class="col-md-2 mr-auto d-flex justify-content-center align-items-center">
+                                                                <button data-url="{{Route('imageRemove' , ['id' => $gallery_image_id])}}" type="button" rel="tooltip" class="btn btn-sm btn-danger px-2 btn_main_remove " data-original-title="" title="">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     </div>
-{{--                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
                                 </div>
                             </div>
                         </div>
@@ -326,33 +377,66 @@
                                 <div class="card-body text-center">
                                     <h4 class="card-title border-bottom pb-2 mb-2">
                                        <b> عکس رویداد اصلی </b>
-                                        <button type="button" rel="tooltip" class="btn btn-sm btn-success px-2 mr-2" data-toggle="modal" data-target="#main_event_image">
-                                            <i class="material-icons">add</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
+
                                     </h4>
                                     <div class="row">
                                         {{-- image in galary image --}}
-                                        @foreach($GetEvents as $GetEvent)
-                                            <div class="card mx-auto my-1" style="max-width: 540px;">
-                                                <div class="row no-gutters">
-                                                    <div class="col-md-4">
-                                                        <img src="../assets/img/card-2.jpg" class="card-img" alt="...">
-                                                    </div>
-                                                    <div class="col-md">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title"> {{ $GetEvent['location_name'] }}</h5>
-                                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                        @if(count($GetEvents) == 0)
+                                            <div class="col">
+                                                <h6 class="text-center py-5 text-secondary" >
+                                                    رویدادی یافت نشد .
+                                                </h6>
+                                            </div>
+
+                                        @else
+                                            @foreach($GetEvents as $GetEvent)
+                                                <div class="card mx-auto my-1" style="max-width: 540px;">
+                                                    <div class="row no-gutters">
+                                                        <div class="col-md-4">
+                                                            @php
+                                                                $event_image_id = null ;
+                                                            @endphp
+                                                            @if(count($service_id_image) == 0  )
+                                                                <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                            @else
+                                                                @foreach($service_id_image as $pic)
+                                                                    @if($pic['service_id'] == $GetEvent['service_id'])
+                                                                        @php
+                                                                            $event_image_id = $pic['picture_id'];
+                                                                             $main_image_address = $api->GetImageAddress($event_image_id)
+                                                                        @endphp
+                                                                        <img class="card-img" src="{{$main_image_address}}" rel="main_image">
+                                                                    @endif
+                                                                @endforeach
+                                                                @if($event_image_id == null)
+                                                                    <img class="card-img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                                @endif
+                                                            @endif
+                                                            {{--                                                        <img src="../assets/img/card-2.jpg" class="card-img" alt="...">--}}
+                                                        </div>
+                                                        <div class="col-md d-flex align-items-center">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title"> {{ $GetEvent['service_name'] }}</h5>
+{{--                                                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 d-flex justify-content-center align-items-center \">
+                                                            @if($event_image_id == null)
+                                                                <button data-url="{{Route('AddServicePicture' , ['id'=>$GetEvent['service_id']] )}}" type="button" rel="tooltip" class="btn btn-sm btn-success px-2 btn_add_event " data-toggle="modal" data-target="#main_event_image">
+                                                                    <i class="material-icons">add</i>
+                                                                </button>
+                                                            @else
+                                                                <button data-url="{{Route('imageRemove' , ['id'=>$event_image_id])}}" class="btn btn-sm btn-danger px-2 btn_main_remove" data-original-title="" title="">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            @endif
+
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2 d-flex justify-content-center align-items-center \">
-                                                        <button type="button" rel="tooltip" class="btn btn-sm btn-danger px-2" data-original-title="" title="">
-                                                            <i class="material-icons">close</i>
-                                                        </button>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        @endif
+
 
                                     </div>
 {{--                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--}}
@@ -713,19 +797,19 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{Route('AddMainEventPicture' , ['id' => $location_id])}}" method="post" enctype="multipart/form-data">
+                <form id="event_image" action="" method="post" enctype="multipart/form-data">
                     @csrf
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="col-md text-right">
                             <label for=""> تصویر رویداد اصلی  </label>
-                            <input name="main_image_event" type="file" class="form-control">
+                            <input name="service_image" type="file" class="form-control">
                         </div>
                         <div class="col-md text-right">
-                            <label for=""> رویداد </label>
-                            <select name="event_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب رویداد">
-                                @foreach($GetEvents as $GetEvent)
-                                    <option value="{{$GetEvent['location_id']}}"> {{$GetEvent['location_name']}} </option>
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -758,6 +842,14 @@
                         <div class="col-md text-right">
                             <label for=""> لوگوی مکان  </label>
                             <input name="logo_image" type="file" class="form-control">
+                        </div>
+                        <div class="col-md text-right">
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -826,6 +918,14 @@
                         <div class="col-md text-right">
                             <label for=""> تصویر مکان  </label>
                             <input name="location_imgae" type="file" class="form-control">
+                        </div>
+                        <div class="col-md text-right">
+                            <label for=""> پروژه <small>(اختیاری)</small> </label>
+                            <select name="project_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
+                                @foreach($projectList as $project)
+                                    <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -941,6 +1041,33 @@
                             alert('false')*/
                     }
                 });
+            });
+
+            $(".btn_add_event").click(function () {
+                let url = $(this).attr("data-url");
+                $("#event_image").attr("action" ,url );
+            });
+
+            $(".btn_main_remove").click(function () {
+                let url = $(this).attr('data-url');
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = url ;
+                        /*Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )*/
+                    }
+                })
             });
 
             $(".citzen_main_img").click(function () {

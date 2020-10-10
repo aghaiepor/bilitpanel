@@ -477,6 +477,20 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public  function DeletePicture($picture_id){
+        $data = [
+            "picture_id" => $picture_id,
+        ];
+        $client = new Client();
+        $result = $client->Post($this->url . 'DeletePicture',[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response);
+        return $response;
+    }
 
 
     // ******************* CancelVoucher *******************

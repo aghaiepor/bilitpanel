@@ -73,7 +73,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/AddLogoPicture/{id}' , 'LocationController@AddLogoPicture')->name('AddLogoPicture');
         Route::post('/AddGalleryPicture/{id}' , 'LocationController@AddGalleryPicture')->name('AddGalleryPicture');
         Route::post('/AddMainEventPicture/{id}' , 'LocationController@AddMainEventPicture')->name('AddMainEventPicture');
-        Route::get('/imageRemove/{id}' , 'LocationController@imageRemove')->name('imageRemove');
+        Route::get('/imageRemove/{id?}' , 'LocationController@imageRemove')->name('imageRemove');
 
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');
@@ -82,6 +82,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/EditService/{service_id}/{location_id}' ,'LocationController@EditService' )->name('EditService');
         Route::post('/DeleteService/{service_id}' ,'LocationController@DeleteService' )->name('DeleteService');
         Route::post('/ServiceActivation' ,'LocationController@ServiceActivation' )->name('ServiceActivation');
+        Route::post('/AddServicePicture/{id?}' ,'LocationController@AddServicePicture' )->name('AddServicePicture');
 
         // Voucher Route
         Route::post('/AddVoucherInfo/{service_id}/{location_id}' ,'LocationController@AddVoucherInfo' )->name('AddVoucherInfo');
@@ -90,6 +91,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/voucherTypeList'  , 'VoucherController@VoucherTypeList' )->name('voucherTypeList');
         Route::post('/AddVoucherType'  , 'VoucherController@AddVoucherType' )->name('AddVoucherType');
         Route::post('/EditVoucherType/{id}'  , 'VoucherController@EditVoucherType' )->name('EditVoucherType');
+        Route::post('/AddVoucherPicture/{id?}' ,'LocationController@AddVoucherPicture' )->name('AddVoucherPicture');
 
         //VoucherText
         Route::get('/DeleteVoucherText/{id}'  , 'VoucherController@DeleteVoucherText' )->name('DeleteVoucherText');
