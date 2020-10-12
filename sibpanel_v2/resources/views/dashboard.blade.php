@@ -34,17 +34,47 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 cards">
+                {{--     for admin access          --}}
+                @if(session('UserInfo')['account_type_id'] == 1 || session('UserInfo')['account_type_id'] == 2 || session('UserInfo')['account_type_id'] == 9 )
+                    <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
                             <div class="card-icon icon-rose">
-                                <i class="material-icons">location_city</i>
+                                <i class="material-icons">insert_chart</i>
                             </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت استان ها و شهر ها</h5>
-                            <a href="{{Route('stateMg')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                            <h5 class="card-title mt-2 font-weight-normal">گزارش تجمیعی</h5>
+                            <a href="{{Route('Report')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
                         </div>
                     </div>
                 </div>
+                    <div class="col-lg-3 cards">
+                    <div class="card card-pricing card-raised">
+                        <div class="card-body">
+                            <div class="card-icon icon-rose">
+                                <i class="material-icons">receipt_long</i>
+                            </div>
+                            <h5 class="card-title mt-2 font-weight-normal">ریز تراکنش ها</h5>
+                            <a href="{{Route('transaction')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                @if(session('UserInfo')['account_type_id'] != 2 )
+                    @if(session('UserInfo')['account_type_id'] != 9 )
+                        {{-- Province manager --}}
+                        <div class="col-lg-3 cards">
+                        <div class="card card-pricing card-raised">
+                            <div class="card-body">
+                                <div class="card-icon icon-rose">
+                                    <i class="material-icons">location_city</i>
+                                </div>
+                                <h5 class="card-title mt-2 font-weight-normal">مدیریت استان ها و شهر ها</h5>
+                                <a href="{{Route('stateMg')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                {{-- location manager --}}
                 <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
@@ -56,29 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">insert_chart</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">گزارش تجمیعی</h5>
-                            <a href="{{Route('Report')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">receipt_long</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">ریز تراکنش ها</h5>
-                            <a href="{{Route('transaction')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-
+                {{-- Delete Voucher --}}
                 <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
@@ -90,7 +98,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 cards">
+                @if(session('UserInfo')['account_type_id'] != 9 )
+                    {{-- Text voucher manager --}}
+                    <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
                             <div class="card-icon icon-rose">
@@ -101,7 +111,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 cards">
+                    {{-- Type voucher manager --}}
+                    <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
                             <div class="card-icon icon-rose">
@@ -112,6 +123,20 @@
                         </div>
                     </div>
                 </div>
+                @endif
+                {{-- User manager --}}
+                <div class="col-lg-3 cards">
+                        <div class="card card-pricing card-raised">
+                            <div class="card-body">
+                                <div class="card-icon icon-rose">
+                                    <i class="material-icons">supervised_user_circle</i>
+                                </div>
+                                <h5 class="card-title mt-2 font-weight-normal">مدیریت کاربران</h5>
+                                <a href="{{Route('UserManager')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                            </div>
+                        </div>
+                    </div>
+                {{-- Sans manager --}}
                 <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
@@ -123,18 +148,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">supervised_user_circle</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت کاربران</h5>
-                            <a href="{{Route('UserManager')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
+                {{-- Alarm manager --}}
+                @if(env("HAS_ALARM"))
                 <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
@@ -146,6 +161,8 @@
                         </div>
                     </div>
                 </div>
+                @endif
+                {{-- Terminal manager --}}
                 @if(env("HAS_TERMINAL"))
                     <div class="col-lg-3 cards">
                         <div class="card card-pricing card-raised">
@@ -159,7 +176,7 @@
                         </div>
                     </div>
                 @endif
-
+                @endif
             </div>
         </div>
     </div>

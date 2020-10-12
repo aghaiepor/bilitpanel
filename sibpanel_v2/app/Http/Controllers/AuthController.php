@@ -55,7 +55,13 @@ class AuthController extends Controller
         $cont = new Api();
         $response = $cont->login($username,$password);
         if ($response['Header']['Status'] == 0 && $response['ContentData']['panel_access']){
-            return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
+            if($response['ContentData']['otp_verify']){
+                return redirect()->route('otp');
+            }
+            else{
+                return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
+            }
+
         }else
         {
             return redirect()->back()->with('error' , ' نام کاربری یا رمز عبور وارد شده معتبر نیست . ');

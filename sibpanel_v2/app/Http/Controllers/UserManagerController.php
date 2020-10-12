@@ -93,6 +93,7 @@ class UserManagerController extends Controller
         $TerminalTypeList = $this->api->TerminalTypeList();
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
+//        return $GetUserPermission;
 //        return $GetUserPermission['ContentData'];
 //        http://127.0.0.1:8000/setUserPermission/533
 //        return is_null($GetUserPer  ) ;
