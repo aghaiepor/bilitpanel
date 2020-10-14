@@ -88,6 +88,13 @@
                                     @php
                                     $i = 0 ;
                                     @endphp
+                                    @if(count($Users) <=0)
+                                        <tr>
+                                            <td colspan="8">
+                                                <h6 class="text-center py-5"> موردی یافت نشد .  </h6>
+                                            </td>
+                                        </tr>
+                                    @else
                                     @foreach($Users as $user)
                                         <tr>
                                             <td>
@@ -224,6 +231,7 @@
                                             $i++ ;
                                         @endphp
                                     @endforeach
+                                        @endif
                                     </tbody>
 
                                 </table>

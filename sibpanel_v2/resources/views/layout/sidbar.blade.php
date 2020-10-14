@@ -143,7 +143,7 @@
 
             @if(session('UserInfo')['account_type_id'] != 2)
             @php
-                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' ] ;
+                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' , 'alerts' ] ;
             @endphp
             <li class="nav-item @if(in_array(Route::current()->getName(),$serviceUrl))  active  @endif">
                 <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
