@@ -35,6 +35,9 @@
             <div class="user-info">
                 <a data-toggle="collapse" href="#collapseExample" class="username">
               <span>
+                  {{--@php
+                   return dd(session('UserInfo'))
+                  @endphp--}}
                   {{ session('UserInfo')['first_name']  . " "  . session('UserInfo')['last_name'] }}
 {{--                <b class="caret"></b>--}}
               </span>
@@ -70,6 +73,7 @@
                     <p> داشبورد </p>
                 </a>
             </li>
+            @if(session('UserInfo')['account_type_id'] == 1 || session('UserInfo')['account_type_id'] == 2 || session('UserInfo')['account_type_id'] == 9 )
             @php
                 $ReportUrl = ['Report','transaction'] ;
             @endphp
@@ -135,8 +139,11 @@
                     </ul>
                 </div>
             </li>
+            @endif
+
+            @if(session('UserInfo')['account_type_id'] != 2)
             @php
-                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' ] ;
+                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' , 'alerts' ] ;
             @endphp
             <li class="nav-item @if(in_array(Route::current()->getName(),$serviceUrl))  active  @endif">
                 <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
@@ -145,6 +152,7 @@
                         <b class="caret"></b>
                     </p>
                 </a>
+            {{--  Terminal manager  --}}
                 <div class="collapse @if(in_array(Route::current()->getName(),$serviceUrl))  show  @endif" id="componentsExamples">
                     <ul class="nav">
                         @if(env('HAS_TERMINAL'))
@@ -155,57 +163,71 @@
                             </a>
                         </li>
                         @endif
+                            {{--  Location  manager  --}}
                         <li class="nav-item @if(Route::current()->getName() === 'places' )  active  @endif">
                             <a class="nav-link" href="{{Route('places')}}">
                                 <span class="sidebar-mini"> <i class="material-icons">room</i> </span>
                                 <span class="sidebar-normal"> مدیریت مکان ها  </span>
                             </a>
                         </li>
+                            {{--  Delete voucher  --}}
                         <li class="nav-item ">
                             <a href="#" data-toggle="modal" data-target="#deleteVoucher" class="nav-link" >
                                 <span class="sidebar-mini"> <i class="material-icons">backspace</i>   </span>
                                 <span class="sidebar-normal"> باطل کردن بلیت </span>
                             </a>
                         </li>
-                        <li class="nav-item @if(Route::current()->getName() === 'stateMg' )  active  @endif">
-                            <a class="nav-link" href="{{Route('stateMg')}}">
-                                <span class="sidebar-mini"> <i class="material-icons">location_city</i> </span>
-                                <span class="sidebar-normal"> مدیریت استان ها و شهر ها </span>
-                            </a>
-                        </li>
+                            @if(session('UserInfo')['account_type_id'] != 9)
+                            {{--  Province and city  manager  --}}
+                            <li class="nav-item @if(Route::current()->getName() === 'stateMg' )  active  @endif">
+                                <a class="nav-link" href="{{Route('stateMg')}}">
+                                    <span class="sidebar-mini"> <i class="material-icons">location_city</i> </span>
+                                    <span class="sidebar-normal"> مدیریت استان ها و شهر ها </span>
+                                </a>
+                            </li>
+
+                            {{--  Type of voucher manager  --}}
                         <li class="nav-item  @if(Route::current()->getName() === 'voucherTypeList' )  active  @endif">
                             <a class="nav-link" href="{{Route('voucherTypeList')}}">
                                 <span class="sidebar-mini"> <i class="material-icons">confirmation_number</i> </span>
                                 <span class="sidebar-normal"> مدیریت نوع بلیت </span>
                             </a>
                         </li>
+                            {{--  text voucher manager  --}}
                         <li class="nav-item @if(Route::current()->getName() === 'voucherText' )  active  @endif ">
                             <a class="nav-link" href="{{Route('voucherText')}}">
                                 <span class="sidebar-mini"> <i class="material-icons">format_size</i> </span>
                                 <span class="sidebar-normal"> مدیریت متن بلیت </span>
                             </a>
                         </li>
+                            @endif
+                            {{--  User manager  --}}
                         <li class="nav-item  @if(Route::current()->getName() === 'UserManager' )  active  @endif">
                             <a class="nav-link" href="{{Route('UserManager')}}">
                                 <span class="sidebar-mini">  <i class="material-icons">group</i>  </span>
                                 <span class="sidebar-normal"> مدیریت کاربران </span>
                             </a>
                         </li>
+                            {{--  sans manager  --}}
                         <li class="nav-item  @if(Route::current()->getName() === 'group_times' )  active  @endif">
                             <a class="nav-link" href="{{Route('group_times')}}">
                                 <span class="sidebar-mini"> <i class="material-icons"> watch_later </i>  </span>
                                 <span class="sidebar-normal"> مدیریت سانس ها </span>
                             </a>
                         </li>
-                        <li class="nav-item  @if(Route::current()->getName() === 'alerts' )  active  @endif">
-                            <a class="nav-link" href="{{Route('alerts')}}">
-                                <span class="sidebar-mini"> <i class="material-icons"> notifications_active </i>  </span>
-                                <span class="sidebar-normal"> مدیریت اعلان ها </span>
-                            </a>
-                        </li>
+                            {{--  Alarm manager  --}}
+                        @if(env("HAS_ALARM"))
+                            <li class="nav-item  @if(Route::current()->getName() === 'alerts' )  active  @endif">
+                                <a class="nav-link" href="{{Route('alerts')}}">
+                                    <span class="sidebar-mini"> <i class="material-icons"> notifications_active </i>  </span>
+                                    <span class="sidebar-normal"> مدیریت اعلان ها </span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </li>
+            @endif
            {{-- <li class="nav-item ">
                 <a class="nav-link" data-toggle="collapse" href="#formsExamples">
                     <i class="material-icons">content_paste</i>

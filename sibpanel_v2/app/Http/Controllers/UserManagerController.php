@@ -79,8 +79,8 @@ class UserManagerController extends Controller
                 return redirect()->back()->with('success' , $success_message);
         }
         else
-            return  $SellerUserList ;
-//            return redirect()->back()->with('error' , $error_message);
+            return redirect()->back()->with('error' , $error_message);
+//            return  $SellerUserList ;
     }
     public function GetUserInfo(Request $request  ){
         $id = $request->get('UserId');
@@ -93,6 +93,7 @@ class UserManagerController extends Controller
         $TerminalTypeList = $this->api->TerminalTypeList();
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
+//        return $GetUserPermission;
 //        return $GetUserPermission['ContentData'];
 //        http://127.0.0.1:8000/setUserPermission/533
 //        return is_null($GetUserPer  ) ;

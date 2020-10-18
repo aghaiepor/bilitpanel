@@ -80,29 +80,36 @@
                                     @php
                                     $i = 0 ;
                                     @endphp
-                                    @foreach( $result_data as $item)
+                                    @if(count($result_data) <=0)
+                                        <h6 class="text-center py-5">
+                                            موردی یافت نشد !
+                                        </h6>
+                                    @else
+                                        @foreach( $result_data as $item)
 
-                                    <div class="card card-2" style="width: 100%;height: auto;padding: 20px;text-align: right;background: #f7f7f7">
-                                        <div class="form-row align-items-center">
-                                            <div class="col-md">
-                                                <h5 class="font-weight-bold my-0">{{$item['group_name']}}</h5>
-                                            </div>
-                                            <div class="col-md text-left">
-                                                <a class="pull-right" onclick="edit_group({{ $item['time_group_id'] }})" ><button class="btn btn-danger ">ویرایش</button></a>
-                                            </div>
-                                        </div>
-                                            <div id="div_all_locations_{{ $item['time_group_id'] }}">
-                                            </div>
+                                            <div class="card card-2" style="width: 100%;height: auto;padding: 20px;text-align: right;background: #f7f7f7">
+                                                <div class="form-row align-items-center">
+                                                    <div class="col-md">
+                                                        <h5 class="font-weight-bold my-0">{{$item['group_name']}}</h5>
+                                                    </div>
+                                                    <div class="col-md text-left">
+                                                        <a class="pull-right" onclick="edit_group({{ $item['time_group_id'] }})" ><button class="btn btn-danger ">ویرایش</button></a>
+                                                    </div>
+                                                </div>
+                                                <div id="div_all_locations_{{ $item['time_group_id'] }}">
+                                                </div>
 
-                                        @php
-                                        $i++ ;
-                                        @endphp
-                                        <div style="margin-top: 30px">
-                                            <button class="btn btn-primary" onclick="open_location_modal({{ $item['time_group_id'] }})"><i class="fa fa-plus"></i> مکان جدید </button>
-                                            <button class="btn btn-success" onclick="save_send('{{ $item['time_group_id'] }}','{{ $item['group_name'] }}')"><i class="fa fa-save"></i> ذخیره </button>
-                                        </div>
-                                    </div>
-                                    @endforeach
+                                                @php
+                                                    $i++ ;
+                                                @endphp
+                                                <div style="margin-top: 30px">
+                                                    <button class="btn btn-primary" onclick="open_location_modal({{ $item['time_group_id'] }})"><i class="fa fa-plus"></i> مکان جدید </button>
+                                                    <button class="btn btn-success" onclick="save_send('{{ $item['time_group_id'] }}','{{ $item['group_name'] }}')"><i class="fa fa-save"></i> ذخیره </button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+
                                 </div>
 
                                 <form method="post" id="form" enctype="multipart/form-data" action="/apply_edit_group_time">
