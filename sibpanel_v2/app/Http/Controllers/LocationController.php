@@ -376,9 +376,12 @@ class LocationController extends Controller
 
         $amount = $request->get("amount");
         $voucher_type_id = $request->get("voucher_type_id");
-        $capacity = $request->get("capacity");
+        $capacity = (int)$request->get("capacity");
+        if($capacity == 0 )
+            $capacity = '';
 
         $AddVoucherInfo  = $this->api->AddVoucherInfo($service_id, $amount, $voucher_type_id, $capacity, $location_id);
+//        return $AddVoucherInfo;
         if ($AddVoucherInfo['Header']['Status'] == 0){
             return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
         }
@@ -390,10 +393,13 @@ class LocationController extends Controller
 
         $amount = $request->get("amount");
         $voucher_type_id = $request->get("voucher_type_id");
-        $capacity = $request->get("capacity");
+        $capacity = (int)$request->get("capacity");
+        if($capacity == 0 )
+            $capacity = '' ;
 
-        $AddVoucherInfo  = $this->api->EditVoucherInfo($id, $voucher_type_id, $service_id, $amount, $capacity, $location_id);
-        if ($AddVoucherInfo['Header']['Status'] == 0){
+        $EditVoucherInfo = $this->api->EditVoucherInfo($id, $voucher_type_id, $service_id, $amount, $capacity, $location_id);
+//        return $EditVoucherInfo;
+        if ($EditVoucherInfo['Header']['Status'] == 0){
             return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
         }
         else

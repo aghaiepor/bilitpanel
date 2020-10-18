@@ -79,8 +79,8 @@ class UserManagerController extends Controller
                 return redirect()->back()->with('success' , $success_message);
         }
         else
-            return  $SellerUserList ;
-//            return redirect()->back()->with('error' , $error_message);
+            return redirect()->back()->with('error' , $error_message);
+//            return  $SellerUserList ;
     }
     public function GetUserInfo(Request $request  ){
         $id = $request->get('UserId');
