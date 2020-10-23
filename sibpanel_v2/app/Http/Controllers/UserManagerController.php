@@ -28,13 +28,120 @@ class UserManagerController extends Controller
         }else
             $SellerUserList = Cache::get('GetSubUserList');
 
-        $SellerUserList = $this->paginate($SellerUserList);
-        $SellerUserList->withPath('UserManager');
+//        return $SellerUserList;
+        $userList = $SellerUserList ;
 
-        return view('UserManager' , ['Users' => $SellerUserList]);
+        usort($SellerUserList, function($a, $b) {
+//            echo '<script> console.log(' . preg_match($pattern, $a["first_name"]) . ' )</script>';
+            if ($a["first_name"] == "" && $b["first_name"] != "" )
+               return 1;
+            elseif ( $a["first_name"] == "" && is_numeric($b["first_name"]))
+                return 1 ;
+            else if(is_numeric($a["first_name"]) && !is_numeric($b["first_name"]))
+                return 1;
+            else if(!is_numeric($a["first_name"]) && is_numeric($b["first_name"]))
+                return -1;
+            else
+                return ($a["first_name"] < $b["first_name"]) ? -1 : 1;
+       });
+        // **************** Pagination ****************
+        /*
+         $SellerUserList = $this->paginate($SellerUserList);
+        $SellerUserList->withPath('UserManager');
+        */
+        return view('UserManager' , ['Users' => $SellerUserList , 'userLists' => $userList]);
 //        return $SellerUserList ;
     }
+    public function getUserWithFilter(Request $request){
+        $filter = $request->get('filter') ;
+        $alphabet_index = $request->get('alphabet_index') ;
+//        echo "<script> console.log( " . $alphabet_index . " )</script>" ;
+//        if($alphabet_index == "")
+//            $alphabet_index = null ;
+        if ($alphabet_index == "الف")
+            $alphabet_index = 'ا' ;
 
+        if(is_null($filter) && is_null($alphabet_index))
+        {
+            $SellerUserList = Cache::get('GetSubUserList');
+            $array_keys = -1;
+        }else
+        {
+            $num = [];
+            if($alphabet_index == "اعداد")
+            {
+                $alphabet_index =  null ;
+                $num =  [1,2,3,4,5,6,7,8,9,0];
+            }
+            $SellerUserList = Cache::get('GetSubUserList');
+            $SellerUserList = array_filter($SellerUserList, function ($event) use ($filter , $alphabet_index , $num) {
+                return  ((is_null($filter)) ? true : str_replace("\n" , ''  , $event['account_type']) == $filter ) && ((is_null($alphabet_index)) ? true : strpos($event['first_name'], $alphabet_index) === 0) &&  ( (count($num) == 0) ? true : (is_numeric(substr($event['first_name'], 0, 1))) );
+            });
+            $array_keys = array_keys($SellerUserList) ;
+        }
+
+        $data = [
+            'data' => $SellerUserList ,
+            'array_key' => $array_keys
+        ];
+        return $data;
+    }
+    public function getUserWithAlphabet(Request $request){
+        $filter = $request->get('filter') ;
+//        return $filter ;
+        $isActive = $request->get('isActive') ;
+        $user_filter_value = $request->get('user_filter_value') ;
+        /*if($user_filter_value == "")
+            $user_filter_value = true ;*/
+
+
+
+        if($isActive == "false")
+            $filter = null ;
+
+        if ($filter == "الف")
+            $filter = 'ا' ;
+
+        if(is_null($filter) && is_null($user_filter_value) )
+        {
+            $SellerUserList = Cache::get('GetSubUserList');
+            $array_keys = -1;
+        }else
+        {
+            $num = [];
+            if($filter == "اعداد")
+            {
+                $filter =  null ;
+                $num =  [1,2,3,4,5,6,7,8,9,0];
+            }
+//            return  ; //in_array(substr("کیوسک کاخ گلستان", 0, 1) , $num);
+            $SellerUserList = Cache::get('GetSubUserList');
+            usort($SellerUserList, function($a, $b) {
+//            echo '<script> console.log(' . preg_match($pattern, $a["first_name"]) . ' )</script>';
+                if ($a["first_name"] == "" && $b["first_name"] != "" )
+                    return 1;
+                elseif ( $a["first_name"] == "" && is_numeric($b["first_name"]))
+                    return 1 ;
+                else if(is_numeric($a["first_name"]) && !is_numeric($b["first_name"]))
+                    return 1;
+                else if(!is_numeric($a["first_name"]) && is_numeric($b["first_name"]))
+                    return -1;
+                else
+                    return ($a["first_name"] < $b["first_name"]) ? -1 : 1;
+            });
+
+            $SellerUserList = array_filter($SellerUserList, function ($event) use ($filter , $user_filter_value , $num) {
+                return  ((is_null($filter))  ? true : (strpos($event['first_name'], $filter) === 0) )  && ((is_null($user_filter_value)) ? true : str_replace("\n" , ''  , $event['account_type'])== $user_filter_value ) &&  ( (count($num) == 0) ? true : (is_numeric(substr($event['first_name'], 0, 1))) );
+            });
+            $array_keys = array_keys($SellerUserList) ;
+        }
+
+        $data = [
+            'data' => $SellerUserList ,
+            'array_key' => $array_keys
+        ];
+        return $data;
+    }
     public function UserActivation(Request $request)
     {
         $sib_user_id = $request->get('id');
@@ -87,7 +194,10 @@ class UserManagerController extends Controller
         $User_info = $this->api->GetUserInfo( $id);
        return $User_info['ContentData'];
     }
-    public function setUserPermission($id){
+    public function setUserPermission($id=null){
+        if( is_null($id))
+            abort(404);
+
         $projectList = $this->api->ProjectList();
 //        return $projectList;
         $TerminalTypeList = $this->api->TerminalTypeList();
