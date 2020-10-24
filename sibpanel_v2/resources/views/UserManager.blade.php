@@ -522,6 +522,7 @@
 
             $("#user_search").change(function () {
                 $('#userInfo tbody').html(" ");
+                $('#loader').css('display' , 'flex');
                 let value = $(this).val() ;
                 value = value.split("-");
                 let userId = value[0];
@@ -596,6 +597,7 @@
                             'ویرایش\n' +
                             ' </button>' ;
                         userEdit.innerHTML = edit_html;
+                        $('#loader').hide();
                     }
                 });
             });
