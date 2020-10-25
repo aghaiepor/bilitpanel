@@ -860,7 +860,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetStat($location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id){
+    public function GetStat($location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id){
         $conditions = [
             'location_id'=> $location_id,
             'procedure_status' =>$status_code,
@@ -872,6 +872,7 @@ class Api
             'date'=> $date,
             'province_id'=> $province_id,
             'city_id'=> $city_id,
+            'project_id'=> $project_id,
         ];
         $data = [
             "conditions" => $conditions,
@@ -891,7 +892,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id){
+    public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id){
         $conditions = [
             'location_id'=> $location_id,
             'procedure_status' =>$status_code,
@@ -903,6 +904,7 @@ class Api
             'date'=> $date,
             'province_id'=> $province_id,
             'city_id'=> $city_id,
+            'project_id'=> $project_id,
         ];
         $data = [
             "page" => $page ,

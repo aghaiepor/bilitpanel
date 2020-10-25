@@ -67,7 +67,7 @@
                                     {{--  category --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> نحوه دسته بندی </label>
-                                        <select name="key" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
+                                        <select name="key" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                             <option value="province"  selected> همه </option>
                                             <option @if(request('key') == "province") selected @endif value="province">استان</option>
                                             <option @if(request('key') == "city") selected @endif value="city">شهر</option>
@@ -172,6 +172,20 @@
                                                     <option selected value="{{$Seller['sib_user_id']}}">{{$Seller['first_name']}}</option>
                                                 @else
                                                     <option value="{{$Seller['sib_user_id']}}">{{$Seller['first_name']}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {{--  Project --}}
+                                    <div class="col-md-3 text-right">
+                                        <label for="">  پروژه </label>
+                                        <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
+                                            <option value="" selected> همه  </option>
+                                            @foreach($ProjectList as $Project)
+                                                @if(request('project_id') == $Project['project_id'])
+                                                    <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                @else
+                                                    <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
