@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\Api;
 use App\Exports\UsersExport;
+use App\Jobs\ExportToExel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Hekmatinasser\Verta\Verta;
@@ -178,6 +179,10 @@ class ReportController extends Controller
         if($location_id == 0)
             $location_id = '';
 
+        $project_id = $request->get("project_id");
+        if(is_null($project_id))
+            $project_id = "";
+
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
         $status_codeArray = [] ;
@@ -231,19 +236,28 @@ class ReportController extends Controller
         if($page == 0)
             $page = 1;
         */
-        $test = [] ;
-        $data = $this->api->GetTransaction(1,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+        $job = new ExportToExel($location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
+        $test = $this->dispatch($job) ;
+        return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;
+//        $test = [] ;
+//        $data = $this->api->GetTransaction(1,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id,$project_id);
 //        echo  "ok";
-        $total_page = (int)$data['ContentData']["total_pages"] ;
-//        $data = $data['ContentData']["log"] ;
-//        return $data['ContentData']["log"] ;
+//        $total_page = (int)$data['ContentData']["total_pages"] ;
+//        $test = $data['ContentData']["log"][0];
+//        return $test;
+//        $array = [[1,2,3],[3,2,1]];
+//        return Excel::download(new UsersExport($data['ContentData']["log"]), 'tansacion.xlsx') ;
+        /*
+                //        $data = $data['ContentData']["log"] ;
+        //        return $data['ContentData']["log"] ;
 
-        for ($i = 1 ; $i <= $total_page  ;$i++ )
-        {
-            $GetStat = $this->api->GetTransaction($i,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
-            $test = array_merge($test,$GetStat['ContentData']["log"]);
-        }
-            return Excel::download(new UsersExport($test), 'tansacion.xlsx');
+                for ($i = 1 ; $i <= $total_page  ;$i++ )
+                {
+                    $GetStat = $this->api->GetTransaction($i,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+                    $test = array_merge($test,$GetStat['ContentData']["log"]);
+                }
+                    return Excel::download(new UsersExport($test), 'tansacion.xlsx');
+        */
 
     }
 

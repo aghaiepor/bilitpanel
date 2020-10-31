@@ -193,7 +193,7 @@
                                                 $url = str_replace("GetTransaction","transactionToExcel",\Illuminate\Support\Facades\URL::full())
                                             @endphp
                                             <button @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) disabled @endif onclick="export2excel()" class="btn btn-info  mt-2 "> دانلود اکسل این صفحه<i class="material-icons"> vertical_align_bottom </i>  </button>
-                                            <a @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) href="no" @else href="{{$url}}" @endif id="excelBtn"  target="_blank" anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل تمامی صفحات<i class="material-icons"> vertical_align_bottom </i>  </a>
+                                            <a @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) href="no" @else href="{{$url}}" @endif id="excelBtn"  {{--target="_blank"--}} anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل تمامی صفحات<i class="material-icons"> vertical_align_bottom </i>  </a>
                                         </th>
                                     </tr>
                                     <tr class="">
@@ -549,7 +549,7 @@
                         'info'
                     )
                     setTimeout(function () {
-                        window.open(href, "_blank");
+                        window.open(href/*, "_blank"*/);
                     } , 1500)
                 }
 
