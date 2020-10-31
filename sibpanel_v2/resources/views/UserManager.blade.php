@@ -515,11 +515,9 @@
                         }
                     });
                 }
-
-
-
             });
 
+            // user filters
             $("#user_search").change(function () {
                 $('#userInfo tbody').html(" ");
                 $('#loader').css('display' , 'flex');
@@ -766,7 +764,6 @@
                     }
                 });
             });
-
             let ElementIndex = null ;
             let isActive = false ;
             $("#alphabets .badge").click(function () {
