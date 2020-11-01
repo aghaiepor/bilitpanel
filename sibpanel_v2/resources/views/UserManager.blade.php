@@ -517,7 +517,7 @@
                 }
             });
 
-            // user filters
+            // users filters
             $("#user_search").change(function () {
                 $('#userInfo tbody').html(" ");
                 $('#loader').css('display' , 'flex');
