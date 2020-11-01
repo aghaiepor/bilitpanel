@@ -72,6 +72,7 @@ class ExportToExel implements ShouldQueue
             $GetStat = $api->GetTransaction($i,$this->location_id, $this->key, $this->values, $this->status_codeArray, $this->service_id, $this->operator_id, $this->sale_type_id, $this->sell_type_id, $this->voucher_type_id, $this->date, $this->province_id, $this->city_id , $this->project_id);
             $test = array_merge($test,$GetStat['ContentData']["log"]);
         }
+        return json_encode($test) ;
         return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;;
 //        return json_encode($test) ;
 //        return "done";

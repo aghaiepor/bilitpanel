@@ -549,7 +549,7 @@
                         'info'
                     )
                     setTimeout(function () {
-                        window.open(href/*, "_blank"*/);
+                        window.open(href, "_blank");
                     } , 1500)
                 }
 
