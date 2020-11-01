@@ -101,11 +101,13 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         //UserManagment
         Route::get('/UserManager'  , 'UserManagerController@index' )->name('UserManager');
-        Route::get('/setUserPermission/{id}'  , 'UserManagerController@setUserPermission' )->name('setUserPermission');
+        Route::get('/setUserPermission/{id?}'  , 'UserManagerController@setUserPermission' )->name('setUserPermission');
         Route::post('/RegisterUser'  , 'UserManagerController@RegisterUser' )->name('RegisterUser');
         Route::post('/AssignPermission'  , 'UserManagerController@AssignPermission' )->name('AssignPermission');
-        Route::post('/EditUser/{id}'  , 'UserManagerController@RegisterUser' )->name('EditUser');
+        Route::post('/EditUser/{id?}'  , 'UserManagerController@RegisterUser' )->name('EditUser');
         Route::post('/GetUserInfo'  , 'UserManagerController@GetUserInfo' )->name('GetUserInfo');
+        Route::post('/getUserWithFilter'  , 'UserManagerController@getUserWithFilter' )->name('getUserWithFilter');
+        Route::post('/getUserWithAlphabet'  , 'UserManagerController@getUserWithAlphabet' )->name('getUserWithAlphabet');
         Route::post('/UserActivation'  , 'UserManagerController@UserActivation' )->name('UserActivation');
 
 

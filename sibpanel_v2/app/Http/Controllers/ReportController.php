@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\Api;
 use App\Exports\UsersExport;
+use App\Jobs\ExportToExel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Hekmatinasser\Verta\Verta;
@@ -27,8 +28,10 @@ class ReportController extends Controller
         $tikcetType = Cache::get('VoucherTypeList');
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList = Cache::get('SellerUserList');
+        $Project_list = $this->api->ProjectList();
+//        return $Project_list ;
 //        return $SellerUsersList ;
-        return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>null , 'SaleTypeList' => $SaleTypeList]);
+        return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>null , 'SaleTypeList' => $SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
     }
     public function CityList(Request $request){
         $id = (int)$request->get('province_id');
@@ -76,6 +79,9 @@ class ReportController extends Controller
         $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
         if (!session('UserInfo')['presell'] )
             $report_type = 0;
+        $project_id = $request->get("project_id");
+        if(is_null($project_id))
+            $project_id = "";
 
         $location_id = $request->get('location_id' , '');
         if($location_id == 0)
@@ -133,7 +139,7 @@ class ReportController extends Controller
         $city_id = (int)$request->get('city_id' ,'') ;
         if($city_id == 0)
             $city_id = '';
-        $GetStat = $this->api->GetStat($location_id, $key, $values, $status_codeArray, $service_id, $operator_id,  $sell_type_id , $sale_type_id, $voucher_type_id, $date, $province_id, $city_id);
+        $GetStat = $this->api->GetStat($location_id, $key, $values, $status_codeArray, $service_id, $operator_id,  $sell_type_id , $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
         $SaleTypeList = Cache::get('SaleTypeList');
@@ -141,10 +147,12 @@ class ReportController extends Controller
         $tikcetType = Cache::get('VoucherTypeList');
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList =  Cache::get('SellerUserList');
+        $Project_list = $this->api->ProjectList();
+//        return $GetStat ;
         if ($GetStat['Header']['Status'] == 0){
-            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'], 'SaleTypeList'=>$SaleTypeList]);
+            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'], 'SaleTypeList'=>$SaleTypeList  , "ProjectList" => $Project_list['ContentData'] ] ) ;
         }else{
-            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!', 'SaleTypeList'=>$SaleTypeList]);
+            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!', 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
         }
 
     }
@@ -158,8 +166,9 @@ class ReportController extends Controller
         $tikcetType = Cache::get('VoucherTypeList');
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList = Cache::get('SellerUserList');
+        $Project_list = $this->api->ProjectList();
 //        return $SellerUsersList ;
-        return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList , 'report_type'=>$report_type , 'data'=> null , 'SaleTypeList'=>$SaleTypeList ]);
+        return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList , 'report_type'=>$report_type , 'data'=> null , 'SaleTypeList'=>$SaleTypeList , 'ProjectList' =>$Project_list['ContentData'] ]);
     }
     public function transactionToExcel(Request $request){
         $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
@@ -169,6 +178,10 @@ class ReportController extends Controller
         $location_id = $request->get('location_id' , '');
         if($location_id == 0)
             $location_id = '';
+
+        $project_id = $request->get("project_id");
+        if(is_null($project_id))
+            $project_id = "";
 
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
@@ -223,19 +236,28 @@ class ReportController extends Controller
         if($page == 0)
             $page = 1;
         */
-        $test = [] ;
-        $data = $this->api->GetTransaction(1,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+        $job = new ExportToExel($location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
+        $test = $this->dispatch($job) ;
+        return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;
+//        $test = [] ;
+//        $data = $this->api->GetTransaction(1,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id,$project_id);
 //        echo  "ok";
-        $total_page = (int)$data['ContentData']["total_pages"] ;
-//        $data = $data['ContentData']["log"] ;
-//        return $data['ContentData']["log"] ;
+//        $total_page = (int)$data['ContentData']["total_pages"] ;
+//        $test = $data['ContentData']["log"][0];
+//        return $test;
+//        $array = [[1,2,3],[3,2,1]];
+//        return Excel::download(new UsersExport($data['ContentData']["log"]), 'tansacion.xlsx') ;
+        /*
+                //        $data = $data['ContentData']["log"] ;
+        //        return $data['ContentData']["log"] ;
 
-        for ($i = 1 ; $i <= $total_page  ;$i++ )
-        {
-            $GetStat = $this->api->GetTransaction($i,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
-            $test = array_merge($test,$GetStat['ContentData']["log"]);
-        }
-            return Excel::download(new UsersExport($test), 'tansacion.xlsx');
+                for ($i = 1 ; $i <= $total_page  ;$i++ )
+                {
+                    $GetStat = $this->api->GetTransaction($i,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id);
+                    $test = array_merge($test,$GetStat['ContentData']["log"]);
+                }
+                    return Excel::download(new UsersExport($test), 'tansacion.xlsx');
+        */
 
     }
 
@@ -244,6 +266,10 @@ class ReportController extends Controller
         $report_type     = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
         if (!session('UserInfo')['presell'] )
             $report_type = 0;
+
+        $project_id = $request->get("project_id");
+        if(is_null($project_id))
+            $project_id = "";
 
         $location_id = $request->get('location_id' , '');
         if($location_id == 0)
@@ -301,18 +327,19 @@ class ReportController extends Controller
         if($page == 0)
             $page = 1;
 
-        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id);
+        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
         $SaleTypeList = Cache::get('SaleTypeList');
         $tikcetType = Cache::get('VoucherTypeList');
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList = Cache::get('SellerUserList');
+        $Project_list = $this->api->ProjectList();
         if ($GetStat['Header']['Status'] == 0){
 //            return $GetStat ;
-            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'] , 'SaleTypeList'=>$SaleTypeList]);
+            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'] , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
         }else{
-            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!' , 'SaleTypeList'=>$SaleTypeList]);
+            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!' , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
         }
 
 

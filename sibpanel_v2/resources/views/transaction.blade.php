@@ -88,8 +88,8 @@
                                         <option selected value=""> همه </option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
+
+
                                 <div class="col-md-3  text-right">
                                     <label for="">  نوع بلیت </label>
                                     <select name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">
@@ -138,8 +138,21 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
+
+                                {{--  Project --}}
+                                <div class="col-md-3 text-right">
+                                    <label for="">  پروژه </label>
+                                    <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
+                                        <option value="" selected> همه  </option>
+                                        @foreach($ProjectList as $Project)
+                                            @if(request('project_id') == $Project['project_id'])
+                                                <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                            @else
+                                                <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
                                 @if($report_type == 0)
                                     <div class="col-md-3 text-right">
                                         <label for="">  نوع فروش  </label>
@@ -160,7 +173,7 @@
                                     <label for="">  تاریخ پایان  </label>
                                     <input id="ToDate" name="endtDate" type="text" class="form-control" placeholder="تا تاریخ">
                                 </div>
-                                    <input type="hidden" name="page" value="1">
+                                <input type="hidden" name="page" value="1">
                                 <div class="col-md-3 mr-auto">
                                     <label for="">&nbsp;</label>
                                    <button type="submit" class="btn bgPer btn-block"> جست و جو <i class="material-icons"> search</i> </button>
@@ -180,7 +193,7 @@
                                                 $url = str_replace("GetTransaction","transactionToExcel",\Illuminate\Support\Facades\URL::full())
                                             @endphp
                                             <button @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) disabled @endif onclick="export2excel()" class="btn btn-info  mt-2 "> دانلود اکسل این صفحه<i class="material-icons"> vertical_align_bottom </i>  </button>
-                                            <a @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) href="no" @else href="{{$url}}" @endif id="excelBtn"  target="_blank" anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل تمامی صفحات<i class="material-icons"> vertical_align_bottom </i>  </a>
+                                            <a @if(Route::current()->getName() != "GetTransaction" || count($data['log']) == 0) href="no" @else href="{{$url}}" @endif id="excelBtn"  {{--target="_blank"--}} anchor="download" class="btn btn-success  mt-2 "> دانلود اکسل تمامی صفحات<i class="material-icons"> vertical_align_bottom </i>  </a>
                                         </th>
                                     </tr>
                                     <tr class="">
