@@ -177,19 +177,22 @@
                                         </select>
                                     </div>
                                     {{--  Project --}}
-                                    <div class="col-md-3 text-right">
-                                        <label for="">  پروژه </label>
-                                        <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
-                                            <option value="" selected> همه  </option>
-                                            @foreach($ProjectList as $Project)
-                                                @if(request('project_id') == $Project['project_id'])
-                                                    <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
-                                                @else
-                                                    <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    @if(count($ProjectList) > 1)
+                                        <div class="col-md-3 text-right">
+                                            <label for="">  پروژه </label>
+                                            <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
+                                                <option value="" selected> همه  </option>
+                                                @foreach($ProjectList as $Project)
+                                                    @if(request('project_id') == $Project['project_id'])
+                                                        <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                    @else
+                                                        <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+
                                     {{--  Start Date --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  تاریخ شروع  </label>

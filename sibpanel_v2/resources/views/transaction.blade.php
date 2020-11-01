@@ -140,6 +140,7 @@
                                 </div>
 
                                 {{--  Project --}}
+                                @if(count($ProjectList) > 1)
                                 <div class="col-md-3 text-right">
                                     <label for="">  پروژه </label>
                                     <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
@@ -153,6 +154,8 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                @endif
+
                                 @if($report_type == 0)
                                     <div class="col-md-3 text-right">
                                         <label for="">  نوع فروش  </label>
