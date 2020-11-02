@@ -94,8 +94,6 @@ class UserManagerController extends Controller
         /*if($user_filter_value == "")
             $user_filter_value = true ;*/
 
-
-
         if($isActive == "false")
             $filter = null ;
 

@@ -21,6 +21,9 @@
         .alphabets span{
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 11pt;
+            font-weight: 400;
+            margin-top: 5px;
         }
         .alphabets span:hover{
             background: #e91e63;
@@ -94,8 +97,7 @@
                                 </div>
                             </div>
                             <div class="row justify-content-center">
-                                <div data-active="" id="alphabets" class="col-md-auto text-black alphabets">
-                                    <div class="col-md">
+                                <div data-active="" id="alphabets" class="col-md-auto text-center w-100 text-black alphabets">
                                     <span class="badge badge-lg badge-primary "> آ </span>
                                     <span class="badge badge-lg badge-primary "> الف </span>
                                     <span class="badge badge-primary"> ب </span>
@@ -113,8 +115,6 @@
                                     <span class="badge badge-primary"> ژ </span>
                                     <span class="badge badge-primary"> س </span>
                                     <span class="badge badge-primary"> ش </span>
-                                    </div>
-                                    <div class="col-md">
                                     <span class="badge badge-primary"> ص </span>
                                     <span class="badge badge-primary"> ض </span>
                                     <span class="badge badge-primary"> ط </span>
@@ -132,7 +132,6 @@
                                     <span class="badge badge-primary"> ه </span>
                                     <span class="badge badge-primary"> ی </span>
                                     <span class="badge badge-primary"> اعداد </span>
-                                    </div>
                                 </div>
                             </div>
                             <!-- Modal -->

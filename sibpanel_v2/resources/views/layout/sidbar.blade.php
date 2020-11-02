@@ -143,7 +143,7 @@
 
             @if(session('UserInfo')['account_type_id'] != 2)
             @php
-                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' , 'alerts' ] ;
+                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' , 'alerts' , 'presellManger' ] ;
             @endphp
             <li class="nav-item @if(in_array(Route::current()->getName(),$serviceUrl))  active  @endif">
                 <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
@@ -224,6 +224,14 @@
                                 </a>
                             </li>
                         @endif
+                            @if(session('UserInfo')['presell'])
+                                <li class="nav-item @if(Route::current()->getName() === 'presellManger' )  active  @endif">
+                                    <a class="nav-link"  href="{{Route('presellManger')}}" >
+                                        <span class="sidebar-mini"> <i class="material-icons">assignment</i> </span>
+                                        <span class="sidebar-normal"> مدیریت پیش فروش </span>
+                                    </a>
+                                </li>
+                            @endif
                     </ul>
                 </div>
             </li>

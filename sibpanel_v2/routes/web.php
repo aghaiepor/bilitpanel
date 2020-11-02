@@ -148,6 +148,8 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/DeleteAlert/{id}' , 'AlertController@DeleteAlert')->name('DeleteAlert');
         Route::get('/EditAlert/{id}' , 'AlertController@EditAlert')->name('EditAlert');
 
+        // presel Route
+        Route::get('/presellManger' , 'presellController@index')->name('presellManger');
 
     });
 
