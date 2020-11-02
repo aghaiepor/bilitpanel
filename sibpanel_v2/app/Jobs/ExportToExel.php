@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportToExel implements ShouldQueue
@@ -72,10 +73,17 @@ class ExportToExel implements ShouldQueue
             $GetStat = $api->GetTransaction($i,$this->location_id, $this->key, $this->values, $this->status_codeArray, $this->service_id, $this->operator_id, $this->sale_type_id, $this->sell_type_id, $this->voucher_type_id, $this->date, $this->province_id, $this->city_id , $this->project_id);
             $test = array_merge($test,$GetStat['ContentData']["log"]);
         }
-        return json_encode($test) ;
-        return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;;
-//        return json_encode($test) ;
-//        return "done";
-//        return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;
+        Excel::store(new UsersExport($test), 'invoices.xlsx');
+        $file = storage_path('app') . "/invoices.xlsx";
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.basename($file).'"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+        readfile($file);
+//        return Excel::download(new UsersExport($test), 'invoices.xlsx') ;
+
     }
 }

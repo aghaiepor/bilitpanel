@@ -30,6 +30,14 @@
 <div class="content">
     <div class="content">
         <div class="container-fluid">
+            @if(session("success"))
+                <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+                    {{ session("success") }}
+                    <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -551,6 +559,7 @@
                         ' این در خواست ممکن است کمی طول بکشد ، لطفا صبور باشید. ',
                         'info'
                     )
+                    // document.location = href ;
                     setTimeout(function () {
                         window.open(href, "_blank");
                     } , 1500)

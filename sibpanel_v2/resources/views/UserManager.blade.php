@@ -94,9 +94,10 @@
                                 </div>
                             </div>
                             <div class="row justify-content-center">
-                                <div data-active="" id="alphabets" class="col-sm-auto text-black alphabets">
-                                    <span class="badge badge-primary "> آ </span>
-                                    <span class="badge badge-primary "> الف </span>
+                                <div data-active="" id="alphabets" class="col-md-auto text-black alphabets">
+                                    <div class="col-md">
+                                    <span class="badge badge-lg badge-primary "> آ </span>
+                                    <span class="badge badge-lg badge-primary "> الف </span>
                                     <span class="badge badge-primary"> ب </span>
                                     <span class="badge badge-primary"> پ </span>
                                     <span class="badge badge-primary"> ت </span>
@@ -112,6 +113,8 @@
                                     <span class="badge badge-primary"> ژ </span>
                                     <span class="badge badge-primary"> س </span>
                                     <span class="badge badge-primary"> ش </span>
+                                    </div>
+                                    <div class="col-md">
                                     <span class="badge badge-primary"> ص </span>
                                     <span class="badge badge-primary"> ض </span>
                                     <span class="badge badge-primary"> ط </span>
@@ -129,6 +132,7 @@
                                     <span class="badge badge-primary"> ه </span>
                                     <span class="badge badge-primary"> ی </span>
                                     <span class="badge badge-primary"> اعداد </span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Modal -->

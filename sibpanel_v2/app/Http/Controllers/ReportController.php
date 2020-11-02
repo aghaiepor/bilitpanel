@@ -8,6 +8,7 @@ use App\Jobs\ExportToExel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Hekmatinasser\Verta\Verta;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
@@ -237,8 +238,11 @@ class ReportController extends Controller
             $page = 1;
         */
         $job = new ExportToExel($location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
-        $test = $this->dispatch($job) ;
-        return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;
+        $this->dispatch($job) ;
+//        Session::flush('success','Data is being exported to excel file.');
+//        return redirect()->back();
+//        var_dump($test);
+//        return Excel::download(new UsersExport($test), 'tansacion.xlsx') ;
 //        $test = [] ;
 //        $data = $this->api->GetTransaction(1,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id,$project_id);
 //        echo  "ok";
@@ -341,7 +345,6 @@ class ReportController extends Controller
         }else{
             return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!' , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
         }
-
 
     }
 
