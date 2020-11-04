@@ -422,6 +422,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            var userData = @json($Users);
+            var startsWith = [];
+            // console.log(startsWithN);
             $('input[name=active]').change(function () {
                 var id =$(this).attr('sib-user-id') ;
                 var value = ($(this).is(':checked'));
@@ -767,14 +771,14 @@
                     }
                 });
             });
+
             let ElementIndex = null ;
             let isActive = false ;
             $("#alphabets .badge").click(function () {
                 let value = $(this).text();
-                // console.log(value);
                 let user_filter_value = $("#user_filter").val();
-                // console.log( " user filter value is :  " + user_filter_value)
-                // console.log("per index is : " +  ElementIndex  + " now index is : " +  $(this).index())
+                // loader
+                $('#loader').css('display' , 'flex');
                 if(ElementIndex == $(this).index() && isActive){
                     $(this).css('backgroundColor' ,  '#494c6b');
                     isActive = false ;
@@ -793,158 +797,306 @@
                     isActive = true ;
                 }
 
-                // console.log(isActive);
-                $('#loader').css('display' , 'flex');
-            $.ajax({
-                    type:'POST',
-                    url:"{{Route('getUserWithAlphabet')}}" ,
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'filter' : value ,
-                        'isActive' : isActive,
-                        'user_filter_value' : user_filter_value ,
-                    },
-                    success:function(data) {
-                        // console.log(data);
-                        $('#userInfo tbody').html(" ");
-                        let table = document.getElementById("userInfo").getElementsByTagName('tbody')[0];
-                        // console.log(data);
-                        if(data.data.length == 0 )
-                        {
-                            $("#pagination_links").hide();
+                // get elements
+                let number = ['1','2','3','4','5','6','7','8','9','0'] ;
+                let  users ;
+                console.log(value.length)
+                if(value.length >= 4)
+                {
+                    users = userData.filter(d => number.indexOf(d.first_name[0]) != -1 && ((user_filter_value == "")  ?  true : d.account_type === user_filter_value));
+                }
+                else {
+                    value = value[1];
+                    users = userData.filter(d => d.first_name[0] === value && ((user_filter_value == "")  ?  true : d.account_type === user_filter_value)   );
+                }
+
+                // console.log("users : ",users) ;
+                // for empty list
+                $('#userInfo tbody').html(" ");
+                let table = document.getElementById("userInfo").getElementsByTagName('tbody')[0];
+                if (isActive){
+                    if(users.length == 0 ){
+                        $("#pagination_links").hide();
+                        var row = table.insertRow();
+                        var cell = row.insertCell();
+                        cell.id = "myTd";
+                        cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";
+                        document.getElementById("myTd").colSpan = "6";
+                    }else {
+                        $("#pagination_links").hide();
+                        // console.log(data.array_key)
+                        // let array_key = data.array_key;
+                        for(let i = 0 ; i < users.length ; i++){
                             var row = table.insertRow();
-                            var cell = row.insertCell();
-                            cell.id = "myTd";
-                            cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";
-                            document.getElementById("myTd").colSpan = "6";
-                        }
-                        else if(data.array_key == -1 ){
-                            let sib_user_id = data.sib_user_id;
-                            $("#pagination_links").show();
-                            // console.log(data.data.data.length)
-                            for(let i = 0 ; i < data.data.length ; i++){
-                                var row = table.insertRow();
-                                var name = row.insertCell();
-                                var mobile = row.insertCell();
-                                var account_type = row.insertCell();
-                                var permission = row.insertCell();
-                                var activation = row.insertCell();
-                                var userEdit = row.insertCell();
+                            var name = row.insertCell();
+                            var mobile = row.insertCell();
+                            var account_type = row.insertCell();
+                            var permission = row.insertCell();
+                            var activation = row.insertCell();
+                            var userEdit = row.insertCell();
 
-                                name.innerHTML = data.data[i].first_name + " " + data.data[i].last_name;
-                                mobile.innerHTML = data.data[i].mobile;
-                                account_type.innerHTML = data.data[i].account_type;
+                            name.innerHTML = users[i].first_name + " " + users[i].last_name;
+                            mobile.innerHTML = users[i].mobile;
+                            account_type.innerHTML = users[i].account_type;
 
-                                // for permission column
-                                let permission_html ;
-                                let url ;
-                                // console.log( "permisson data : " + data.data.data.has_permission)
-                                if( data.data[i].has_permission == 1) {
-                                    url = "{{Route('setUserPermission')}}/" + data.data[i].sib_user_id;
-                                    permission_html = '<a href=" ' + url + '" class="btn btn-info px-4"> سطح دسترسی  </a>';
-                                }
-                                else {
-                                    url = "{{Route('setUserPermission')}}/" + data.data[i].sib_user_id;
-                                    permission_html = ' <a href=" ' + url + '" class="btn btn-primary">\n' +
-                                        ' <i class="material-icons">person_add_alt_1</i>\n' +
-                                        '                                                        تعریف\n' +
-                                        ' </a>' ;
-                                }
-                                permission.innerHTML = permission_html;
-
-                                // for activation
-                                let check ;
-                                if(data.data[i].active)
-                                {
-                                    check = "checked" ;
-                                }
-                                else
-                                    check = "";
-                                let active = '<div dir="ltr" class="togglebutton">\n' +
-                                    '  <label>\n' +
-                                    '      <input sib-user-id=" ' + data.data[i].sib_user_id  +'" name="active" ' + check + ' type="checkbox">\n' +
-                                    '    <span class="toggle"></span>\n' +
-                                    '  </label>\n' +
-                                    '</div>';
-                                // console.log( "activation : " + data.data.data[i].active);
-                                // console.log( "checked was : " + $('input', active).is(":checked"))
-                                activation.innerHTML = active;
-
-                                // for edit column
-                                let user_edit_url = "{{Route('EditUser')}}/" + data.data[i].sib_user_id;
-                                let edit_html = '<button data-url="' + user_edit_url + '" data-toggle="modal" data-id="' + data.data[i].sib_user_id +'" data-target="#edit" type="button" rel="tooltip" class="btn EditBtnAccess TableEditBtn  btn-success btn-simple">\n' +
-                                    ' <i class="material-icons">edit</i>\n' +
-                                    'ویرایش\n' +
-                                    ' </button>' ;
-                                userEdit.innerHTML = edit_html;
+                            // for permission column
+                            let permission_html ;
+                            let url ;
+                            // console.log( "permisson data : " + data.data.has_permission)
+                            if( users[i].has_permission == 1) {
+                                url = "{{Route('setUserPermission')}}/" + users[i].sib_user_id;
+                                permission_html = '<a href=" ' + url + '" class="btn btn-info px-4"> سطح دسترسی  </a>';
                             }
+                            else {
+                                url = "{{Route('setUserPermission')}}/" + users[i].sib_user_id;
+                                permission_html = ' <a href=" ' + url + '" class="btn btn-primary">\n' +
+                                    ' <i class="material-icons">person_add_alt_1</i>\n' +
+                                    '                                                        تعریف\n' +
+                                    ' </a>' ;
+                            }
+                            permission.innerHTML = permission_html;
+
+                            // for activation
+                            let check ;
+                            if(users[i].active)
+                            {
+                                check = "checked" ;
+                            }
+                            else
+                                check = "";
+                            let active = '<div dir="ltr" class="togglebutton">\n' +
+                                '  <label>\n' +
+                                '      <input sib-user-id=" ' + users[i].sib_user_id  +'" name="active" ' + check + ' type="checkbox">\n' +
+                                '    <span class="toggle"></span>\n' +
+                                '  </label>\n' +
+                                '</div>';
+                            // console.log( "activation : " + data.data[array_key[i]].active);
+                            // console.log( "checked was : " + $('input', active).is(":checked"))
+                            activation.innerHTML = active;
+
+                            // for edit column
+                            let user_edit_url = "{{Route('EditUser')}}/" + users[i].sib_user_id;
+                            let edit_html = '<button data-url="' + user_edit_url + '" data-toggle="modal" data-id="' + users[i].sib_user_id +'" data-target="#edit" type="button" rel="tooltip" class="btn EditBtnAccess TableEditBtn  btn-success btn-simple">\n' +
+                                ' <i class="material-icons">edit</i>\n' +
+                                'ویرایش\n' +
+                                ' </button>' ;
+                            userEdit.innerHTML = edit_html;
+                        }
+                    }
+
+                }else {
+                    for(let i = 0 ; i < userData.length ; i++){
+                        var row = table.insertRow();
+                        var name = row.insertCell();
+                        var mobile = row.insertCell();
+                        var account_type = row.insertCell();
+                        var permission = row.insertCell();
+                        var activation = row.insertCell();
+                        var userEdit = row.insertCell();
+
+                        name.innerHTML = userData[i].first_name + " " + userData[i].last_name;
+                        mobile.innerHTML = userData[i].mobile;
+                        account_type.innerHTML = userData[i].account_type;
+
+                        // for permission column
+                        let permission_html ;
+                        let url ;
+                        // console.log( "permisson data : " + data.data.data.has_permission)
+                        if( userData[i].has_permission == 1) {
+                            url = "{{Route('setUserPermission')}}/" + userData[i].sib_user_id;
+                            permission_html = '<a href=" ' + url + '" class="btn btn-info px-4"> سطح دسترسی  </a>';
+                        }
+                        else {
+                            url = "{{Route('setUserPermission')}}/" + userData[i].sib_user_id;
+                            permission_html = ' <a href=" ' + url + '" class="btn btn-primary">\n' +
+                                ' <i class="material-icons">person_add_alt_1</i>\n' +
+                                '                                                        تعریف\n' +
+                                ' </a>' ;
+                        }
+                        permission.innerHTML = permission_html;
+
+                        // for activation
+                        let check ;
+                        if(userData[i].active)
+                        {
+                            check = "checked" ;
                         }
                         else
-                        {
-                            $("#pagination_links").hide();
-                            // console.log(data.array_key)
-                            let array_key = data.array_key;
-                            for(let i = 0 ; i < array_key.length ; i++){
-                                var row = table.insertRow();
-                                var name = row.insertCell();
-                                var mobile = row.insertCell();
-                                var account_type = row.insertCell();
-                                var permission = row.insertCell();
-                                var activation = row.insertCell();
-                                var userEdit = row.insertCell();
-
-                                name.innerHTML = data.data[array_key[i]].first_name + " " + data.data[array_key[i]].last_name;
-                                mobile.innerHTML = data.data[array_key[i]].mobile;
-                                account_type.innerHTML = data.data[array_key[i]].account_type;
-
-                                // for permission column
-                                let permission_html ;
-                                let url ;
-                                // console.log( "permisson data : " + data.data.has_permission)
-                                if( data.data[array_key[i]].has_permission == 1) {
-                                    url = "{{Route('setUserPermission')}}/" + data.data[array_key[i]].sib_user_id;
-                                    permission_html = '<a href=" ' + url + '" class="btn btn-info px-4"> سطح دسترسی  </a>';
-                                }
-                                else {
-                                    url = "{{Route('setUserPermission')}}/" + data.data[array_key[i]].sib_user_id;
-                                    permission_html = ' <a href=" ' + url + '" class="btn btn-primary">\n' +
-                                        ' <i class="material-icons">person_add_alt_1</i>\n' +
-                                        '                                                        تعریف\n' +
-                                        ' </a>' ;
-                                }
-                                permission.innerHTML = permission_html;
-
-                                // for activation
-                                let check ;
-                                if(data.data[array_key[i]].active)
-                                {
-                                    check = "checked" ;
-                                }
-                                else
-                                    check = "";
-                                let active = '<div dir="ltr" class="togglebutton">\n' +
-                                    '  <label>\n' +
-                                    '      <input sib-user-id=" ' + data.data[array_key[i]].sib_user_id  +'" name="active" ' + check + ' type="checkbox">\n' +
-                                    '    <span class="toggle"></span>\n' +
-                                    '  </label>\n' +
-                                    '</div>';
-                                // console.log( "activation : " + data.data[array_key[i]].active);
-                                // console.log( "checked was : " + $('input', active).is(":checked"))
-                                activation.innerHTML = active;
-
-                                // for edit column
-                                let user_edit_url = "{{Route('EditUser')}}/" + data.data[array_key[i]].sib_user_id;
-                                let edit_html = '<button data-url="' + user_edit_url + '" data-toggle="modal" data-id="' + data.data[array_key[i]].sib_user_id +'" data-target="#edit" type="button" rel="tooltip" class="btn EditBtnAccess TableEditBtn  btn-success btn-simple">\n' +
-                                    ' <i class="material-icons">edit</i>\n' +
-                                    'ویرایش\n' +
-                                    ' </button>' ;
-                                userEdit.innerHTML = edit_html;
-                            }
-                        }
-                        $('#loader').hide();
+                            check = "";
+                        let active = '<div dir="ltr" class="togglebutton">\n' +
+                            '  <label>\n' +
+                            '      <input sib-user-id=" ' + userData[i].sib_user_id  +'" name="active" ' + check + ' type="checkbox">\n' +
+                            '    <span class="toggle"></span>\n' +
+                            '  </label>\n' +
+                            '</div>';
+                        // console.log( "activation : " + data.data.data[i].active);
+                        // console.log( "checked was : " + $('input', active).is(":checked"))
+                        activation.innerHTML = active;
+                        // for edit column
+                        let user_edit_url = "{{Route('EditUser')}}/" +userData[i].sib_user_id;
+                        let edit_html = '<button data-url="' + user_edit_url + '" data-toggle="modal" data-id="' + userData[i].sib_user_id +'" data-target="#edit" type="button" rel="tooltip" class="btn EditBtnAccess TableEditBtn  btn-success btn-simple">\n' +
+                            ' <i class="material-icons">edit</i>\n' +
+                            'ویرایش\n' +
+                            ' </button>' ;
+                        userEdit.innerHTML = edit_html;
                     }
-                });
+
+                }
+                setTimeout(function () {
+                    $('#loader').hide();
+                } , 300);
+                // console.log('arr1', arr1.length);
+
+            {{--$.ajax({--}}
+            {{--        type:'POST',--}}
+            {{--        url:"{{Route('getUserWithAlphabet')}}" ,--}}
+            {{--        dataType:'json',--}}
+            {{--        data:{--}}
+            {{--            '_token ': '<?php echo csrf_token() ?>',--}}
+            {{--            'filter' : value ,--}}
+            {{--            'isActive' : isActive,--}}
+            {{--            'user_filter_value' : user_filter_value ,--}}
+            {{--        },--}}
+            {{--        success:function(data) {--}}
+            {{--            // console.log(data);--}}
+            {{--            $('#userInfo tbody').html(" ");--}}
+            {{--            let table = document.getElementById("userInfo").getElementsByTagName('tbody')[0];--}}
+            {{--            // console.log(data);--}}
+            {{--            if(data.data.length == 0 )--}}
+            {{--            {--}}
+            {{--                $("#pagination_links").hide();--}}
+            {{--                var row = table.insertRow();--}}
+            {{--                var cell = row.insertCell();--}}
+            {{--                cell.id = "myTd";--}}
+            {{--                cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";--}}
+            {{--                document.getElementById("myTd").colSpan = "6";--}}
+            {{--            }--}}
+            {{--            else if(data.array_key == -1 ){--}}
+            {{--                let sib_user_id = data.sib_user_id;--}}
+            {{--                $("#pagination_links").show();--}}
+            {{--                // console.log(data.data.data.length)--}}
+            {{--                for(let i = 0 ; i < data.data.length ; i++){--}}
+            {{--                    var row = table.insertRow();--}}
+            {{--                    var name = row.insertCell();--}}
+            {{--                    var mobile = row.insertCell();--}}
+            {{--                    var account_type = row.insertCell();--}}
+            {{--                    var permission = row.insertCell();--}}
+            {{--                    var activation = row.insertCell();--}}
+            {{--                    var userEdit = row.insertCell();--}}
+
+            {{--                    name.innerHTML = data.data[i].first_name + " " + data.data[i].last_name;--}}
+            {{--                    mobile.innerHTML = data.data[i].mobile;--}}
+            {{--                    account_type.innerHTML = data.data[i].account_type;--}}
+
+            {{--                    // for permission column--}}
+            {{--                    let permission_html ;--}}
+            {{--                    let url ;--}}
+            {{--                    // console.log( "permisson data : " + data.data.data.has_permission)--}}
+            {{--                    if( data.data[i].has_permission == 1) {--}}
+            {{--                        url = "{{Route('setUserPermission')}}/" + data.data[i].sib_user_id;--}}
+            {{--                        permission_html = '<a href=" ' + url + '" class="btn btn-info px-4"> سطح دسترسی  </a>';--}}
+            {{--                    }--}}
+            {{--                    else {--}}
+            {{--                        url = "{{Route('setUserPermission')}}/" + data.data[i].sib_user_id;--}}
+            {{--                        permission_html = ' <a href=" ' + url + '" class="btn btn-primary">\n' +--}}
+            {{--                            ' <i class="material-icons">person_add_alt_1</i>\n' +--}}
+            {{--                            '                                                        تعریف\n' +--}}
+            {{--                            ' </a>' ;--}}
+            {{--                    }--}}
+            {{--                    permission.innerHTML = permission_html;--}}
+
+            {{--                    // for activation--}}
+            {{--                    let check ;--}}
+            {{--                    if(data.data[i].active)--}}
+            {{--                    {--}}
+            {{--                        check = "checked" ;--}}
+            {{--                    }--}}
+            {{--                    else--}}
+            {{--                        check = "";--}}
+            {{--                    let active = '<div dir="ltr" class="togglebutton">\n' +--}}
+            {{--                        '  <label>\n' +--}}
+            {{--                        '      <input sib-user-id=" ' + data.data[i].sib_user_id  +'" name="active" ' + check + ' type="checkbox">\n' +--}}
+            {{--                        '    <span class="toggle"></span>\n' +--}}
+            {{--                        '  </label>\n' +--}}
+            {{--                        '</div>';--}}
+            {{--                    // console.log( "activation : " + data.data.data[i].active);--}}
+            {{--                    // console.log( "checked was : " + $('input', active).is(":checked"))--}}
+            {{--                    activation.innerHTML = active;--}}
+
+            {{--                    // for edit column--}}
+            {{--                    let user_edit_url = "{{Route('EditUser')}}/" + data.data[i].sib_user_id;--}}
+            {{--                    let edit_html = '<button data-url="' + user_edit_url + '" data-toggle="modal" data-id="' + data.data[i].sib_user_id +'" data-target="#edit" type="button" rel="tooltip" class="btn EditBtnAccess TableEditBtn  btn-success btn-simple">\n' +--}}
+            {{--                        ' <i class="material-icons">edit</i>\n' +--}}
+            {{--                        'ویرایش\n' +--}}
+            {{--                        ' </button>' ;--}}
+            {{--                    userEdit.innerHTML = edit_html;--}}
+            {{--                }--}}
+            {{--            }--}}
+            {{--            else--}}
+            {{--            {--}}
+            {{--                $("#pagination_links").hide();--}}
+            {{--                // console.log(data.array_key)--}}
+            {{--                let array_key = data.array_key;--}}
+            {{--                for(let i = 0 ; i < array_key.length ; i++){--}}
+            {{--                    var row = table.insertRow();--}}
+            {{--                    var name = row.insertCell();--}}
+            {{--                    var mobile = row.insertCell();--}}
+            {{--                    var account_type = row.insertCell();--}}
+            {{--                    var permission = row.insertCell();--}}
+            {{--                    var activation = row.insertCell();--}}
+            {{--                    var userEdit = row.insertCell();--}}
+
+            {{--                    name.innerHTML = data.data[array_key[i]].first_name + " " + data.data[array_key[i]].last_name;--}}
+            {{--                    mobile.innerHTML = data.data[array_key[i]].mobile;--}}
+            {{--                    account_type.innerHTML = data.data[array_key[i]].account_type;--}}
+
+            {{--                    // for permission column--}}
+            {{--                    let permission_html ;--}}
+            {{--                    let url ;--}}
+            {{--                    // console.log( "permisson data : " + data.data.has_permission)--}}
+            {{--                    if( data.data[array_key[i]].has_permission == 1) {--}}
+            {{--                        url = "{{Route('setUserPermission')}}/" + data.data[array_key[i]].sib_user_id;--}}
+            {{--                        permission_html = '<a href=" ' + url + '" class="btn btn-info px-4"> سطح دسترسی  </a>';--}}
+            {{--                    }--}}
+            {{--                    else {--}}
+            {{--                        url = "{{Route('setUserPermission')}}/" + data.data[array_key[i]].sib_user_id;--}}
+            {{--                        permission_html = ' <a href=" ' + url + '" class="btn btn-primary">\n' +--}}
+            {{--                            ' <i class="material-icons">person_add_alt_1</i>\n' +--}}
+            {{--                            '                                                        تعریف\n' +--}}
+            {{--                            ' </a>' ;--}}
+            {{--                    }--}}
+            {{--                    permission.innerHTML = permission_html;--}}
+
+            {{--                    // for activation--}}
+            {{--                    let check ;--}}
+            {{--                    if(data.data[array_key[i]].active)--}}
+            {{--                    {--}}
+            {{--                        check = "checked" ;--}}
+            {{--                    }--}}
+            {{--                    else--}}
+            {{--                        check = "";--}}
+            {{--                    let active = '<div dir="ltr" class="togglebutton">\n' +--}}
+            {{--                        '  <label>\n' +--}}
+            {{--                        '      <input sib-user-id=" ' + data.data[array_key[i]].sib_user_id  +'" name="active" ' + check + ' type="checkbox">\n' +--}}
+            {{--                        '    <span class="toggle"></span>\n' +--}}
+            {{--                        '  </label>\n' +--}}
+            {{--                        '</div>';--}}
+            {{--                    // console.log( "activation : " + data.data[array_key[i]].active);--}}
+            {{--                    // console.log( "checked was : " + $('input', active).is(":checked"))--}}
+            {{--                    activation.innerHTML = active;--}}
+
+            {{--                    // for edit column--}}
+            {{--                    let user_edit_url = "{{Route('EditUser')}}/" + data.data[array_key[i]].sib_user_id;--}}
+            {{--                    let edit_html = '<button data-url="' + user_edit_url + '" data-toggle="modal" data-id="' + data.data[array_key[i]].sib_user_id +'" data-target="#edit" type="button" rel="tooltip" class="btn EditBtnAccess TableEditBtn  btn-success btn-simple">\n' +--}}
+            {{--                        ' <i class="material-icons">edit</i>\n' +--}}
+            {{--                        'ویرایش\n' +--}}
+            {{--                        ' </button>' ;--}}
+            {{--                    userEdit.innerHTML = edit_html;--}}
+            {{--                }--}}
+            {{--            }--}}
+            {{--            $('#loader').hide();--}}
+            {{--        }--}}
+            {{--    });--}}
             });
         });
     </script>
