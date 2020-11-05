@@ -173,8 +173,15 @@ class UserManagerController extends Controller
 
         $SellerUserList = $this->api->RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password, $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei ,$id);
 //       return $SellerUserList;
-        $success_message = (is_null($id)) ?   "کاربر جدید اضافه گردید." : "کاربر مورد نظر ویرایش گردید .  ";
-        $error_message = (is_null($id)) ?   "خطا در ایجاد کاربر !" : "خطا در ویرایش کاربر !  ";
+
+        $success_message = ($id == "") ?   "کاربر جدید اضافه گردید." : "کاربر مورد نظر ویرایش گردید .  ";
+        $error_message = ($id == "") ?   "خطا در ثبت کاربر جديد !" : "خطا در ویرایش کاربر !  ";
+
+        if( $SellerUserList['Header']["Message"] ==  "Repetitious Username")
+        {
+            $error_message = "نام کاربري قيلا ثبت شده است .";
+        }
+
         if($SellerUserList['Header']['Status'] == 0 ){
                 Cache::forget('GetSubUserList');
                 $SellerUserList = Cache::rememberForever('GetSubUserList' , function (){

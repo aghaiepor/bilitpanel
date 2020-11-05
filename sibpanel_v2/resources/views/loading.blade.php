@@ -301,7 +301,7 @@ The above copyright notice and this permission notice shall be included in all c
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         percentComplete += evt.loaded / evt.total;
-                        console.log(percentComplete);
+                        // console.log(percentComplete);
                         $('#pro').css({
                             width: (percentComplete * 100)/num + '%'
                         });
@@ -313,7 +313,7 @@ The above copyright notice and this permission notice shall be included in all c
                 xhr.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         percentComplete += evt.loaded / evt.total;
-                        console.log(percentComplete);
+                        // console.log(percentComplete);
                         $('#pro').css({
                             width: (percentComplete * 100)/num + '%'
                         });
@@ -338,7 +338,7 @@ The above copyright notice and this permission notice shall be included in all c
                             xhr.upload.addEventListener("progress", function (evt) {
                                 if (evt.lengthComputable) {
                                      percentComplete += evt.loaded / evt.total;
-                                    console.log(percentComplete);
+                                    // console.log(percentComplete);
                                     $('#pro').css({
                                         width: (percentComplete * 100)/num + '%'
                                     });
@@ -350,7 +350,7 @@ The above copyright notice and this permission notice shall be included in all c
                             xhr.addEventListener("progress", function (evt) {
                                 if (evt.lengthComputable) {
                                     percentComplete += evt.loaded / evt.total;
-                                    console.log(percentComplete);
+                                    // console.log(percentComplete);
                                     $('#pro').css({
                                         width: (percentComplete * 100)/num + '%'
                                     });
@@ -379,7 +379,7 @@ The above copyright notice and this permission notice shall be included in all c
                                             xhr.upload.addEventListener("progress", function (evt) {
                                                 if (evt.lengthComputable) {
                                                     percentComplete += evt.loaded / evt.total;
-                                                    console.log(percentComplete);
+                                                    // console.log(percentComplete);
                                                     $('#pro').css({
                                                         width: (percentComplete * 100)/num + '%'
                                                     });
@@ -391,7 +391,7 @@ The above copyright notice and this permission notice shall be included in all c
                                             xhr.addEventListener("progress", function (evt) {
                                                 if (evt.lengthComputable) {
                                                     percentComplete += evt.loaded / evt.total;
-                                                    console.log(percentComplete);
+                                                    // console.log(percentComplete);
                                                     $('#pro').css({
                                                         width: (percentComplete * 100)/num + '%'
                                                     });
@@ -420,7 +420,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                         xhr.upload.addEventListener("progress", function (evt) {
                                                             if (evt.lengthComputable) {
                                                                 percentComplete += evt.loaded / evt.total;
-                                                                console.log(percentComplete);
+                                                                // console.log(percentComplete);
                                                                 $('#pro').css({
                                                                     width: (percentComplete * 100)/num + '%'
                                                                 });
@@ -432,7 +432,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                         xhr.addEventListener("progress", function (evt) {
                                                             if (evt.lengthComputable) {
                                                                 percentComplete += evt.loaded / evt.total;
-                                                                console.log(percentComplete);
+                                                                // console.log(percentComplete);
                                                                 $('#pro').css({
                                                                     width: (percentComplete * 100)/num + '%'
                                                                 });
@@ -458,7 +458,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                     xhr.upload.addEventListener("progress", function (evt) {
                                                                         if (evt.lengthComputable) {
                                                                             percentComplete += evt.loaded / evt.total;
-                                                                            console.log(percentComplete);
+                                                                            // console.log(percentComplete);
                                                                             $('#pro').css({
                                                                                 width: (percentComplete * 100)/num + '%'
                                                                             });
@@ -470,7 +470,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                     xhr.addEventListener("progress", function (evt) {
                                                                         if (evt.lengthComputable) {
                                                                             percentComplete += evt.loaded / evt.total;
-                                                                            console.log(percentComplete);
+                                                                            // console.log(percentComplete);
                                                                             $('#pro').css({
                                                                                 width: (percentComplete * 100)/num + '%'
                                                                             });
@@ -496,7 +496,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                 xhr.upload.addEventListener("progress", function (evt) {
                                                                                     if (evt.lengthComputable) {
                                                                                         percentComplete += evt.loaded / evt.total;
-                                                                                        console.log(percentComplete);
+                                                                                        // console.log(percentComplete);
                                                                                         $('#pro').css({
                                                                                             width: (percentComplete * 100)/num + '%'
                                                                                         });
@@ -508,7 +508,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                 xhr.addEventListener("progress", function (evt) {
                                                                                     if (evt.lengthComputable) {
                                                                                         percentComplete += evt.loaded / evt.total;
-                                                                                        console.log(percentComplete);
+                                                                                        // console.log(percentComplete);
                                                                                         $('#pro').css({
                                                                                             width: (percentComplete * 100)/num + '%'
                                                                                         });
@@ -534,7 +534,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                             xhr.upload.addEventListener("progress", function (evt) {
                                                                                                 if (evt.lengthComputable) {
                                                                                                     percentComplete += evt.loaded / evt.total;
-                                                                                                    console.log(percentComplete);
+                                                                                                    // console.log(percentComplete);
                                                                                                     $('#pro').css({
                                                                                                         width: (percentComplete * 100)/num + '%'
                                                                                                     });
@@ -546,7 +546,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                             xhr.addEventListener("progress", function (evt) {
                                                                                                 if (evt.lengthComputable) {
                                                                                                     percentComplete += evt.loaded / evt.total;
-                                                                                                    console.log(percentComplete);
+                                                                                                    // console.log(percentComplete);
                                                                                                     $('#pro').css({
                                                                                                         width: (percentComplete * 100)/num + '%'
                                                                                                     });
@@ -572,7 +572,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                         xhr.upload.addEventListener("progress", function (evt) {
                                                                                                             if (evt.lengthComputable) {
                                                                                                                 percentComplete += evt.loaded / evt.total;
-                                                                                                                console.log(percentComplete);
+                                                                                                                // console.log(percentComplete);
                                                                                                                 $('#pro').css({
                                                                                                                     width: (percentComplete * 100)/num + '%'
                                                                                                                 });
@@ -584,7 +584,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                         xhr.addEventListener("progress", function (evt) {
                                                                                                             if (evt.lengthComputable) {
                                                                                                                 percentComplete += evt.loaded / evt.total;
-                                                                                                                console.log(percentComplete);
+                                                                                                                // console.log(percentComplete);
                                                                                                                 $('#pro').css({
                                                                                                                     width: (percentComplete * 100)/num + '%'
                                                                                                                 });
@@ -606,7 +606,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                             $('#current').text(currentNumber);
                                                                                                             $('#LoadingText').text(' در حال ورود ');
                                                                                                             let url = "{{session()->get('previous_url')}}";
-                                                                                                            console.log(url);
+                                                                                                            // console.log(url);
                                                                                                             if(url == "")
                                                                                                                 url = "{{Route('dashboard')}}";
                                                                                                            setTimeout(function(){

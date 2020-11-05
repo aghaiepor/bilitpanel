@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Log;
 class Api
 {
 //    protected $url = "http://213.207.198.106:8021/";
-//    protected $url = "http://185.129.170.10:5002/";
-    protected $url =  "http://192.168.171.2:5002/";
+    protected $url = "http://185.129.170.10:5002/"; // for test use this address
+//    protected $url =  "http://192.168.171.2:5002/";
 //    protected $url = "http://185.129.170.10:5001/";
     private $CONTENT_TYPE = 'application/json';
     private $AUTHORIZATION = 'basic aG9zc2VpbjpAZG1pbjEyMw==';
