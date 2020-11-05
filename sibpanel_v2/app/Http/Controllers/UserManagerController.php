@@ -242,7 +242,6 @@ class UserManagerController extends Controller
 
     }
 
-
     //************ methods ********************
     public function paginate($items, $perPage = 20, $page = null, $options = [])
     {
