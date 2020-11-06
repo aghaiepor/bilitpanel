@@ -301,7 +301,7 @@
                     <div class="form-row mt-3">
                         <div class="col-sm-6 text-right">
                             <label for=""> IEMI </label>
-                            <input name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
+                            <input id="addUser_imei" name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for=""> دسترسی به نوع فروش </label>
@@ -423,10 +423,11 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $("#addUser_password").val(" ")
 
             $("#addUserSubmit").submit( function (e) {
-
+                let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
                 let addUser_name = $("#addUser_name").val();
                 let addUser_lastname = $("#addUser_lastname").val();
                 let addUser_username = $("#addUser_username").val();
@@ -434,11 +435,12 @@
                 let addUser_mobile = $("#addUser_mobile").val();
                 let addUser_ssn = $("#addUser_ssn").val();
                 let addUser_account_type_id = $("#addUser_account_type_id").val();
+                let addUser_imei = $("#addUser_imei").val();
                 // console.log('addUser_account_type_id' , addUser_account_type_id == null);
                 // console.log('addUser_lastname : ' , addUser_lastname == "")
-                if(addUser_name == "" || addUser_username == "" || addUser_password == "" || addUser_account_type_id == null || addUser_lastname == ""   || addUser_mobile == "" || addUser_ssn == ""){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || !addUser_account_type_id == null || !addUser_lastname.match(pattern)   || !addUser_mobile.match(pattern) || !addUser_ssn.match(pattern) || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
                     e.preventDefault();
-                    if(addUser_name == "") {
+                    if(!addUser_name.match(pattern)) {
                         $("#addUser_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_name").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -448,7 +450,7 @@
                         $("#addUser_name").parent().prev().removeAttr("style") ;
                     }
 
-                    if(addUser_username == "") {
+                    if(!addUser_username.match(pattern) ) {
                         $("#addUser_username").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_username").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -458,7 +460,7 @@
                         $("#addUser_username").parent().prev().removeAttr("style") ;
                     }
 
-                    if(addUser_password == "") {
+                    if(!addUser_password.match(pattern) ) {
                         $("#addUser_password").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_password").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -469,7 +471,7 @@
                     }
 
 
-                    if(addUser_account_type_id == null) {
+                    if(!addUser_account_type_id == null) {
                         $("#addUser_account_type_id").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_account_type_id").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -478,7 +480,7 @@
                         $("#addUser_account_type_id").removeAttr("style");
                         $("#addUser_account_type_id").parent().prev().removeAttr("style") ;
                     }
-                    if(addUser_lastname == "") {
+                    if(!addUser_lastname.match(pattern)) {
                         $("#addUser_lastname").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_lastname").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -488,7 +490,7 @@
                         $("#addUser_lastname").parent().prev().removeAttr("style") ;
                     }
 
-                    if(addUser_mobile == "") {
+                    if(!addUser_mobile.match(pattern)) {
                         $("#addUser_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_mobile").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -497,7 +499,7 @@
                         $("#addUser_mobile").removeAttr("style");
                         $("#addUser_mobile").parent().prev().removeAttr("style") ;
                     }
-                    if(addUser_ssn == "") {
+                    if(!addUser_ssn.match(pattern)) {
                         $("#addUser_ssn").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_ssn").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -507,6 +509,15 @@
                         $("#addUser_ssn").parent().prev().removeAttr("style") ;
                     }
 
+                    if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
+                        if (addUser_imei == "") {
+                            $("#addUser_imei").css("cssText", "border : solid 2px #e91e63 !important");
+                            $("#addUser_imei").parent().prev().css("color", "#e91e63");
+                        } else {
+                            $("#addUser_imei").removeAttr("style");
+                            $("#addUser_imei").parent().prev().removeAttr("style");
+                        }
+                    }
                     Swal.fire(
                         'خطا ! ',
                         'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
