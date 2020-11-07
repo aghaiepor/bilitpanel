@@ -80,7 +80,7 @@
                                     <input id="user_search" name="user_search" class="form-control" placeholder="جست و جو ....">
                                 </div>
                                 <div class="col-sm-3">
-                                    <select id="user_filter" name="user_filter" class="selectpicker " data-width="100%" data-style="btn btn-primary border-dark" title="فیلتر">
+                                    <select id="user_filter" name="user_filter" class="selectpicker " data-width="100%" data-style="btn btn-primary border-dark" title="نوع کاربر">
                                         <option value=""> همه </option>
                                         <option value="admin user">admin user</option>
                                         <option value="panel user">panel user</option>
@@ -133,6 +133,7 @@
                                     <span class="badge badge-primary">ه</span>
                                     <span class="badge badge-primary">ی</span>
                                     <span class="badge badge-primary">اعداد</span>
+                                    <span class="badge badge-primary">سایر</span>
                                 </div>
                             </div>
                             <!-- Modal -->
@@ -235,7 +236,7 @@
     </div>
 <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="{{Route('RegisterUser')}}" method="post">
+        <form id="addUserSubmit" action="{{Route('RegisterUser')}}" method="post">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -248,28 +249,28 @@
                     <div class="form-row mt-3">
                         <div class="col-sm-6 text-right">
                             <label for=""> نام </label>
-                            <input name="name" type="text" class="form-control"  placeholder="نام  ">
+                            <input id="addUser_name" name="name" type="text" class="form-control"  placeholder="نام  ">
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for=""> نام خانوادگی </label>
-                            <input name="last_name" type="text" class="form-control"  placeholder=" نام خانوادگی">
+                            <input id="addUser_lastname" name="last_name" type="text" class="form-control"  placeholder=" نام خانوادگی">
                         </div>
                     </div>
 
                     <div class="form-row mt-3 text-right" >
                         <div class="col-sm-6">
                             <label for=""> نام کاربری </label>
-                            <input autocomplete="false" name="username" type="text" class="form-control"  placeholder="نام کاربری  ">
+                            <input id="addUser_username" autocomplete="false" name="username" type="text" class="form-control"  placeholder="نام کاربری  ">
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for=""> شماره موبایل </label>
-                            <input name="cellphone" type="number" class="form-control"  placeholder="شمار موبایل">
+                            <input id="addUser_mobile" name="cellphone" type="number" class="form-control"  placeholder="شمار موبایل">
                         </div>
                     </div>
                     <div class="form-row mt-3">
                         <div class="col-sm-6 text-right">
                             <label for=""> نوع اکانت </label>
-                            <select name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                            <select id="addUser_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option value="" disabled selected>  انتخاب کنید </option>
                                 <option value="1">admin user</option>
                                 <option value="2">panel user</option>
@@ -284,7 +285,7 @@
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for="">کد ملی</label>
-                            <input name="national_id" type="number" class="form-control"  placeholder="شمار ملی">
+                            <input id="addUser_ssn" name="national_id" type="number" class="form-control"  placeholder="شمار ملی">
                         </div>
                     </div>
                     <div class="form-row mt-3">
@@ -294,17 +295,17 @@
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for="">   رمزعبور </label>
-                            <input autocomplete="false" name="password" type="password" class="form-control"  placeholder="کلمه عبور">
+                            <input id="addUser_password" autocomplete="false" name="password" type="password" class="form-control"  placeholder="کلمه عبور">
                         </div>
                     </div>
                     <div class="form-row mt-3">
                         <div class="col-sm-6 text-right">
                             <label for=""> IEMI </label>
-                            <input name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
+                            <input id="addUser_imei" name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for=""> دسترسی به نوع فروش </label>
-                            <select name="pre_sell" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                            <select id="addUser_presell" name="pre_sell" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option selected value="0"> خیر</option>
                                 <option value="1"> بله</option>
                             </select>
@@ -314,7 +315,7 @@
                 </div>
                 <div class="modal-footer mt-4">
                     {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                    <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> افزودن </button>
+                    <button id="addUser" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> افزودن </button>
                 </div>
             </div>
         </form>
@@ -403,7 +404,6 @@
                                 <input id="user_password" autocomplete="false" name="password" type="password" class="form-control "  placeholder="کلمه عبور">
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-footer mt-4">
                         <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش  </button>
@@ -411,17 +411,124 @@
                 </form>
             </div>
         </div>
-
     </div>
 @endsection
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="../assets/js/plugins/sweetalert2.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+
+            $("#addUser_password").val(" ")
+
+            $("#addUserSubmit").submit( function (e) {
+                let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
+                let addUser_name = $("#addUser_name").val();
+                let addUser_lastname = $("#addUser_lastname").val();
+                let addUser_username = $("#addUser_username").val();
+                let addUser_password = $("#addUser_password").val();
+                let addUser_mobile = $("#addUser_mobile").val();
+                let addUser_ssn = $("#addUser_ssn").val();
+                let addUser_account_type_id = $("#addUser_account_type_id").val();
+                let addUser_imei = $("#addUser_imei").val();
+                // console.log('addUser_account_type_id' , addUser_account_type_id == null);
+                // console.log('addUser_lastname : ' , addUser_lastname == "")
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || !addUser_account_type_id == null || !addUser_lastname.match(pattern)   || !addUser_mobile.match(pattern) || !addUser_ssn.match(pattern) || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
+                    e.preventDefault();
+                    if(!addUser_name.match(pattern)) {
+                        $("#addUser_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_name").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_name").removeAttr("style");
+                        $("#addUser_name").parent().prev().removeAttr("style") ;
+                    }
+
+                    if(!addUser_username.match(pattern) ) {
+                        $("#addUser_username").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_username").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_username").removeAttr("style");
+                        $("#addUser_username").parent().prev().removeAttr("style") ;
+                    }
+
+                    if(!addUser_password.match(pattern) ) {
+                        $("#addUser_password").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_password").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_password").removeAttr("style");
+                        $("#addUser_password").parent().prev().removeAttr("style") ;
+                    }
+
+
+                    if(!addUser_account_type_id == null) {
+                        $("#addUser_account_type_id").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_account_type_id").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_account_type_id").removeAttr("style");
+                        $("#addUser_account_type_id").parent().prev().removeAttr("style") ;
+                    }
+                    if(!addUser_lastname.match(pattern)) {
+                        $("#addUser_lastname").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_lastname").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_lastname").removeAttr("style");
+                        $("#addUser_lastname").parent().prev().removeAttr("style") ;
+                    }
+
+                    if(!addUser_mobile.match(pattern)) {
+                        $("#addUser_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_mobile").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_mobile").removeAttr("style");
+                        $("#addUser_mobile").parent().prev().removeAttr("style") ;
+                    }
+                    if(!addUser_ssn.match(pattern)) {
+                        $("#addUser_ssn").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_ssn").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_ssn").removeAttr("style");
+                        $("#addUser_ssn").parent().prev().removeAttr("style") ;
+                    }
+
+                    if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
+                        if (addUser_imei == "") {
+                            $("#addUser_imei").css("cssText", "border : solid 2px #e91e63 !important");
+                            $("#addUser_imei").parent().prev().css("color", "#e91e63");
+                        } else {
+                            $("#addUser_imei").removeAttr("style");
+                            $("#addUser_imei").parent().prev().removeAttr("style");
+                        }
+                    }
+                    Swal.fire(
+                        'خطا ! ',
+                        'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                        'error'
+                    )
+                }
+                else
+                {
+                    $("#addUserSubmit").submit();
+                }
+
             });
 
             var userData = @json($Users);
@@ -529,6 +636,7 @@
             $("#user_search").on( "input", function () {
                 $('#userInfo tbody').html(" ");
                 $('#loader').css('display' , 'flex');
+                let pattern = /^[a-zA-Z]/ ;
                 let value = $(this).val() ;
                 let number = ['1','2','3','4','5','6','7','8','9','0'] ;
                 let users = [];
@@ -546,7 +654,7 @@
                 if(user_filter == "")
                     user_filter = null
 
-                console.log(alphabet_index)
+                // console.log(alphabet_index)
                 if( alphabet_index == "الف")
                     alphabet_index = "ا" ;
 
@@ -556,6 +664,9 @@
                     if(alphabet_index == "اعداد")
                     {
                         users = userData.filter(d => ((value == "") ? true : ((d.first_name + d.last_name).search(value) != -1)) && ((user_filter == null) ? true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (number.indexOf(d.first_name[0]) != -1) ));
+                    }
+                    else if (alphabet_index == "سایر") {
+                        users = userData.filter(d =>  ((value == "") ? true : ((d.first_name + d.last_name).search(value) != -1)) && ((alphabet_index == null) ? true : (d.first_name.match(pattern) != null) ) && ((user_filter == null) ? true : d.account_type == user_filter) );
                     }
                     else
                         users = userData.filter(d => ((value == "") ? true : ((d.first_name + d.last_name).search(value) != -1)) && ((user_filter == null) ? true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (d.first_name[0] === alphabet_index || ((alphabet_index == "ا") ? d.first_name[0] === "آ" : false))));
@@ -640,6 +751,10 @@
                     if(alphabet_index == "اعداد")
                     {
                         user = userData.filter(d => ((user_filter == null)  ?  true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (number.indexOf(d.first_name[0]) != -1) )  );
+                    }
+                    else if (alphabet_index == "سایر") {
+
+                        user = userData.filter(d => ((user_filter == null)  ?  true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (d.first_name.match(pattern) != null) ) );
                     }
                     else
                         user = userData.filter(d => ((user_filter == null)  ?  true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (   d.first_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.first_name[0] === "آ" : false  ) ))  );
@@ -786,6 +901,7 @@
             $("#user_filter").change(function () {
                 let value = $(this).val() ;
                 let serach = $("#user_search").val();
+                let pattern = /^[a-zA-Z]/ ;
                 // console.log(value);
                 /*if(value == "")
                     value = null ;*/
@@ -807,6 +923,9 @@
                 if(alphabet_index == "اعداد")
                 {
                     users = userData.filter(d =>  ((alphabet_index == null) ? true : (number.indexOf(d.first_name[0]) != -1) ) && ((value == "")  ?  true : d.account_type === value) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1));
+                }
+                else if (alphabet_index == "سایر") {
+                    users = userData.filter(d => ((alphabet_index == null) ? true : (d.first_name.match(pattern) != null) ) && ((value == "")  ?  true : d.account_type === value) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1) );
                 }
                 else {
                     if( alphabet_index == "الف")
@@ -895,6 +1014,10 @@
                     if(alphabet_index == "اعداد")
                     {
                         user = userData.filter(d =>  ((alphabet_index == null) ? true : (number.indexOf(d.first_name[0]) != -1) ) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1));
+                    }
+                    else if (alphabet_index == "سایر") {
+
+                        user = userData.filter(d =>  ((alphabet_index == null) ? true : (d.first_name.match(pattern) != null) ) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1));
                     }
                     else
                         user = userData.filter(d => ((alphabet_index == null) ? true : (   d.first_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.first_name[0] === "آ" : false  ) )) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1)   );
@@ -992,10 +1115,15 @@
                 // get elements
                 let number = ['1','2','3','4','5','6','7','8','9','0'] ;
                 let  users  =[] ;
+                let pattern = /^[a-zA-Z]/ ;
+                // console.log( "match : ", "asdf".match(pattern) ); //"somethingELSE"
                 // console.log(value=="الف")
                 if(value == "اعداد")
                 {
                     users = userData.filter(d => ((value == null) ? true : number.indexOf(d.first_name[0]) != -1) && ((user_filter_value == "")  ?  true : d.account_type === user_filter_value) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1));
+                }
+                else if (value == "سایر") {
+                    users = userData.filter(d => ((value == null) ? true : (d.first_name.match(pattern) != null) || (d.first_name == null) ) && ((user_filter_value == "")  ?  true : d.account_type === user_filter_value) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1));
                 }
                 else {
                     if( value == "الف")
@@ -1079,7 +1207,8 @@
 
                 }else {
 
-                    user = userData.filter(d => ((user_filter_value == "")  ?  true : d.account_type === user_filter_value) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1)   );
+                        user = userData.filter(d => ((user_filter_value == "")  ?  true : d.account_type === user_filter_value) && ((serach == "")  ?  true : ( (d.first_name + d.last_name ).search(serach))  != -1)   );
+
                     for(let i = 0 ; i < user.length ; i++){
                         var row = table.insertRow();
                         var name = row.insertCell();
