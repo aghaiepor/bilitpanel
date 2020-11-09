@@ -45,4 +45,11 @@ class presellController extends Controller
             return redirect()->back()->with("error" , "خطا در ويرايش تنظيمات .");
         }
     }
+    public function LocationAccountActivation(Request $request )
+    {
+        $locationaccount_id = $request->get("id") ;
+        $activation = ($request->get("activation") == 'true') ? True : False;
+        $LocationAccountActivation = $this->Api->LocationAccountActivation($locationaccount_id  ,$activation);
+        return $LocationAccountActivation;
+    }
 }

@@ -152,6 +152,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/presellManger' , 'presellController@index')->name('presellManger');
         Route::post('/GetAccountProvince' , 'presellController@GetAccountProvince')->name('GetAccountProvince');
         Route::post('/SetAccountSetting/{id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
+        Route::post('/LocationAccountActivation' , 'presellController@LocationAccountActivation')->name('LocationAccountActivation');
 
     });
 

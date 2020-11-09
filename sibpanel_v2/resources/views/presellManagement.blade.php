@@ -296,7 +296,52 @@
                 $("#red_percentage").val(red_percentage);
                 $("#yellow_percentage").val(yellow_percentage);
             });
+            $(document).on("change",'input[name=locationaccount_id]' ,function () {
 
+                let locationaccount_id = $(this).attr('data-location');
+                let activation = $(this).is(':checked');
+
+                $('#loader').css('display' , 'flex');
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('LocationAccountActivation')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'id' : locationaccount_id ,
+                                'activation' : activation ,
+                            },
+                            success:function(data) {
+                                console.log(data);
+                                $('#loader').hide();
+                                Swal.fire(
+                                    'تغییر مورد نظر اعمال گردید',
+                                    '',
+                                    'success'
+                                )
+                            }
+                        });
+
+                    }else{
+                        if(value)
+                            $(this).prop( "checked", false );
+                        else
+                            $(this).prop( "checked", true );
+                        $('#loader').hide();
+                    }
+                })
+
+            });
             GetAccountProvince(1);
 
             $(".province").click(function () {
@@ -352,7 +397,7 @@
                 },
                 success : function (data) {
 
-                    console.log("data : " , data["ContentData"]["location_accounts"]);
+                    // console.log("data : " , data["ContentData"]["location_accounts"]);
                     let account  = data["ContentData"]["location_accounts"] ;
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
                     if(account.length == 0 ){
@@ -429,9 +474,9 @@
                                 let state_html = ' <div class="togglebutton">' + '<label>' ;
 
                                 if (location[x].presell_activation)
-                                    state_html += '<input type="checkbox" checked="">'  ;
+                                    state_html += '<input  data-location="' + location[x].locationaccount_id + '" type="checkbox" name="locationaccount_id" checked="">'  ;
                                 else
-                                    state_html += '<input type="checkbox">'  ;
+                                    state_html += '<input data-location="' + location[x].locationaccount_id + '" type="checkbox" name="locationaccount_id">'  ;
 
                                 state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
 

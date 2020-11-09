@@ -1263,6 +1263,22 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public function LocationAccountActivation($locationaccount_id  ,$activation){
+        $data = [
+            "locationaccount_id" => $locationaccount_id,
+            "activation" => $activation
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'LocationAccountActivation' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
     public function SetAccountSetting($account_id ,$average_balance_use , $red_percentage ,$orange_percentage , $yellow_percentage , $green_percentage){
         $data = [
             "account_id" =>  $account_id,
