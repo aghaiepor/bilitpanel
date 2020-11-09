@@ -26,9 +26,23 @@ class presellController extends Controller
         $AccountList = $this->Api->GetAccountProvince($province_id);
         return $AccountList ;
     }
-    public function AccountList(Request $request)
+    public function SetAccountSetting(Request $request , $id=null)
     {
-        $AccountList = $this->Api->AccountList(1,[0]);
-        return $AccountList ;
+        if($id == null)
+            return redirect()->back()->with("error" , "خطا در ويرايش تنظيمات .");
+
+        $account_id = $id ;
+        $average_balance_use = $request->get("average_balance_use") ;
+        $red_percentage = $request->get("red_percentage");
+        $green_percentage = $request->get("green_percentage");
+        $orange_percentage = $request->get("orange_percentage") ;
+        $yellow_percentage  = $request->get("yellow_percentage");
+        $AccountList = $this->Api->SetAccountSetting($account_id ,$average_balance_use , $red_percentage ,$orange_percentage , $yellow_percentage , $green_percentage);
+        if($AccountList["Header"]["Status"] == 0 ){
+            return redirect()->back()->with("success" , " ويرايش تنظيمات انجام گرديد . ");
+        }
+        else {
+            return redirect()->back()->with("error" , "خطا در ويرايش تنظيمات .");
+        }
     }
 }

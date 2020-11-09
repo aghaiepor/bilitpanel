@@ -17,6 +17,14 @@
         .nav-pills .nav-item .nav-link{
             border-radius: 0 !important;
         }
+        .subTable{
+            width: 98%;
+            margin-right: 3%;
+        }
+        .subRow{
+            display: none;
+            position: relative;
+        }
     </style>
 @endsection
 @section('content')
@@ -202,7 +210,7 @@
 
 <div class="modal fade" id="setting" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="#" method="post">
+        <form id="form_setting" action="#" method="post">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -215,7 +223,7 @@
                     <div class="form-row mt-3">
                         <div class="col-md text-right">
                             <label for="" class="text-right"> میزان متوسط مصرف  </label>
-                            <input type="text" class="form-control">
+                            <input name="average_balance_use" id="average_balance_use" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="form-row mt-3">
@@ -224,14 +232,14 @@
                                 <span style=" vertical-align :middle" class="material-icons text-success">info</span>
                                 سطح سبز <small>(درصد)</small>
                             </label>
-                            <input type="text" class="form-control">
+                            <input name="green_percentage" id="green_percentage" type="text" class="form-control">
                         </div>
                         <div class="col-md text-right">
                             <label for="" class="text-right">
                                 <span style=" vertical-align :middle ; color: #ffc716" class="material-icons">info</span>
                                 سطح زرد <small>(درصد)</small>
                             </label>
-                            <input type="text" class="form-control">
+                            <input name="yellow_percentage" id="yellow_percentage" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="form-row mt-3">
@@ -240,14 +248,14 @@
                                 <span style=" vertical-align :middle;" class="material-icons text-warning">info</span>
                                 سطح نارنجی <small>(درصد)</small>
                             </label>
-                            <input type="text" class="form-control">
+                            <input id="orange_percentage" name="orange_percentage" type="text" class="form-control">
                         </div>
                         <div class="col-md text-right">
                             <label for="" class="text-right">
                                 <span style=" vertical-align :middle" class="material-icons text-danger">info</span>
                                 سطح قرمز <small>(درصد)</small>
                             </label>
-                            <input type="text" class="form-control">
+                            <input id="red_percentage" name="red_percentage" type="text" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -270,7 +278,27 @@
     <script>
         $(document).ready(function () {
 
+            $(document).on("click",'.location_button' , function () {
+                $(this).parent().parent().next().fadeToggle() ;
+            });
+            $(document).on("click",'.setting_btn' , function () {
+
+                let green_percentage = $(this).attr("green_percentage");
+                let orange_percentage = $(this).attr("orange_percentage");
+                let red_percentage = $(this).attr("red_percentage");
+                let yellow_percentage = $(this).attr("yellow_percentage");
+                let average_balance_use = $(this).attr("average_balance_use");
+                let url = "{{Route("SetAccountSetting")}}/" + $(this).attr("id") ;
+                $("#form_setting").attr("action" , url );
+                $("#average_balance_use").val(average_balance_use);
+                $("#green_percentage").val(green_percentage);
+                $("#orange_percentage").val(orange_percentage);
+                $("#red_percentage").val(red_percentage);
+                $("#yellow_percentage").val(yellow_percentage);
+            });
+
             GetAccountProvince(1);
+
             $(".province").click(function () {
                 let province_id = $(this).attr("province_id") ;
                 GetAccountProvince(province_id);
@@ -343,6 +371,7 @@
                         let mojodi ;
                         let state ;
                         let service ;
+                        let setting = [] ;
                         for(let i = 0 ; i < account.length ; i++){
                             row = table.insertRow();
                             name = row.insertCell();
@@ -360,13 +389,9 @@
                             saba_number.innerHTML = saba;
                             mojodi.innerHTML = number_format(eval(account[i].inventory) , 0 , "." , ",");
                             mojodi.style = "color : " + account[i].account_state + ";";
-                            let state_html = ' <div class="togglebutton">\n' +
-                                '<label>\n' +
-                                '<input type="checkbox" checked="">\n' +
-                                '<span class="toggle"></span>\n' +
-                                '</label>\n' +
-                                '</div>'
-                            state.innerHTML = state_html ;
+
+                            state.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
+
                             let service_html = '<button type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1" data-original-title="" title="">\n' +
                                 '<i class="material-icons">flash_on</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
@@ -375,11 +400,46 @@
                                 '<i class="material-icons">list</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
                                 '</button>\n' +
-                                '<button type="button" class="btn btn-sm px-2 btn-danger mr-1" data-toggle="modal" data-target="#setting" data-original-title="" title="">\n' +
+                                '<button type="button" class="btn setting_btn btn-sm px-2 btn-danger mr-1" data-toggle="modal" data-target="#setting" data-original-title="" id="'+ account[i].account_id +'" average_balance_use="' + account[i].average_balance_use + '"' +
+                                ' green_percentage="'+ account[i].green_percentage +'" orange_percentage="'+ account[i].orange_percentage + '" red_percentage="'+ account[i].red_percentage +'" yellow_percentage="'+ account[i].yellow_percentage+'" title="">\n' +
                                 '<i class="material-icons">settings</i>\n' +
                                 '<div class="ripple-container"></div><div class="ripple-container"></div>\n' +
                                 '</button>';
                             service.innerHTML = service_html ;
+
+                            let location = account[i].locations;
+                            let tbl = document.createElement('table');
+                            tbl.className  = "subTable" ;
+                            row = table.insertRow();
+                            row.className = "subRow";
+                            cell = row.insertCell();
+                            cell.className = "myTd";
+                            cell.colSpan = "5";
+                            cell.appendChild(tbl);
+                            // cell.innerHTML = ;
+
+                            for (let x = 0 ; x < location.length ; x++){
+                                row = tbl.insertRow();
+                                row.class = "myTr";
+                                location_name = row.insertCell();
+                                location_name.colSpan = "3"
+                                location_name.innerHTML = location[x].name;
+                                location_state = row.insertCell();
+                                location_state.colSpan = "2"
+                                let state_html = ' <div class="togglebutton">' + '<label>' ;
+
+                                if (location[x].presell_activation)
+                                    state_html += '<input type="checkbox" checked="">'  ;
+                                else
+                                    state_html += '<input type="checkbox">'  ;
+
+                                state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
+
+                                location_state.innerHTML =  state_html;
+                                tbl.appendChild(row);
+                            }
+
+                            // document.getElementsByClassName("myTr").colSpan = "5";
 
                         }
                         $("#loader").hide();

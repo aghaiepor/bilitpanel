@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class Api
 {
 //    protected $url = "http://213.207.198.106:8021/";
-    protected $url = "http://185.129.170.10:5002/"; // for test use this address
+    protected $url  ; // for test use this address
 //    protected $url =  "http://192.168.171.2:5002/";
 //    protected $url = "http://185.129.170.10:5001/";
     private $CONTENT_TYPE = 'application/json';
@@ -20,7 +20,7 @@ class Api
     public $session_id;
 
     function __construct($from='') {
-
+        $this->url = env('API_ADDRESS') ;
     }
 
     public function login($username, $password, $debug = false)
@@ -1254,6 +1254,26 @@ class Api
         ];
         $client = new Client();
         $result = $client->post($this->url . 'GetAccountProvince' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+    public function SetAccountSetting($account_id ,$average_balance_use , $red_percentage ,$orange_percentage , $yellow_percentage , $green_percentage){
+        $data = [
+            "account_id" =>  $account_id,
+            "average_balance_use" => $average_balance_use,
+            "red_percentage" => $red_percentage,
+            "orange_percentage" =>$orange_percentage,
+            "yellow_percentage" => $yellow_percentage,
+            "green_percentage" => $green_percentage
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'SetAccountSetting' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
