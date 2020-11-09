@@ -13,7 +13,6 @@ services:
       - variables.env
     networks:
       - app_network
-    command: composer install
 
   sib-panel-v2-nginx:
     build:
