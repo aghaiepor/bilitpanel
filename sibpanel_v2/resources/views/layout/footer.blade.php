@@ -1,6 +1,7 @@
 <footer class="footer">
     <div class="container-fluid">
         <nav class="float-left">
+            <img src="assets/img/logo.png" style="width: 50px;filter: invert(.6);">
            {{-- <ul>
                 <li>
                     <a href="https://www.creative-tim.com/">

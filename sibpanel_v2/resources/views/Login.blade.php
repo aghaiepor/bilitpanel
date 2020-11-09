@@ -60,8 +60,9 @@
                     <form id="loginForm" action="{{Route('login')}}" method="post" >
                         @csrf
                         <div class="card card-login card-hidden">
-                            <div class="card-header card-header-rose text-center">
-                                <h4 class="card-title"> ورود  </h4>
+                            <div style="padding: 53px;" class="card-header card-header-rose text-center">
+{{--                                <h4 class="card-title"> ورود </h4>--}}
+                                <img width="70" src="{{asset('')}}assets/img/logo.png" alt="">
                             </div>
                             <input type="hidden" value="{{$previous_url}}" name="previous_url">
                             <div class="card-body ">

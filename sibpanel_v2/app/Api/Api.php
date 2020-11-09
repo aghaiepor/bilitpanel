@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Log;
 class Api
 {
 //    protected $url = "http://213.207.198.106:8021/";
-//    protected $url = "http://185.129.170.10:5002/"; // for test use this address
-    protected $url =  "http://192.168.171.2:5002/";
+    protected $url = "http://185.129.170.10:5002/"; // for test use this address
+//    protected $url =  "http://192.168.171.2:5002/";
 //    protected $url = "http://185.129.170.10:5001/";
     private $CONTENT_TYPE = 'application/json';
     private $AUTHORIZATION = 'basic aG9zc2VpbjpAZG1pbjEyMw==';
@@ -1238,6 +1238,42 @@ class Api
         $client = new Client();
         $result = $client->put($this->url . 'EditAlert' ,[
                 'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+
+    // ******************** Presell ****************
+    public function GetAccountProvince($province_id){
+        $data = [
+            'province_id' => $province_id,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetAccountProvince' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+    public function AccountList($project_id, $account_ids){
+        $data = [
+            "project_id" => 1,
+	        "account_ids" => [0]
+        ];
+        $client = new Client();
+        $result = $client->post('swtest.atishahr.net:1663/AccountList2' ,[
+                'headers'=>[
+                    "Authorization" => "Basic YWRtaW46MjI4MjE4ZmFqYQ==" ,
+                    "Content-Type" => "application/json"
+                ],
                 'json'=>$data
             ]
         );

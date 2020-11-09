@@ -150,6 +150,8 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // presel Route
         Route::get('/presellManger' , 'presellController@index')->name('presellManger');
+        Route::post('/GetAccountProvince' , 'presellController@GetAccountProvince')->name('GetAccountProvince');
+        Route::post('/AccountList' , 'presellController@AccountList')->name('AccountList');
 
     });
 

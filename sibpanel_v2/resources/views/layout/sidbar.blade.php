@@ -1,8 +1,8 @@
 <div id="loader" style="position: fixed;z-index: 35;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
     <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
 </div>
-<div style="z-index: 10" class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-3.jpg">
-    <div style="z-index: 100;position: absolute;left: 22px;top: 7px;  " class="navbar-wrapper">
+<div id="sidebar" style="z-index: 10" class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-3.jpg">
+    <div style="z-index: 100;position: absolute;left: 23px;top: 5px;  " class="navbar-wrapper">
         <div class="navbar-minimize">
             <button id="minimizeSidebar" class="btn btn-just-icon btn-primary btn-fab btn-round">
                 <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
@@ -20,17 +20,18 @@
 
 
     <div class="logo">
-
+        <img id="logo_image" src="{{asset('')}}assets/img/mirasw_logo.png" style="width: 78px;margin: 15px auto 0px;display: block;">
         <a href="http://www.creative-tim.com" class="simple-text logo-mini">
 
         </a>
-        <a href="/" class="simple-text logo-normal">
+        <a id="project_name" style="font-weight: 200;" href="/" class="simple-text logo-normal text-center mt-3">
             {{ config('app.PROJECT_NAME') }}
-        </a></div>
+        </a>
+    </div>
     <div class="sidebar-wrapper">
         <div class="user">
             <div class="photo">
-                <img src="{{asset('')}}assets/img/avatar5.png" />
+                <img src="{{asset('')}}assets/img/logo_avatar.png" />
             </div>
             <div class="user-info">
                 <a data-toggle="collapse" href="#collapseExample" class="username">
@@ -388,6 +389,27 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        $("#sidebar").mouseover(function () {
+            let min_sideBar = $("body").hasClass("sidebar-mini") ;
+            if(min_sideBar) {
+                $("#project_name").show();
+                $("#logo_image").css({
+                    'width' : "78px" ,
+                    'margin'  :  "17px auto 0px" ,
+                });
+            }
+        })
+        $("#sidebar").mouseout(function () {
+            let min_sideBar = $("body").hasClass("sidebar-mini") ;
+            if(min_sideBar)
+            {
+                $("#logo_image").css({
+                    'width' : "50%" ,
+                    'margin'  :  "45px auto 0px" ,
+                });
+                $("#project_name").hide();
+            }
+        })
         $("#deleteVoucherBtn").click(function (e) {
             $('#loader').css('display' , 'flex');
             let voucher_number = $("#voucher_number").val();
