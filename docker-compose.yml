@@ -3,7 +3,7 @@ services:
   sib-panel-v2-app:
     build:
       context: .
-    image: sib-panel-v2
+      #    image: sib-panel-v2
     container_name: sib-panel-v2
     restart: unless-stopped
     working_dir: /var/www/
@@ -20,6 +20,7 @@ services:
     restart: unless-stopped
     ports:
       - 5009:80
+      - 1012:443
     environment:
       NGINX_FPM_HOST: sib-panel-v2-app
       NGINX_ROOT: /var/www/public
@@ -32,8 +33,6 @@ services:
     networks:
       - app_network
     command: sed -i "s|# Gzip Settings|server_tokens off;|g" /etc/nginx/nginx.conf
-    
-
 networks:
   app_network:
     driver: bridge
