@@ -1,13 +1,17 @@
-FROM php:7.4-fpm
+# development use this image
+# FROM php:7.4-fpm
+
+# production use this image
+FROM dr.atishahr.net:8090/php_7_4_fpm
 
 COPY ./sibpanel_v2/composer.lock ./sibpanel_v2/composer.json ./sibpanel_v2/package.json /usr/src/app/
 
 ENV DOCKERIZE_VERSION 0.6.1
 
+COPY ./dockerize-alpine-linux-amd64-v0.6.1.tar.gz /tmp
+
 # Install dockerize so we can wait for containers to be ready
-RUN curl -s -f -L -o /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/v$DOCKERIZE_VERSION/dockerize-linux-amd64-v$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
-    && rm /tmp/dockerize.tar.gz
+RUN tar -C /usr/local/bin -xzvf /tmp/dockerize-alpine-linux-amd64-v0.6.1.tar.gz
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
@@ -51,6 +55,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 COPY ./laravel.ini /usr/local/etc/php/conf.d/laravel.ini
+
+# RUN chown -R www-data:www-data /var/www/
 
 # Nginx settings
 #COPY timeout.conf /etc/nginx/conf.d/
