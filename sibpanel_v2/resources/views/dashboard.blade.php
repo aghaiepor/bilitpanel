@@ -318,10 +318,10 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-icon card-header-rose">
-                                <div class="card-icon float-right">
+                                <div class="card-icon float-right ml-3">
                                     <i class="material-icons">insert_chart</i>
                                 </div>
-                                <h4 class="card-title">گزارش فروش استان ها
+                                <h4 class="card-title text-right">گزارش فروش استان ها
                                 </h4>
                             </div>
                             <div class="card-body">
@@ -335,10 +335,10 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-icon card-header-rose">
-                                <div class="card-icon float-right">
+                                <div class="card-icon float-right ml-3">
                                     <i class="material-icons">insert_chart</i>
                                 </div>
-                                <h4 class="card-title">گزارش فروش مکان های گردشگری
+                                <h4 class="card-title text-right">گزارش فروش مکان های گردشگری
                                 </h4>
                             </div>
                             <div class="card-body">
@@ -349,10 +349,10 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-icon card-header-rose">
-                                <div class="card-icon float-right">
+                                <div class="card-icon float-right ml-3">
                                     <i class="material-icons">insert_chart</i>
                                 </div>
-                                <h4 class="card-title">گزارش فروش مکان های گردشگری
+                                <h4 class="card-title text-right">گزارش فروش مکان های گردشگری
                                 </h4>
                             </div>
                             <div class="card-body">
@@ -867,6 +867,7 @@
                         bottom: 90
                     },
                 },
+
 
                 responsive: true,
                 maintainAspectRatio: false,
