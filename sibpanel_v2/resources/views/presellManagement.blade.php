@@ -437,11 +437,11 @@
 
                             state.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
 
-                            let service_html = '<button type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1" data-original-title="" title="">\n' +
+                            let service_html = '<button disabled type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1" data-original-title="" title="">\n' +
                                 '<i class="material-icons">flash_on</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
                                 '</button>\n' +
-                                '<button type="button" rel="tooltip" class="btn btn-sm px-2 btn-success mr-1" data-original-title="" title="">\n' +
+                                '<button disabled type="button" rel="tooltip" class="btn btn-sm px-2 btn-success mr-1" data-original-title="" title="">\n' +
                                 '<i class="material-icons">list</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
                                 '</button>\n' +
