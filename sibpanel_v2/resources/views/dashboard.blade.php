@@ -2,11 +2,11 @@
 
 @section('title')
     <title>
-       پنل گردشگری
+        پنل گردشگری
     </title>
     <style>
         /* width */
-       .sidebar-wrapper::-webkit-scrollbar {
+        .sidebar-wrapper::-webkit-scrollbar {
             width: 10px;
         }
 
@@ -30,157 +30,275 @@
 @endsection
 
 @section('content')
-<div class="content">
     <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                {{--     for admin access          --}}
-                @if(session('UserInfo')['account_type_id'] == 1 || session('UserInfo')['account_type_id'] == 2 || session('UserInfo')['account_type_id'] == 9 )
-                    <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">insert_chart</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">گزارش تجمیعی</h5>
-                            <a href="{{Route('Report')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                    <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">receipt_long</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">ریز تراکنش ها</h5>
-                            <a href="{{Route('transaction')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if(session('UserInfo')['account_type_id'] != 2 )
-                    @if(session('UserInfo')['account_type_id'] != 9 )
-                        {{-- Province manager --}}
-                        <div class="col-lg-3 cards">
-                        <div class="card card-pricing card-raised">
-                            <div class="card-body">
-                                <div class="card-icon icon-rose">
-                                    <i class="material-icons">location_city</i>
+        <div class="content">
+            <div class="container-fluid">
+{{--                <div class="row">--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="card ">--}}
+{{--                            <div class="card-header card-header-success card-header-icon">--}}
+{{--                                <div class="card-icon float-right">--}}
+{{--                                    <i class="material-icons"></i>--}}
+{{--                                </div>--}}
+{{--                                <h4 class="card-title">Global Sales by Top Locations</h4>--}}
+{{--                            </div>--}}
+{{--                            <div class="card-body ">--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <div class="table-responsive table-sales">--}}
+{{--                                            <table class="table">--}}
+{{--                                                <tbody>--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>--}}
+{{--                                                        <div class="flag">--}}
+{{--                                                            <img src="../assets/img/flags/US.png">--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
+{{--                                                    <td>USA</td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        2.920--}}
+{{--                                                    </td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        53.23%--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>--}}
+{{--                                                        <div class="flag">--}}
+{{--                                                            <img src="../assets/img/flags/DE.png">--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
+{{--                                                    <td>Germany</td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        1.300--}}
+{{--                                                    </td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        20.43%--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>--}}
+{{--                                                        <div class="flag">--}}
+{{--                                                            <img src="../assets/img/flags/AU.png">--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
+{{--                                                    <td>Australia</td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        760--}}
+{{--                                                    </td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        10.35%--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>--}}
+{{--                                                        <div class="flag">--}}
+{{--                                                            <img src="../assets/img/flags/GB.png">--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
+{{--                                                    <td>United Kingdom</td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        690--}}
+{{--                                                    </td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        7.87%--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>--}}
+{{--                                                        <div class="flag">--}}
+{{--                                                            <img src="../assets/img/flags/RO.png">--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
+{{--                                                    <td>Romania</td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        600--}}
+{{--                                                    </td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        5.94%--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>--}}
+{{--                                                        <div class="flag">--}}
+{{--                                                            <img src="../assets/img/flags/BR.png">--}}
+{{--                                                        </div>--}}
+{{--                                                    </td>--}}
+{{--                                                    <td>Brasil</td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        550--}}
+{{--                                                    </td>--}}
+{{--                                                    <td class="text-right">--}}
+{{--                                                        4.34%--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
+{{--                                                </tbody>--}}
+{{--                                            </table>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="col-md-6 ml-auto mr-auto">--}}
+{{--                                        <div id="worldMap" style="height: 300px;"></div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
                                 </div>
-                                <h5 class="card-title mt-2 font-weight-normal">مدیریت استان ها و شهر ها</h5>
-                                <a href="{{Route('stateMg')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                                <h4 class="card-title text-right">گزارش مقایسه تعداد انواع بلیط ها
+                                </h4>
                             </div>
-                        </div>
-                    </div>
-                    @endif
-                {{-- location manager --}}
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">room</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت مکان ها</h5>
-                            <a href="{{Route('places')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                {{-- Delete Voucher --}}
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">backspace</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">ابطال بلیت</h5>
-                            <a data-toggle="modal" data-target="#deleteVoucher" class="btn btn-rose btn-round text-white"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                @if(session('UserInfo')['account_type_id'] != 9 )
-                    {{-- Text voucher manager --}}
-                    <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">format_size</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت متن بلیت ها</h5>
-                            <a href="{{Route('voucherText')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                    {{-- Type voucher manager --}}
-                    <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons">confirmation_number</i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت نوع بلیت</h5>
-                            <a href="{{Route('voucherTypeList')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                {{-- User manager --}}
-                <div class="col-lg-3 cards">
-                        <div class="card card-pricing card-raised">
                             <div class="card-body">
-                                <div class="card-icon icon-rose">
-                                    <i class="material-icons">supervised_user_circle</i>
+                                <canvas id="voucher_type_voucher_count" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
                                 </div>
-                                <h5 class="card-title mt-2 font-weight-normal">مدیریت کاربران</h5>
-                                <a href="{{Route('UserManager')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                                <h4 class="card-title text-right">گزارش مقایسه مبلغ انواع بلیط ها
+                                </h4>
                             </div>
-                        </div>
-                    </div>
-                {{-- Sans manager --}}
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons"> watch_later </i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت سانس ها</h5>
-                            <a href="{{Route('group_times')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                {{-- Alarm manager --}}
-                @if(env("HAS_ALARM"))
-                <div class="col-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                        <div class="card-body">
-                            <div class="card-icon icon-rose">
-                                <i class="material-icons"> notifications_active </i>
-                            </div>
-                            <h5 class="card-title mt-2 font-weight-normal">مدیریت اعلان ها</h5>
-                            <a href="{{Route('alerts')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                {{-- Terminal manager --}}
-                @if(env("HAS_TERMINAL"))
-                    <div class="col-lg-3 cards">
-                        <div class="card card-pricing card-raised">
                             <div class="card-body">
-                                <div class="card-icon icon-rose">
-                                    <i class="material-icons">dvr</i>
-                                </div>
-                                <h5 class="card-title mt-2 font-weight-normal"> مدیریت ترمینال </h5>
-                                <a href="{{Route('terminals')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                                <canvas id="myChartPie" width="350" height="400"></canvas>
                             </div>
                         </div>
                     </div>
-                @endif
-                @endif
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
+                                </div>
+                                <h4 class="card-title text-right">گزارش مقایسه ای ۱۴ روز اخیر
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="days_report_amount" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
+                                </div>
+                                <h4 class="card-title text-right">گزارش مقایسه تعداد فروش ۱۴ روز اخیر
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="days_report_voucher_count" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-rose">
+                                <div class="card-icon float-right">
+                                    <i class="material-icons">insert_chart</i>
+                                </div>
+                                <h4 class="card-title">Multiple Bars Chart
+                                    <small>- Bar Chart</small>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+{{--                                <div class="ct-chart ct-golden-section" id="chart1"></div>--}}
+                                <canvas id="myChart" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
+                                </div>
+                                <h4 class="card-title text-right">گزارش مقایسه تعداد انواع بلیط ها به تفکیک استان
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="province_based_report_province_voucher_count" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
+                                </div>
+                                <h4 class="card-title text-right">گزارش مقایسه مبلغ انواع بلیط ها به تفکیک استان
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="province_based_report_amount" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-rose">
+                                <div class="card-icon float-right">
+                                    <i class="material-icons">insert_chart</i>
+                                </div>
+                                <h4 class="card-title">گزارش فروش استان ها
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="province_chart" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-rose">
+                                <div class="card-icon float-right">
+                                    <i class="material-icons">insert_chart</i>
+                                </div>
+                                <h4 class="card-title">گزارش فروش مکان های گردشگری
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="location_amount" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-rose">
+                                <div class="card-icon float-right">
+                                    <i class="material-icons">insert_chart</i>
+                                </div>
+                                <h4 class="card-title">گزارش فروش مکان های گردشگری
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="location_amount_voucher_count" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 @section('AddJs')
     <!-- Forms Validations Plugin -->
@@ -216,9 +334,637 @@
 
     <!-- Material Dashboard DEMO methods, don't include it in your project! -->
     <script src="../assets/demo/demo.js"></script>
+    @php
+        $api = new \App\Api\Api();
+        $stats = $api->statsChart();
+        $stats_24hours_reports = $stats["24hours_report"]["result"] ;
+
+        $stats_14days_reports = $stats["14days_report"]["result"] ;
+        $days_report_data = [] ;
+        $days_report_amount = [] ;
+        $days_report_voucher_count = [] ;
+        foreach ($stats_14days_reports as $stats_14days_report){
+            array_push($days_report_data,$stats_14days_report["date"]);
+            array_push($days_report_amount,intval($stats_14days_report["amount"]));
+            array_push($days_report_voucher_count,intval($stats_14days_report["voucher_count"]));
+        }
+
+
+        $voucher_type_report = $stats["voucher_type_report"]["result"] ;
+        $voucher_type_name = [] ;
+        $voucher_type_amount = [] ;
+        $voucher_type_voucher_count = [] ;
+        foreach ($voucher_type_report as $voucher_type_report){
+            array_push($voucher_type_name,$voucher_type_report["voucher_type_name"]);
+            array_push($voucher_type_amount,intval($voucher_type_report["amount"]));
+            array_push($voucher_type_voucher_count,intval($voucher_type_report["voucher_count"]));
+        }
+
+        $location_based_reports = $stats["location_based_report"]["result"] ;
+        $location_based_name = [] ;
+        $location_based_amount = [] ;
+        $location_based_voucher_count = [] ;
+        foreach ($location_based_reports as $location_based_report){
+            array_push($location_based_name,$location_based_report["location_name"]);
+            array_push($location_based_amount,intval($location_based_report["amount"]));
+            array_push($location_based_voucher_count,intval($location_based_report["voucher_count"]));
+        }
+
+        $province_based_reports = $stats["province_based_report"]["result"] ;
+        $province_name = [] ;
+        $province_amount = [] ;
+        $province_voucher_count = [] ;
+        foreach ($province_based_reports as $province_based_report){
+            array_push($province_name,$province_based_report["province_name"]);
+            array_push($province_amount,intval($province_based_report["amount"]));
+            array_push($province_voucher_count,intval($province_based_report["voucher_count"]));
+        }
+
+        $voucher_count = [];
+        $amount = [];
+        foreach ($stats_24hours_reports as $stats_24hours_report){
+            array_push($voucher_count,$stats_24hours_report["voucher_count"]);
+            array_push($amount,$stats_24hours_report["amount"]);
+        }
+
+    @endphp
     <script>
-        $(document).ready(function() {
-            $().ready(function() {
+        let stats2 = @json($stats);
+        let stats = @json($voucher_count);
+        let amount = @json($amount);
+        // console.log("stats : " , stats2);
+        // console.log("stats : " , stats);
+        // console.log("amount : " , amount);
+        let voucher_type_name = @json($voucher_type_name);
+        let voucher_type_amount = @json($voucher_type_amount);
+        let voucher_type_voucher_count = @json($voucher_type_voucher_count);
+
+        let province_name = @json($province_name);
+        let province_amount = @json($province_amount);
+        let province_voucher_count = @json($province_voucher_count);
+
+        let location_based_name = @json($location_based_name);
+        let location_based_amount = @json($location_based_amount);
+        let location_based_voucher_count = @json($location_based_voucher_count);
+
+        let days_report_data = @json($days_report_data);
+        let days_report_amount = @json($days_report_amount);
+        let days_report_voucher_count = @json($days_report_voucher_count);
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    {{-- voucher chart   --}}
+    <script>
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
+        var inputs = {
+            min: -100,
+            max: 100,
+            count: 8,
+            decimals: 2,
+            continuity: 1
+        };
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: stats,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: amount,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+    </script>
+    <script>
+        ctx2 = document.getElementById('myChartPie').getContext('2d');
+        var myChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: voucher_type_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: voucher_type_amount,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                     'rgb(255, 205, 86)',
+                     'rgb(75, 192, 192)',
+                     'rgb(54, 162, 235)',
+                     'rgb(153, 102, 255)',
+                     'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                labels : [voucher_type_name] ,
+            }
+        });
+    </script>
+    <script>
+        ctx2 = document.getElementById('days_report_amount').getContext('2d');
+        var myChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: days_report_data,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: days_report_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                labels : [voucher_type_name] ,
+            }
+        });
+    </script>
+    <script>
+        ctx2 = document.getElementById('days_report_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: days_report_data,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: days_report_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                labels : [voucher_type_name] ,
+            }
+        });
+    </script>
+
+
+    <script>
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
+        var inputs = {
+            min: -100,
+            max: 100,
+            count: 8,
+            decimals: 2,
+            continuity: 1
+        };
+
+        let colors = [] ;
+        ctx2 = document.getElementById('voucher_type_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: voucher_type_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: voucher_type_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                labels : [voucher_type_name] ,
+            }
+        });
+    </script>
+
+    {{--  province Chart  --}}
+    <script>
+        let ctx4 = document.getElementById('province_based_report_province_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx4, {
+            type: 'pie',
+            data: {
+                labels: province_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: province_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                labels : [voucher_type_name] ,
+            }
+        });
+    </script>
+    <script>
+        let ctx5 = document.getElementById('province_based_report_amount').getContext('2d');
+        var myChart = new Chart(ctx5, {
+            type: 'pie',
+            data: {
+                labels: province_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: province_amount,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+            }
+        });
+    </script>
+    <script>
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
+        var inputs = {
+            min: -100,
+            max: 100,
+            count: 8,
+            decimals: 2,
+            continuity: 1
+        };
+
+        var ctx = document.getElementById('province_chart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: province_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: province_amount,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgb(255, 159, 64)' ,
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+    </script>
+
+    {{--  Location Chart  --}}
+    <script>
+
+        var ctx1 = document.getElementById('location_amount').getContext('2d');
+        var myChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: location_based_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: location_based_amount,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor:  'rgb(54, 162, 235)',
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+    </script>
+    <script>
+        var ctx6 = document.getElementById('location_amount_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx6, {
+            type: 'bar',
+            data: {
+                labels: location_based_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: location_based_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+    </script>
+
+    {{-- Other js sources   --}}
+    <script>
+        $(document).ready(function () {
+
+            $().ready(function () {
                 $sidebar = $('.sidebar');
 
                 $sidebar_img_container = $sidebar.find('.sidebar-background');
@@ -238,7 +984,7 @@
 
                 }
 
-                $('.fixed-plugin a').click(function(event) {
+                $('.fixed-plugin a').click(function (event) {
                     // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
                     if ($(this).hasClass('switch-trigger')) {
                         if (event.stopPropagation) {
@@ -249,7 +995,7 @@
                     }
                 });
 
-                $('.fixed-plugin .active-color span').click(function() {
+                $('.fixed-plugin .active-color span').click(function () {
                     $full_page_background = $('.full-page-background');
 
                     $(this).siblings().removeClass('active');
@@ -270,7 +1016,7 @@
                     }
                 });
 
-                $('.fixed-plugin .background-color .badge').click(function() {
+                $('.fixed-plugin .background-color .badge').click(function () {
                     $(this).siblings().removeClass('active');
                     $(this).addClass('active');
 
@@ -281,7 +1027,7 @@
                     }
                 });
 
-                $('.fixed-plugin .img-holder').click(function() {
+                $('.fixed-plugin .img-holder').click(function () {
                     $full_page_background = $('.full-page-background');
 
                     $(this).parent('li').siblings().removeClass('active');
@@ -291,7 +1037,7 @@
                     var new_image = $(this).find("img").attr('src');
 
                     if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-                        $sidebar_img_container.fadeOut('fast', function() {
+                        $sidebar_img_container.fadeOut('fast', function () {
                             $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
                             $sidebar_img_container.fadeIn('fast');
                         });
@@ -300,7 +1046,7 @@
                     if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
                         var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
 
-                        $full_page_background.fadeOut('fast', function() {
+                        $full_page_background.fadeOut('fast', function () {
                             $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
                             $full_page_background.fadeIn('fast');
                         });
@@ -319,7 +1065,7 @@
                     }
                 });
 
-                $('.switch-sidebar-image input').change(function() {
+                $('.switch-sidebar-image input').change(function () {
                     $full_page_background = $('.full-page-background');
 
                     $input = $(this);
@@ -351,7 +1097,7 @@
                     }
                 });
 
-                $('.switch-sidebar-mini input').change(function() {
+                $('.switch-sidebar-mini input').change(function () {
                     $body = $('body');
 
                     $input = $(this);
@@ -366,7 +1112,7 @@
 
                         $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             $('body').addClass('sidebar-mini');
 
                             md.misc.sidebar_mini_active = true;
@@ -374,12 +1120,12 @@
                     }
 
                     // we simulate the window Resize so the charts will get updated in realtime.
-                    var simulateWindowResize = setInterval(function() {
+                    var simulateWindowResize = setInterval(function () {
                         window.dispatchEvent(new Event('resize'));
                     }, 180);
 
                     // we stop the simulation of Window Resize after the animations are completed
-                    setTimeout(function() {
+                    setTimeout(function () {
                         clearInterval(simulateWindowResize);
                     }, 1000);
 
@@ -388,7 +1134,7 @@
         });
     </script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Javascript method's body can be found in assets/js/demos.js
             md.initDashboardPageCharts();
 

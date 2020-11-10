@@ -62,7 +62,7 @@
                         <div class="card card-login card-hidden">
                             <div style="padding: 53px;" class="card-header card-header-rose text-center">
 {{--                                <h4 class="card-title"> ورود </h4>--}}
-                                <img width="70" src="{{asset('')}}assets/img/logo.png" alt="">
+                                <img width="100" src="{{asset('')}}assets/img/mirasw_logo.png" alt="">
                             </div>
                             <input type="hidden" value="{{$previous_url}}" name="previous_url">
                             <div class="card-body ">

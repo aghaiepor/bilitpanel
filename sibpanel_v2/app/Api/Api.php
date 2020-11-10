@@ -1319,6 +1319,15 @@ class Api
         return $response;
     }
 
+    // ******************* Charts *******************
+    public function statsChart(){
+        $client = new Client();
+        $result = $client->get("http://185.129.169.64:5020/stats.json");
+        $response = json_decode($result->getBody(),true);
+//        $this->checkError($response);
+        return $response;
+    }
+
     // ******************* Methods *******************
     private function getHeader(){
         $this->session_id = (session()->has('SessionId')) ?  session('SessionId') : null ;
