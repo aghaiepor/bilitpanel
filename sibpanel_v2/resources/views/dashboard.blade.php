@@ -33,6 +33,70 @@
     <div class="content">
         <div class="content">
             <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-success">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">location_on</i>
+                                </div>
+                                <h4 class="card-title text-right">
+                                </h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>۲۲۹</h2>
+                                <h4>نقطه فعال</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-success">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">credit_card</i>
+                                </div>
+                                <h4 class="card-title text-right">
+                                </h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>+۱۷ میلیون</h2>
+                                <h4>عدد بلیت کارتی</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-success">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">money</i>
+                                </div>
+                                <h4 class="card-title text-right">
+                                </h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>+۱.۸ میلیون</h2>
+                                <h4>عدد بلیت نقدی</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-success">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">language</i>
+                                </div>
+                                <h4 class="card-title text-right">
+                                </h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>+۵۰ هزار</h2>
+                                <h4>عدد بلیت اینترنتی</h4>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
 {{--                <div class="row">--}}
 {{--                    <div class="col-md-12">--}}
 {{--                        <div class="card ">--}}
@@ -174,52 +238,53 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header card-header-icon card-header-info">
-                                <div class="card-icon float-right ml-2">
-                                    <i class="material-icons">pie_chart</i>
-                                </div>
-                                <h4 class="card-title text-right">گزارش مقایسه ای ۱۴ روز اخیر
-                                </h4>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="days_report_amount" width="350" height="400"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header card-header-icon card-header-info">
-                                <div class="card-icon float-right ml-2">
-                                    <i class="material-icons">pie_chart</i>
-                                </div>
-                                <h4 class="card-title text-right">گزارش مقایسه تعداد فروش ۱۴ روز اخیر
-                                </h4>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="days_report_voucher_count" width="350" height="400"></canvas>
-                            </div>
-                        </div>
-                    </div>
+{{--                    <div class="col-md-6">--}}
+{{--                        <div class="card">--}}
+{{--                            <div class="card-header card-header-icon card-header-info">--}}
+{{--                                <div class="card-icon float-right ml-2">--}}
+{{--                                    <i class="material-icons">pie_chart</i>--}}
+{{--                                </div>--}}
+{{--                                <h4 class="card-title text-right">گزارش مقایسه ای ۱۴ روز اخیر--}}
+{{--                                </h4>--}}
+{{--                            </div>--}}
+{{--                            <div class="card-body">--}}
+{{--                                <canvas id="days_report_amount" width="350" height="400"></canvas>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-6">--}}
+{{--                        <div class="card">--}}
+{{--                            <div class="card-header card-header-icon card-header-info">--}}
+{{--                                <div class="card-icon float-right ml-2">--}}
+{{--                                    <i class="material-icons">pie_chart</i>--}}
+{{--                                </div>--}}
+{{--                                <h4 class="card-title text-right">گزارش مقایسه تعداد فروش ۱۴ روز اخیر--}}
+{{--                                </h4>--}}
+{{--                            </div>--}}
+{{--                            <div class="card-body">--}}
+{{--                                <canvas id="days_report_voucher_count" width="350" height="400"></canvas>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
 
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header card-header-icon card-header-rose">
-                                <div class="card-icon float-right">
-                                    <i class="material-icons">insert_chart</i>
-                                </div>
-                                <h4 class="card-title">Multiple Bars Chart
-                                    <small>- Bar Chart</small>
-                                </h4>
-                            </div>
-                            <div class="card-body">
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="card">--}}
+{{--                            <div class="card-header card-header-icon card-header-rose">--}}
+{{--                                <div class="card-icon float-right">--}}
+{{--                                    <i class="material-icons">insert_chart</i>--}}
+{{--                                </div>--}}
+{{--                                <h4 class="card-title">Multiple Bars Chart--}}
+{{--                                    <small>- Bar Chart</small>--}}
+{{--                                </h4>--}}
+{{--                            </div>--}}
+{{--                            <div class="card-body">--}}
 {{--                                <div class="ct-chart ct-golden-section" id="chart1"></div>--}}
-                                <canvas id="myChart" width="350" height="400"></canvas>
-                            </div>
-                        </div>
-                    </div>
+{{--                                <canvas id="myChart" width="350" height="400"></canvas>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    --}}
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -414,6 +479,10 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+{{--    <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>--}}
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
+
     {{-- voucher chart   --}}
     <script>
         window.chartColors = {
@@ -439,7 +508,8 @@
             data: {
                 labels: stats,
                 // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
+                datasets: [
+                    {
                     label: false,
                     maxBarThickness : 80 ,
                     data: amount,
@@ -459,7 +529,8 @@
                     ],
                     fill: false,
                     borderWidth: 1
-                }]
+                } ,
+                ]
             },
             options: {
                 responsive: true,
@@ -490,16 +561,18 @@
         });
 
     </script>
+
+
+
     <script>
-        ctx2 = document.getElementById('myChartPie').getContext('2d');
-        var myChart = new Chart(ctx2, {
+        let ctx12 = document.getElementById('myChartPie').getContext('2d');
+        var myChart = new Chart(ctx12, {
             type: 'pie',
             data: {
                 labels: voucher_type_name,
                 // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: false,
-                    maxBarThickness : 80 ,
                     data: voucher_type_amount,
 
                     // data: [12, 19, 3, 5, 2, 3],
@@ -520,6 +593,116 @@
                 }]
             },
             options: {
+                layout : {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 100,
+                        bottom: 90
+                    },
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                    outlabels: {
+                        text: '%l  %p \n %v' ,
+                        color: '#000',
+                        font: {
+                            resizable: true,
+                            minSize: 12,
+                            maxSize: 18
+                        },
+                    }
+                } ,
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                labels : [voucher_type_name] ,
+            }
+        });
+        document.getElementById('myChartPie').append(voucher_type_name);
+    </script>
+    <script>
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
+        var inputs = {
+            min: -100,
+            max: 100,
+            count: 8,
+            decimals: 2,
+            continuity: 1
+        };
+
+        let colors = [] ;
+        ctx2 = document.getElementById('voucher_type_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: voucher_type_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: voucher_type_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 100,
+                        bottom: 90
+                    }
+                } ,
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                    outlabels: {
+                        text: '%l  %p \n %v' ,
+                        color: '#000',
+                        font: {
+                            resizable: true,
+                            minSize: 12,
+                            maxSize: 18
+                        },
+                    }
+                } ,
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -537,6 +720,8 @@
             }
         });
     </script>
+
+    {{--  days report    --}}
     <script>
         ctx2 = document.getElementById('days_report_amount').getContext('2d');
         var myChart = new Chart(ctx2, {
@@ -633,75 +818,12 @@
     </script>
 
 
-    <script>
-        window.chartColors = {
-            red: 'rgb(255, 99, 132)',
-            orange: 'rgb(255, 159, 64)',
-            yellow: 'rgb(255, 205, 86)',
-            green: 'rgb(75, 192, 192)',
-            blue: 'rgb(54, 162, 235)',
-            purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(231,233,237)'
-        };
-        var inputs = {
-            min: -100,
-            max: 100,
-            count: 8,
-            decimals: 2,
-            continuity: 1
-        };
 
-        let colors = [] ;
-        ctx2 = document.getElementById('voucher_type_voucher_count').getContext('2d');
-        var myChart = new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: voucher_type_name,
-                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: false,
-                    maxBarThickness : 80 ,
-                    data: voucher_type_voucher_count,
-
-                    // data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(231,233,237)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                    ],
-                    fill: false,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend:{
-                    display:false ,
-                    labels: {
-                        defaultFontFamily : "iransans" ,
-                        fontColor: 'black' ,
-                    }
-                },
-                title: {
-                    display: false,
-                    text: ' نمودار ماهانه فروش'
-                },
-                labels : [voucher_type_name] ,
-            }
-        });
-    </script>
 
     {{--  province Chart  --}}
     <script>
         let ctx4 = document.getElementById('province_based_report_province_voucher_count').getContext('2d');
+        let color = [];
         var myChart = new Chart(ctx4, {
             type: 'pie',
             data: {
@@ -720,7 +842,14 @@
                         'rgb(75, 192, 192)',
                         'rgb(54, 162, 235)',
                         'rgb(153, 102, 255)',
-                        'rgb(231,233,237)'
+                        'rgb(231,233,237)' ,
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)' ,
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
@@ -730,6 +859,15 @@
                 }]
             },
             options: {
+                layout : {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 100,
+                        bottom: 90
+                    },
+                },
+
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -739,13 +877,24 @@
                         fontColor: 'black' ,
                     }
                 },
-                title: {
-                    display: false,
-                    text: ' نمودار ماهانه فروش'
-                },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                    outlabels: {
+                        text: '%l  %p \n %v' ,
+                        color: '#000',
+                        font: {
+                            resizable: true,
+                            minSize: 12,
+                            maxSize: 18
+                        },
+                    }
+                } ,
                 labels : [voucher_type_name] ,
             }
         });
+
     </script>
     <script>
         let ctx5 = document.getElementById('province_based_report_amount').getContext('2d');
@@ -767,7 +916,14 @@
                         'rgb(75, 192, 192)',
                         'rgb(54, 162, 235)',
                         'rgb(153, 102, 255)',
-                        'rgb(231,233,237)'
+                        'rgb(231,233,237)' ,
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(231,233,237)' ,
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
@@ -777,6 +933,28 @@
                 }]
             },
             options: {
+                layout : {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 100,
+                        bottom: 90
+                    },
+                },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                    outlabels: {
+                        text: '%l  %p \n %v' ,
+                        color: '#000',
+                        font: {
+                            resizable: true,
+                            minSize: 12,
+                            maxSize: 18
+                        },
+                    }
+                } ,
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -797,7 +975,8 @@
             green: 'rgb(75, 192, 192)',
             blue: 'rgb(54, 162, 235)',
             purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(231,233,237)'
+            grey: 'rgb(231,233,237)' ,
+
         };
         var inputs = {
             min: -100,
@@ -837,6 +1016,14 @@
                         fontColor: 'black' ,
                     }
                 },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                    labels: {
+                        display : false ,
+                    }
+                } ,
                 title: {
                     display: false,
                     text: ' نمودار ماهانه فروش'
@@ -890,6 +1077,11 @@
                         fontColor: 'black' ,
                     }
                 },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                } ,
                 title: {
                     display: false,
                     text: ' نمودار ماهانه فروش'
@@ -940,6 +1132,11 @@
                         fontColor: 'black' ,
                     }
                 },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                } ,
                 title: {
                     display: false,
                     text: ' نمودار ماهانه فروش'
