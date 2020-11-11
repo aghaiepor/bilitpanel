@@ -338,7 +338,7 @@
                                 <div class="card-icon float-right ml-3">
                                     <i class="material-icons">insert_chart</i>
                                 </div>
-                                <h4 class="card-title text-right">گزارش فروش مکان های گردشگری
+                                <h4 class="card-title text-right">گزارش مبلغ فروش مکان های گردشگری
                                 </h4>
                             </div>
                             <div class="card-body">
@@ -352,7 +352,7 @@
                                 <div class="card-icon float-right ml-3">
                                     <i class="material-icons">insert_chart</i>
                                 </div>
-                                <h4 class="card-title text-right">گزارش فروش مکان های گردشگری
+                                <h4 class="card-title text-right">گزارش تعداد فروش مکان های گردشگری
                                 </h4>
                             </div>
                             <div class="card-body">
