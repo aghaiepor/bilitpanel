@@ -401,6 +401,7 @@
     <script src="../assets/demo/demo.js"></script>
     @php
         $api = new \App\Api\Api();
+        $verta = new \Hekmatinasser\Verta\Facades\Verta();
         $stats = $api->statsChart();
         $stats_24hours_reports = $stats["24hours_report"]["result"] ;
 
