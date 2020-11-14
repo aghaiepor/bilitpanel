@@ -425,7 +425,7 @@
                             state = row.insertCell();
                             service = row.insertCell();
 
-                            name.innerHTML = " - " ;
+                            name.innerHTML = account[i].name ;
                             let saba = "<span>" +
                                 "IRI" + account[i].shaba +
                                 "</span>\n" +

@@ -41,7 +41,10 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // home Dashboard
         Route::get('/', function () {
-            return view('dashboard');
+            if(session('UserInfo')['account_type_id'] == 1 )
+                return view('dashboard');
+            else
+                return  view('dashboard2') ;
         })->name('dashboard');
 
         Route::get('loading' , 'LoadingController@index')->name('loading');

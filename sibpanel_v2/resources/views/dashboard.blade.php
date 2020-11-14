@@ -238,34 +238,34 @@
                         </div>
                     </div>
 
-{{--                    <div class="col-md-6">--}}
-{{--                        <div class="card">--}}
-{{--                            <div class="card-header card-header-icon card-header-info">--}}
-{{--                                <div class="card-icon float-right ml-2">--}}
-{{--                                    <i class="material-icons">pie_chart</i>--}}
-{{--                                </div>--}}
-{{--                                <h4 class="card-title text-right">گزارش مقایسه ای ۱۴ روز اخیر--}}
-{{--                                </h4>--}}
-{{--                            </div>--}}
-{{--                            <div class="card-body">--}}
-{{--                                <canvas id="days_report_amount" width="350" height="400"></canvas>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="col-md-6">--}}
-{{--                        <div class="card">--}}
-{{--                            <div class="card-header card-header-icon card-header-info">--}}
-{{--                                <div class="card-icon float-right ml-2">--}}
-{{--                                    <i class="material-icons">pie_chart</i>--}}
-{{--                                </div>--}}
-{{--                                <h4 class="card-title text-right">گزارش مقایسه تعداد فروش ۱۴ روز اخیر--}}
-{{--                                </h4>--}}
-{{--                            </div>--}}
-{{--                            <div class="card-body">--}}
-{{--                                <canvas id="days_report_voucher_count" width="350" height="400"></canvas>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
+                                </div>
+                                <h4 class="card-title text-right">گزارش مقایسه ای مبلغ فروش ۱۴ روز اخیر
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="days_report_amount" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-info">
+                                <div class="card-icon float-right ml-2">
+                                    <i class="material-icons">pie_chart</i>
+                                </div>
+                                <h4 class="card-title text-right">گزارش مقایسه تعداد فروش ۱۴ روز اخیر
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="days_report_voucher_count" width="350" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
 
 
 {{--                    <div class="col-md-12">--}}
@@ -284,7 +284,7 @@
 {{--                            </div>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-{{--                    --}}
+
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -401,19 +401,48 @@
     <script src="../assets/demo/demo.js"></script>
     @php
         $api = new \App\Api\Api();
-        $verta = new \Hekmatinasser\Verta\Facades\Verta();
+        use Hekmatinasser\Verta\Verta;
+
         $stats = $api->statsChart();
         $stats_24hours_reports = $stats["24hours_report"]["result"] ;
 
         $stats_14days_reports = $stats["14days_report"]["result"] ;
         $days_report_data = [] ;
-        $days_report_amount = [] ;
-        $days_report_voucher_count = [] ;
+        $days_report_data_instance = [] ;
+
         foreach ($stats_14days_reports as $stats_14days_report){
-            array_push($days_report_data,$stats_14days_report["date"]);
-            array_push($days_report_amount,intval($stats_14days_report["amount"]));
-            array_push($days_report_voucher_count,intval($stats_14days_report["voucher_count"]));
+            $data2 = Verta::parse($stats_14days_report["date"].' 00:00:00')->timestamp;
+            array_push($days_report_data_instance,$data2  );
+            $date = explode("-" , $stats_14days_report["date"]);
+            $data = Verta::getJalali($date[0],$date[1],$date[2]);
+            $data = $data[0] . "-" . $data[1] . "-" . $data[2] ;
+            array_push($days_report_data,[ 'timestamp'  => $data2 , 'date' => $data , "amount" =>  $stats_14days_report["amount"] , "voucher_count" =>$stats_14days_report["voucher_count"] ]  );
         }
+        // 14days reports sort elements
+        $collection = collect($days_report_data);
+        $sorted = $collection->sortBy("timestamp");
+        $max = $sorted->values()->all();
+        $collections = collect($max);
+        $days_report_datas_sorted = $collections->pluck('date');
+        $days_report_amount_sorted = $collections->pluck('amount');
+        $days_report_voucher_count_sorted = $collections->pluck('voucher_count');
+
+        // 14days reports Slice elements
+        $days_report_data_sorted = $days_report_datas_sorted->all();
+        $days_report_data_sorted_first = $days_report_datas_sorted->slice(0,7);
+        $days_report_data_sorted_Secend = $days_report_datas_sorted->slice(7);
+
+        $days_report_amount = $days_report_amount_sorted->all();
+        $days_report_amount = collect($days_report_amount);
+        $days_report_amount_first = $days_report_amount->slice(0,7);
+        $days_report_amount_Secend = $days_report_amount->slice(7);
+
+        $days_report_voucher_count = $days_report_voucher_count_sorted->all();
+        $days_report_voucher_count = collect($days_report_voucher_count);
+        $days_report_voucher_count_first = $days_report_voucher_count->slice(0,7);
+        $days_report_voucher_count_Secend = $days_report_voucher_count->slice(7);
+
+
 
 
         $voucher_type_report = $stats["voucher_type_report"]["result"] ;
@@ -458,6 +487,8 @@
         let stats2 = @json($stats);
         let stats = @json($voucher_count);
         let amount = @json($amount);
+        {{--let data2 = @json($max2);--}}
+        // console.log(data2);
         // console.log("stats : " , stats2);
         // console.log("stats : " , stats);
         // console.log("amount : " , amount);
@@ -473,9 +504,20 @@
         let location_based_amount = @json($location_based_amount);
         let location_based_voucher_count = @json($location_based_voucher_count);
 
-        let days_report_data = @json($days_report_data);
-        let days_report_amount = @json($days_report_amount);
-        let days_report_voucher_count = @json($days_report_voucher_count);
+        let days_report_data = @json($days_report_data_sorted_first);
+
+        let days_report_data_sorted_Secend = @json($days_report_data_sorted_Secend);
+        days_report_data_sorted_Secend =  Object.keys(days_report_data_sorted_Secend).map((key) => [Number(key), days_report_data_sorted_Secend[key]]);
+        console.log("days_report_data_sorted_Secend" ,days_report_data_sorted_Secend)
+
+        let days_report_amount = @json($days_report_amount_first);
+        console.log("days_report_amount" ,days_report_amount)
+        let days_report_amount_Secend = @json($days_report_amount_Secend);
+        days_report_amount_Secend =  Object.keys(days_report_amount_Secend).map((key) => days_report_amount_Secend[key] );
+        let days_report_voucher_count = @json($days_report_voucher_count_first);
+        days_report_voucher_count =  Object.keys(days_report_voucher_count).map((key) => days_report_voucher_count[key] );
+        let days_report_voucher_count_Secend = @json($days_report_voucher_count_Secend);
+        days_report_voucher_count_Secend =  Object.keys(days_report_voucher_count_Secend).map((key) => days_report_voucher_count_Secend[key] );
 
     </script>
 
@@ -724,33 +766,34 @@
 
     {{--  days report    --}}
     <script>
+        console.log("days_report_data_sorted_Secend" , days_report_data_sorted_Secend);
         ctx2 = document.getElementById('days_report_amount').getContext('2d');
         var myChart = new Chart(ctx2, {
             type: 'line',
             data: {
-                labels: days_report_data,
-                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: false,
-                    maxBarThickness : 80 ,
-                    data: days_report_voucher_count,
-
+                    label: 'هفته گذشته',
+                    data: days_report_amount ,
                     // data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(231,233,237)'
-                    ],
+                    backgroundColor:  'rgba(255, 99, 132, 1)',
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                     ],
                     fill: false,
                     borderWidth: 1
-                }]
+                }, {
+                    label: 'هفته جاري',
+                    data: days_report_amount_Secend,
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgb(54, 162, 235)',
+                    borderColor: [
+                        'rgb(54, 162, 235)',
+                    ],
+                    fill: false,
+                    borderWidth: 1 ,
+                    type: 'line'
+                }],
+                labels: days_report_data_sorted_Secend
             },
             options: {
                 responsive: true,
@@ -762,42 +805,55 @@
                         fontColor: 'black' ,
                     }
                 },
-                title: {
-                    display: false,
-                    text: ' نمودار ماهانه فروش'
-                },
-                labels : [voucher_type_name] ,
+            scales: {
+                xAxes: [{
+                    display: true,
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
             }
         });
     </script>
     <script>
-        ctx2 = document.getElementById('days_report_voucher_count').getContext('2d');
-        var myChart = new Chart(ctx2, {
+        ctx22 = document.getElementById('days_report_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx22, {
             type: 'line',
             data: {
-                labels: days_report_data,
+                labels: days_report_data_sorted_Secend,
                 // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: false,
+                    label: 'هفته گذشته',
                     maxBarThickness : 80 ,
                     data: days_report_voucher_count,
 
                     // data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(231,233,237)'
-                    ],
+                    backgroundColor: 'rgba(255, 99, 132, 1)',
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                     ],
                     fill: false,
                     borderWidth: 1
-                }]
+                } ,
+                    {
+                        label: 'هفته جاري',
+                        maxBarThickness: 80,
+                        data: days_report_voucher_count_Secend,
+
+                        // data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgb(54, 162, 235)',
+                        borderColor: [
+                            'rgb(54, 162, 235)',
+                        ],
+                        fill: false,
+                        borderWidth: 1,
+                    }
+
+                ]
             },
             options: {
                 responsive: true,
@@ -813,6 +869,18 @@
                     display: false,
                     text: ' نمودار ماهانه فروش'
                 },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+
                 labels : [voucher_type_name] ,
             }
         });
@@ -843,7 +911,7 @@
                         'rgb(75, 192, 192)',
                         'rgb(54, 162, 235)',
                         'rgb(153, 102, 255)',
-                        'rgb(231,233,237)' ,
+
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
                         'rgb(255, 205, 86)',
@@ -1125,6 +1193,17 @@
                 }]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -1150,7 +1229,14 @@
                     yAxes: [{
                         display: true,
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
                         }
                     }]
                 }
