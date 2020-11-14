@@ -523,6 +523,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
 {{--    <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>--}}
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
 
@@ -576,6 +578,17 @@
                 ]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -596,7 +609,14 @@
                     yAxes: [{
                         display: true,
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
                         }
                     }]
                 }
@@ -636,6 +656,17 @@
                 }]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 layout : {
                     padding: {
                         left: 0,
@@ -663,7 +694,8 @@
                         font: {
                             resizable: true,
                             minSize: 12,
-                            maxSize: 18
+                            maxSize: 18 ,
+                            family : "iransans" ,
                         },
                     }
                 } ,
@@ -724,6 +756,17 @@
                 }]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 layout: {
                     padding: {
                         left: 0,
@@ -737,9 +780,10 @@
                         display: false,
                     },
                     outlabels: {
-                        text: '%l  %p \n %v' ,
+                        text: "%l  %p \n %v" ,
                         color: '#000',
                         font: {
+                            family : "iransans" ,
                             resizable: true,
                             minSize: 12,
                             maxSize: 18
@@ -762,6 +806,7 @@
                 labels : [voucher_type_name] ,
             }
         });
+
     </script>
 
     {{--  days report    --}}
@@ -796,6 +841,17 @@
                 labels: days_report_data_sorted_Secend
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -812,7 +868,14 @@
                 yAxes: [{
                     display: true,
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero:true,
+                        userCallback: function(value, index, values) {
+                            // Convert the number to a string and splite the string every 3 charaters from the end
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
                     }
                 }]
             }
@@ -856,6 +919,17 @@
                 ]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -876,7 +950,14 @@
                     yAxes: [{
                         display: true,
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true ,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
                         }
                     }]
                 },
@@ -885,9 +966,6 @@
             }
         });
     </script>
-
-
-
 
     {{--  province Chart  --}}
     <script>
@@ -928,6 +1006,17 @@
                 }]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 layout : {
                     padding: {
                         left: 0,
@@ -957,7 +1046,8 @@
                         font: {
                             resizable: true,
                             minSize: 12,
-                            maxSize: 18
+                            maxSize: 18 ,
+                            family : "iransans" ,
                         },
                     }
                 } ,
@@ -1003,6 +1093,17 @@
                 }]
             },
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 layout : {
                     padding: {
                         left: 0,
@@ -1021,7 +1122,8 @@
                         font: {
                             resizable: true,
                             minSize: 12,
-                            maxSize: 18
+                            maxSize: 18 ,
+                            family : "iransans" ,
                         },
                     }
                 } ,
@@ -1077,6 +1179,22 @@
                 }]
             },
             options: {
+                tooltips: {
+                    titleFontFamily : "iransans" ,
+                    bodyFontFamily : "iransans" ,
+                    footerFontFamily : "iransans" ,
+                    xPadding : 10 ,
+                    rtl : true ,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 legend:{
@@ -1101,11 +1219,22 @@
                 scales: {
                     xAxes: [{
                         display: true,
+                        ticks: {
+                            fontFamily : "iransans",
+
+                        }
                     }],
                     yAxes: [{
                         display: true,
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
                         }
                     }]
                 }
@@ -1138,62 +1267,12 @@
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend:{
-                    display:false ,
-                    labels: {
-                        defaultFontFamily : "iransans" ,
-                        fontColor: 'black' ,
-                    }
-                },
-                plugins: {
-                    datalabels: {
-                        display: false,
-                    },
-                } ,
-                title: {
-                    display: false,
-                    text: ' نمودار ماهانه فروش'
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                    }],
-                    yAxes: [{
-                        display: true,
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-
-    </script>
-    <script>
-        var ctx6 = document.getElementById('location_amount_voucher_count').getContext('2d');
-        var myChart = new Chart(ctx6, {
-            type: 'bar',
-            data: {
-                labels: location_based_name,
-                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: false,
-                    maxBarThickness : 80 ,
-                    data: location_based_voucher_count,
-
-                    // data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                    ],
-                    fill: false,
-                    borderWidth: 1
-                }]
-            },
-            options: {
                 tooltips: {
+                    titleFontFamily : "iransans" ,
+                    bodyFontFamily : "iransans" ,
+                    footerFontFamily : "iransans" ,
+                    xPadding : 10 ,
+                    rtl : true ,
                     callbacks: {
                         label: function(tooltipItem, data) {
                             var value = data.datasets[0].data[tooltipItem.index];
@@ -1225,6 +1304,10 @@
                 scales: {
                     xAxes: [{
                         display: true,
+                        ticks: {
+                            fontFamily : "iransans",
+
+                        }
                     }],
                     yAxes: [{
                         display: true,
@@ -1240,6 +1323,111 @@
                         }
                     }]
                 }
+            }
+        });
+
+    </script>
+    <script>
+        var ctx6 = document.getElementById('location_amount_voucher_count').getContext('2d');
+        var myChart = new Chart(ctx6, {
+            type: 'bar',
+            data: {
+                labels: location_based_name,
+                // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: false,
+                    maxBarThickness : 80 ,
+                    data: location_based_voucher_count,
+
+                    // data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    fill: false,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                tooltips: {
+                    titleFontFamily : "iransans" ,
+                    bodyFontFamily : "iransans" ,
+                    footerFontFamily : "iransans" ,
+                    xPadding : 10 ,
+                    rtl : true ,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                    } // end callbacks:
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                legend:{
+                    display:false ,
+                    labels: {
+                        defaultFontFamily : "iransans" ,
+                        fontColor: 'black' ,
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    },
+                    // zoom: {
+                    //     // Container for pan options
+                    //     pan: {
+                    //         // Boolean to enable panning
+                    //         enabled: true,
+                    //
+                    //         // Panning directions. Remove the appropriate direction to disable
+                    //         // Eg. 'y' would only allow panning in the y direction
+                    //         mode: 'xy'
+                    //     },
+                    //
+                    //     // Container for zoom options
+                    //     zoom: {
+                    //         // Boolean to enable zooming
+                    //         enabled: true,
+                    //
+                    //         // Zooming directions. Remove the appropriate direction to disable
+                    //         // Eg. 'y' would only allow zooming in the y direction
+                    //         mode: 'xy',
+                    //     }
+                    // }
+                } ,
+                title: {
+                    display: false,
+                    text: ' نمودار ماهانه فروش'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        ticks: {
+                            fontFamily : "iransans",
+
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero:true,
+                            fontFamily : "iransans",
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
+
             }
         });
 
