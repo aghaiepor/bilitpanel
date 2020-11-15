@@ -1318,6 +1318,72 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public function GetChargeTransaction($page ,$account_id, $trace_number){
+        $data = [
+            "page" => $page,
+            "conditions" =>
+                [
+                    "account_id"  => [$account_id],
+                    "trace_number"=> $trace_number,
+                    "date" => ["",""]
+                ]
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetChargeTransaction' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+    public function GetDechargeTransaction($page ,$account_id, $trace_number){
+        $data = [
+            "page" => $page,
+            "conditions" =>
+                [
+                    "account_id"  => [$account_id],
+                    "trace_number"=> $trace_number,
+                    "date" => ["",""]
+                ]
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetDechargeTransaction' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+
+
+    public function ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str , $description){
+        $data = [
+            "charge_amount" => $charge_amount,
+            "account_id"=>$account_id,
+            "project_name"=> $project_name , //"TourismSystem"
+            "reference_number"=> $reference_number , //"18411525685",
+            "source_bank"=>$source_bank , //"خیابان معالی آباد",
+            "payment_datetime" =>$payment_datetime,
+            "pic_str" => $pic_str,
+            "description" => $description,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'ChargeAccount' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
 
     // ******************* Charts *******************
     public function statsChart(){

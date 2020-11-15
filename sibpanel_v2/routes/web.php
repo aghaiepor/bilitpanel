@@ -153,6 +153,10 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // presel Route
         Route::get('/presellManger' , 'presellController@index')->name('presellManger');
+        Route::get('/presellTransaction/{id?}/{province_id?}' , 'presellController@transaction')->name('presellTransaction');
+        Route::post('/ChargeAccount/{id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
+        Route::post('/GetDechargeTransaction' , 'presellController@GetDechargeTransaction')->name('GetDechargeTransaction');
+        Route::post('/GetChargeTransaction' , 'presellController@GetChargeTransaction')->name('GetChargeTransaction');
         Route::post('/GetAccountProvince' , 'presellController@GetAccountProvince')->name('GetAccountProvince');
         Route::post('/SetAccountSetting/{id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
         Route::post('/LocationAccountActivation' , 'presellController@LocationAccountActivation')->name('LocationAccountActivation');

@@ -26,6 +26,7 @@
             position: relative;
         }
     </style>
+    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
 @section('content')
     <div class="content">
@@ -176,32 +177,124 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form action="#" method="post">
+    <div class="modal fade" id="charge" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form id="chargeForm" action="#" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title " id="testLabel"> اضافه ..  </h5>
+                        <h5 class="modal-title " id="testLabel"> شارژ اعتبار بلیت الکترونیک  </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-row mt-3">
+                            <div class="col-6">
+                                <div class="card card-stats">
+                                    <div class="card-header card-header-success card-header-icon">
+                                        <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                            <i class="material-icons">person</i>
+                                        </div>
+                                        <p class="card-category font-weight-normal mb-1">نام</p>
+                                        <h6 id="location_name" class="card-title" style="font-weight: 400;font-size: 11pt;">
+
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card card-stats">
+                                    <div class="card-header card-header-success card-header-icon">
+                                        <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                            <i class="material-icons">account_balance_wallet</i>
+                                        </div>
+                                        <p class="card-category font-weight-normal mb-1">موجودی</p>
+                                        <h6 id="location_mojodi" class="card-title" style="font-weight: 400;font-size: 11pt;">
+                                            <span></span> (ریال)
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card card-stats">
+                                    <div class="card-header card-header-success card-header-icon">
+                                        <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                            <i class="material-icons">payment</i>
+                                        </div>
+                                        <p class="card-category font-weight-normal mb-1">شماره شبای حساب</p>
+                                        <h6 id="location_shaba_number" class="card-title" style="font-weight: 400;font-size: 10pt;">
+                                            IR260100004058026201625330
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card card-stats">
+                                    <div class="card-header card-header-success card-header-icon">
+                                        <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                            <i class="material-icons">payment</i>
+                                        </div>
+                                        <p class="card-category font-weight-normal mb-1">شناسه پرداخت</p>
+                                        <h6 id="location_pay_number" class="card-title" style="font-weight: 400;font-size: 10pt;">
+                                            356026258140125030000000000000
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-row mt-3">
                             <div class="col-md text-right">
-                                <label for="" class="text-right"> متن  </label>
-                                <input type="text" class="form-control">
+                                <label for="" class="text-right"> مبلغ واریزی (ریال) </label>
+                                <input name="charge_amount" type="text" class="form-control">
                             </div>
                             <div class="col-md text-right">
-                                <label for="" class="text-right"> متن  </label>
-                                <input type="text" class="form-control">
+                                <label for="" class="text-right">
+                                    اعتبار بلیت شارژ شده (ریال)
+                                </label>
+                                <input disabled type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-md text-right">
+                                <label for="" class="text-right"> بانک مبدا/شعبه </label>
+                                <input name="source_bank" type="text" class="form-control">
+                            </div>
+                            <div class="col-md text-right">
+                                <label for="" class="text-right">
+                                    شماره فیش
+                                </label>
+                                <input name="reference_number" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-md text-right">
+                                <label for="" class="text-right">
+                                    تاریخ واریز
+                                </label>
+                                <input autocomplete="off" value="" name="payment_datetime" id="FromDate" type="text" class="form-control" placehrequester="">
+                            </div>
+                            <div class="col-md text-right">
+                                <label for="" class="text-right">
+                                    اسکن مستندات واریزی
+                                    <small class="text-secondary text-small text-left">
+                                        (PDF|PNG|JPG|JPEG)
+                                    </small>
+                                </label>
+                                <input name="pic_str" type="file" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-md text-right">
+                                <label for="" class="text-right">توضیحات</label>
+                                <textarea name="description" style="min-height: 90px !important;" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer mt-4">
                         {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> افزودن </button>
+                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> تایید </button>
                     </div>
                 </div>
             </form>
@@ -275,12 +368,50 @@
 {{--    </button>--}}
 @endsection
 @section('AddJs')
+    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
+    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $('#FromDate').persianDatepicker({
+            initialValue: true,
+            autoClose : true ,
+            format: 'YYYY/MM/DD',
+            calendar:{
+                persian:{
+                    locale: 'fa'
+                }
+            },navigator:{
+                scroll:{
+                    enabled:false
+                }
+            }
 
+
+        });
+        $(document).ready(function () {
+            let global_provive_id = 33 ;
+            let global_provive_name = "" ;
             $(document).on("click",'.location_button' , function () {
                 $(this).parent().parent().next().fadeToggle() ;
             });
+
+            $(document).on("click",'.chargeBtn' , function () {
+                // console.log("name  : " + global_provive_name );
+                // console.log("id  : " + global_provive_id );
+                let account_id  = $(this).attr("data-id");
+                let name = "استان " + global_provive_name + "/";
+                name += $(this).parent().parent().children().eq(0).text()
+                    $("#location_name").text(name);
+                let shaba_number = $(this).parent().parent().children().eq(1).find("span").text()
+                    $("#location_shaba_number").text(shaba_number);
+                let pay_number = $(this).parent().parent().children().eq(1).find("small").text()
+                    $("#location_pay_number").text(pay_number);
+                let mojodi = $(this).parent().parent().children().eq(2).text();
+                    $("#location_mojodi").find("span").text(mojodi);
+
+                    let url = "{{Route("ChargeAccount")}}/" + account_id ;
+                    $("#chargeForm").attr("action" , url);
+            });
+
             $(document).on("click",'.setting_btn' , function () {
 
                 let green_percentage = $(this).attr("green_percentage");
@@ -322,7 +453,7 @@
                                 'activation' : activation ,
                             },
                             success:function(data) {
-                                console.log(data);
+                                // console.log(data);
                                 $('#loader').hide();
                                 Swal.fire(
                                     'تغییر مورد نظر اعمال گردید',
@@ -342,11 +473,13 @@
                 })
 
             });
-            GetAccountProvince(1);
+            GetAccountProvince(33);
 
             $(".province").click(function () {
                 let province_id = $(this).attr("province_id") ;
+                global_provive_name = $(this).text() ;
                 GetAccountProvince(province_id);
+
             });
 
         });
@@ -386,6 +519,7 @@
         }
         function GetAccountProvince(id){
             let province_id = id ;
+            global_provive_id = id ;
             $("#loader").css("display" , "flex");
             $.ajax({
                 type:'POST',
@@ -396,7 +530,6 @@
                     'id' : province_id ,
                 },
                 success : function (data) {
-
                     // console.log("data : " , data["ContentData"]["location_accounts"]);
                     let account  = data["ContentData"]["location_accounts"] ;
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
@@ -433,18 +566,19 @@
                                 "<small>" + account[i].payment_id + "</small>" ;
                             saba_number.innerHTML = saba;
                             mojodi.innerHTML = number_format(eval(account[i].inventory) , 0 , "." , ",");
-                            mojodi.style = "color : " + account[i].account_state + ";";
+                            let style = `color : ${account[i].account_state} `;
+                            mojodi.style = style.toString() ;
 
                             state.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
 
-                            let service_html = '<button disabled type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1" data-original-title="" title="">\n' +
+                            let service_html = '<button data-id= ' + account[i].account_id  + '  type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1 chargeBtn" data-toggle="modal" data-target="#charge" data-original-title="" title="">\n' +
                                 '<i class="material-icons">flash_on</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
                                 '</button>\n' +
-                                '<button disabled type="button" rel="tooltip" class="btn btn-sm px-2 btn-success mr-1" data-original-title="" title="">\n' +
+                                '<a href="{{Route("presellTransaction")}}/' + account[i].account_id + '/'+id +'" class="btn btn-sm px-2 btn-success mr-1" data-original-title="" title="">\n' +
                                 '<i class="material-icons">list</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
-                                '</button>\n' +
+                                '</a>\n' +
                                 '<button type="button" class="btn setting_btn btn-sm px-2 btn-danger mr-1" data-toggle="modal" data-target="#setting" data-original-title="" id="'+ account[i].account_id +'" average_balance_use="' + account[i].average_balance_use + '"' +
                                 ' green_percentage="'+ account[i].green_percentage +'" orange_percentage="'+ account[i].orange_percentage + '" red_percentage="'+ account[i].red_percentage +'" yellow_percentage="'+ account[i].yellow_percentage+'" title="">\n' +
                                 '<i class="material-icons">settings</i>\n' +
@@ -468,7 +602,7 @@
                                 row.class = "myTr";
                                 location_name = row.insertCell();
                                 location_name.colSpan = "3"
-                                location_name.innerHTML = location[x].name;
+                                location_name.innerHTML = location[x].location_name;
                                 location_state = row.insertCell();
                                 location_state.colSpan = "2"
                                 let state_html = ' <div class="togglebutton">' + '<label>' ;
