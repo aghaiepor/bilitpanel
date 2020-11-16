@@ -26,6 +26,29 @@
         .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+
+
+        .chartWrapper {
+            position: relative;
+        }
+
+        .chartWrapper > canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+        }
+
+        .chartAreaWrapper {
+            width: 100%;
+            overflow-x: scroll;
+            direction: ltr;
+        }
+
+
+
+
     </style>
 @endsection
 
@@ -325,7 +348,14 @@
                                 </h4>
                             </div>
                             <div class="card-body">
-                                <canvas id="province_chart" width="350" height="400"></canvas>
+                                <div class="chartWrapper">
+                                    <div class="chartAreaWrapper">
+                                        <div id="province_sale_wrapper" class="chartAreaWrapper2">
+                                            <canvas id="province_chart" width="350" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -342,7 +372,15 @@
                                 </h4>
                             </div>
                             <div class="card-body">
-                                <canvas id="location_amount" width="350" height="400"></canvas>
+
+                                <div class="chartWrapper">
+                                    <div class="chartAreaWrapper">
+                                        <div id="location_amount_wrapper" class="chartAreaWrapper2">
+                                            <canvas id="location_amount" width="350" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -356,7 +394,13 @@
                                 </h4>
                             </div>
                             <div class="card-body">
-                                <canvas id="location_amount_voucher_count" width="350" height="400"></canvas>
+                                <div class="chartWrapper">
+                                    <div class="chartAreaWrapper">
+                                        <div id="location_count_wrapper" class="chartAreaWrapper2">
+                                            <canvas id="location_amount_voucher_count" width="350" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1326,6 +1370,8 @@
             }
         });
 
+
+
     </script>
     <script>
         var ctx6 = document.getElementById('location_amount_voucher_count').getContext('2d');
@@ -1613,6 +1659,26 @@
 
             md.initVectorMap();
 
+
+
+            // fix for scroll
+
+            // ToDo: find a ratio for fixed scaling
+
+            let new_width = $('#location_amount_wrapper').width() + (location_based_name.length * 40);
+            $('#location_amount_wrapper').width(new_width);
+
+            new_width = $('#location_count_wrapper').width() + (location_based_name.length * 40);
+            $('#location_count_wrapper').width(new_width);
+
+            new_width = $('#province_sale_wrapper').width() + (province_name.length * 1);
+            $('#province_sale_wrapper').width(new_width);
+
+
+
         });
+
+
+
     </script>
 @endsection
