@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Types\Boolean;
 
 
 class Api
@@ -708,9 +709,11 @@ class Api
     }
     public function UserActivation($sib_user_id , $activation){
         $data= [
-            'sib_user_id' =>  $sib_user_id,
+            'sib_user_id' =>  (int)$sib_user_id,
             'activation' => $activation ,
         ];
+        Log::info(json_encode(gettype($data["activation"])));
+        Log::info(json_encode($data["activation"]));
         $client = new Client();
         $result = $client->post($this->url . 'UserActivation' ,[
                 'headers'=>$this->getHeader(),
@@ -1384,6 +1387,24 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public function GetChargeDocument($picture_id){
+        $data = [
+            "picture_id" => $picture_id,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetChargeDocument' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+//        $response = json_decode($result->getBody(),true);
+//        $this->checkError($response);
+        return $result = [
+            'type' => $result->getHeader("Content-Type")[0] ,
+            'content' => $result->getBody()->getContents() ,
+        ];
+//        return $response;
+    }
 
     // ******************* Charts *******************
     public function statsChart(){
@@ -1424,6 +1445,14 @@ class Api
     function GetImageAddress($id)
     {
         $GetPicture = $this->GetPicture($id);
+        $mime = $GetPicture['type'];
+        $content = $GetPicture['content'];
+        $base64   = base64_encode($content);
+        return ('data:' . $mime . ';base64,' . $base64);
+    }
+    function GetDocumentAddress($id)
+    {
+        $GetPicture = $this->GetChargeDocument($id);
         $mime = $GetPicture['type'];
         $content = $GetPicture['content'];
         $base64   = base64_encode($content);

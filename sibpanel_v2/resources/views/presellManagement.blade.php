@@ -473,7 +473,8 @@
                 })
 
             });
-            GetAccountProvince(33);
+            let FirstProvince = "{{$ProvinceList[0]["id"]}}";
+            GetAccountProvince(FirstProvince);
 
             $(".province").click(function () {
                 let province_id = $(this).attr("province_id") ;
@@ -528,6 +529,16 @@
                 data:{
                     '_token ': '<?php echo csrf_token() ?>',
                     'id' : province_id ,
+                },
+                statusCode: {
+                    500: function() {
+                        $("#loader").hide();
+                        Swal.fire(
+                            'خطا در دريافت اطلاعات ! ',
+                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                            'error'
+                        )
+                    }
                 },
                 success : function (data) {
                     // console.log("data : " , data["ContentData"]["location_accounts"]);

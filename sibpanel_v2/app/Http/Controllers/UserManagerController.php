@@ -8,6 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class UserManagerController extends Controller
 {
@@ -29,8 +30,9 @@ class UserManagerController extends Controller
             $SellerUserList = Cache::get('GetSubUserList');
 
 //        return $SellerUserList;
+//        $data = $this->api->GetSubUserList() ;
+//        return $data['ContentData'];
         $userList = $SellerUserList ;
-
         usort($SellerUserList, function($a, $b) {
 //            echo '<script> console.log(' . preg_match($pattern, $a["first_name"]) . ' )</script>';
             if ($a["first_name"] == "" && $b["first_name"] != "" )
@@ -142,8 +144,15 @@ class UserManagerController extends Controller
     }
     public function UserActivation(Request $request)
     {
-        $sib_user_id = $request->get('id');
+        $sib_user_id = (int)$request->get('id');
         $activation = $request->get('value');
+        if($activation == "true")
+            $activation = true ;
+        else
+            $activation = false ;
+
+        Log::info( "controller activation =>" . gettype($activation));
+        Log::info( "controller activation =>" . $activation);
         $user_activation = $this->api->UserActivation($sib_user_id , $activation);
         if ($user_activation['Header']['Status'] == 0 ){
             Cache::forget('GetSubUserList');
@@ -221,9 +230,13 @@ class UserManagerController extends Controller
         $projectList = $this->api->ProjectList();
 //        return $projectList;
         $TerminalTypeList = $this->api->TerminalTypeList();
+//        return $TerminalTypeList ;
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
-//        return $GetUserPermission;
+//        return $GetUserPermission ;
+//        $GetUserPermission = $GetUserPermission["ContentData"];
+//        $terminal_type_ids = (!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
+//        dd(count($GetUserPermission));
 //        return $GetUserPermission['ContentData'];
 //        http://127.0.0.1:8000/setUserPermission/533
 //        return is_null($GetUserPer  ) ;
@@ -247,7 +260,7 @@ class UserManagerController extends Controller
         $sale_type_id = (is_null($request->get('sale_type_id'))) ? "" : implode(",",$request->get('sale_type_id'));
         $terminal_type_id = (is_null($request->get('terminal_type_id'))) ? "" : implode(",",$request->get('terminal_type_id'));
         $sib_user_id = $request->get('sib_user_id');
-        /*$data =  [
+       /* $data =  [
         '$province_id' => $province_id,
         '$city_id' => $city_id,
         '$location_id' => $location_id,
@@ -257,7 +270,7 @@ class UserManagerController extends Controller
         '$sale_type_id' => $sale_type_id,
         '$terminal_type_id' => $terminal_type_id,
         '$sib_user_id' => $sib_user_id
-        ];;
+        ];
         return $data ;*/
         $AssignPermission = $this->api->AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id);
         return $AssignPermission;

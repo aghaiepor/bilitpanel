@@ -79,7 +79,7 @@
                                             </div>
                                             <p class="card-category font-weight-normal mb-1">	کل خرید</p>
                                             <h6 class="card-title" style="font-weight: 400;font-size: 10pt;">
-{{--                                                {{ number_format($total_buy , 0 , "." ,",")}} (ریال)--}}
+                                                {{ number_format($total_buy , 0 , "." ,",")}} (ریال)
                                             </h6>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
                                             </td>
                                         </tr>
                                     @else
-                                        @foreach($transactions as $transaction)
+                                        @foreach($transactions["log"] as $transaction)
                                             <tr>
                                                 <td><span class="h5 text-success">{{number_format($transaction["transaction_amount"] ,0,"." , "," )}}</span> </td>
                                                 <td> {{$transaction["created_jalali"]}}  </td>
@@ -165,9 +165,21 @@
                                                 </td>
                                                 <td>{{$transaction["trace_number"]}}</td>
                                                 <td>-</td>
+
                                                 <td>
-                                                    <a href="#" {{--href="https://chargepanel.tafrihati.com/charge/receiptNEW/1/1791/39438" target="_blank"--}} class="btn btn-success ">دانلود رسید</a>
-                                                    <a href="#" {{--href="https://chargepanel.tafrihati.com/uploads/receipt/9812200541003306.jpg" target="_blank"--}} class="btn btn-primary ">اسکن مستندات</a>
+                                                    @if(!is_null( $transaction['picture_id']))
+                                                        @php
+                                                            $api = new \App\Api\Api();
+                                                            $image_id = $transaction['picture_id'];
+                                                            $imageUrl = $api->GetDocumentAddress($image_id) ;
+
+                                                        @endphp
+                                                    <a  href="{{$imageUrl}}" class="btn btn-success docDownload">دانلود رسید</a>
+                                                    <button data-toggle="modal" data-target="#setting" class="btn btn-primary ">اسکن مستندات</button>
+                                                    @else
+                                                        <button disabled class="btn btn-success ">دانلود رسید</button>
+                                                    @endif
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -178,17 +190,166 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="card-footer justify-content-center">
+                            <ul class="pagination justify-content-center">
+                                @if(count($transactions) != 0 /* ||  count($transactions['log']) != 0*/ )
+                                    @php
+                                        $result = new \Illuminate\Pagination\LengthAwarePaginator( $transactions['log'],$transactions['total_pages'], 1,  \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage(),array('path' => \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPath()));
+                                        $page = (int)request('page');
+                                        $result->withPath(url()->full());
+                                    @endphp
+                                    {{$result->render()}}
+                                @endif
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="modal fade" id="showFactor" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form id="chargeForm" action="#" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="testLabel"> شارژ اعتبار بلیت الکترونیک  </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="invoice">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="invoice-brandinfo">رسید شارژ اعتبار بلیت الکترونیک</div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="invoice-brands text-right">
+                                        <img class="brand brand-pec" width="80" height="80" alt="Miras" src="https://chargepanel.tafrihati.com/application/modules/charge/images/mirass.png">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="invoice-title">فاکتور فروش: #88411</div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="invoice-ginfo">
+                                        <table class="float-right">
+                                            <tbody>
+                                            <tr>
+                                                <th>تاریخ:</th>
+                                                <td>1399/5/29<br>10:24:30</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider mb-0"></div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="invoice-info wide">
+                                        <h4>اطلاعات فاکتور:</h4>
+                                        <table style="font-size:14px">
+                                            <tbody>
+                                            <tr>
+                                                <th>نام مرکز:</th>
+                                                <td>استان فارس/مجموعه ساسانی</td>
+                                                <th>نام کاربر</th>
+                                                <td>a.nochi</td>
+                                            </tr>
+                                            <tr>
+                                                <th>شناسه پرداخت:</th>
+                                                <td>305006658113710001400385194806</td>
+                                                <th>شماره شبای حساب:</th>
+                                                <td>310100004001006603026798</td>
+                                            </tr>
+                                            <tr>
+                                                <th>مبلغ واریزی:</th>
+                                                <td>2,000,000 ریال</td>
+                                                <th>اعتبار بلیت شارژ شده:</th>
+                                                <td>2,352,941 ریال</td>
+                                            </tr>
+                                            <tr>
+                                                <th>بانک مبدا/شعبه:</th>
+                                                <td>پارسیان شعبه چهار راه تختی</td>
+                                                <th>شماره فیش:</th>
+                                                <td>9905280541003845</td>
+                                            </tr>
+                                            <tr>
+                                                <th>تاریخ واریز:</th>
+                                                <td style="direction:ltr">1399/5/28<br>05:08:09</td>
+                                                <th>تاریخ ثبت شارژ:</th>
+                                                <td style="direction:ltr">1399/5/29<br>10:24:30</td>
+                                            </tr>
+                                            <tr>
+                                                <th>توضیحات:</th>
+                                                <td>شارژ پنل بالک مجموعه ساسانی</td>
+                                                <th>شماره پی گیری:</th>
+                                                <td>88411</td>
+                                            </tr>
+                                            <tr>
+                                                <th>اسکن مستندات:</th>
+                                                <td style="direction:ltr">https://chargepanel.tafrihati.com/uploads/receipt/9905280541003845.jpg</td>
+                                                <th>&nbsp;</th>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-info mb-0">
+                                        <div class="row">
+                                            <div class="col-sm-12"></div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6 text-center pt-2 pb-5">امضای واحد ذی حساب:</div>
+                                            <div class="col-sm-6 text-center pt-2 pb-5">امضای دستگاه نظارت:</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
+                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> تایید </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
 @endsection
 @section('AddJs')
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script>
         $(document).ready(function () {
+
+            $(document).on( "click", ".docDownload", function () {
+                var a = document.createElement("a");
+                a.href = $(this).attr("href") ;
+                a.download = "Image.jpeg";
+                a.click();
+            });
 
             $("#transaction_type").change(function () {
                 let type = $("#transaction_type").val() ;
@@ -220,6 +381,16 @@
                     '_token ': '<?php echo csrf_token() ?>',
                     'account_id' : id ,
                     'page' : page ,
+                },
+                statusCode: {
+                    500: function() {
+                        $("#loader").hide();
+                        Swal.fire(
+                            'خطا در دريافت اطلاعات ! ',
+                            '',
+                            'error'
+                        )
+                    }
                 },
                 success : function (data) {
 

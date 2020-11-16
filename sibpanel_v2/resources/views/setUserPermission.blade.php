@@ -125,7 +125,7 @@
                                                     }
                                                     @endphp
                                                     @foreach($projectList as $project)
-                                                        @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || ( count($project_ids) != 0 ) ?  $project_ids[0] == '*' : ''))
+                                                        @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || (( count($project_ids) != 0 ) ?  ($project_ids[0] == '*') : '') ))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value=" {{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked value="">
@@ -164,11 +164,12 @@
                                             @php
                                                 if(count($GetUserPermission) != 0)
                                                     $terminal_type_ids =(!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
+
                                             @endphp
                                             <div id="collapseTwo" class="collapse show" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                                                 <div class="card-body">
                                                     @foreach($TerminalTypeList as $TerminalType)
-                                                        @if( count($GetUserPermission) != 0 && (in_array($TerminalType['id'] , $terminal_type_ids) || (count($project_ids) != 0 ) ? $project_ids[0] == '*' : '') )
+                                                        @if( count($GetUserPermission) != 0 && (in_array($TerminalType['id'] , $terminal_type_ids) || ((count($terminal_type_ids) != 0 ) ? ($terminal_type_ids[0] == '*') : '') ) )
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$TerminalType['id']}}" name="Terminal" class="form-check-input" type="checkbox" checked value="">
@@ -209,7 +210,7 @@
                                                            $voucher_types = (!is_null($GetUserPermission)) ?  $GetUserPermission['voucher_types'] : [];
                                                     @endphp
                                                     @foreach($VoucherTypeList as $VoucherType)
-                                                        @if(count($GetUserPermission) != 0 && (in_array( $VoucherType['voucher_type_id'], $voucher_types) || (count($voucher_types) != 0 ) ? $voucher_types[0] == '*' : ''))
+                                                        @if(count($GetUserPermission) != 0 && (in_array( $VoucherType['voucher_type_id'], $voucher_types) || ((count($voucher_types) != 0 ) ?( $voucher_types[0] == '*') : '') ))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$VoucherType['voucher_type_id']}}" name="VoucherType" class="form-check-input" type="checkbox" checked value=""> {{$VoucherType['voucher_type']}}
@@ -249,7 +250,7 @@
                                                 <div class="card-body">
 
                                                 @foreach($SaleTypeList as $SaleType)
-                                                        @if(count($GetUserPermission) != 0 && (in_array($SaleType['sale_type_id'],$sale_types)  ||   (count($sale_types) != 0 ) ? $sale_types[0] == '*' : '') )
+                                                        @if(count($GetUserPermission) != 0 && (in_array($SaleType['sale_type_id'],$sale_types)  ||   ((count($sale_types) != 0 ) ? ($sale_types[0] == '*') : '') ) )
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$SaleType['sale_type_id']}}" name="SaleType" class="form-check-input" type="checkbox" checked value="">  {{$SaleType['sale_type']}}
@@ -485,6 +486,15 @@
                     sale_type_id = ['*'];
                 if(terminal_type_id.length == $("[name=Terminal]").length)
                     terminal_type_id = ['*'];*/
+                console.log("city_id" , city_id);
+                console.log("province_id" , province_id);
+                console.log("location_id" , location_id);
+                console.log("service_id" , service_id);
+                console.log("project_id" , project_id);
+                console.log("terminal_type_id" , terminal_type_id);
+                console.log("voucher_type_id" , voucher_type_id);
+                console.log("sale_type_id" , sale_type_id);
+                console.log("sib_user_id" , sib_user_id);
                 $.ajax({
                     type:'POST',
                     url:"{{Route('AssignPermission')}}",
@@ -502,7 +512,8 @@
                         'sib_user_id' : sib_user_id ,
                     },
                     success:function(data) {
-                        console.clear();
+                        // console.clear();
+                        console.log(data);
                         if(data['Header']['Status'] == 0 ){
                             Swal.fire(
                                 'تغییر مورد نظر اعمال گردید',

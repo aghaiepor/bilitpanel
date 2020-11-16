@@ -17,7 +17,7 @@ class presellController extends Controller
 
     public function index(){
         $ProvinceList =  Cache::get('ProvinceList');
-//        return $AccountList;
+//        return $ProvinceList[0];
         return view("presellManagement" , ['ProvinceList' => $ProvinceList]) ;
     }
     public function transaction(Request $request , $id=null , $province_id=null){
@@ -31,11 +31,22 @@ class presellController extends Controller
         $account_id = $id;
         $trace_number = "";
         $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number) ;
-//        $GetDechargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
-//        return $GetChargeTransaction ;
-//        $total_buy = $GetDechargeTransaction["ContentData"]["total_amount"];
-        $total_amount = $GetChargeTransaction["ContentData"]["total_amount"];
-        $GetChargeTransaction =  $GetChargeTransaction["ContentData"]["log"] ;
+        $GetDechargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
+//        return $GetChargeTransaction;
+//          return $GetDechargeTransaction ;
+        if(count($GetDechargeTransaction["ContentData"]) != 0 )
+            $total_buy = $GetDechargeTransaction["ContentData"]["total_amount"];
+        else
+            $total_buy = 0 ;
+
+        if(count($GetChargeTransaction["ContentData"]) != 0)
+            $total_amount = $GetChargeTransaction["ContentData"]["total_amount"];
+        else
+            $total_amount = 0 ;
+
+        $GetChargeTransaction =  $GetChargeTransaction["ContentData"] ;
+//        return $GetChargeTransaction;
+
         $AccountList = $this->Api->GetAccountProvince($province_id);
         $province_name = $AccountList["ContentData"]["province_name"];
         $AccountList = array_filter($AccountList["ContentData"]["location_accounts"], function ($event) use ($id) {
@@ -43,8 +54,10 @@ class presellController extends Controller
         });
         $array_keys = array_keys($AccountList) ;
         $Account = $AccountList[$array_keys[0]];
-//        return $AccountList;
-        return view("presell_transaciton"  , ["transactions" => $GetChargeTransaction  , "Account" =>$Account , "province_name" => $province_name , "total_amount" =>$total_amount , /*"total_buy"=>$total_buy*/]);
+
+//        dd($this->Api->GetChargeDocument(8));
+
+        return view("presell_transaciton"  , ["transactions" => $GetChargeTransaction  , "Account" =>$Account , "province_name" => $province_name , "total_amount" =>$total_amount , "total_buy"=>$total_buy]);
 
     }
     public function GetDechargeTransaction(Request $request){

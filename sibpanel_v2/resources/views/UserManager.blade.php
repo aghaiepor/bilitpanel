@@ -534,7 +534,8 @@
             var userData = @json($Users);
             var startsWith = [];
             // console.log(startsWithN);
-            $('input[name=active]').change(function () {
+
+            $(document).on( "change" ,'input[name=active]' ,function () {
                 var id =$(this).attr('sib-user-id') ;
                 var value = ($(this).is(':checked'));
                 // alert(value);
@@ -558,7 +559,18 @@
                                 'id' : id ,
                                 'value' : value ,
                             },
+                            statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                }
+                            },
                             success:function(data) {
+                                console.log(data);
                                 $('#loader').hide();
                                 Swal.fire(
                                     'تغییر مورد نظر اعمال گردید',
@@ -580,7 +592,7 @@
             });
 
             let current_user_id  ;
-            $("input[name=pass]").change(function () {
+            $(document).on( "change" ,"input[name=pass]" , function () {
                 if($(this).is(':checked')){
                     $(this).parent().parent().next().show();
                 }
@@ -609,6 +621,16 @@
                         data:{
                             '_token ': '<?php echo csrf_token() ?>',
                             'UserId' : UserId ,
+                        },
+                        statusCode: {
+                            500: function() {
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'خطا در دريافت اطلاعات ! ',
+                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                    'error'
+                                )
+                            }
                         },
                         success:function(data) {
                             $('#form_edit').attr('action' , action_url );
