@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-icon card-header-rose titleStyle">
+                        <div class="card-header card-header-icon card-header-rose">
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="card-icon float-right ml-3 mr-0">
@@ -45,10 +45,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-md-6">
                                     <div class="card card-stats">
-                                        <div class="card-header card-header-danger card-header-icon">
-                                            <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                        <div class="card-header pb-2 card-header-danger card-header-icon">
+                                            <div class="card-icon" style="padding: 5px;margin-left: 15px;margin-right: 0;float: right;">
                                                 <i class="material-icons">person</i>
                                             </div>
                                             <p class="card-category font-weight-normal mb-1">نام</p>
@@ -58,36 +58,36 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg">
+                                <div class="col-md-6">
                                     <div class="card card-stats">
-                                        <div class="card-header card-header-rose card-header-icon">
-                                            <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                        <div class="card-header pb-2 card-header-rose card-header-icon">
+                                            <div class="card-icon" style="padding: 5px;margin-left: 15px;margin-right: 0;float: right;">
                                                 <i class="material-icons">attach_money</i>
                                             </div>
-                                            <p class="card-category font-weight-normal mb-1">	کل افزایش اعتبار</p>
+                                            <p class="card-category font-weight-normal mb-1">	کل افزایش اعتبار <small> (ریال) </small></p>
                                             <h6 class="card-title" style="font-weight: 400;font-size: 10pt;">
-                                                {{ number_format($total_amount , 0,"." , ",")}} (ریال)
+                                                {{ number_format($total_amount , 0,"." , ",")}}
                                             </h6>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg">
+                                <div class="col-md-6">
                                     <div class="card card-stats">
-                                        <div class="card-header card-header-rose card-header-icon">
-                                            <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                        <div class="card-header pb-2 card-header-rose card-header-icon">
+                                            <div class="card-icon" style="padding: 5px;margin-left: 15px;margin-right: 0;float: right;">
                                                 <i class="material-icons">shopping_cart</i>
                                             </div>
-                                            <p class="card-category font-weight-normal mb-1">	کل خرید</p>
+                                            <p class="card-category font-weight-normal mb-1"> کل خرید<small> (ریال) </small> </p>
                                             <h6 class="card-title" style="font-weight: 400;font-size: 10pt;">
-                                                {{ number_format($total_buy , 0 , "." ,",")}} (ریال)
+                                                {{ number_format($total_buy , 0 , "." ,",")}}
                                             </h6>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg">
+                                <div class="col-md-6">
                                     <div class="card card-stats">
-                                        <div class="card-header card-header-rose card-header-icon">
-                                            <div class="card-icon" style="margin-left: 15px;margin-right: 0;float: right;">
+                                        <div class="card-header pb-2 card-header-rose card-header-icon">
+                                            <div class="card-icon" style="padding: 5px;margin-left: 15px;margin-right: 0;float: right;">
                                                 <i class="material-icons">account_balance_wallet</i>
                                             </div>
                                             <p class="card-category font-weight-normal mb-1"> موجودی<small> (ریال) </small></p>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="row">
 
-                                <div class="col-lg-2 ml-auto">
+                                <div class="col-lg-4 ml-auto">
                                     <select id="transaction_type" name="key" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع تراکنش ها">
                                         <option disabled value="province"  > نوع تراکنش ها </option>
                                         <option value="charge" selected > افزایش اعتبار </option>
@@ -115,6 +115,7 @@
                                     </button>
                                 </div>
                             </div>
+                            <hr>
                             <!-- Modal -->
                         </div>
                         <div class="card-body">
