@@ -273,6 +273,48 @@
                                                 </div>
                                             </div>
                                         </div>
+                                            @if($GetUserPermission["presell"] && session('UserInfo')['presell'])
+                                                <div class="card card-collapse">
+                                            <div class="card-header" role="tab" id="headingFive">
+                                                <h5 class="mb-0">
+                                                    <a class="collapsed" data-toggle="collapse" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour">
+                                                        مدیریت پیش فروش
+                                                        <i class="material-icons">keyboard_arrow_down</i>
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                            @php
+                                                if(count($GetUserPermission) != 0)
+                                                     $switch_web_service_ids =(!is_null($GetUserPermission)) ?  $GetUserPermission['switch_web_service_ids'] : [];
+                                            @endphp
+                                            <div id="collapseFive" class="collapse show" role="tabpanel" aria-labelledby="headingFive" data-parent="#accordion">
+                                                <div class="card-body">
+
+                                                @foreach($GetSwitchWebServiceList as $GetSwitchWebService)
+                                                        @if(count($GetUserPermission) != 0 && (in_array($GetSwitchWebService['switch_web_service_id'],$switch_web_service_ids)  ||   ((count($switch_web_service_ids) != 0 ) ? ($switch_web_service_ids[0] == '*') : '') ) )
+                                                            <div class="form-check form-check-inline">
+                                                                <label class="form-check-label">
+                                                                    <input value="{{$GetSwitchWebService['switch_web_service_id']}}" name="switch_web_service_ids" class="form-check-input" type="checkbox" checked value="">  {{$GetSwitchWebService['name']}}
+                                                                    <span class="form-check-sign">
+                                                              <span class="check"></span>
+                                                            </span>
+                                                                </label>
+                                                            </div>
+                                                        @else
+                                                            <div class="form-check form-check-inline">
+                                                                <label class="form-check-label">
+                                                                    <input value="{{$GetSwitchWebService['switch_web_service_id']}}" name="switch_web_service_ids" class="form-check-input" type="checkbox" value="">  {{$GetSwitchWebService['name']}}
+                                                                    <span class="form-check-sign">
+                                                              <span class="check"></span>
+                                                            </span>
+                                                                </label>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                            @endif
                                     </div>
                                     <button id="AcceptBtn" class="btn d-block btn-success mt-5 px-5 mr-auto"> اعمال دسترسی </button>
                                 </div>
@@ -419,6 +461,7 @@
                 let project_id = [];
                 let sale_type_id = [];
                 let terminal_type_id = [];
+                let switch_web_service_ids = [];
                 var city_id = [];
                 var province_id = [];
                 var location_id = [];
@@ -478,6 +521,10 @@
                     if($("[name=VoucherType]")[i].checked)
                         voucher_type_id.push(eval($("[name=VoucherType]")[i].value))
                 }
+                for(let i = 0 ; i < $("[name=switch_web_service_ids]").length ; i++){
+                    if($("[name=switch_web_service_ids]")[i].checked)
+                        switch_web_service_ids.push(eval($("[name=switch_web_service_ids]")[i].value))
+                }
                /* if(voucher_type_id.length == $("[name=VoucherType]").length)
                     voucher_type_id = ['*'];
                 if(project_id.length == $("[name=project]").length)
@@ -495,6 +542,7 @@
                 console.log("voucher_type_id" , voucher_type_id);
                 console.log("sale_type_id" , sale_type_id);
                 console.log("sib_user_id" , sib_user_id);
+                console.log("switch_web_service_ids" , switch_web_service_ids);
                 $.ajax({
                     type:'POST',
                     url:"{{Route('AssignPermission')}}",
@@ -510,6 +558,7 @@
                         'voucher_type_id' : voucher_type_id ,
                         'sale_type_id' : sale_type_id ,
                         'sib_user_id' : sib_user_id ,
+                        'switch_web_service_ids' : switch_web_service_ids ,
                     },
                     success:function(data) {
                         // console.clear();

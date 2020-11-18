@@ -109,7 +109,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-auto mr-auto">
-                                    <button class="btn btn-success pr-2">
+                                    <button onclick="export2excel()" class="btn btn-success pr-2">
                                         <i class="material-icons"> vertical_align_bottom </i>
                                         دانلود اکسل
                                     </button>
@@ -172,14 +172,13 @@
                                                             $api = new \App\Api\Api();
                                                             $image_id = $transaction['picture_id'];
                                                             $imageUrl = $api->GetDocumentAddress($image_id) ;
-
                                                         @endphp
-                                                    <a  href="{{$imageUrl}}" class="btn btn-success docDownload">دانلود رسید</a>
-                                                    <button data-toggle="modal" data-target="#setting" class="btn btn-primary ">اسکن مستندات</button>
+                                                    <a  href="{{$imageUrl}}" class="btn btn-success docDownload">دانلود مستندات</a>
+                                                    <button data_id="{{$transaction['trace_number']}}" data-toggle="modal" data-target="#showFactor" class="btn btn-primary factor ">فاکتور فروش</button>
                                                     @else
-                                                        <button disabled class="btn btn-success ">دانلود رسید</button>
+                                                        <button  disabled class="btn btn-success ">دانلود مستندات</button>
+                                                        <button data_id="{{$transaction['trace_number']}}" data-toggle="modal" data-target="#showFactor" class="btn btn-primary factor ">فاکتور فروش</button>
                                                     @endif
-
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -219,34 +218,37 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="card-body">
-                        <div class="invoice">
+                    <div id="printArea" class="card-body">
+                        <div id="loader2" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                            <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                        </div>
+                        <div class="invoice p-1 border">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6 my-auto">
-                                    <div class="invoice-brandinfo">رسید شارژ اعتبار بلیت الکترونیک</div>
+                                    <div class="text-right">رسید شارژ اعتبار بلیت الکترونیک</div>
                                 </div>
-
                                 <div class="col-sm-12 col-md-6 my-auto">
-                                    <div class="invoice-brands text-right">
-                                        <img class="brand brand-pec" width="80" height="80" alt="Miras" src="https://chargepanel.tafrihati.com/application/modules/charge/images/mirass.png">
+                                    <div class="invoice-brands text-left">
+                                        <img class="brand brand-pec" width="80" height="80" alt="Miras" style="filter: invert(1)" src="{{asset("")}}assets/img/mirasw_logo.png">
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="divider"></div>
-
+                            <hr>
                             <div class="row">
                                 <div class="col-sm-12 col-md-6 my-auto">
-                                    <div class="invoice-title">فاکتور فروش: #88411</div>
+                                    <div class=" text-right">
+                                        فاکتور فروش:
+                                        #
+                                        <span id="factor_number" class="font-weight-bold"></span>
+                                    </div>
                                 </div>
-
                                 <div class="col-sm-12 col-md-6 my-auto">
                                     <div class="invoice-ginfo">
-                                        <table class="float-right">
+                                        <table class="float-left">
                                             <tbody>
                                             <tr>
                                                 <th>تاریخ:</th>
-                                                <td>1399/5/29<br>10:24:30</td>
+                                                <td id="date"></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -254,59 +256,56 @@
                                 </div>
                             </div>
 
-                            <div class="divider mb-0"></div>
+                            <hr>
 
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="invoice-info wide">
-                                        <h4>اطلاعات فاکتور:</h4>
-                                        <table style="font-size:14px">
-                                            <tbody>
-                                            <tr>
-                                                <th>نام مرکز:</th>
-                                                <td>استان فارس/مجموعه ساسانی</td>
-                                                <th>نام کاربر</th>
-                                                <td>a.nochi</td>
-                                            </tr>
-                                            <tr>
-                                                <th>شناسه پرداخت:</th>
-                                                <td>305006658113710001400385194806</td>
-                                                <th>شماره شبای حساب:</th>
-                                                <td>310100004001006603026798</td>
-                                            </tr>
-                                            <tr>
-                                                <th>مبلغ واریزی:</th>
-                                                <td>2,000,000 ریال</td>
-                                                <th>اعتبار بلیت شارژ شده:</th>
-                                                <td>2,352,941 ریال</td>
-                                            </tr>
-                                            <tr>
-                                                <th>بانک مبدا/شعبه:</th>
-                                                <td>پارسیان شعبه چهار راه تختی</td>
-                                                <th>شماره فیش:</th>
-                                                <td>9905280541003845</td>
-                                            </tr>
-                                            <tr>
-                                                <th>تاریخ واریز:</th>
-                                                <td style="direction:ltr">1399/5/28<br>05:08:09</td>
-                                                <th>تاریخ ثبت شارژ:</th>
-                                                <td style="direction:ltr">1399/5/29<br>10:24:30</td>
-                                            </tr>
-                                            <tr>
-                                                <th>توضیحات:</th>
-                                                <td>شارژ پنل بالک مجموعه ساسانی</td>
-                                                <th>شماره پی گیری:</th>
-                                                <td>88411</td>
-                                            </tr>
-                                            <tr>
-                                                <th>اسکن مستندات:</th>
-                                                <td style="direction:ltr">https://chargepanel.tafrihati.com/uploads/receipt/9905280541003845.jpg</td>
-                                                <th>&nbsp;</th>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+
+                                    <h4 class="text-center font-weight-bold py-3">اطلاعات فاکتور</h4>
+                                    <table class="table table-striped bordered text-right" style="font-size:14px;">
+                                        <tbody>
+                                        <tr>
+                                            <th>نام مرکز:</th>
+                                            <td style="">استان {{$province_name}} / {{$Account["name"]}} </td>
+                                            <th>نام کاربر</th>
+                                            <td> {{session('UserInfo')['first_name']  . " "  . session('UserInfo')['last_name']}} </td>
+                                        </tr>
+                                        <tr>
+                                            <th>شناسه پرداخت:</th>
+                                            <td>{{$Account["payment_id"]}}</td>
+                                            <th>شماره شبای حساب:</th>
+                                            <td>{{$Account["shaba"]}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>مبلغ واریزی:</th>
+                                            <td><span id="deposit_amount"></span> ریال</td>
+                                            <th>اعتبار بلیت شارژ شده:</th>
+                                            <td><span id="transaction_amount"></span> ریال</td>
+                                        </tr>
+                                        <tr>
+                                            <th>بانک مبدا/شعبه:</th>
+                                            <td id="source_bank"></td>
+                                            <th>شماره فیش:</th>
+                                            <td id="reference_number"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>تاریخ واریز:</th>
+                                            <td id="payment_datetime" style="direction:ltr"></td>
+                                            <th>تاریخ ثبت شارژ:</th>
+                                            <td id="created_jalali" style="direction:ltr"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>توضیحات:</th>
+                                            <td>-</td>
+                                            <th>شماره پی گیری:</th>
+                                            <td id="trace_number"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>اسکن مستندات:</th>
+                                            <td id="account_doc" class="text-right" style="" colspan="3"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
@@ -314,23 +313,23 @@
 
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="alert alert-info mb-0">
+                                    <div class="bg-light mb-0">
                                         <div class="row">
                                             <div class="col-sm-12"></div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-sm-6 text-center pt-2 pb-5">امضای واحد ذی حساب:</div>
-                                            <div class="col-sm-6 text-center pt-2 pb-5">امضای دستگاه نظارت:</div>
+                                            <div class="col-sm-6 text-center py-4">امضای واحد ذی حساب</div>
+                                            <div class="col-sm-6 text-center py-4">امضای دستگاه نظارت</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer mt-4">
+                    <div class="modal-footer mt-1">
                         {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> تایید </button>
+                        <button id="print" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> پرينت </button>
                     </div>
                 </div>
             </form>
@@ -341,9 +340,85 @@
 @endsection
 @section('AddJs')
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
     <script>
         $(document).ready(function () {
 
+            $(document).on( "click", ".factor", function () {
+                $("#loader2").css("display" , "flex");
+                let id = "{{url()->current()}}";
+                id = id.split("/");
+                id = id[4];
+                let trace_number = $(this).attr("data_id") ;
+                let type = $("#transaction_type").val();
+                let page = "{{request("page")}}";
+                if(page == "")
+                    page = 1 ;
+                $("#trace_number , #factor_number").text(trace_number);
+                $.ajax({
+                    type:'POST',
+                    url: "{{Route("GetTransaction")}}" ,
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'account_id' : id ,
+                        'page' : page ,
+                        'type' : type ,
+                        'trace_number' : trace_number ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader2").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                '',
+                                'error'
+                            )
+                        }
+                    },
+                    success : function (data) {
+                        $("#loader2").hide();
+                        let account  = data["GetChargeTransactions"] ;
+                        let images = data["images_url"] ;
+                        console.log(images)
+                        $("#deposit_amount").text(number_format(account.deposit_amount, 0 , "." , ","));
+                        $("#transaction_amount").text(number_format(account.transaction_amount, 0 , "." , ","));
+                        if(Object.keys(account["description_json"]).length != 0)
+                        {
+                            $("#source_bank").text(account["description_json"].source_bank);
+                            $("#payment_datetime").text(account["description_json"].payment_datetime);
+                        }else
+                        {
+                            $("#source_bank").text("");
+                            $("#payment_datetime").text("");
+                        }
+                        $("#reference_number").text(account.reference_number);
+                        $("#created_jalali").text(account.created_jalali);
+                        let date = account.created_jalali.split(" ");
+                        date = date[0] + "<br>" + date[1];
+                        $("#date").html(date);
+
+                        let link = "" ;
+                        if(images[0] != 0)
+                        {
+                            link = "<a href='" + images[0] + "' class='docDownload btn btn-sm btn-outline-info'>  <i class=\"material-icons\"> vertical_align_bottom </i> دانلود تصویر  </a>"
+                            $("#account_doc").html(link);
+                        }
+                        else
+                        {
+                            link = "";
+                            $("#account_doc").html("");
+                        }
+                    }
+                })
+            });
+            $(document).on( "click", "#print", function () {
+                var printContents = document.getElementById('printArea').innerHTML;
+                var originalContents = document.body.innerHTML;
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+            });
             $(document).on( "click", ".docDownload", function () {
                 var a = document.createElement("a");
                 a.href = $(this).attr("href") ;
@@ -395,7 +470,9 @@
                 success : function (data) {
 
                     // console.log("data : " , data);
-                    let account  = data ;
+                    let account  = data["GetChargeTransactions"] ;
+                    let images = data["images_url"] ;
+                    // console.log(images);
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
                     if(account.length == 0 ){
                         $("#tbody").html(" ");
@@ -429,10 +506,15 @@
                             transaction_type.innerHTML = type ;
                             pigiri_number.innerHTML = account[i].trace_number ;
                             discripton.innerHTML = "-" ;
-
-                            setting.innerHTML = " <a href=\"#\" {{--href=\"https://chargepanel.tafrihati.com/charge/receiptNEW/1/1791/39438\" target=\"_blank\"--}} class=\"btn btn-success \">دانلود رسید</a>\n" +
-                                "<a href=\"#\" {{--href=\"https://chargepanel.tafrihati.com/uploads/receipt/9812200541003306.jpg\" target=\"_blank\"--}} class=\"btn btn-primary \">اسکن مستندات</a>" ;
-
+                            let typeT = $("#transaction_type").val();
+                            if(typeT == "charge"){
+                            let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;
+                            if(images[i] != 0 ){
+                                image = " <a href='" + images[i] + "' class=\"btn btn-success docDownload \">دانلود مستندات</a>" ;
+                            }
+                            setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;
+                            }else
+                                setting.innerHTML = "" ;
 
                             // document.getElementsByClassName("myTr").colSpan = "5";
 
@@ -475,6 +557,9 @@
             }
 
             return s.join(dec)
+        }
+        function export2excel() {
+            TableToExcel.convert(document.getElementById("AccountTable"));
         }
     </script>
 @endsection

@@ -769,7 +769,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id){
+    public function AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id , $switch_web_service_id){
         $data= [
             'province_id' => $province_id,
             'city_id' => $city_id,
@@ -780,9 +780,23 @@ class Api
             'sale_type_id' => $sale_type_id,
             'sib_user_id' => $sib_user_id,
             'terminal_type_id' => $terminal_type_id,
+            'switch_web_service_ids' => $switch_web_service_id
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AssignPermission' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+    public function GetSwitchWebServiceList(){
+        $data = null ;
+        $client = new Client();
+        $result = $client->post($this->url . 'GetSwitchWebServiceList' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]

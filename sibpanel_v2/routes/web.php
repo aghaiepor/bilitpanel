@@ -157,6 +157,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/ChargeAccount/{id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
         Route::post('/GetDechargeTransaction' , 'presellController@GetDechargeTransaction')->name('GetDechargeTransaction');
         Route::post('/GetChargeTransaction' , 'presellController@GetChargeTransaction')->name('GetChargeTransaction');
+        Route::post('/GetTransaction' , 'presellController@GetTransaction')->name('GetTransaction');
         Route::post('/GetAccountProvince' , 'presellController@GetAccountProvince')->name('GetAccountProvince');
         Route::post('/SetAccountSetting/{id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
         Route::post('/LocationAccountActivation' , 'presellController@LocationAccountActivation')->name('LocationAccountActivation');

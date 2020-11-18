@@ -233,19 +233,21 @@ class UserManagerController extends Controller
 //        return $TerminalTypeList ;
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
-        return $GetUserPermission ;
+//        return $GetUserPermission ;
 //        $GetUserPermission = $GetUserPermission["ContentData"];
 //        $terminal_type_ids = (!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
 //        dd(count($GetUserPermission));
 //        return $GetUserPermission['ContentData'];
 //        http://127.0.0.1:8000/setUserPermission/533
 //        return is_null($GetUserPer  ) ;
+        $GetSwitchWebServiceList = $this->api->GetSwitchWebServiceList();
+//        return $GetSwitchWebServiceList["ContentData"] ;
         $GetInfo = Cache::get('GetInfo');
 //        return $GetInfo ;
         $VoucherTypeList = Cache::get('VoucherTypeList');
         $LocationList = Cache::get('ServiceList');
         return view('setUserPermission' , ['projectList'=> $projectList['ContentData'] , 'TerminalTypeList' => $TerminalTypeList['ContentData'] ,
-            'VoucherTypeList'=> $VoucherTypeList , 'SaleTypeList'=>$SaleTypeList['ContentData'] ,
+            'VoucherTypeList'=> $VoucherTypeList , 'SaleTypeList'=>$SaleTypeList['ContentData'] , 'GetSwitchWebServiceList'=>$GetSwitchWebServiceList["ContentData"] ,
             'LocationList'=>$LocationList , 'GetInfo'=>$GetInfo ,'GetUserPermission' => $GetUserPermission['ContentData'] , 'userId'=>$id ] ) ;
 
     }
@@ -259,6 +261,8 @@ class UserManagerController extends Controller
         $project_id = (is_null($request->get('project_id'))) ? "" : implode(",",$request->get('project_id'));
         $sale_type_id = (is_null($request->get('sale_type_id'))) ? "" : implode(",",$request->get('sale_type_id'));
         $terminal_type_id = (is_null($request->get('terminal_type_id'))) ? "" : implode(",",$request->get('terminal_type_id'));
+        $switch_web_service_ids = (is_null($request->get('switch_web_service_ids'))) ? "" : implode(",",$request->get('switch_web_service_ids'));
+        Log::info($switch_web_service_ids);
         $sib_user_id = $request->get('sib_user_id');
        /* $data =  [
         '$province_id' => $province_id,
@@ -272,7 +276,7 @@ class UserManagerController extends Controller
         '$sib_user_id' => $sib_user_id
         ];
         return $data ;*/
-        $AssignPermission = $this->api->AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id);
+        $AssignPermission = $this->api->AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id, $switch_web_service_ids);
         return $AssignPermission;
 
     }

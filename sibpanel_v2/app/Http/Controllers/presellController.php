@@ -55,6 +55,7 @@ class presellController extends Controller
         $array_keys = array_keys($AccountList) ;
         $Account = $AccountList[$array_keys[0]];
 
+//        return $Account ;
 //        dd($this->Api->GetChargeDocument(8));
 
         return view("presell_transaciton"  , ["transactions" => $GetChargeTransaction  , "Account" =>$Account , "province_name" => $province_name , "total_amount" =>$total_amount , "total_buy"=>$total_buy]);
@@ -65,8 +66,22 @@ class presellController extends Controller
         $account_id = $request->get("account_id");
         $trace_number = "";
         $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
-        $GetChargeTransaction =  $GetChargeTransaction["ContentData"]["log"] ;
-        return $GetChargeTransaction ;
+        $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
+        $images_url = [] ;
+
+//        foreach ($GetChargeTransactions as $GetChargeTransaction){
+//            $url = 0 ;
+//            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
+//                array_push($images_url , $url);
+//            }else
+//                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
+//                array_push($images_url , $url);
+//        }
+        $data = [
+            "GetChargeTransactions" => $GetChargeTransactions ,
+            "images_url" => $images_url ,
+        ] ;
+        return $data;
 
     }
     public function GetChargeTransaction(Request $request){
@@ -74,8 +89,50 @@ class presellController extends Controller
         $account_id = $request->get("account_id");
         $trace_number = "";
         $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number) ;
-        $GetChargeTransaction =  $GetChargeTransaction["ContentData"]["log"] ;
-        return $GetChargeTransaction ;
+        $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
+        $images_url = [] ;
+        foreach ($GetChargeTransactions as $GetChargeTransaction)
+        {
+            $url = 0 ;
+            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
+                array_push($images_url , $url);
+            }else
+                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
+            array_push($images_url , $url);
+        }
+        $data = [
+            "GetChargeTransactions" => $GetChargeTransactions ,
+            "images_url" => $images_url ,
+        ] ;
+        return $data;
+
+    }
+    public function GetTransaction(Request $request){
+        $page = $request->get("page") ;
+        $account_id = $request->get("account_id");
+        $trace_number = $request->get("trace_number");
+        $trancation_type = $request->get("type");
+        if($trancation_type == "charge")
+            $GetTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number) ;
+        else
+            $GetTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
+
+        $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
+        $images_url = [] ;
+        foreach ($GetTransactions as $GetTransactions)
+        {
+            $url = 0 ;
+            if( is_null($GetTransactions["picture_id"]) ||  $GetTransactions["picture_id"] === null ) {
+                array_push($images_url , $url);
+            }else
+                $url = $this->Api->GetDocumentAddress($GetTransactions["picture_id"]);
+            array_push($images_url , $url);
+        }
+        $data = [
+            "GetChargeTransactions" => $GetTransactions ,
+            "images_url" => $images_url ,
+        ] ;
+        return $data;
 
     }
     public function ChargeAccount(Request $request , $id){
