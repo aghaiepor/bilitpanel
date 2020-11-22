@@ -1390,6 +1390,7 @@ class Api
             "pic_str" => $pic_str,
             "description" => $description,
         ];
+        Log::info( "Charge data : " ,  $data);
         $client = new Client();
         $result = $client->post($this->url . 'ChargeAccount' ,[
                 'headers'=>$this->getHeader(),

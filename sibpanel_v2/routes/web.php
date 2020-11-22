@@ -152,8 +152,8 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/EditAlert/{id}' , 'AlertController@EditAlert')->name('EditAlert');
 
         // presel Route
-        Route::get('/presellManger' , 'presellController@index')->name('presellManger');
         Route::get('/presellTransaction/{id?}/{province_id?}' , 'presellController@transaction')->name('presellTransaction');
+        Route::get('/presellManger' , 'presellController@indexPage')->name('presellManger');
         Route::post('/ChargeAccount/{id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
         Route::post('/GetDechargeTransaction' , 'presellController@GetDechargeTransaction')->name('GetDechargeTransaction');
         Route::post('/GetChargeTransaction' , 'presellController@GetChargeTransaction')->name('GetChargeTransaction');

@@ -233,6 +233,8 @@ class UserManagerController extends Controller
 //        return $TerminalTypeList ;
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
+        $User_info = $this->api->GetUserInfo( $id);
+//        return $User_info['ContentData']["presell"];
 //        return $GetUserPermission ;
 //        $GetUserPermission = $GetUserPermission["ContentData"];
 //        $terminal_type_ids = (!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
@@ -248,7 +250,7 @@ class UserManagerController extends Controller
         $LocationList = Cache::get('ServiceList');
         return view('setUserPermission' , ['projectList'=> $projectList['ContentData'] , 'TerminalTypeList' => $TerminalTypeList['ContentData'] ,
             'VoucherTypeList'=> $VoucherTypeList , 'SaleTypeList'=>$SaleTypeList['ContentData'] , 'GetSwitchWebServiceList'=>$GetSwitchWebServiceList["ContentData"] ,
-            'LocationList'=>$LocationList , 'GetInfo'=>$GetInfo ,'GetUserPermission' => $GetUserPermission['ContentData'] , 'userId'=>$id ] ) ;
+            'LocationList'=>$LocationList , 'GetInfo'=>$GetInfo ,'GetUserPermission' => $GetUserPermission['ContentData'] , 'userId'=>$id , 'presell' => $User_info['ContentData']["presell"] ]  ) ;
 
     }
     public function AssignPermission(Request $request)

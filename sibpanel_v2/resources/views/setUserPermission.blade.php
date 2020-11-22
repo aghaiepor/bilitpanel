@@ -273,7 +273,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            @if($GetUserPermission["presell"] && session('UserInfo')['presell'])
+                                            @if( (($presell == 1) ? true : false)  && session('UserInfo')['presell'])
                                                 <div class="card card-collapse">
                                             <div class="card-header" role="tab" id="headingFive">
                                                 <h5 class="mb-0">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Api\Api;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cache;
 
 class presellController extends Controller
@@ -15,14 +16,14 @@ class presellController extends Controller
         $this->Api = new Api() ;
     }
 
-    public function index(){
+    public function indexPage(){
         $ProvinceList =  Cache::get('ProvinceList');
-//        return $ProvinceList[0];
+//        return $ProvinceList;
         return view("presellManagement" , ['ProvinceList' => $ProvinceList]) ;
     }
     public function transaction(Request $request , $id=null , $province_id=null){
         if(is_null($id) || is_null($province_id) )
-            return redirect()->back();
+            return redirect()->route("presellManger");
 
         $page = $request->get("page") ;
         if(is_null($page)){
@@ -142,7 +143,8 @@ class presellController extends Controller
         $charge_amount = $request->get("charge_amount");
         $account_id = $id;
         $project_name = "TourismSystem";
-        $reference_number = $request->get("reference_number");
+        $reference_number = $this->fa2en($request->get("reference_number"));
+//        return $reference_number ;
         $source_bank = $request->get("source_bank");
         $payment_datetime = $request->get("payment_datetime") ;
         $payment_datetime = explode("/" , $this->fa2en($payment_datetime)) ;

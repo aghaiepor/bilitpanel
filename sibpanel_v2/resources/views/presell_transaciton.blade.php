@@ -99,13 +99,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row mb-2">
+                                <div class="col-md pl-0">
+                                    <input type="text" placeholder="شماره پيگيري" class="form-control">
+                                </div>
+                                <div class="col-md pl-0">
+                                    <input type="text" placeholder="شماره فيش" class="form-control">
+                                </div>
+                                <div class="col-md pl-0">
+                                    <input id="FromDate" type="text" placeholder="تاريخ" class="form-control">
+                                </div>
+                                <div class="col-md-auto">
+                                    <button class="btn btn-rose px-5">
+                                        جستوجو
+                                    </button>
+                                </div>
+                            </div>
+                            <hr>
                             <div class="row">
 
                                 <div class="col-lg-4 ml-auto">
                                     <select id="transaction_type" name="key" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع تراکنش ها">
                                         <option disabled value="province"  > نوع تراکنش ها </option>
                                         <option value="charge" selected > افزایش اعتبار </option>
-                                        <option value="Decharge"  > خريد </option>
+                                        <option value="Decharge"> خريد </option>
                                     </select>
                                 </div>
                                 <div class="col-lg-auto mr-auto">
@@ -115,6 +132,7 @@
                                     </button>
                                 </div>
                             </div>
+
                             <hr>
                             <!-- Modal -->
                         </div>
@@ -342,6 +360,25 @@
 @section('AddJs')
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
+    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
+    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
+    <script>
+        $('#FromDate').persianDatepicker({
+            initialValue: true,
+            autoClose : true ,
+            format: 'YYYY/MM/DD',
+            calendar:{
+                persian:{
+                    locale: 'fa'
+                }
+            },navigator:{
+                scroll:{
+                    enabled:false
+                }
+            }
+        });
+        // $('#FromDate').val("");
+    </script>
     <script>
         $(document).ready(function () {
 
@@ -383,7 +420,8 @@
                         let images = data["images_url"] ;
                         console.log(images)
                         $("#deposit_amount").text(number_format(account.deposit_amount, 0 , "." , ","));
-                        $("#transaction_amount").text(number_format(account.transaction_amount, 0 , "." , ","));
+                        let transaction_amount = eval(account.deposit_amount) / 0.85 ;
+                        $("#transaction_amount").text(number_format(transaction_amount, 0 , "." , ","));
                         if(Object.keys(account["description_json"]).length != 0)
                         {
                             $("#source_bank").text(account["description_json"].source_bank);

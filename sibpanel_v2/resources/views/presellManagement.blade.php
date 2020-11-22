@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-icon card-header-rose titleStyle">
+                        <div class="card-header card-header-icon card-header-rose">
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="card-icon float-right ml-3 mr-0">
@@ -71,7 +71,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div style="overflow: auto ; height: 60vh ;" class="col-md-4 border-left">
+                                <div style="overflow: auto ; height: 60vh ;" class="col-md-3 border-left">
                                     <ul class="nav nav-pills nav-pills-rose flex-column" role="tablist">
                                         @php
                                           $i = 0  ;
@@ -99,7 +99,7 @@
 {{--                                        </li>--}}
                                     </ul>
                                 </div>
-                                <div class="col-md-8">
+                                <div style="overflow: auto ; height: 60vh ;" class="col-md-9">
                                     <div class="tab-content text-right">
                                         <div class="tab-pane active show" style="overflow: auto ;" id="link4">
                                             <table id="AccountTable"  class="table table-striped" style="font-size: 10pt;">
@@ -113,9 +113,9 @@
                                                             شناسه ی پرداخت
                                                         </small>
                                                     </th>
-                                                    <th class="text-center"> موجودی <small class="text-secondary" style="font-size: 8pt">(ريال)</small> </th>
-                                                    <th class="text-center">وضعیت</th>
-                                                    <th class="text-center"> خدمات</th>
+                                                    <th > موجودی <small class="text-secondary" style="font-size: 8pt">(ريال)</small> </th>
+                                                    <th >وضعیت</th>
+                                                    <th > خدمات</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="AccountTableTbody">
@@ -169,6 +169,10 @@
 {{--                                            <br>Dynamically innovate resource-leveling customer service for state of the art customer service.--}}
 {{--                                        </div>--}}
                                     </div>
+                                </div>
+                                <div class="col-md-9 mr-md-auto bg-light mt-2 p-3">
+                                    <span class="font-weight-bold" > جمع موجودی   <small>(ریال)</small> : </span>
+                                    <span id="total_inventory"> 0 </span>
                                 </div>
                             </div>
                         </div>
@@ -541,8 +545,10 @@
                     }
                 },
                 success : function (data) {
-                    // console.log("data : " , data["ContentData"]["location_accounts"]);
+                    console.log("data : " , data["ContentData"]);
                     let account  = data["ContentData"]["location_accounts"] ;
+                    let total_inv = data["ContentData"]["total_inventory"] ;
+                    $("#total_inventory").text(number_format(total_inv , 0, "." , ","));
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
                     if(account.length == 0 ){
                         $("#AccountTableTbody").html(" ");
@@ -577,8 +583,14 @@
                                 "<small>" + account[i].payment_id + "</small>" ;
                             saba_number.innerHTML = saba;
                             mojodi.innerHTML = number_format(eval(account[i].inventory) , 0 , "." , ",");
-                            let style = `color : ${account[i].account_state} `;
-                            mojodi.style = style.toString() ;
+                            if (account[i].account_state == "Green")
+                                mojodi.className = "h6 text-success";
+                            else if (account[i].account_state == "Orange")
+                                mojodi.className = "h6 text-warning";
+                            else if (account[i].account_state == "Red")
+                                mojodi.className = "h6 text-danger";
+                            else
+                                mojodi.className = "";
 
                             state.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
 
