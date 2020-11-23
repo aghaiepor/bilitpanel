@@ -1280,6 +1280,21 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public function VerifyOtp($otp){
+        $data = [
+            'otp' => $otp,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'VerifyOtp' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
     public function LocationAccountActivation($locationaccount_id  ,$activation){
         $data = [
             "locationaccount_id" => $locationaccount_id,
@@ -1335,16 +1350,19 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetChargeTransaction($page ,$account_id, $trace_number){
-        $data = [
-            "page" => $page,
-            "conditions" =>
-                [
-                    "account_id"  => [$account_id],
-                    "trace_number"=> $trace_number,
-                    "date" => ["",""]
-                ]
-        ];
+    public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date=""){
+            $data = [
+                "page" => $page,
+                "conditions" =>
+                    [
+                        "account_id"  => [$account_id],
+                        "trace_number"=> $trace_number,
+//                        "date" => ["",""]
+                        "reference_number" => $reference_number,
+                        "date" => $date ,
+                    ]
+            ];
+        Log::info("GetChargeTransaction Log : " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GetChargeTransaction' ,[
                 'headers'=>$this->getHeader(),
@@ -1356,14 +1374,15 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetDechargeTransaction($page ,$account_id, $trace_number){
+    public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date=""){
         $data = [
             "page" => $page,
             "conditions" =>
                 [
                     "account_id"  => [$account_id],
                     "trace_number"=> $trace_number,
-                    "date" => ["",""]
+                    "reference_number" => $reference_number,
+                    "date" => $date ,
                 ]
         ];
         $client = new Client();
@@ -1440,7 +1459,7 @@ class Api
         ];
         return $header;
     }
-    public function checkError($response)
+    public function checkError($response , $type=null)
     {
         if ($response['Header']['MessageCode'] == 141) {
             session()->forget('SessionId');

@@ -7,6 +7,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title> تایید شماره موبایل </title>
 
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
@@ -45,6 +46,9 @@
     <div class="page-header lock-page header-filter" style="background-image: url('../../assets/img/lock.jpg')">
       <!--   you can change the color of the filter page using: data-color="blue | green | orange | red | purple" -->
       <div class="container">
+          <div id="loader" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+              <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+          </div>
         <div class="row">
           <div class="col-md-5 ml-auto mr-auto">
             <div style="width: 360px" class="card card-profile text-center card-hidden">
@@ -125,7 +129,7 @@
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap-material-design.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-
+  <script src="{{asset('')}}assets/js/plugins/sweetalert2.js"></script>
   <!-- Chartist JS -->
   <script src="../../assets/js/plugins/chartist.min.js"></script>
   <!--  Notifications Plugin    -->
@@ -306,6 +310,12 @@
   </script>
   <script>
     $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
       md.checkFullPageBackgroundImage();
       setTimeout(function() {
         // after 1000 ms we add the class animated to the login/register card
@@ -341,6 +351,7 @@
         if(len <= 1)
             old = $(this).val();
     });*/
+    let all_input_value = "" ;
     $("#first").focus();
     $("input[type=number]").on("input" , function () {
         let len = $(this).val().length;
@@ -355,12 +366,16 @@
                return $.trim($(this).val()).length == 0
            }).length == 0)
            {
-               let all_input_value = "" ;
+               all_input_value = "" ;
                $("input").each(function() {
                    var element = $(this).val();
                    all_input_value += element ;
                });
-               console.log(all_input_value) ;
+               if(all_input_value.length == 5) {
+                   $("#loader").css("display" , "flex") ;
+                   validation(all_input_value) ;
+               }
+
            }
             else
                 $(this).next().focus();
@@ -369,6 +384,45 @@
             $(this).val(old_value)
         }
     })
+
+    function validation(number){
+        $("#loader").css("display" , "flex") ;
+        $.ajax({
+            type:'POST',
+            url:"{{Route('VerifyOtp')}}",
+            dataType:'json',
+            data:{
+                '_token ': '<?php echo csrf_token() ?>',
+                'number' : number ,
+            },
+            success:function(data) {
+                $("#loader").hide();
+                if(data.Header.Status != 0){
+                    Swal.fire(
+                        'عدد وارد شده نامعتبر است ! ',
+                        '',
+                        'error'
+                    )
+                }
+                else{
+                    Swal.fire(
+                        'تایید با موفقیت انجام شد .  ',
+                        '',
+                        'success'
+                    )
+                    window.location.href = "{{Route('dashboard')}}";
+                }
+
+            }
+        });
+    }
+      $("#accept").click(function () {
+          console.log(all_input_value);
+        if(all_input_value.length == 5)
+        {
+            validation(all_input_value) ;
+        }
+      });
 
   </script>
 </body>

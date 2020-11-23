@@ -9,6 +9,7 @@
             width: 100% !important;
         }
     </style>
+    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
 
 @section('content')
@@ -101,16 +102,19 @@
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md pl-0">
-                                    <input type="text" placeholder="شماره پيگيري" class="form-control">
+                                    <input id="search_trace_number" type="text" placeholder="شماره پيگيري" class="form-control">
                                 </div>
                                 <div class="col-md pl-0">
-                                    <input type="text" placeholder="شماره فيش" class="form-control">
+                                    <input id="search_reference_number" type="text" placeholder="شماره فيش" class="form-control">
                                 </div>
                                 <div class="col-md pl-0">
-                                    <input id="FromDate" type="text" placeholder="تاريخ" class="form-control">
+                                    <input autocomplete="off"  id="FromDate" type="text" placeholder="تاریخ شروع" class="form-control">
+                                </div>
+                                <div class="col-md pl-0">
+                                    <input autocomplete="off"  id="ToDate" type="text" placeholder="تاريخ پایان" class="form-control">
                                 </div>
                                 <div class="col-md-auto">
-                                    <button class="btn btn-rose px-5">
+                                    <button id="Search_btn" class="btn btn-rose px-5">
                                         جستوجو
                                     </button>
                                 </div>
@@ -376,12 +380,131 @@
                     enabled:false
                 }
             }
+
+
         });
-        // $('#FromDate').val("");
+        $('#ToDate').persianDatepicker({
+            initialValue: true,
+            autoClose : true ,
+            format: 'YYYY/MM/DD',
+            calendar:{
+                persian:{
+                    locale: 'fa'
+                }
+            },navigator:{
+                scroll:{
+                    enabled:false
+                }
+            },navigator:{
+                text:{
+                    btnNextText:'بعدی',
+                    btnPrevText:'قبلی'
+                }
+            }
+
+        });
+        $('#FromDate').val("");
+        $('#ToDate').val("");
     </script>
     <script>
         $(document).ready(function () {
 
+            {{--$("#Search_btn").click(function () {--}}
+            {{--    $("#loader").css("display" , "flex");--}}
+            {{--    let trace_number = $("#search_trace_number").val();--}}
+            {{--    let reference_number = $("#search_reference_number").val();--}}
+            {{--    let date = $("#FromDate").val();--}}
+            {{--    let type = $("#transaction_type").val();--}}
+            {{--    let id = "{{url()->current()}}";--}}
+            {{--    id = id.split("/");--}}
+            {{--    id = id[4];--}}
+            {{--    $.ajax({--}}
+            {{--        type:'POST',--}}
+            {{--        url: "{{Route("GetTransactionFilter")}}" ,--}}
+            {{--        dataType:'json',--}}
+            {{--        data:{--}}
+            {{--            '_token ': '<?php echo csrf_token() ?>',--}}
+            {{--            'account_id' : id ,--}}
+            {{--            'page' : 1 ,--}}
+            {{--            'trace_number' : trace_number,--}}
+            {{--            'reference_number' : reference_number,--}}
+            {{--            'date' : date,--}}
+            {{--            'type' : type,--}}
+            {{--        },--}}
+            {{--        statusCode: {--}}
+            {{--            500: function() {--}}
+            {{--                $("#loader").hide();--}}
+            {{--                Swal.fire(--}}
+            {{--                    'خطا در دريافت اطلاعات ! ',--}}
+            {{--                    '',--}}
+            {{--                    'error'--}}
+            {{--                )--}}
+            {{--            }--}}
+            {{--        },--}}
+            {{--        success : function (data) {--}}
+
+            {{--            console.log("data : " , data);--}}
+            {{--            let account  = data["GetChargeTransactions"] ;--}}
+            {{--            let images = data["images_url"] ;--}}
+            {{--            // console.log(images);--}}
+            {{--            let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];--}}
+            {{--            if(account.length == 0 ){--}}
+            {{--                $("#tbody").html(" ");--}}
+            {{--                var row = table.insertRow();--}}
+            {{--                var cell = row.insertCell();--}}
+            {{--                cell.id = "myTd";--}}
+            {{--                cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";--}}
+            {{--                document.getElementById("myTd").colSpan = "6";--}}
+            {{--                $("#loader").hide();--}}
+            {{--            }--}}
+            {{--            else {--}}
+            {{--                $("#tbody").html(" ");--}}
+            {{--                let row ;--}}
+            {{--                let transition_amount ;--}}
+            {{--                let date ;--}}
+            {{--                let transaction_type ;--}}
+            {{--                let pigiri_number ;--}}
+            {{--                let discripton ;--}}
+            {{--                let setting ;--}}
+            {{--                for(let i = 0 ; i < account.length ; i++){--}}
+            {{--                    row = table.insertRow();--}}
+            {{--                    transition_amount = row.insertCell();--}}
+            {{--                    date = row.insertCell();--}}
+            {{--                    transaction_type = row.insertCell();--}}
+            {{--                    pigiri_number = row.insertCell();--}}
+            {{--                    discripton = row.insertCell();--}}
+            {{--                    setting = row.insertCell();--}}
+
+            {{--                    transition_amount.innerHTML = number_format(eval(account[i].transaction_amount) , 0 , "." , ",") ;--}}
+            {{--                    transition_amount.className = "h5 text-success" ;--}}
+            {{--                    date.innerHTML = account[i].created_jalali ;--}}
+            {{--                    let showType = "" ;--}}
+            {{--                    if(type == "charge")--}}
+            {{--                        showType = "افزایش اعتبار"--}}
+            {{--                    else--}}
+            {{--                        showType = "خرید"--}}
+            {{--                    transaction_type.innerHTML = showType ;--}}
+            {{--                    pigiri_number.innerHTML = account[i].trace_number ;--}}
+            {{--                    discripton.innerHTML = "-" ;--}}
+            {{--                    let typeT = $("#transaction_type").val();--}}
+            {{--                    if(typeT == "charge"){--}}
+            {{--                        let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;--}}
+            {{--                        if(images[i] != 0 ){--}}
+            {{--                            image = " <a href='" + images[i] + "' class=\"btn btn-success docDownload \">دانلود مستندات</a>" ;--}}
+            {{--                        }--}}
+            {{--                        setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;--}}
+            {{--                    }else--}}
+            {{--                        setting.innerHTML = "" ;--}}
+
+            {{--                    // document.getElementsByClassName("myTr").colSpan = "5";--}}
+
+            {{--                }--}}
+            {{--                $("#loader").hide();--}}
+            {{--            }--}}
+            {{--        }--}}
+            {{--    })--}}
+
+            {{--});--}}
             $(document).on( "click", ".factor", function () {
                 $("#loader2").css("display" , "flex");
                 let id = "{{url()->current()}}";
@@ -473,28 +596,42 @@
                     GetDechargeTransaction("{{Route('GetChargeTransaction')}}" , "افزايش اعتبار");
 
             })
+            $("#Search_btn").click(function () {
+                GetDechargeTransaction();
+
+            })
 
 
         });
-        function GetDechargeTransaction(url , type){
+        function GetDechargeTransaction(){
             $("#loader").css("display" , "flex");
             let page = "{{request("page")}}";
             // console.log("page" , page == "");
             if(page == "")
                 page = 1 ;
-
+            let trace_number = $("#search_trace_number").val();
+            let reference_number = $("#search_reference_number").val();
+            let FromDate = $("#FromDate").val();
+            let ToDate = $("#ToDate").val();
+            let transaction_type = $("#transaction_type").val();
+            console.log("transaction_type : " , transaction_type);
             let id = "{{url()->current()}}";
             id = id.split("/");
             id = id[4];
             // console.log(id[4]);
             $.ajax({
                 type:'POST',
-                url: url ,
+                url: "{{Route("GetTransactionFilter")}}" ,
                 dataType:'json',
                 data:{
                     '_token ': '<?php echo csrf_token() ?>',
                     'account_id' : id ,
                     'page' : page ,
+                    'trace_number' : trace_number,
+                    'reference_number' : reference_number,
+                    'FromDate' : FromDate,
+                    'ToDate' : ToDate,
+                    'type' : transaction_type,
                 },
                 statusCode: {
                     500: function() {
@@ -542,7 +679,14 @@
                             transition_amount.innerHTML = number_format(eval(account[i].transaction_amount) , 0 , "." , ",") ;
                             transition_amount.className = "h5 text-success" ;
                             date.innerHTML = account[i].created_jalali ;
-                            transaction_type.innerHTML = type ;
+                            let showType  = "" ;
+                            if( $("#transaction_type").val() == "charge"){
+                                showType = "افزایش اعتبار"
+                            }
+                            else{
+                                showType = "خرید"
+                            }
+                            transaction_type.innerHTML = showType ;
                             pigiri_number.innerHTML = account[i].trace_number ;
                             discripton.innerHTML = "-" ;
                             let typeT = $("#transaction_type").val();

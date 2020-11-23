@@ -12,6 +12,11 @@ use ReCaptcha\ReCaptcha;
 
 class AuthController extends Controller
 {
+    var $api;
+    public function __construct()
+    {
+        $this->api = new Api();
+    }
 
     public function loginPage(){
         if(isset($_SERVER['HTTP_REFERER']))
@@ -83,6 +88,12 @@ class AuthController extends Controller
     public function otpIndex()
     {
         return view("otp");
+    }
+    public function VerifyOtp(Request $request)
+    {
+        $otp = $request->get("number") ;
+        $VerifyOtp = $this->api->VerifyOtp($otp);
+        return $VerifyOtp ;
     }
 
     public function test(){

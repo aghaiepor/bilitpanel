@@ -26,6 +26,7 @@ Route::middleware(['CheckLogin'])->group(function () {
 
     // OTP Route
     Route::get('/otp' , 'AuthController@otpIndex')->name('otp');
+    Route::post('/VerifyOtp' , 'AuthController@VerifyOtp')->name('VerifyOtp');
 
     Route::middleware(['otp'])->group(function () {
 
@@ -154,6 +155,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         // presel Route
         Route::get('/presellTransaction/{id?}/{province_id?}' , 'presellController@transaction')->name('presellTransaction');
         Route::get('/presellManger' , 'presellController@indexPage')->name('presellManger');
+        Route::post('/GetTransactionFilter' , 'presellController@GetTransactionFilter')->name('GetTransactionFilter');
         Route::post('/ChargeAccount/{id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
         Route::post('/GetDechargeTransaction' , 'presellController@GetDechargeTransaction')->name('GetDechargeTransaction');
         Route::post('/GetChargeTransaction' , 'presellController@GetChargeTransaction')->name('GetChargeTransaction');

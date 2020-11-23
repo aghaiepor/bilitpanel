@@ -106,8 +106,55 @@ class presellController extends Controller
             "images_url" => $images_url ,
         ] ;
         return $data;
-
     }
+    public function GetTransactionFilter(Request $request){
+        $type = $request->get("type");
+        $page = $request->get("page") ;
+        $account_id = $request->get("account_id");
+        $trace_number = $request->get("trace_number");
+        if(is_null($trace_number))
+            $trace_number = "" ;
+        $reference_number = $request->get("reference_number");
+        if(is_null($reference_number))
+            $reference_number = "" ;
+        $ToDate = $request->get("ToDate");
+//        return $ToDate ;
+        $FromDate = $request->get("FromDate");
+        if(is_null($ToDate) && is_null($FromDate) )
+            $date = ["",""] ;
+        else{
+            if ($FromDate !='')
+                $FromDate = Verta::parse($this->fa2en($FromDate).' 00:00:00')->timestamp ;
+            if($ToDate != "")
+                $ToDate = Verta::parse($this->fa2en($ToDate).' 00:00:00')->timestamp ;
+
+            $date = [(string)$FromDate , (string)$ToDate ];
+        }
+//        return $date;
+
+        if($type == "charge")
+            $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number , $reference_number , $date) ;
+        else
+            $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date) ;
+//        return $GetChargeTransaction ;
+        $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
+        $images_url = [] ;
+        foreach ($GetChargeTransactions as $GetChargeTransaction)
+        {
+            $url = 0 ;
+            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
+                array_push($images_url , $url);
+            }else
+                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
+            array_push($images_url , $url);
+        }
+        $data = [
+            "GetChargeTransactions" => $GetChargeTransactions ,
+            "images_url" => $images_url ,
+        ] ;
+        return $data;
+    }
+
     public function GetTransaction(Request $request){
         $page = $request->get("page") ;
         $account_id = $request->get("account_id");

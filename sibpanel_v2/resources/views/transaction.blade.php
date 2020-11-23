@@ -178,7 +178,7 @@
                                 @endif
                                 <div class="col-md-3 text-right">
                                     <label for="">  تاریخ شروع  </label>
-                                    <input id="FromDate" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
+                                    <input id="FromDate" data-date="2025/3/12" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <label for="">  تاریخ پایان  </label>
@@ -341,10 +341,11 @@
     <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-
+            // console.log("test");
             $('#FromDate').persianDatepicker({
                 initialValue: true,
                 autoClose : true ,
+                altField: '#inlineExampleAlt',
                 format: 'YYYY/MM/DD',
                 calendar:{
                     persian:{
@@ -354,7 +355,7 @@
                     scroll:{
                         enabled:false
                     }
-                }
+                },
             });
             $('#ToDate').persianDatepicker({
                 initialValue: true,
@@ -376,12 +377,16 @@
                 }
             });
             let start = "{{request('startDate')}}";
-            if(start != '')
+            if(start != ''){
                 $("#FromDate").val(start);
-
+                start = start.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+                console.log(start);
+                $("#FromDate").attr("data-date" , start );
+            }
             let end = "{{request('endtDate')}}";
             if(end != '')
                 $("#ToDate").val(end);
+
         });
     </script>
     <script>
