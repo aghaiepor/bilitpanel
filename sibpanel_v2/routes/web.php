@@ -90,7 +90,7 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // Voucher Route
         Route::post('/AddVoucherInfo/{service_id}/{location_id}' ,'LocationController@AddVoucherInfo' )->name('AddVoucherInfo');
-        Route::post('/EditVoucherInfo/{service_id}/{location_id}/{id}' ,'LocationController@EditVoucherInfo' )->name('EditVoucherInfo');
+        Route::post('/EditVoucherInfo/{service_id?}/{location_id?}/{id?}' ,'LocationController@EditVoucherInfo' )->name('EditVoucherInfo');
         Route::post('/CancelVoucher' ,'VoucherController@CancelVoucher' )->name('CancelVoucher');
         Route::get('/voucherTypeList'  , 'VoucherController@VoucherTypeList' )->name('voucherTypeList');
         Route::post('/AddVoucherType'  , 'VoucherController@AddVoucherType' )->name('AddVoucherType');

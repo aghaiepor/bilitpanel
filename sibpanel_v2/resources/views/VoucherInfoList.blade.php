@@ -42,6 +42,7 @@
             color: #de8400;
         }
     </style>
+    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
 
 @section('content')
@@ -167,55 +168,91 @@
 {{--                                                    <img data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">--}}
                                                 </td>
                                                 <td>
-                                                    <button data-toggle="modal" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn  btn-success btn-simple">
+                                                    <button data-id="{{ $VoucherInfo[$i]['id'] }}" data-service_id="{{$VoucherInfo[$i]['service_id']}}" data-location_id="{{$VoucherInfo[$i]['location_id']}}" data-validity_period="{{$VoucherInfo[$i]['validity_period']}}" data-expiration_date="{{$VoucherInfo[$i]['expiration_date']}}"  data-voucher_type_name="{{$VoucherInfo[$i]['voucher_type_name']}}" data-toggle="modal" data-target="#Edit" type="button" rel="tooltip" class="btn TableEditBtn edit_btn  btn-success btn-simple">
                                                         <i class="material-icons">edit</i>
                                                         ویرایش
                                                     </button>
-                                                    <div class="modal fade" id="edit{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <form method="post" action="{{Route('EditVoucherInfo' , ['service_id'=>$VoucherInfo[$i]['service_id'] , 'location_id'=> $VoucherInfo[$i]['location_id'] ,'id'=>$VoucherInfo[$i]['id']])}}">
-                                                                @csrf
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title " id="edit1Label">  ویرایش بلیت </h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="form-row mt-3">
-                                                                            <div class="col-sm text-right">
-                                                                                <label for=""> مبلغ به ریال </label>
-                                                                                <input value="{{$VoucherInfo[$i]['amount']}}" name="amount" type="text" class="form-control"  placeholder="مبلغ به ریال">
-                                                                            </div>
-                                                                            <div class="col-sm text-right">
-                                                                                <label for=""> ظرفیت </label>
-                                                                                <input value="{{$VoucherInfo[$i]['total_capacity']}}" name="capacity" type="text" class="form-control"  placeholder="ظرفیت">
-                                                                            </div>
-                                                                            <div class="col-sm text-right">
-                                                                                <label for="">  نوع بلیت </label>
-                                                                                <select name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">
-                                                                                    <option disabled> نوع بلیت </option>
-                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "نیم بها") selected @endif value="2">نیم بها</option>
-                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "ایرانی") selected @endif value="3">ایرانی</option>
-                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "رایگان") selected @endif value="1">رایگان</option>
-                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "ایرانی گروهی") selected @endif value="5">ایرانی گروهی</option>
-                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "خارجی") selected @endif value="4">خارجی</option>
-                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "خارجی گروهی") selected @endif value="6">خارجی گروهی</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer mt-4">
-                                                                        {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                                                                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> ویرایش </button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
+{{--                                                    <div class="modal fade" id="edit{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">--}}
+{{--                                                        <div class="modal-dialog" role="document">--}}
+{{--                                                            <form method="post" action="{{Route('EditVoucherInfo' , ['service_id'=>$VoucherInfo[$i]['service_id'] , 'location_id'=> $VoucherInfo[$i]['location_id'] ,'id'=>$VoucherInfo[$i]['id']])}}">--}}
+{{--                                                                @csrf--}}
+{{--                                                                <div class="modal-content">--}}
+{{--                                                                    <div class="modal-header">--}}
+{{--                                                                        <h5 class="modal-title " id="edit1Label">  ویرایش بلیت </h5>--}}
+{{--                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                                                                            <span aria-hidden="true">&times;</span>--}}
+{{--                                                                        </button>--}}
+{{--                                                                    </div>--}}
+{{--                                                                    <div class="modal-body">--}}
+{{--                                                                        <div class="form-row mt-3">--}}
+{{--                                                                            <div class="col-sm text-right">--}}
+{{--                                                                                <label for=""> مبلغ به ریال </label>--}}
+{{--                                                                                <input value="{{$VoucherInfo[$i]['amount']}}" name="amount" type="text" class="form-control"  placeholder="مبلغ به ریال">--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <div class="col-sm text-right">--}}
+{{--                                                                                <label for=""> ظرفیت </label>--}}
+{{--                                                                                <input value="{{$VoucherInfo[$i]['total_capacity']}}" name="capacity" type="text" class="form-control"  placeholder="ظرفیت">--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <div class="col-sm text-right">--}}
+{{--                                                                                <label for="">  نوع بلیت </label>--}}
+{{--                                                                                <select name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">--}}
+{{--                                                                                    <option disabled> نوع بلیت </option>--}}
+{{--                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "نیم بها") selected @endif value="2">نیم بها</option>--}}
+{{--                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "ایرانی") selected @endif value="3">ایرانی</option>--}}
+{{--                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "رایگان") selected @endif value="1">رایگان</option>--}}
+{{--                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "ایرانی گروهی") selected @endif value="5">ایرانی گروهی</option>--}}
+{{--                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "خارجی") selected @endif value="4">خارجی</option>--}}
+{{--                                                                                    <option @if($VoucherInfo[$i]['voucher_type_name'] == "خارجی گروهی") selected @endif value="6">خارجی گروهی</option>--}}
+{{--                                                                                </select>--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                        <div class="form-row mt-3">--}}
+{{--                                                                            <div class="col-sm text-right">--}}
+{{--                                                                                <label class="mb-0" for=""> حداکثر تخفيف(درصد) </label>--}}
+{{--                                                                                <input min="0" max="100" type="text" class="form-control" name="max_discount_percentage" placeholder="حداکثر تخفيف">--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <div class="col-sm">--}}
+{{--                                                                                <label for=""></label>--}}
+{{--                                                                                <select name="exprieMode" class="selectpicker" data-style="btn btn-primary border-dark" name="" id="exprieMode">--}}
+{{--                                                                                    <option value="time">مدت انقضا  </option>--}}
+{{--                                                                                    <option value="date">تاریخ انقضا  </option>--}}
+{{--                                                                                </select>--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                        <div class="form-row mt-3">--}}
+{{--                                                                            <div id="expire_time" class="col-sm text-right">--}}
+{{--                                                                                <label class="mb-0" for="" > مدت انقضا </label>--}}
+{{--                                                                                <input type="text" class="form-control" name="validity_period" placeholder="مدت انقضا">--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <div id="timetype" class="col-sm text-right">--}}
+{{--                                                                                <label class="mb-0" for=""> نوع زمان </label>--}}
+{{--                                                                                <select class="selectpicker" data-style="btn btn-primary border-dark" name="timetype" >--}}
+{{--                                                                                    <option value="seconds">ثانیه  </option>--}}
+{{--                                                                                    <option value="min">دقیقه  </option>--}}
+{{--                                                                                    <option value="hour">ساعت  </option>--}}
+{{--                                                                                    <option value="day">روز  </option>--}}
+{{--                                                                                    <option value="week">هفته  </option>--}}
+{{--                                                                                    <option value="month">ماه  </option>--}}
+{{--                                                                                    <option value="year">سال  </option>--}}
+{{--                                                                                </select>--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <div id="expire_date" class="col-sm text-right">--}}
+{{--                                                                                <label class="mb-0" for="expiration_date"> تاريخ انقضا </label>--}}
+{{--                                                                                <input id="expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    </div>--}}
+{{--                                                                    <div class="modal-footer mt-4">--}}
+{{--                                                                        --}}{{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
+{{--                                                                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> ویرایش </button>--}}
+{{--                                                                    </div>--}}
+{{--                                                                </div>--}}
+{{--                                                            </form>--}}
 
-                                                        </div>
+{{--                                                        </div>--}}
 
-                                                    </div>
+{{--                                                    </div>--}}
+{{--                                                    --}}
                                                     <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
                                                         <i class="material-icons">close</i>
                                                         حدف
@@ -300,7 +337,7 @@
                         </div>
                         <div id="expire_date" class="col-sm text-right">
                             <label class="mb-0" for="expiration_date"> تاريخ انقضا </label>
-                            <input id="expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">
+                            <input dir="ltr" id="expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">
                         </div>
                     </div>
                 </div>
@@ -313,6 +350,87 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="edit_form" method="post" action="#">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="testLabel"> افزودن بلیت </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row mt-3">
+                        <div class="col-sm text-right">
+                            <label class="mb-0" for=""> مبلغ به ریال </label>
+                            <input id="edit_price" type="text" class="form-control" name="amount" placeholder="مبلغ به ریال">
+                        </div>
+                        <div class="col-sm text-right">
+                            <label class="mb-0" for=""> ظرفیت </label>
+                            <input id="edit_capacity" type="text" class="form-control" name="capacity" placeholder="ظرفیت">
+                        </div>
+                        <div class="col-sm text-right">
+                            <label class="mb-0" for=""> نوع بلیت </label>
+                            <select id="edit_voucher_type" name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">
+                                <option disabled> نوع بلیت </option>
+                                <option value="2">نیم بها</option>
+                                <option value="3">ایرانی</option>
+                                <option value="1">رایگان</option>
+                                <option value="5">ایرانی گروهی</option>
+                                <option value="4">خارجی</option>
+                                <option value="6">خارجی گروهی</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-sm text-right">
+                            <label class="mb-0" for=""> حداکثر تخفيف(درصد) </label>
+                            <input id="edit_max_percent" min="0" max="100" type="text" class="form-control" name="max_discount_percentage" placeholder="حداکثر تخفيف">
+                        </div>
+                        <div class="col-sm">
+                            <label for=""></label>
+                            <select name="exprieMode" class="selectpicker" data-style="btn btn-primary border-dark"  id="Edit_exprieMode">
+                                <option value="time">مدت انقضا</option>
+                                <option value="date">تاریخ انقضا</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div id="Edit_expire_time" class="col-sm text-right">
+                            <label class="mb-0" for="" > مدت انقضا </label>
+                            <input id="edit_validity_period" type="text" class="form-control" name="validity_period" placeholder="مدت انقضا">
+                        </div>
+                        <div id="Edit_timetype" class="col-sm text-right">
+                            <label class="mb-0" for=""> نوع زمان </label>
+                            <select id="edit_timetype" class="selectpicker" data-style="btn btn-primary border-dark" name="timetype" >
+                                <option value="seconds">ثانیه  </option>
+                                <option value="min">دقیقه  </option>
+                                <option value="hour">ساعت  </option>
+                                <option value="day">روز  </option>
+                                <option value="week">هفته  </option>
+                                <option value="month">ماه  </option>
+                                <option value="year">سال  </option>
+                            </select>
+                        </div>
+                        <div id="Edit_expire_date" class="col-sm text-right">
+                            <label class="mb-0" for="expiration_date"> تاريخ انقضا </label>
+                            <input dir="ltr" id="Edit_expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
+                    <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
 
 {{-- Modal for singel images   --}}
 <div class="modal fade" id="image_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -337,6 +455,7 @@
         </div>
     </div>
 </div>
+
 
 {{-- Modal for add service image   --}}
 <div class="modal fade" id="insetImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -375,12 +494,116 @@
         </div>
     </div>
 </div>
+
+
 @endsection
 @section('AddJs')
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
+    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // console.log("test");
+            $('#expiration_date , #Edit_expiration_date').persianDatepicker({
+                initialValue: true,
+                autoClose : true ,
+                altField: '#inlineExampleAlt',
+                format: 'YYYY/MM/DD hh:mm:ss',
+                timePicker : {
+                    enabled : true
+                } ,
+                calendar:{
+                    persian:{
+                        locale: 'fa'
+                    }
+                },navigator:{
+                    scroll:{
+                        enabled:false
+                    }
+                },
+            });
+        });
+    </script>
     <script>
+
         $(document).ready(function () {
+
+            $('.edit_btn').click(function () {
+                let voucher_id = $(this).attr("data-id");
+                let service_id = $(this).attr("data-service_id");
+                let location_id = $(this).attr("data-location_id");
+                let validity_period = $(this).attr("data-validity_period");
+                let expiration_date = $(this).attr("data-expiration_date");
+                let edit_price = $(this).parent().parent().find("td").eq(0).text();
+                edit_price = edit_price.replace(",", "");
+                edit_price = eval(edit_price);
+                let edit_capacity = $(this).parent().parent().find("td").eq(1).text() ;
+                if(edit_capacity == "نامحدود")
+                    edit_capacity = "";
+                let edit_voucher_type = $(this).attr("data-voucher_type_name") ;
+                let edit_max_percent = $(this).parent().parent().find("td").eq(3).text() ;
+                edit_max_percent = edit_max_percent.replace("درصد" , "");
+                edit_max_percent = eval(edit_max_percent);
+                $("#Edit_expire_time").show()
+                $("#Edit_timetype").show()
+                $("#Edit_expire_date").hide()
+
+                let Edit_exprieMode = "" ;
+                let edit_validity_period = "" ;
+                edit_validity_period = "seconds" ;
+
+                let edit_timetype = "" ;
+                let Edit_expiration_date ="" ;
+
+                if(validity_period != null ){
+                    Edit_exprieMode = "time" ;
+                }
+                else if(expiration_date != null){
+                    Edit_exprieMode = "date" ;
+                    $("#Edit_expire_time").hide();
+                    $("#Edit_timetype").hide();
+                    $("#Edit_expire_date").show();
+                }
+                else
+                    Edit_exprieMode = "time";
+
+
+                let url = "{{Route('EditVoucherInfo')}}/" + service_id + "/" + location_id + "/" + voucher_id ;
+                $("#edit_form").attr("action" , url);
+                $("#edit_price").val(edit_price);
+                $("#edit_capacity").val(edit_capacity);
+                $("#edit_voucher_type").val(edit_voucher_type);
+                $("#edit_max_percent").val(edit_max_percent);
+                // console.log("Edit_exprieMode " , Edit_exprieMode)
+                // console.log("edit_validity_period " , edit_validity_period)
+                $('#Edit_exprieMode').find("option[value="+ Edit_exprieMode + "]").attr('selected' , true);
+                $('#edit_timetype').find("option[value="+ edit_validity_period + "]").attr('selected' , true);
+                $("#edit_validity_period").val(validity_period);
+                $("#Edit_expiration_date").val(expiration_date);
+
+                $('#Edit_exprieMode').selectpicker('refresh');
+                $('#edit_timetype').selectpicker('refresh');
+                // $('#edit_timetype').find("option[value="+ edit_timetype + "]").attr('selected' , true);
+                // console.log(url);
+            });
+
+            $("#Edit_exprieMode").change(function () {
+                let value = $(this).val() ;
+                if(value == "date"){
+                    $("#Edit_expire_date").show();
+                    $("#Edit_timetype").hide();
+                    $("#Edit_expire_time").hide();
+                }
+                else{
+                    $("#Edit_expire_date").hide();
+                    $("#Edit_timetype").show();
+                    $("#Edit_expire_time").show();
+                }
+            });
+
+
             $("#expire_date").hide();
+
             $("#exprieMode").change(function () {
                 let value = $(this).val() ;
                 console.log(value);
@@ -394,7 +617,6 @@
                     $("#expire_time").show();
                     $("#timetype").show();
                 }
-
             });
             // for show image and id on modal
             $(".citzen_main_img").click(function () {
@@ -427,3 +649,4 @@
 
     </script>
 @endsection
+

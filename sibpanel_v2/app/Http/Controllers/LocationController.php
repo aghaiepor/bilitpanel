@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use Carbon\Carbon;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -343,7 +345,7 @@ class LocationController extends Controller
             }
         }
 //        return $voucher_id_image;
-        return $VoucherInfoList;
+//        return $VoucherInfoList;
         return view('VoucherInfoList' , ['VoucherInfo'=> $VoucherInfoList['ContentData'] ,
             'GetServices' =>$GetServices , 'service_id'=> $service_id , 'location_id' =>$location_id ,
             'voucher_id_image'=> $voucher_id_image ,  'projectList' => $projectList['ContentData'] ]);
@@ -401,12 +403,16 @@ class LocationController extends Controller
             else if ($timetype == "year" )
                 $validity_period *= 29030400 ;
         }
-        else if($exprieMode == "date" )
-            $validity_period = "";
+        else if($exprieMode == "date" ){
+            $validity_period = null;
+            $expiration_date = $this->fa2en($expiration_date);
+            $expiration_date = Verta::parse($expiration_date)->timestamp;
+            $expiration_date = Carbon::createFromTimestamp($expiration_date)->format('Y-m-d h:i');
 
-
+        }
+//        return $expiration_date ;
         $AddVoucherInfo  = $this->api->AddVoucherInfo($service_id, $amount, $voucher_type_id, $capacity, $location_id , $max_discount_percentage , $validity_period , $expiration_date);
-//        return $AddVoucherInfo;
+        return $AddVoucherInfo;
         if ($AddVoucherInfo['Header']['Status'] == 0){
             return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
         }
@@ -695,6 +701,9 @@ class LocationController extends Controller
             'image' => base64_encode(file_get_contents($request->file('main_image_event')->path())),
         ];
         return $data ;
+    }
+    private function fa2en($number){
+        return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
     }
     public function imageRemove($id){
         $del = $this->api->DeletePicture($id);

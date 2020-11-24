@@ -223,6 +223,29 @@
                                     {{$result->render()}}
                                 @endif
                             </ul>
+                            <nav id="pagination" aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#link" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i></span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#link">1<div class="ripple-container"></div></a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#link">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#link">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#link" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -409,102 +432,6 @@
     <script>
         $(document).ready(function () {
 
-            {{--$("#Search_btn").click(function () {--}}
-            {{--    $("#loader").css("display" , "flex");--}}
-            {{--    let trace_number = $("#search_trace_number").val();--}}
-            {{--    let reference_number = $("#search_reference_number").val();--}}
-            {{--    let date = $("#FromDate").val();--}}
-            {{--    let type = $("#transaction_type").val();--}}
-            {{--    let id = "{{url()->current()}}";--}}
-            {{--    id = id.split("/");--}}
-            {{--    id = id[4];--}}
-            {{--    $.ajax({--}}
-            {{--        type:'POST',--}}
-            {{--        url: "{{Route("GetTransactionFilter")}}" ,--}}
-            {{--        dataType:'json',--}}
-            {{--        data:{--}}
-            {{--            '_token ': '<?php echo csrf_token() ?>',--}}
-            {{--            'account_id' : id ,--}}
-            {{--            'page' : 1 ,--}}
-            {{--            'trace_number' : trace_number,--}}
-            {{--            'reference_number' : reference_number,--}}
-            {{--            'date' : date,--}}
-            {{--            'type' : type,--}}
-            {{--        },--}}
-            {{--        statusCode: {--}}
-            {{--            500: function() {--}}
-            {{--                $("#loader").hide();--}}
-            {{--                Swal.fire(--}}
-            {{--                    'خطا در دريافت اطلاعات ! ',--}}
-            {{--                    '',--}}
-            {{--                    'error'--}}
-            {{--                )--}}
-            {{--            }--}}
-            {{--        },--}}
-            {{--        success : function (data) {--}}
-
-            {{--            console.log("data : " , data);--}}
-            {{--            let account  = data["GetChargeTransactions"] ;--}}
-            {{--            let images = data["images_url"] ;--}}
-            {{--            // console.log(images);--}}
-            {{--            let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];--}}
-            {{--            if(account.length == 0 ){--}}
-            {{--                $("#tbody").html(" ");--}}
-            {{--                var row = table.insertRow();--}}
-            {{--                var cell = row.insertCell();--}}
-            {{--                cell.id = "myTd";--}}
-            {{--                cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";--}}
-            {{--                document.getElementById("myTd").colSpan = "6";--}}
-            {{--                $("#loader").hide();--}}
-            {{--            }--}}
-            {{--            else {--}}
-            {{--                $("#tbody").html(" ");--}}
-            {{--                let row ;--}}
-            {{--                let transition_amount ;--}}
-            {{--                let date ;--}}
-            {{--                let transaction_type ;--}}
-            {{--                let pigiri_number ;--}}
-            {{--                let discripton ;--}}
-            {{--                let setting ;--}}
-            {{--                for(let i = 0 ; i < account.length ; i++){--}}
-            {{--                    row = table.insertRow();--}}
-            {{--                    transition_amount = row.insertCell();--}}
-            {{--                    date = row.insertCell();--}}
-            {{--                    transaction_type = row.insertCell();--}}
-            {{--                    pigiri_number = row.insertCell();--}}
-            {{--                    discripton = row.insertCell();--}}
-            {{--                    setting = row.insertCell();--}}
-
-            {{--                    transition_amount.innerHTML = number_format(eval(account[i].transaction_amount) , 0 , "." , ",") ;--}}
-            {{--                    transition_amount.className = "h5 text-success" ;--}}
-            {{--                    date.innerHTML = account[i].created_jalali ;--}}
-            {{--                    let showType = "" ;--}}
-            {{--                    if(type == "charge")--}}
-            {{--                        showType = "افزایش اعتبار"--}}
-            {{--                    else--}}
-            {{--                        showType = "خرید"--}}
-            {{--                    transaction_type.innerHTML = showType ;--}}
-            {{--                    pigiri_number.innerHTML = account[i].trace_number ;--}}
-            {{--                    discripton.innerHTML = "-" ;--}}
-            {{--                    let typeT = $("#transaction_type").val();--}}
-            {{--                    if(typeT == "charge"){--}}
-            {{--                        let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;--}}
-            {{--                        if(images[i] != 0 ){--}}
-            {{--                            image = " <a href='" + images[i] + "' class=\"btn btn-success docDownload \">دانلود مستندات</a>" ;--}}
-            {{--                        }--}}
-            {{--                        setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;--}}
-            {{--                    }else--}}
-            {{--                        setting.innerHTML = "" ;--}}
-
-            {{--                    // document.getElementsByClassName("myTr").colSpan = "5";--}}
-
-            {{--                }--}}
-            {{--                $("#loader").hide();--}}
-            {{--            }--}}
-            {{--        }--}}
-            {{--    })--}}
-
-            {{--});--}}
             $(document).on( "click", ".factor", function () {
                 $("#loader2").css("display" , "flex");
                 let id = "{{url()->current()}}";
@@ -588,12 +515,17 @@
                 a.click();
             });
 
+            $(document).on( "click", ".page_btn", function () {
+                let page = $(this).text();
+                GetDechargeTransaction(eval(page));
+            });
+
             $("#transaction_type").change(function () {
                 let type = $("#transaction_type").val() ;
                 if(type == "Decharge")
-                    GetDechargeTransaction("{{Route('GetDechargeTransaction')}}" , "خريد");
+                    GetDechargeTransaction();
                 else
-                    GetDechargeTransaction("{{Route('GetChargeTransaction')}}" , "افزايش اعتبار");
+                    GetDechargeTransaction();
 
             })
             $("#Search_btn").click(function () {
@@ -603,18 +535,23 @@
 
 
         });
-        function GetDechargeTransaction(){
+        $("#pagination").hide();
+        function GetDechargeTransaction(curent_page=""){
             $("#loader").css("display" , "flex");
             let page = "{{request("page")}}";
-            // console.log("page" , page == "");
+            // console.log("page" , curent_page );
             if(page == "")
                 page = 1 ;
+
+            if(curent_page != "")
+                page = curent_page ;
+
             let trace_number = $("#search_trace_number").val();
             let reference_number = $("#search_reference_number").val();
             let FromDate = $("#FromDate").val();
             let ToDate = $("#ToDate").val();
             let transaction_type = $("#transaction_type").val();
-            console.log("transaction_type : " , transaction_type);
+            // console.log("transaction_type : " , transaction_type);
             let id = "{{url()->current()}}";
             id = id.split("/");
             id = id[4];
@@ -644,11 +581,59 @@
                     }
                 },
                 success : function (data) {
-
                     // console.log("data : " , data);
+                    // console.log("page : " , page);
                     let account  = data["GetChargeTransactions"] ;
                     let images = data["images_url"] ;
-                    // console.log(images);
+                    let total_pages = data["total_pages"] ;
+                    let page_html = "";
+                    if(total_pages > 1 ){
+                        $("#pagination").show();
+                        let start = 0 ;
+                        let end  = 0;
+                        $("#pagination .pagination").html("");
+                        if (total_pages <= 5)
+                        {
+                            start = 0 ;
+                            end =  total_pages ;
+                            for(let i = 1 ; i <= total_pages ; i++){
+                                    if(i == page)
+                                        page_html = '<li class="page-item page_btn active">\n' ;
+                                    else
+                                        page_html = '<li class="page-item page_btn">\n' ;
+
+                                    page_html += '<a class="page-link" >'+i+'<div class="ripple-container "></div></a>\n' +
+                                        '</li>';
+                                    $("#pagination .pagination").append(page_html);
+                            }
+                        }
+                        else {
+                        for(let i = 1 ; i <= total_pages ; i++){
+                            if(i == 1  || (((i - page) <= 3) && ((i - page) >= 0)) || (((page - i) <= 3) && ((page - i) >= 0) ) || i == total_pages ){
+                                if(i == page)
+                                    page_html = '<li class="page-item page_btn active">\n' ;
+                                else
+                                    page_html = '<li class="page-item page_btn">\n' ;
+
+                                page_html += '<a class="page-link" >'+i+'<div class="ripple-container "></div></a>\n' +
+                                    '</li>';
+                                $("#pagination .pagination").append(page_html);
+                            }
+                            else if ( (page - i ) == 4 ){
+                                page_html = "..."
+                                $("#pagination .pagination").append(page_html);
+                            }
+                            else if ( (i - page) == 4 ){
+                                page_html = "..."
+                                $("#pagination .pagination").append(page_html);
+                            }
+                        }
+                        }
+                    }
+                    else
+                        $("#pagination").hide();
+
+                    console.log("total_pages : " , total_pages);
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
                     if(account.length == 0 ){
                         $("#tbody").html(" ");
