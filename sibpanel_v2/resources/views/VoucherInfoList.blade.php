@@ -97,6 +97,9 @@
                                             ظرفیت باقی مانده
                                         </th>
                                         <th >
+                                           حداکثر تخفیف
+                                        </th>
+                                        <th >
                                             نوع بلیت
                                         </th>
                                         <th >
@@ -121,10 +124,21 @@
                                                     {{number_format($VoucherInfo[$i]['amount'],0,'.',',')}}
                                                 </td>
                                                 <td>
-                                                    {{$VoucherInfo[$i]['total_capacity']}}
+                                                    @if ($VoucherInfo[$i]['total_capacity'] == "")
+                                                        نامحدود
+                                                        @else
+                                                        {{$VoucherInfo[$i]['total_capacity']}}
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    {{$VoucherInfo[$i]['remain_capacity']}}
+                                                    @if ($VoucherInfo[$i]['remain_capacity'] == "")
+                                                        نامحدود
+                                                    @else
+                                                        {{$VoucherInfo[$i]['remain_capacity']}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                     {{$VoucherInfo[$i]['max_discount_percentage']}} درصد
                                                 </td>
                                                 <td>
                                                     {{$VoucherInfo[$i]['voucher_type_name']}}
@@ -234,15 +248,15 @@
                 <div class="modal-body">
                     <div class="form-row mt-3">
                         <div class="col-sm text-right">
-                            <label for=""> مبلغ به ریال </label>
+                            <label class="mb-0" for=""> مبلغ به ریال </label>
                             <input type="text" class="form-control" name="amount" placeholder="مبلغ به ریال">
                         </div>
                         <div class="col-sm text-right">
-                            <label for=""> ظرفیت </label>
+                            <label class="mb-0" for=""> ظرفیت </label>
                             <input type="text" class="form-control" name="capacity" placeholder="ظرفیت">
                         </div>
                         <div class="col-sm text-right">
-                            <label for=""> نوع بلیت </label>
+                            <label class="mb-0" for=""> نوع بلیت </label>
                             <select name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">
                                 <option disabled> نوع بلیت </option>
                                 <option value="2">نیم بها</option>
@@ -252,6 +266,41 @@
                                 <option value="4">خارجی</option>
                                 <option value="6">خارجی گروهی</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-sm text-right">
+                            <label class="mb-0" for=""> حداکثر تخفيف(درصد) </label>
+                            <input min="0" max="100" type="text" class="form-control" name="max_discount_percentage" placeholder="حداکثر تخفيف">
+                        </div>
+                        <div class="col-sm">
+                            <label for=""></label>
+                            <select name="exprieMode" class="selectpicker" data-style="btn btn-primary border-dark" name="" id="exprieMode">
+                                <option value="time">مدت انقضا  </option>
+                                <option value="date">تاریخ انقضا  </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div id="expire_time" class="col-sm text-right">
+                            <label class="mb-0" for="" > مدت انقضا </label>
+                            <input type="text" class="form-control" name="validity_period" placeholder="مدت انقضا">
+                        </div>
+                        <div id="timetype" class="col-sm text-right">
+                            <label class="mb-0" for=""> نوع زمان </label>
+                            <select class="selectpicker" data-style="btn btn-primary border-dark" name="timetype" >
+                                <option value="seconds">ثانیه  </option>
+                                <option value="min">دقیقه  </option>
+                                <option value="hour">ساعت  </option>
+                                <option value="day">روز  </option>
+                                <option value="week">هفته  </option>
+                                <option value="month">ماه  </option>
+                                <option value="year">سال  </option>
+                            </select>
+                        </div>
+                        <div id="expire_date" class="col-sm text-right">
+                            <label class="mb-0" for="expiration_date"> تاريخ انقضا </label>
+                            <input id="expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">
                         </div>
                     </div>
                 </div>
@@ -331,7 +380,22 @@
     <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script>
         $(document).ready(function () {
+            $("#expire_date").hide();
+            $("#exprieMode").change(function () {
+                let value = $(this).val() ;
+                console.log(value);
+                if(value == "date"){
+                    $("#expire_date").show();
+                    $("#expire_time").hide();
+                    $("#timetype").hide();
+                }
+                else{
+                    $("#expire_date").hide();
+                    $("#expire_time").show();
+                    $("#timetype").show();
+                }
 
+            });
             // for show image and id on modal
             $(".citzen_main_img").click(function () {
                 let src = $(this).attr("src") ;

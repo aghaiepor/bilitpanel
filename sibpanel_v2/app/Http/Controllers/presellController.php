@@ -131,23 +131,27 @@ class presellController extends Controller
             $date = [(string)$FromDate , (string)$ToDate ];
         }
 //        return $date;
-
-        if($type == "charge")
-            $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number , $reference_number , $date) ;
-        else
-            $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date) ;
-//        return $GetChargeTransaction ;
-        $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
         $images_url = [] ;
-        foreach ($GetChargeTransactions as $GetChargeTransaction)
-        {
-            $url = 0 ;
-            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
-                array_push($images_url , $url);
-            }else
-                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
-            array_push($images_url , $url);
+        if($type == "charge"){
+            $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number , $reference_number , $date) ;
+            $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
+            foreach ($GetChargeTransactions as $GetChargeTransaction)
+            {
+                $url = 0 ;
+                if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
+                    array_push($images_url , $url);
+                }else{
+                    $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
+                    array_push($images_url , $url);
+                }
+            }
         }
+        else{
+            $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date) ;
+            $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
+        }
+//        return $GetChargeTransaction ;
+
         $data = [
             "GetChargeTransactions" => $GetChargeTransactions ,
             "images_url" => $images_url ,

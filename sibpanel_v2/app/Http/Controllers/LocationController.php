@@ -343,6 +343,7 @@ class LocationController extends Controller
             }
         }
 //        return $voucher_id_image;
+        return $VoucherInfoList;
         return view('VoucherInfoList' , ['VoucherInfo'=> $VoucherInfoList['ContentData'] ,
             'GetServices' =>$GetServices , 'service_id'=> $service_id , 'location_id' =>$location_id ,
             'voucher_id_image'=> $voucher_id_image ,  'projectList' => $projectList['ContentData'] ]);
@@ -376,14 +377,41 @@ class LocationController extends Controller
 
         $amount = $request->get("amount");
         $voucher_type_id = $request->get("voucher_type_id");
+        $exprieMode = $request->get("exprieMode");
+        $timetype = $request->get("timetype");
+        $max_discount_percentage = $request->get("max_discount_percentage");
+        $validity_period = $request->get("validity_period");
+        $expiration_date = $request->get("expiration_date");
         $capacity = (int)$request->get("capacity");
         if($capacity == 0 )
             $capacity = '';
 
-        $AddVoucherInfo  = $this->api->AddVoucherInfo($service_id, $amount, $voucher_type_id, $capacity, $location_id);
+        if($exprieMode == "time"){
+            $expiration_date = null;
+            if($timetype == "min")
+                $validity_period *= 60 ;
+            else if ($timetype == "hour" )
+                $validity_period *= 3600 ;
+            else if ($timetype == "day" )
+                $validity_period *= 86400 ;
+            else if ($timetype == "week" )
+                $validity_period *= 604800 ;
+            else if ($timetype == "month" )
+                $validity_period *= 2419200 ;
+            else if ($timetype == "year" )
+                $validity_period *= 29030400 ;
+        }
+        else if($exprieMode == "date" )
+            $validity_period = "";
+
+
+        $AddVoucherInfo  = $this->api->AddVoucherInfo($service_id, $amount, $voucher_type_id, $capacity, $location_id , $max_discount_percentage , $validity_period , $expiration_date);
 //        return $AddVoucherInfo;
         if ($AddVoucherInfo['Header']['Status'] == 0){
             return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
+        }
+        else if( $AddVoucherInfo['Header']['Message'] == "Repetitious Voucher Info"){
+            return redirect()->back()->with('error' , 'نوع بلیت انتخابی موجود است ! ');
         }
         else
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');

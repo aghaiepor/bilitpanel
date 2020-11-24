@@ -101,16 +101,16 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md pl-0">
+                                <div class="col-md pl-md-0">
                                     <input id="search_trace_number" type="text" placeholder="شماره پيگيري" class="form-control">
                                 </div>
-                                <div class="col-md pl-0">
+                                <div class="col-md pl-md-0">
                                     <input id="search_reference_number" type="text" placeholder="شماره فيش" class="form-control">
                                 </div>
-                                <div class="col-md pl-0">
+                                <div class="col-md pl-md-0">
                                     <input autocomplete="off"  id="FromDate" type="text" placeholder="تاریخ شروع" class="form-control">
                                 </div>
-                                <div class="col-md pl-0">
+                                <div class="col-md pl-md-0">
                                     <input autocomplete="off"  id="ToDate" type="text" placeholder="تاريخ پایان" class="form-control">
                                 </div>
                                 <div class="col-md-auto">

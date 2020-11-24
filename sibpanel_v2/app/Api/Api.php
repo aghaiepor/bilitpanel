@@ -349,14 +349,16 @@ class Api
         return $response;
 
     }
-    public function AddVoucherInfo($service_id, $amount, $voucher_type_id, $capacity, $location_id){
+    public function AddVoucherInfo($service_id, $amount, $voucher_type_id, $capacity, $location_id , $max_discount_percentage , $validity_period , $expiration_date){
         $data = [
             "service_id" => $service_id,
             "amount"=> $amount,
             "voucher_type_id"=> $voucher_type_id,
             "capacity"=> $capacity,
             "location_id"=> $location_id,
-
+            "max_discount_percentage"=> $max_discount_percentage,
+            "validity_period"=> $validity_period,
+            "expiration_date"=> $expiration_date,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddVoucherInfo' ,[
