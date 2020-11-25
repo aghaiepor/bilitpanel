@@ -360,6 +360,7 @@ class Api
             "validity_period"=> $validity_period,
             "expiration_date"=> $expiration_date,
         ];
+
         $client = new Client();
         $result = $client->post($this->url . 'AddVoucherInfo' ,[
                 'headers'=>$this->getHeader(),
@@ -372,7 +373,7 @@ class Api
         return $response;
 
     }
-    public function EditVoucherInfo($voucher_info_id, $voucher_type_id, $service_id, $amount, $capacity, $location_id){
+    public function EditVoucherInfo($voucher_info_id, $voucher_type_id, $service_id, $amount, $capacity, $location_id , $max_discount_percentage , $validity_period , $expiration_date){
         $data = [
             "service_id" => $service_id,
             "amount"=> $amount,
@@ -380,7 +381,11 @@ class Api
             "voucher_info_id"=> $voucher_info_id,
             "capacity"=> $capacity,
             "location_id"=> $location_id,
+            "max_discount_percentage"=> $max_discount_percentage,
+            "validity_period"=> $validity_period,
+            "expiration_date"=> $expiration_date,
         ];
+        Log::info("EditVoucherInfo " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditVoucherInfo' ,[
                 'headers'=>$this->getHeader(),

@@ -253,10 +253,12 @@
 
 {{--                                                    </div>--}}
 {{--                                                    --}}
-                                                    <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
+
+                                                    {{-- DELETE BUTTON  DONT REMOVE THIS PART --}}
+                                                 {{--   <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
                                                         <i class="material-icons">close</i>
                                                         حدف
-                                                    </button>
+                                                    </button>--}}
                                                 </td>
                                             </tr>
                                         @endfor
@@ -536,10 +538,16 @@
                 let expiration_date = $(this).attr("data-expiration_date");
                 let edit_price = $(this).parent().parent().find("td").eq(0).text();
                 edit_price = edit_price.replace(",", "");
+                edit_price = edit_price.trim();
                 edit_price = eval(edit_price);
                 let edit_capacity = $(this).parent().parent().find("td").eq(1).text() ;
+                edit_capacity = edit_capacity.trim();
+                // console.log(edit_capacity == "نامحدود")
                 if(edit_capacity == "نامحدود")
                     edit_capacity = "";
+                else
+                    edit_capacity = eval(edit_capacity);
+
                 let edit_voucher_type = $(this).attr("data-voucher_type_name") ;
                 let edit_max_percent = $(this).parent().parent().find("td").eq(3).text() ;
                 edit_max_percent = edit_max_percent.replace("درصد" , "");
@@ -555,10 +563,12 @@
                 let edit_timetype = "" ;
                 let Edit_expiration_date ="" ;
 
-                if(validity_period != null ){
+                // console.log("expiration_date =>" , expiration_date)
+                // console.log("validity_period =>" , validity_period)
+                if(validity_period != "" ){
                     Edit_exprieMode = "time" ;
                 }
-                else if(expiration_date != null){
+                else if(expiration_date != ""){
                     Edit_exprieMode = "date" ;
                     $("#Edit_expire_time").hide();
                     $("#Edit_timetype").hide();
@@ -567,26 +577,29 @@
                 else
                     Edit_exprieMode = "time";
 
-
+                // console.log("Edit_exprieMode =>" , Edit_exprieMode)
                 let url = "{{Route('EditVoucherInfo')}}/" + service_id + "/" + location_id + "/" + voucher_id ;
                 $("#edit_form").attr("action" , url);
                 $("#edit_price").val(edit_price);
                 $("#edit_capacity").val(edit_capacity);
-                $("#edit_voucher_type").val(edit_voucher_type);
                 $("#edit_max_percent").val(edit_max_percent);
-                // console.log("Edit_exprieMode " , Edit_exprieMode)
+                // console.log("Edit_exprieMode " , $('#Edit_exprieMode').find("option[value="+ Edit_exprieMode + "]").attr("value"))
                 // console.log("edit_validity_period " , edit_validity_period)
+                $('#Edit_exprieMode').find("option").attr('selected' , false);
                 $('#Edit_exprieMode').find("option[value="+ Edit_exprieMode + "]").attr('selected' , true);
+                $('#edit_timetype').find("option").attr('selected' , false);
                 $('#edit_timetype').find("option[value="+ edit_validity_period + "]").attr('selected' , true);
+                console.log("voucher_type_id =>" , edit_voucher_type);
+                $('#edit_voucher_type').find("option").attr('selected' , false);
+                let edit_voucher_type_value = $("#edit_voucher_type option").filter(function() {
+                    return $(this).text() === edit_voucher_type;
+                }).val();
+                console.log("edit_voucher_type_value => " , edit_voucher_type_value)
+                $('#edit_voucher_type').find("option[value="+ edit_voucher_type_value + "]").attr('selected' , true);
                 $("#edit_validity_period").val(validity_period);
                 $("#Edit_expiration_date").val(expiration_date);
-
-                $('#Edit_exprieMode').selectpicker('refresh');
-                $('#edit_timetype').selectpicker('refresh');
-                // $('#edit_timetype').find("option[value="+ edit_timetype + "]").attr('selected' , true);
-                // console.log(url);
+                $('.selectpicker').selectpicker('refresh');
             });
-
             $("#Edit_exprieMode").change(function () {
                 let value = $(this).val() ;
                 if(value == "date"){
@@ -600,10 +613,7 @@
                     $("#Edit_expire_time").show();
                 }
             });
-
-
             $("#expire_date").hide();
-
             $("#exprieMode").change(function () {
                 let value = $(this).val() ;
                 console.log(value);
