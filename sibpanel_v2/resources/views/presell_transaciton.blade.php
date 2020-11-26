@@ -253,6 +253,123 @@
         </div>
     </div>
 
+    <div class="modal fade" id="showFactorBuy" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form id="chargeForm" action="#" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="testLabel">مشخصات تراکنش خرید بلیت الکترونیک  </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="printArea" class="card-body">
+                        <div id="loader3" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                            <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                        </div>
+                        <div class="invoice p-1 border">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="text-right">رسید تراکنش خرید بلیت الکترونیک</div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="invoice-brands text-left">
+                                        <img class="brand brand-pec" width="80" height="80" alt="Miras" style="filter: invert(1)" src="{{asset("")}}assets/img/mirasw_logo.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class=" text-right">
+                                        فاکتور خرید:
+                                        #
+                                        <span id="buy_factor_number" class="font-weight-bold"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 my-auto">
+                                    <div class="invoice-ginfo">
+                                        <table class="float-left">
+                                            <tbody>
+                                            <tr>
+                                                <th>تاریخ:</th>
+                                                <td id="buy_date"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+
+                                    <h4 class="text-center font-weight-bold py-3">مشخصات تراکنش</h4>
+                                    <table class="table table-striped bordered text-right" style="font-size:14px;">
+                                        <tbody>
+                                        <tr>
+                                            <th>نام مرکز:</th>
+                                            <td style="">استان {{$province_name}} / {{$Account["name"]}} </td>
+                                            <th>نام کاربر</th>
+                                            <td> {{session('UserInfo')['first_name']  . " "  . session('UserInfo')['last_name']}} </td>
+                                        </tr>
+                                        <tr>
+                                            <th>مبلغ:</th>
+                                            <td><span id="buy_deposit_amount"></span> ریال</td>
+                                            <th>نوع بلیت:</th>
+                                            <td><span id="buy_transaction_type"></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <th>مکان:</th>
+                                            <td id="buy_location_name"></td>
+                                            <th>شماره فیش:</th>
+                                            <td id="buy_reference_number"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>تعداد بلیت:</th>
+                                            <td id="buy_ticket_id" style="direction:ltr"></td>
+                                            <th>شناسه قبض:</th>
+                                            <td id="buy_bill_id" style="direction:ltr"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>شناسه پرداخت:</th>
+                                            <td id="buy_payment_id">-</td>
+                                            <th>شماره پی گیری:</th>
+                                            <td id="buy_trace_number"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="bg-light mb-0">
+                                        <div class="row">
+                                            <div class="col-sm-12"></div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6 text-center py-4">امضای واحد ذی حساب</div>
+                                            <div class="col-sm-6 text-center py-4">امضای دستگاه نظارت</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-1">
+                        {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
+                        <button id="print" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> پرينت </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="modal fade" id="showFactor" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <form id="chargeForm" action="#" method="post" enctype="multipart/form-data">
@@ -431,7 +548,98 @@
     </script>
     <script>
         $(document).ready(function () {
+            $(document).on( "click", ".factorBuy", function () {
+                $("#loader3").css("display" , "flex");
+                let id = "{{url()->current()}}";
+                id = id.split("/");
+                id = id[4];
+                let trace_number = $(this).attr("data_id") ;
+                let type = $("#transaction_type").val();
+                console.log("type => " , type);
+                let page = "{{request("page")}}";
+                if(page == "")
+                    page = 1 ;
+                // $("#trace_number , #factor_number").text(trace_number);
+                $.ajax({
+                    type:'POST',
+                    url: "{{Route("GetTransaction")}}" ,
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'account_id' : id ,
+                        'page' : page ,
+                        'type' : type ,
+                        'trace_number' : trace_number ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader2").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                '',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
 
+                        }
+                    },
+                    success : function (data) {
+                        $("#loader3").hide();
+                        // console.log("GetChargeTransactions =>" , data) ;
+                        let account  = data["GetChargeTransactions"] ;
+                        // console.log( "transaction_amount => " , account)
+                        $("#buy_deposit_amount").text(number_format(account[0].transaction_amount, 0 , "." , ","));
+                        $("#buy_factor_number").text(account[0].trace_number);
+                        let date = account[0].created_jalali ;
+                        date  = date.split(" ");
+                        date = date[0] + "<br>" + date[1];
+                        $("#buy_date").html(date);
+                        // console.log("additional_data =>" , account[0]["additional_data"]);
+                        if(Object.keys(account[0]["description"]).length != 0)
+                        {
+                            $("#buy_transaction_type").text(account[0]["description"].voucher_type_name);
+                            $("#buy_location_name").text(account[0]["description"].location_name);
+                            $("#buy_reference_number").text(account[0]["description"].voucher_number);
+                            $("#buy_ticket_id").text(account[0]["description"].ticket_number);
+                            $("#buy_bill_id").text(account[0]["description"].bill_id);
+                            $("#buy_payment_id").text(account[0]["description"].payment_id);
+                            $("#buy_trace_number").text(account[0]["description"].RRN);
+                        }else
+                        {
+                            $("#buy_transaction_type").text("");
+                            $("#buy_location_name").text("");
+                            $("#buy_reference_number").text("");
+                            $("#buy_ticket_id").text("");
+                            $("#buy_bill_id").text("");
+                            $("#buy_payment_id").text("");
+                            $("#buy_trace_number").text("");
+                        }
+                    }
+                })
+            });
             $(document).on( "click", ".factor", function () {
                 $("#loader2").css("display" , "flex");
                 let id = "{{url()->current()}}";
@@ -462,6 +670,31 @@
                                 '',
                                 'error'
                             )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
                         }
                     },
                     success : function (data) {
@@ -575,9 +808,34 @@
                         $("#loader").hide();
                         Swal.fire(
                             'خطا در دريافت اطلاعات ! ',
-                            '',
+                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                             'error'
                         )
+                    } ,
+                    400: function() {
+                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                        let x = 1 ;
+                        let dots = "";
+                        setInterval(function () {
+                            dots += ".";
+                            x++  ;
+                            // console.log(x)
+                            if(x >= 8 ){
+                                x = 1 ;
+                                dots = ".";
+                            }
+                            $("#dots").html(dots)
+                        } , 300)
+                        $("#loader").hide();
+                        Swal.fire(
+                            'نشست  شما پایان یافته است ! ',
+                            html,
+                            'warning' ,
+                        )
+                        setTimeout(function () {
+                            window.location.href = "{{Route("logout")}}";
+                        } , 1500)
+
                     }
                 },
                 success : function (data) {
@@ -633,7 +891,7 @@
                     else
                         $("#pagination").hide();
 
-                    console.log("total_pages : " , total_pages);
+                    // console.log("total_pages : " , total_pages);
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
                     if(account.length == 0 ){
                         $("#tbody").html(" ");
@@ -682,7 +940,7 @@
                             }
                             setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;
                             }else
-                                setting.innerHTML = "" ;
+                                setting.innerHTML = '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactorBuy"  class="btn btn-primary factorBuy "> مشخصات تراکنش</a>' ;
 
                             // document.getElementsByClassName("myTr").colSpan = "5";
 

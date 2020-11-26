@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Boolean;
 
 
@@ -1272,7 +1273,7 @@ class Api
     }
 
     // ******************** Presell ****************
-    public function GetAccountProvince($province_id){
+    public function GetAccountProvince($province_id , $type=null){
         $data = [
             'province_id' => $province_id,
         ];
@@ -1284,7 +1285,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
     }
     public function VerifyOtp($otp){
@@ -1315,7 +1316,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
     }
     public function SetAccountSetting($account_id ,$average_balance_use , $red_percentage ,$orange_percentage , $yellow_percentage , $green_percentage){
@@ -1357,7 +1358,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date=""){
+    public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date="", $ajax=null){
             $data = [
                 "page" => $page,
                 "conditions" =>
@@ -1378,10 +1379,10 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $ajax);
         return $response;
     }
-    public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date=""){
+    public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date="", $ajax=null){
         $data = [
             "page" => $page,
             "conditions" =>
@@ -1399,8 +1400,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
-        $this->checkError($response);
+        $this->checkError($response  , $ajax);
         return $response;
     }
 
@@ -1468,6 +1468,15 @@ class Api
     }
     public function checkError($response , $type=null)
     {
+
+        if($type == "ajax"){
+            if($response['Header']['MessageCode'] == 141){
+                \App::abort(400);
+            }
+            Log::info("requset was ajax ");
+        }
+
+
         if ($response['Header']['MessageCode'] == 141) {
             session()->forget('SessionId');
             session()->forget('UserInfo');
