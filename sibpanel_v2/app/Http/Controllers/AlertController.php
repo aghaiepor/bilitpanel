@@ -27,6 +27,7 @@ class AlertController extends Controller
     {
         $Location_id = $request->get('Location_id');
         $AlertDetail = $this->Api->GetLocationAlerts($Location_id);
+//        return $AlertDetail ;
         return $AlertDetail['ContentData'];
     }
     public function DeleteAlert(Request $request , $id)
@@ -70,8 +71,10 @@ class AlertController extends Controller
             $end = Carbon::instance(Verta::parse($this->fa2en($end).':00')->DateTime())->format('Y-m-d H:i');
 
         $AddAlert = $this->Api->AddAlert( $location_id, $title, $start, $end, $description, $importance);
-        if ($AddAlert['Header']['Status'] == 0)
+//        return $AddAlert ;
+        if ($AddAlert['Header']['Status'] == 0) {
             return redirect()->back()->with('success' , ' اعلان با موفقیت ساخته شد . ');
+        }
         else
             return redirect()->back()->with('error' , ' خطا در ایجاد اعلان ! ');
     }

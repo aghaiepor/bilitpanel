@@ -313,8 +313,8 @@
                                         <tr>
                                             <th>نام مرکز:</th>
                                             <td style="">استان {{$province_name}} / {{$Account["name"]}} </td>
-                                            <th>نام کاربر</th>
-                                            <td> {{session('UserInfo')['first_name']  . " "  . session('UserInfo')['last_name']}} </td>
+                                            <th>  </th>
+                                            <td>  </td>
                                         </tr>
                                         <tr>
                                             <th>مبلغ:</th>
@@ -325,7 +325,7 @@
                                         <tr>
                                             <th>مکان:</th>
                                             <td id="buy_location_name"></td>
-                                            <th>شماره فیش:</th>
+                                            <th>شماره بليت:</th>
                                             <td id="buy_reference_number"></td>
                                         </tr>
                                         <tr>

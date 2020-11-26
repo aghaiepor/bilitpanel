@@ -1207,21 +1207,22 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
     }
     public function AddAlert($location_id, $title, $start, $end, $description, $importance)
     {
         $data = [
-            "location_id" => $location_id,
+            "location_id" => (int)$location_id,
             "title"=> $title,
             "start"=> $start,
             "end"=> $end,
             "description" => $description,
             "importance"=> $importance
         ];
+        Log::info("Alert data => " , $data);
         $client = new Client();
-        $result = $client->POST($this->url . 'AddAlert' ,[
+        $result = $client->post($this->url . 'AddAlert' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]

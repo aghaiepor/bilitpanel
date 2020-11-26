@@ -343,6 +343,7 @@
             });
             $('#Location_id').change(function () {
                 var Location_id = $('#Location_id').val();
+                console.log("Location_id => " , Location_id)
                 $('#loader').css('display' , 'flex');
                 $.ajax({
                     type:'POST',
@@ -351,6 +352,40 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'Location_id' : Location_id ,
+                    }, statusCode: {
+                        500: function() {
+                            $("#loader2").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                '',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
+                        }
                     },
                     success:function(data) {
 
