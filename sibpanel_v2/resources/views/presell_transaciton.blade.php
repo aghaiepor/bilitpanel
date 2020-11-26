@@ -430,8 +430,8 @@
                                         <tr>
                                             <th>نام مرکز:</th>
                                             <td style="">استان {{$province_name}} / {{$Account["name"]}} </td>
-                                            <th>نام کاربر</th>
-                                            <td> {{session('UserInfo')['first_name']  . " "  . session('UserInfo')['last_name']}} </td>
+                                            <th>:نام کاربر</th>
+                                            <td id="userName">  </td>
                                         </tr>
                                         <tr>
                                             <th>شناسه پرداخت:</th>
@@ -555,7 +555,7 @@
                 id = id[4];
                 let trace_number = $(this).attr("data_id") ;
                 let type = $("#transaction_type").val();
-                console.log("type => " , type);
+                // console.log("type => " , type);
                 let page = "{{request("page")}}";
                 if(page == "")
                     page = 1 ;
@@ -701,18 +701,27 @@
                         $("#loader2").hide();
                         let account  = data["GetChargeTransactions"] ;
                         let images = data["images_url"] ;
-                        console.log(images)
+                        // console.log(images)
                         $("#deposit_amount").text(number_format(account.deposit_amount, 0 , "." , ","));
                         let transaction_amount = eval(account.deposit_amount) / 0.85 ;
                         $("#transaction_amount").text(number_format(transaction_amount, 0 , "." , ","));
                         if(Object.keys(account["description_json"]).length != 0)
                         {
+                            if(typeof account["description_json"].user === 'undefined') {
+                                $("#userName").text(" - ")
+                                console.log("this index was not exist ! ") ;
+                            }
+                            else {
+                                $("#userName").text(account["description_json"].user)
+                            }
+
                             $("#source_bank").text(account["description_json"].source_bank);
                             $("#payment_datetime").text(account["description_json"].payment_datetime);
                         }else
                         {
                             $("#source_bank").text("");
                             $("#payment_datetime").text("");
+                            $("#userName").text(" - ") ;
                         }
                         $("#reference_number").text(account.reference_number);
                         $("#created_jalali").text(account.created_jalali);
