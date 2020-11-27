@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class presellController extends Controller
 {
@@ -185,10 +187,22 @@ class presellController extends Controller
             $GetTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number,"","", "ajax") ;
             $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
         }
+        $payment_datetime = "-";
+        if (array_key_exists( "description_json" ,$GetTransactions )) {
+            if( count($GetTransactions["description_json"]) != 0 ){
+                $payment_datetime = $GetTransactions["description_json"]["payment_datetime"] ;
+                $payment_datetime = Carbon::parse($payment_datetime)->timestamp;
+                $payment_datetime = new Verta($payment_datetime);
+                $payment_datetime =$payment_datetime->formatDatetime();
+            }
+        }
+
+        Log::info($payment_datetime);
 
         $data = [
             "GetChargeTransactions" => $GetTransactions ,
             "images_url" => $images_url ,
+            "payment_datetime" => $payment_datetime ,
         ] ;
         return $data;
 

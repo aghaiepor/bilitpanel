@@ -255,16 +255,16 @@
 
     <div class="modal fade" id="showFactorBuy" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form id="chargeForm" action="#" method="post" enctype="multipart/form-data">
+            <form id="chargeForm2" action="#" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title " id="testLabel">مشخصات تراکنش خرید بلیت الکترونیک  </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button id="modalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div id="printArea" class="card-body">
+                    <div id="printArea2" class="card-body">
                         <div id="loader3" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
                             <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
                         </div>
@@ -363,7 +363,7 @@
                     </div>
                     <div class="modal-footer mt-1">
                         {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                        <button id="print" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> پرينت </button>
+                        <button id="print2" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> پرينت </button>
                     </div>
                 </div>
             </form>
@@ -377,7 +377,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title " id="testLabel"> شارژ اعتبار بلیت الکترونیک  </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button id="FactorCloseBtn" type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -492,7 +492,7 @@
                     </div>
                     <div class="modal-footer mt-1">
                         {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                        <button id="print" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> پرينت </button>
+                        <button id="print"  class="btn btn-success px-5 ml-0 mr-auto"> پرينت </button>
                     </div>
                 </div>
             </form>
@@ -548,6 +548,7 @@
     </script>
     <script>
         $(document).ready(function () {
+
             $(document).on( "click", ".factorBuy", function () {
                 $("#loader3").css("display" , "flex");
                 let id = "{{url()->current()}}";
@@ -701,6 +702,8 @@
                         $("#loader2").hide();
                         let account  = data["GetChargeTransactions"] ;
                         let images = data["images_url"] ;
+                        let payment_datetime = data["payment_datetime"] ;
+                        // console.log("payment_datetime => " ,payment_datetime)
                         // console.log(images)
                         $("#deposit_amount").text(number_format(account.deposit_amount, 0 , "." , ","));
                         let transaction_amount = eval(account.deposit_amount) / 0.85 ;
@@ -709,20 +712,21 @@
                         {
                             if(typeof account["description_json"].user === 'undefined') {
                                 $("#userName").text(" - ")
-                                console.log("this index was not exist ! ") ;
+                                // console.log("this index was not exist ! ") ;
                             }
                             else {
                                 $("#userName").text(account["description_json"].user)
                             }
 
                             $("#source_bank").text(account["description_json"].source_bank);
-                            $("#payment_datetime").text(account["description_json"].payment_datetime);
+
                         }else
                         {
                             $("#source_bank").text("");
                             $("#payment_datetime").text("");
                             $("#userName").text(" - ") ;
                         }
+                        $("#payment_datetime").text(payment_datetime);
                         $("#reference_number").text(account.reference_number);
                         $("#created_jalali").text(account.created_jalali);
                         let date = account.created_jalali.split(" ");
@@ -743,12 +747,47 @@
                     }
                 })
             });
-            $(document).on( "click", "#print", function () {
+            $(document).on( "click", "#print2", function (e) {
+                e.preventDefault();
+                var printContents = document.getElementById('printArea2').innerHTML;
+                var mywindow = window.open('', 'new div', 'height=400,width=600');
+                mywindow.document.write('<html><head><title></title>');
+                mywindow.document.write("<link href=\"{{asset('')}}assets/css/bootstrap-rtl.css\" rel=\"stylesheet\">");
+                mywindow.document.write("<link href=\"{{asset('')}}assets/css/material-dashboard.css?v=2.1.2\" rel=\"stylesheet\" />");
+                mywindow.document.write('</head><body >');
+                mywindow.document.write(printContents);
+                mywindow.document.write('</body></html>');
+                mywindow.document.close();
+                mywindow.focus();
+                setTimeout(function(){mywindow.print();},300);
+
+                // var printContents = document.getElementById('printArea2').innerHTML;
+                // var originalContents = document.body.innerHTML;
+                // document.body.innerHTML = printContents;
+                // window.print();
+                // document.body.innerHTML = originalContents;
+            });
+            $(document).on( "click", "#print", function (e) {
+                e.preventDefault();
                 var printContents = document.getElementById('printArea').innerHTML;
-                var originalContents = document.body.innerHTML;
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
+                var mywindow = window.open('', 'new div', 'height=400,width=600');
+                mywindow.document.write('<html><head><title></title>');
+                mywindow.document.write("<link href=\"{{asset('')}}assets/css/bootstrap-rtl.css\" rel=\"stylesheet\">");
+                mywindow.document.write("<link href=\"{{asset('')}}assets/css/material-dashboard.css?v=2.1.2\" rel=\"stylesheet\" />");
+                mywindow.document.write('</head><body >');
+                mywindow.document.write(printContents);
+                mywindow.document.write('</body></html>');
+                mywindow.document.close();
+                mywindow.focus();
+                setTimeout(function(){mywindow.print();},300);
+
+                // var printContents = document.getElementById('printArea').innerHTML;
+                // var originalContents = document.body.innerHTML;
+                // document.body.innerHTML = printContents;
+                // window.print();
+                // document.body.innerHTML = originalContents;
+                // location.reload();
+                // $("body").load();
             });
             $(document).on( "click", ".docDownload", function () {
                 var a = document.createElement("a");
