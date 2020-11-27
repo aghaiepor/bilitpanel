@@ -251,13 +251,13 @@
                         <div class="form-row mt-3">
                             <div class="col-md text-right">
                                 <label for="" class="text-right"> مبلغ واریزی (ریال) </label>
-                                <input name="charge_amount" type="text" class="form-control">
+                                <input id="charge_amount" name="charge_amount" type="number" class="form-control">
                             </div>
                             <div class="col-md text-right">
                                 <label for="" class="text-right">
                                     اعتبار بلیت شارژ شده (ریال)
                                 </label>
-                                <input disabled type="text" class="form-control">
+                                <input id="ticket_charged" disabled type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-row mt-3">
@@ -398,6 +398,11 @@
                 $(this).parent().parent().next().fadeToggle() ;
             });
 
+            $(document).on('input' , "#charge_amount" , function () {
+                let charge_amount =  $(this).val() ;
+                charge_amount = charge_amount * 0.85 ;
+                $("#ticket_charged").val(charge_amount)
+            });
             $(document).on("click",'.chargeBtn' , function () {
                 // console.log("name  : " + global_provive_name );
                 // console.log("id  : " + global_provive_id );
