@@ -192,16 +192,37 @@
                                             </select>
                                         </div>
                                     @endif
+                                    @php
+                                        $api = new \App\Api\Api();
 
+                                        $formDate = $api->fa2en(request('startDate'))  ;
+                                        $endtDate = $api->fa2en(request('endDate'))  ;
+                                        if ($formDate != "" )
+                                            {
+                                               $timestamp = \Hekmatinasser\Verta\Verta::parse($formDate .' 00:00:00')->datetime();
+                                               $time = \Carbon\Carbon::instance($timestamp);;
+                                            }
+                                        else{
+                                            $time = "";
+                                        }
+                                          if ($endtDate != "" )
+                                            {
+                                               $timestamp_endtDate = \Hekmatinasser\Verta\Verta::parse($endtDate .' 00:00:00')->datetime();
+                                               $time_endtDate = \Carbon\Carbon::instance($timestamp_endtDate);;
+                                            }
+                                        else{
+                                            $time_endtDate = "";
+                                        }
+                                    @endphp
                                     {{--  Start Date --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  تاریخ شروع  </label>
-                                        <input autocomplete="off" value="" name="startDate" id="FromDate" type="text" class="form-control" placehrequester="از تاریخ">
+                                        <input autocomplete="off" value="{{$time}}" name="startDate" id="FromDate" type="text" class="form-control" placehrequester="از تاریخ">
                                     </div>
                                     {{--  End Date --}}
                                     <div class="col-md-3 text-right">
                                         <label for="">  تاریخ پایان  </label>
-                                        <input autocomplete="off"  value="{{request('endDate')}}" name="endDate" id="ToDate" type="text" class="form-control" placehrequester="تا تاریخ">
+                                        <input autocomplete="off"  value="{{$time_endtDate}}" name="endDate" id="ToDate" type="text" class="form-control" placehrequester="تا تاریخ">
                                     </div>
                                     @if($report_type == 0)
                                         {{-- sale type --}}

@@ -189,26 +189,29 @@
                                 </div>
 
                                 <div class="col-md-3 text-right">
-                                    <label for="">  تاریخ شروع  </label>
                                     @php
                                         $api = new App\Api\Api() ;
 
                                         $formDate = $api->fa2en(request('startDate'))  ;
                                         $endtDate = $api->fa2en(request('endtDate'))  ;
-                                        if ($formDate != "")
+                                        if ($formDate != "" )
                                             {
-                                           $timestamp = \Hekmatinasser\Verta\Verta::parse($formDate .' 00:00:00')->datetime();
-                                           $timestamp_endtDate = \Hekmatinasser\Verta\Verta::parse($endtDate .' 00:00:00')->datetime();
-                                           $time = \Carbon\Carbon::instance($timestamp);;
-                                           $time_endtDate = \Carbon\Carbon::instance($timestamp_endtDate);;
-                                           \Illuminate\Support\Facades\Log::info($time);
+                                               $timestamp = \Hekmatinasser\Verta\Verta::parse($formDate .' 00:00:00')->datetime();
+                                               $time = \Carbon\Carbon::instance($timestamp);;
                                             }
                                         else{
                                             $time = "";
-                                            $time_endtDate = "";
                                         }
+                                        if ($endtDate != "" )
+                                        {
+                                           $timestamp_endtDate = \Hekmatinasser\Verta\Verta::parse($endtDate .' 00:00:00')->datetime();
+                                           $time_endtDate = \Carbon\Carbon::instance($timestamp_endtDate);;
+                                        }
+                                        else
+                                            $time_endtDate = "";
 
                                     @endphp
+                                    <label for="">  تاریخ شروع  </label>
                                     <input id="FromDate" value="{{$time}}" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
                                 </div>
                                 <div class="col-md-3 text-right">
