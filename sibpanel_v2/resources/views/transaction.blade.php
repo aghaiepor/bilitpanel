@@ -190,11 +190,30 @@
 
                                 <div class="col-md-3 text-right">
                                     <label for="">  تاریخ شروع  </label>
-                                    <input id="FromDate" value="{{request('startDate')}}" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
+                                    @php
+                                        $api = new App\Api\Api() ;
+
+                                        $formDate = $api->fa2en(request('startDate'))  ;
+                                        $endtDate = $api->fa2en(request('endtDate'))  ;
+                                        if ($formDate != "")
+                                            {
+                                           $timestamp = \Hekmatinasser\Verta\Verta::parse($formDate .' 00:00:00')->datetime();
+                                           $timestamp_endtDate = \Hekmatinasser\Verta\Verta::parse($endtDate .' 00:00:00')->datetime();
+                                           $time = \Carbon\Carbon::instance($timestamp);;
+                                           $time_endtDate = \Carbon\Carbon::instance($timestamp_endtDate);;
+                                           \Illuminate\Support\Facades\Log::info($time);
+                                            }
+                                        else{
+                                            $time = "";
+                                            $time_endtDate = "";
+                                        }
+
+                                    @endphp
+                                    <input id="FromDate" value="{{$time}}" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <label for="">  تاریخ پایان  </label>
-                                    <input id="ToDate" name="endtDate" type="text" class="form-control" placeholder="تا تاریخ">
+                                    <input id="ToDate" name="endtDate" value="{{$time_endtDate}}" type="text" class="form-control" placeholder="تا تاریخ">
                                 </div>
                                 <input type="hidden" name="page" value="1">
                                 <div class="col-md-3 mr-auto">
