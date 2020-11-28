@@ -381,7 +381,7 @@ class LocationController extends Controller
         $voucher_type_id = $request->get("voucher_type_id");
         $exprieMode = $request->get("exprieMode");
         $timetype = $request->get("timetype");
-        $max_discount_percentage = $request->get("max_discount_percentage");
+        $max_discount_percentage = (int)$request->get("max_discount_percentage");
         $validity_period = $request->get("validity_period");
         $expiration_date = $request->get("expiration_date");
         $capacity = (int)$request->get("capacity");
@@ -430,7 +430,7 @@ class LocationController extends Controller
         $voucher_type_id = $request->get("voucher_type_id");
         $exprieMode = $request->get("exprieMode");
         $timetype = $request->get("timetype");
-        $max_discount_percentage = $request->get("max_discount_percentage");
+        $max_discount_percentage = (int)$request->get("max_discount_percentage");
         $validity_period = $request->get("validity_period");
         $expiration_date = $request->get("expiration_date");
         $capacity = (int)$request->get("capacity");
