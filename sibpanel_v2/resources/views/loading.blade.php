@@ -107,7 +107,7 @@ The above copyright notice and this permission notice shall be included in all c
 <script src="../../assets/js/core/popper.min.js"></script>
 <script src="../../assets/js/core/bootstrap-material-design.min.js"></script>
 <script src="../../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-
+<script src="{{asset('')}}assets/js/plugins/sweetalert2.js"></script>
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
@@ -328,6 +328,41 @@ The above copyright notice and this permission notice shall be included in all c
                 '_token ': '<?php echo csrf_token() ?>',
                 'currentNumber' : currentNumber ,
             },
+            statusCode: {
+                500: function() {
+                    $("#loader").hide();
+                    Swal.fire(
+                        'خطا در دريافت اطلاعات ! ',
+                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                        'error'
+                    )
+                } ,
+                400: function() {
+                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                    let x = 1 ;
+                    let dots = "";
+                    setInterval(function () {
+                        dots += ".";
+                        x++  ;
+                        // console.log(x)
+                        if(x >= 8 ){
+                            x = 1 ;
+                            dots = ".";
+                        }
+                        $("#dots").html(dots)
+                    } , 300)
+                    $("#loader").hide();
+                    Swal.fire(
+                        'نشست  شما پایان یافته است ! ',
+                        html,
+                        'warning' ,
+                    )
+                    setTimeout(function () {
+                        window.location.href = "{{Route("logout")}}";
+                    } , 1500)
+
+                }
+            },
             success:function(data) {
                 if(data.status == 0 ){
                     currentNumber++;
@@ -364,6 +399,41 @@ The above copyright notice and this permission notice shall be included in all c
                         data:{
                             '_token ': '<?php echo csrf_token() ?>',
                             'currentNumber' : currentNumber ,
+                        },
+                        statusCode: {
+                            500: function() {
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'خطا در دريافت اطلاعات ! ',
+                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                    'error'
+                                )
+                            } ,
+                            400: function() {
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+
+                            }
                         },
                         success:function(data2) {
                             /*$("#msg").html(data.table_data);
@@ -406,6 +476,41 @@ The above copyright notice and this permission notice shall be included in all c
                                             '_token ': '<?php echo csrf_token() ?>',
                                             'currentNumber' : currentNumber ,
                                         },
+                                        statusCode: {
+                                            500: function() {
+                                                $("#loader").hide();
+                                                Swal.fire(
+                                                    'خطا در دريافت اطلاعات ! ',
+                                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                    'error'
+                                                )
+                                            } ,
+                                            400: function() {
+                                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                let x = 1 ;
+                                                let dots = "";
+                                                setInterval(function () {
+                                                    dots += ".";
+                                                    x++  ;
+                                                    // console.log(x)
+                                                    if(x >= 8 ){
+                                                        x = 1 ;
+                                                        dots = ".";
+                                                    }
+                                                    $("#dots").html(dots)
+                                                } , 300)
+                                                $("#loader").hide();
+                                                Swal.fire(
+                                                    'نشست  شما پایان یافته است ! ',
+                                                    html,
+                                                    'warning' ,
+                                                )
+                                                setTimeout(function () {
+                                                    window.location.href = "{{Route("logout")}}";
+                                                } , 1500)
+
+                                            }
+                                        },
                                         success:function(data3) {
                                             /*$("#msg").html(data.table_data);
                                             $("#msg2").html(data.table_data);
@@ -447,6 +552,41 @@ The above copyright notice and this permission notice shall be included in all c
                                                         '_token ': '<?php echo csrf_token() ?>',
                                                         'currentNumber' : currentNumber ,
                                                     },
+                                                    statusCode: {
+                                                        500: function() {
+                                                            $("#loader").hide();
+                                                            Swal.fire(
+                                                                'خطا در دريافت اطلاعات ! ',
+                                                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                                'error'
+                                                            )
+                                                        } ,
+                                                        400: function() {
+                                                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                            let x = 1 ;
+                                                            let dots = "";
+                                                            setInterval(function () {
+                                                                dots += ".";
+                                                                x++  ;
+                                                                // console.log(x)
+                                                                if(x >= 8 ){
+                                                                    x = 1 ;
+                                                                    dots = ".";
+                                                                }
+                                                                $("#dots").html(dots)
+                                                            } , 300)
+                                                            $("#loader").hide();
+                                                            Swal.fire(
+                                                                'نشست  شما پایان یافته است ! ',
+                                                                html,
+                                                                'warning' ,
+                                                            )
+                                                            setTimeout(function () {
+                                                                window.location.href = "{{Route("logout")}}";
+                                                            } , 1500)
+
+                                                        }
+                                                    },
                                                     success:function(data4) {
 
                                                         if(data4.status == 0 ){
@@ -484,6 +624,41 @@ The above copyright notice and this permission notice shall be included in all c
                                                                 data:{
                                                                     '_token ': '<?php echo csrf_token() ?>',
                                                                     'currentNumber' : currentNumber ,
+                                                                },
+                                                                statusCode: {
+                                                                    500: function() {
+                                                                        $("#loader").hide();
+                                                                        Swal.fire(
+                                                                            'خطا در دريافت اطلاعات ! ',
+                                                                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                                            'error'
+                                                                        )
+                                                                    } ,
+                                                                    400: function() {
+                                                                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                                        let x = 1 ;
+                                                                        let dots = "";
+                                                                        setInterval(function () {
+                                                                            dots += ".";
+                                                                            x++  ;
+                                                                            // console.log(x)
+                                                                            if(x >= 8 ){
+                                                                                x = 1 ;
+                                                                                dots = ".";
+                                                                            }
+                                                                            $("#dots").html(dots)
+                                                                        } , 300)
+                                                                        $("#loader").hide();
+                                                                        Swal.fire(
+                                                                            'نشست  شما پایان یافته است ! ',
+                                                                            html,
+                                                                            'warning' ,
+                                                                        )
+                                                                        setTimeout(function () {
+                                                                            window.location.href = "{{Route("logout")}}";
+                                                                        } , 1500)
+
+                                                                    }
                                                                 },
                                                                 success:function(data5) {
 
@@ -523,6 +698,41 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                 '_token ': '<?php echo csrf_token() ?>',
                                                                                 'currentNumber' : currentNumber ,
                                                                             },
+                                                                            statusCode: {
+                                                                                500: function() {
+                                                                                    $("#loader").hide();
+                                                                                    Swal.fire(
+                                                                                        'خطا در دريافت اطلاعات ! ',
+                                                                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                                                        'error'
+                                                                                    )
+                                                                                } ,
+                                                                                400: function() {
+                                                                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                                                    let x = 1 ;
+                                                                                    let dots = "";
+                                                                                    setInterval(function () {
+                                                                                        dots += ".";
+                                                                                        x++  ;
+                                                                                        // console.log(x)
+                                                                                        if(x >= 8 ){
+                                                                                            x = 1 ;
+                                                                                            dots = ".";
+                                                                                        }
+                                                                                        $("#dots").html(dots)
+                                                                                    } , 300)
+                                                                                    $("#loader").hide();
+                                                                                    Swal.fire(
+                                                                                        'نشست  شما پایان یافته است ! ',
+                                                                                        html,
+                                                                                        'warning' ,
+                                                                                    )
+                                                                                    setTimeout(function () {
+                                                                                        window.location.href = "{{Route("logout")}}";
+                                                                                    } , 1500)
+
+                                                                                }
+                                                                            },
                                                                             success:function(data6) {
 
                                                                                 if(data6.status == 0 ){
@@ -560,6 +770,40 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                         data:{
                                                                                             '_token ': '<?php echo csrf_token() ?>',
                                                                                             'currentNumber' : currentNumber ,
+                                                                                        }, statusCode: {
+                                                                                            500: function() {
+                                                                                                $("#loader").hide();
+                                                                                                Swal.fire(
+                                                                                                    'خطا در دريافت اطلاعات ! ',
+                                                                                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                                                                    'error'
+                                                                                                )
+                                                                                            } ,
+                                                                                            400: function() {
+                                                                                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                                                                let x = 1 ;
+                                                                                                let dots = "";
+                                                                                                setInterval(function () {
+                                                                                                    dots += ".";
+                                                                                                    x++  ;
+                                                                                                    // console.log(x)
+                                                                                                    if(x >= 8 ){
+                                                                                                        x = 1 ;
+                                                                                                        dots = ".";
+                                                                                                    }
+                                                                                                    $("#dots").html(dots)
+                                                                                                } , 300)
+                                                                                                $("#loader").hide();
+                                                                                                Swal.fire(
+                                                                                                    'نشست  شما پایان یافته است ! ',
+                                                                                                    html,
+                                                                                                    'warning' ,
+                                                                                                )
+                                                                                                setTimeout(function () {
+                                                                                                    window.location.href = "{{Route("logout")}}";
+                                                                                                } , 1500)
+
+                                                                                            }
                                                                                         },
                                                                                         success:function(data7) {
 
@@ -598,6 +842,40 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                     data:{
                                                                                                         '_token ': '<?php echo csrf_token() ?>',
                                                                                                         'currentNumber' : currentNumber ,
+                                                                                                    }, statusCode: {
+                                                                                                        500: function() {
+                                                                                                            $("#loader").hide();
+                                                                                                            Swal.fire(
+                                                                                                                'خطا در دريافت اطلاعات ! ',
+                                                                                                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                                                                                'error'
+                                                                                                            )
+                                                                                                        } ,
+                                                                                                        400: function() {
+                                                                                                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                                                                            let x = 1 ;
+                                                                                                            let dots = "";
+                                                                                                            setInterval(function () {
+                                                                                                                dots += ".";
+                                                                                                                x++  ;
+                                                                                                                // console.log(x)
+                                                                                                                if(x >= 8 ){
+                                                                                                                    x = 1 ;
+                                                                                                                    dots = ".";
+                                                                                                                }
+                                                                                                                $("#dots").html(dots)
+                                                                                                            } , 300)
+                                                                                                            $("#loader").hide();
+                                                                                                            Swal.fire(
+                                                                                                                'نشست  شما پایان یافته است ! ',
+                                                                                                                html,
+                                                                                                                'warning' ,
+                                                                                                            )
+                                                                                                            setTimeout(function () {
+                                                                                                                window.location.href = "{{Route("logout")}}";
+                                                                                                            } , 1500)
+
+                                                                                                        }
                                                                                                     },
                                                                                                     success:function(data8) {
 

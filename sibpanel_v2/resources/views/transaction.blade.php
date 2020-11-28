@@ -164,6 +164,7 @@
                                 </div>
                                 @endif
 
+
                                 @if($report_type == 0)
                                     <div class="col-md-3 text-right">
                                         <label for="">  نوع فروش  </label>
@@ -176,9 +177,20 @@
                                 @else
                                     <input type="hidden" name="pre_sale" value="1" >
                                 @endif
+                                {{-- **** Voucher Number  **** --}}
+                                <div class="col-md-3 text-right">
+                                    <label for="">  شماره بلیت </label>
+                                    <input  name="voucher_number" type="text" class="form-control" placeholder="شماره بلیت">
+                                </div>
+                                {{-- **** RRN Number  **** --}}
+                                <div class="col-md-3 text-right">
+                                    <label for="">  شماره RRN  </label>
+                                    <input  name="rrn" type="text" class="form-control" placeholder="شماره RRN">
+                                </div>
+
                                 <div class="col-md-3 text-right">
                                     <label for="">  تاریخ شروع  </label>
-                                    <input id="FromDate" data-date="2025/3/12" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
+                                    <input id="FromDate" value="{{request('startDate')}}" name="startDate" type="text" class="form-control" placeholder="از تاریخ">
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <label for="">  تاریخ پایان  </label>

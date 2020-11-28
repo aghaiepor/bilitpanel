@@ -388,7 +388,6 @@
                         }
                     },
                     success:function(data) {
-
                          console.log(data);
                         $('#alertData').html('');
                         if(data.length != 0){

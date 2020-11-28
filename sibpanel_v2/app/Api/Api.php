@@ -58,7 +58,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function LocationList($id = null){
+    public function LocationList($id = null , $type=null){
         $data=null;
         if ( $id != null )
             $data = ['location_id'=>$id];
@@ -71,10 +71,10 @@ class Api
         ) ;
 
         $response = json_decode($result->getBody(),true);
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
-    public function ServiceList($id = null){
+    public function ServiceList($id = null , $type = null){
         $data=null;
         if ( $id != null )
             $data = ['location_id'=>$id];
@@ -87,7 +87,7 @@ class Api
          ) ;
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
 
@@ -521,7 +521,7 @@ class Api
     }
 
     // ******************* voucherTypeList *******************
-    public function VoucherTypeList(){
+    public function VoucherTypeList($type=null){
         $data = null ;
         $client = new Client();
         $result = $client->post($this->url . 'VoucherTypeList' ,[
@@ -531,7 +531,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function AddVoucherType($name_fa, $name_en, $language, $is_free, $min_count, $max_count){
@@ -576,7 +576,7 @@ class Api
     }
 
     // ******************* VoucherText *******************
-    public function GetVoucherText(){
+    public function GetVoucherText($type=null){
         $data = null ;
         $client = new Client();
         $result = $client->post($this->url . 'GetVoucherText' ,[
@@ -586,7 +586,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function AddVoucherText($top_text, $english_top_text, $bottom_text, $english_bottom_text){
@@ -748,7 +748,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetInfo(){
+    public function GetInfo($type=null){
         $data=null;
         $client = new Client();
         $result = $client->post($this->url . 'GetInfo' ,[
@@ -758,7 +758,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function GetUserPermission($sib_user_id=""){
@@ -816,7 +816,7 @@ class Api
     }
 
     // ******************* Get Report Lists *******************
-    public function ProvinceList(){
+    public function ProvinceList($type=null){
         $data=null;
         $client = new Client();
         $result = $client->post($this->url . 'ProvinceList' ,[
@@ -826,7 +826,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function CityList($province_id){
@@ -860,7 +860,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function SellerUserList(){
+    public function SellerUserList($type=null){
         $data = null ;
         $client = new Client();
         $result = $client->post($this->url . 'SellerUserList' ,[
@@ -870,10 +870,10 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
-    public function SaleTypeList(){
+    public function SaleTypeList($type=null){
         $data = null ;
         $client = new Client();
         $result = $client->post($this->url . 'SaleTypeList' ,[
@@ -883,7 +883,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function GetStat($location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id){
@@ -918,7 +918,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id){
+    public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id,$rrn , $voucher_number){
         $conditions = [
             'location_id'=> $location_id,
             'procedure_status' =>$status_code,
@@ -931,6 +931,8 @@ class Api
             'province_id'=> $province_id,
             'city_id'=> $city_id,
             'project_id'=> $project_id,
+            'rrn'=> $rrn ,
+            'voucher_number'=> $voucher_number,
         ];
         $data = [
             "page" => $page ,

@@ -333,6 +333,18 @@
                     </ul>
                 </div>
             </li>--}}
+            <li class="nav-item d-none ">
+                <a class="nav-link" href="{{Route('projectManager')}}">
+                    <i class="material-icons">account_tree</i>
+                    <p> مدیریت پروژه </p>
+                </a>
+            </li>
+            <li class="nav-item d-none ">
+                <a class="nav-link" href="{{Route('Off')}}">
+                    <i class="material-icons">local_offer</i>
+                    <p> تخفیف </p>
+                </a>
+            </li>
             <li class="nav-item ">
                 <a class="nav-link" href="{{Route('logout')}}">
                     <i class="material-icons">login</i>

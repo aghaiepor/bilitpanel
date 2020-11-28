@@ -26,7 +26,7 @@ class LoadingController extends Controller
 
         Cache::forget('LocationList');
         Cache::rememberForever('LocationList', function(){
-            $Locations  = $this->api->LocationList();
+            $Locations  = $this->api->LocationList(null , "ajax");
             return $Locations['ContentData'];
         });
         return $this->response_ok;
@@ -35,7 +35,7 @@ class LoadingController extends Controller
 
         Cache::forget('ServiceList');
         $value = Cache::rememberForever('ServiceList', function(){
-            $ServiceList  = $this->api->ServiceList();
+            $ServiceList  = $this->api->ServiceList(null, "ajax");
             return $ServiceList['ContentData'];
         });
         // notify success
@@ -46,7 +46,7 @@ class LoadingController extends Controller
         //cache ProvinceList
         Cache::forget('ProvinceList');
         $value = Cache::rememberForever('ProvinceList', function(){
-            $ProvinceList  = $this->api->ProvinceList();
+            $ProvinceList  = $this->api->ProvinceList("ajax");
             return $ProvinceList['ContentData'];
         });
         // notify success
@@ -57,7 +57,7 @@ class LoadingController extends Controller
         //cache SellerUserList
         Cache::forget('SellerUserList');
         $value = Cache::rememberForever('SellerUserList', function(){
-            $ProvinceList  = $this->api->SellerUserList();
+            $ProvinceList  = $this->api->SellerUserList("ajax");
             return $ProvinceList['ContentData'];
         });
         // notify success
@@ -68,7 +68,7 @@ class LoadingController extends Controller
         //cache SaleTypeList
         Cache::forget('SaleTypeList');
         $value = Cache::rememberForever('SaleTypeList', function(){
-            $ProvinceList  = $this->api->SaleTypeList();
+            $ProvinceList  = $this->api->SaleTypeList("ajax");
             return $ProvinceList['ContentData'];
         });
         // notify success
@@ -79,7 +79,7 @@ class LoadingController extends Controller
         //cache SaleTypeList
         Cache::forget('VoucherTypeList');
         $value = Cache::rememberForever('VoucherTypeList', function(){
-            $ProvinceList  = $this->api->VoucherTypeList();
+            $ProvinceList  = $this->api->VoucherTypeList("ajax");
             return $ProvinceList['ContentData'];
         });
         // notify success
@@ -89,7 +89,7 @@ class LoadingController extends Controller
         //cache SaleTypeList
         Cache::forget('GetInfo');
         $value = Cache::rememberForever('GetInfo', function(){
-            $GetInfo  = $this->api->GetInfo();
+            $GetInfo  = $this->api->GetInfo("ajax");
             return $GetInfo['ContentData'];
         });
         // notify success
@@ -99,7 +99,7 @@ class LoadingController extends Controller
         //cache GetVoucherText
         Cache::forget('GetVoucherText');
         $value = Cache::rememberForever('GetVoucherText', function(){
-            $GetInfo  = $this->api->GetVoucherText();
+            $GetInfo  = $this->api->GetVoucherText("ajax");
             return $GetInfo['ContentData'];
         });
         // notify success

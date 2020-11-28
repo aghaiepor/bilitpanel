@@ -164,6 +164,13 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/SetAccountSetting/{id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
         Route::post('/LocationAccountActivation' , 'presellController@LocationAccountActivation')->name('LocationAccountActivation');
 
+        // Project manager
+        Route::get('/projectManager' , 'projectManagerController@index')->name('projectManager');
+
+        // Off Managers
+        Route::get('/Off' , 'OffController@index')->name('Off');
+
+
     });
 
 });

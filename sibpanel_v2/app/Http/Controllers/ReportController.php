@@ -331,7 +331,15 @@ class ReportController extends Controller
         if($page == 0)
             $page = 1;
 
-        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
+        $voucher_number = (int)$request->get('voucher_number',"");
+        if(is_null($voucher_number))
+            $voucher_number = "";
+
+        $rrn = $request->get('rrn',"");
+        if(is_null($rrn))
+            $rrn = "";
+
+        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id ,$rrn , $voucher_number);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
         $SaleTypeList = Cache::get('SaleTypeList');

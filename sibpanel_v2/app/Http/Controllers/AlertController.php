@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AlertController extends Controller
 {
@@ -27,7 +28,7 @@ class AlertController extends Controller
     {
         $Location_id = $request->get('Location_id');
         $AlertDetail = $this->Api->GetLocationAlerts($Location_id);
-//        return $AlertDetail ;
+//        return $AlertDetail
         return $AlertDetail['ContentData'];
     }
     public function DeleteAlert(Request $request , $id)
