@@ -346,7 +346,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
 
     }
@@ -844,7 +844,7 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function location_list($province_id , $city_id){
+    public function location_list($province_id , $city_id , $type=null){
         $data = [
             "province_id" => $province_id,
             "city_id" => $city_id
@@ -857,7 +857,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function SellerUserList($type=null){
@@ -1039,7 +1039,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function TerminalLocationList($location_id)
+    public function TerminalLocationList($location_id , $type=null)
     {
         $data = [
             "location_id" =>  $location_id
@@ -1051,7 +1051,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function TerminalInfo($terminal_id, $terminal_number, $serial_number, $terminal_name, $terminal_address){

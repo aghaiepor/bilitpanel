@@ -434,7 +434,7 @@
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
             service_id = "{{request('service_id')}}";
-
+            let session_fall = true;
             if(province != ''){
                 var province_id = province;
                 $.ajax({
@@ -444,6 +444,41 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+                            session_fall = false ;
+
+                        }
                     },
                     success:function(data) {
                         $("#cityList").html('');
@@ -470,6 +505,42 @@
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
                         'city_id' : city_id ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if(session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false ;
+                            }
+                        }
                     },
                     success:function(data) {
                         $("#locationList").html('');
@@ -497,6 +568,42 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'locationID' : locationID ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if(session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false  ;
+                            }
+                        }
                     },
                     success:function(data) {
                         $("#ServiceList").html('');
@@ -522,6 +629,41 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+                            session_fall = false ;
+
+                        }
                     },
                     success:function(data) {
                         $("#cityList").html('');
@@ -544,6 +686,43 @@
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
                         'city_id' : city_id ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if(session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false ;
+                            }
+
+                        }
                     },
                     success:function(data) {
                         $("#locationList").html('');
@@ -567,6 +746,44 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'locationID' : locationID ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if(session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false;
+                            }
+
+
+                        }
                     },
                     success:function(data) {
                         $("#ServiceList").html('');

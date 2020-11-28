@@ -46,7 +46,7 @@ class ReportController extends Controller
         $province_id = (int)$request->get('province_id');
         $city_id = (int)$request->get('city_id');
         $data = '';
-        $location_list = $this->api->location_list($province_id , $city_id);
+        $location_list = $this->api->location_list($province_id , $city_id , "ajax");
         $content = [
             'data' => $location_list['ContentData'],
         ];
@@ -69,7 +69,7 @@ class ReportController extends Controller
     }
     public function TerminalLocationList(Request $request){
         $locationID = (int)$request->get('locationID');
-        $GetTerminal = $this->api->TerminalLocationList($locationID);
+        $GetTerminal = $this->api->TerminalLocationList($locationID , "ajax");
         $content = [
             'data' => $GetTerminal['ContentData'],
         ];
