@@ -400,7 +400,7 @@
 
             $(document).on('input' , "#charge_amount" , function () {
                 let charge_amount =  $(this).val() ;
-                charge_amount = charge_amount * 0.85 ;
+                charge_amount = charge_amount / 0.85 ;
                 $("#ticket_charged").val(charge_amount)
             });
             $(document).on("click",'.chargeBtn' , function () {
