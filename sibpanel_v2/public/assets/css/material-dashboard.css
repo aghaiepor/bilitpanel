@@ -12501,7 +12501,7 @@ a {
     border-left: 4px solid transparent; }
   .sidebar .sidebar-wrapper {
     position: relative;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 149px);
     overflow: auto;
       overflow-x: hidden;
     width: 260px;
