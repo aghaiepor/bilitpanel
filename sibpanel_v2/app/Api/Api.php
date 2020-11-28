@@ -202,7 +202,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
 
     }
@@ -219,7 +219,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
 
     }
@@ -236,7 +236,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
 
     }
@@ -730,10 +730,10 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
     }
-    public function GetUserInfo($user_id){
+    public function GetUserInfo($user_id , $type=null){
         $data= [
             'sib_user_id' => $user_id ,
         ];
@@ -745,7 +745,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function GetInfo($type=null){
@@ -798,7 +798,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , "ajax");
         return $response;
     }
     public function GetSwitchWebServiceList(){
@@ -829,7 +829,7 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function CityList($province_id){
+    public function CityList($province_id , $type=null){
         $data = [
             'province_id' => $province_id ,
         ];
@@ -841,7 +841,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $type);
         return $response;
     }
     public function location_list($province_id , $city_id){
@@ -1274,6 +1274,38 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    // ******************** VerifyOtp ****************
+    public function VerifyOtp($otp){
+        $data = [
+            'otp' => $otp,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'VerifyOtp' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+
+    // ******************** Project Manager ****************
+    public function GetProjectList($type=null)
+    {
+        $data = null ;
+        $client = new Client();
+        $result = $client->post($this->url . 'GetProjectList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
 
     // ******************** Presell ****************
     public function GetAccountProvince($province_id , $type=null){
@@ -1291,21 +1323,7 @@ class Api
         $this->checkError($response , "ajax");
         return $response;
     }
-    public function VerifyOtp($otp){
-        $data = [
-            'otp' => $otp,
-        ];
-        $client = new Client();
-        $result = $client->post($this->url . 'VerifyOtp' ,[
-                'headers'=>$this->getHeader(),
-                'json'=>$data
-            ]
-        );
-        $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
-        return $response;
-    }
     public function LocationAccountActivation($locationaccount_id  ,$activation){
         $data = [
             "locationaccount_id" => $locationaccount_id,
@@ -1406,8 +1424,6 @@ class Api
         $this->checkError($response  , $ajax);
         return $response;
     }
-
-
     public function ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str , $description){
         $data = [
             "charge_amount" => $charge_amount,

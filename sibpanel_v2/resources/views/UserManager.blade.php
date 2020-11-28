@@ -406,7 +406,7 @@
                         </div>
                     </div>
                     <div class="modal-footer mt-4">
-                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش  </button>
+                        <button id="edit_form_btn" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش  </button>
                     </div>
                 </form>
             </div>
@@ -417,6 +417,7 @@
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="../assets/js/plugins/sweetalert2.js"></script>
     <script>
+
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -531,10 +532,93 @@
 
             });
 
+            $("#edit_form_btn").click( function (e) {
+                let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
+                let addUser_name = $("#user_first_name").val();
+                let addUser_lastname = $("#user_last_name").val();
+                let addUser_username = $("#user_username").val();
+                let error = 0 ;
+                let addUser_account_type_id = $("#user_account_type_id").val();
+                console.log("addUser_account_type_id => " , addUser_account_type_id)
+                let addUser_imei = $("#user_imei").val();
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null || !addUser_lastname.match(pattern)   || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) ){
+                    e.preventDefault();
+                    if(!addUser_name.match(pattern)) {
+                        error++ ;
+                        $("#user_first_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#user_first_name").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#user_first_name").removeAttr("style");
+                        $("#user_first_name").parent().prev().removeAttr("style") ;
+                    }
+
+                    if(!addUser_username.match(pattern) ) {
+                        error++ ;
+                        $("#user_username").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#user_username").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#user_username").removeAttr("style");
+                        $("#user_username").parent().prev().removeAttr("style") ;
+                    }
+                    if(!addUser_account_type_id == null) {
+                        error++ ;
+                        $("#user_account_type_id").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#user_account_type_id").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#user_account_type_id").removeAttr("style");
+                        $("#user_account_type_id").parent().prev().removeAttr("style") ;
+                    }
+                    if(!addUser_lastname.match(pattern)) {
+                        error++ ;
+                        $("#user_last_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#user_last_name").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#user_last_name").removeAttr("style");
+                        $("#user_last_name").parent().prev().removeAttr("style") ;
+                    }
+
+                    if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
+                        if (addUser_imei == "") {
+                            error++ ;
+                            $("#user_imei").css("cssText", "border : solid 2px #e91e63 !important");
+                            $("#user_imei").parent().prev().css("color", "#e91e63");
+                        } else {
+                            $("#user_imei").removeAttr("style");
+                            $("#user_imei").parent().prev().removeAttr("style");
+                        }
+                    }
+                    if(error == 0 )
+                        $("#form_edit").submit();
+                    else{
+                        Swal.fire(
+                            'خطا ! ',
+                            'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                            'error'
+                        )
+                    }
+
+                }
+                else
+                {
+                    $("#form_edit").submit();
+                }
+                // if(error == 0)
+                // {
+                //     $("#edit").submit();
+                // }
+            });
+
             var userData = @json($Users);
             var startsWith = [];
             // console.log(startsWithN);
-
             $(document).on( "change" ,'input[name=active]' ,function () {
                 var id =$(this).attr('sib-user-id') ;
                 var value = ($(this).is(':checked'));
@@ -559,6 +643,7 @@
                                 'id' : id ,
                                 'value' : value ,
                             },
+
                             statusCode: {
                                 500: function() {
                                     $("#loader").hide();
@@ -567,6 +652,31 @@
                                         'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                                         'error'
                                     )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
                                 }
                             },
                             success:function(data) {
@@ -590,7 +700,6 @@
                 })
 
             });
-
             let current_user_id  ;
             $(document).on( "change" ,"input[name=pass]" , function () {
                 if($(this).is(':checked')){
@@ -601,7 +710,6 @@
                     $(this).parent().parent().next().hide();
                 }
             });
-
             $(document).on("click",'.EditBtnAccess' , function () {
                 $("input[name=pass]").parent().parent().next().hide()
                 let action = false ;
@@ -622,6 +730,7 @@
                             '_token ': '<?php echo csrf_token() ?>',
                             'UserId' : UserId ,
                         },
+
                         statusCode: {
                             500: function() {
                                 $("#loader").hide();
@@ -630,6 +739,31 @@
                                     'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                                     'error'
                                 )
+                            } ,
+                            400: function() {
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+
                             }
                         },
                         success:function(data) {

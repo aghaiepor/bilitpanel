@@ -400,7 +400,7 @@
         })
 
         let service = data['service_ids'] ;
-        console.log(service==null)  ;
+        // console.log(service==null)  ;
         if(service!=null && service[0] == '*')
             $("#jstree").jstree().check_all();
         else
@@ -424,7 +424,7 @@
             let sib_user_id = {{$userId}};
             let terminal_type_id = [];
             $("#jstree").on("changed.jstree", function (e, data) {
-                console.log("The selected nodes are:");
+                // console.log("The selected nodes are:");
                 let x  = $("#jstree").jstree().get_checked();
 
                 for(let i = 0 ; i <  data.selected.length ; i++){
@@ -533,16 +533,16 @@
                     sale_type_id = ['*'];
                 if(terminal_type_id.length == $("[name=Terminal]").length)
                     terminal_type_id = ['*'];*/
-                console.log("city_id" , city_id);
-                console.log("province_id" , province_id);
-                console.log("location_id" , location_id);
-                console.log("service_id" , service_id);
-                console.log("project_id" , project_id);
-                console.log("terminal_type_id" , terminal_type_id);
-                console.log("voucher_type_id" , voucher_type_id);
-                console.log("sale_type_id" , sale_type_id);
-                console.log("sib_user_id" , sib_user_id);
-                console.log("switch_web_service_ids" , switch_web_service_ids);
+                // console.log("city_id" , city_id);
+                // console.log("province_id" , province_id);
+                // console.log("location_id" , location_id);
+                // console.log("service_id" , service_id);
+                // console.log("project_id" , project_id);
+                // console.log("terminal_type_id" , terminal_type_id);
+                // console.log("voucher_type_id" , voucher_type_id);
+                // console.log("sale_type_id" , sale_type_id);
+                // console.log("sib_user_id" , sib_user_id);
+                // console.log("switch_web_service_ids" , switch_web_service_ids);
                 $.ajax({
                     type:'POST',
                     url:"{{Route('AssignPermission')}}",
@@ -559,10 +559,44 @@
                         'sale_type_id' : sale_type_id ,
                         'sib_user_id' : sib_user_id ,
                         'switch_web_service_ids' : switch_web_service_ids ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
+                        }
                     },
                     success:function(data) {
                         // console.clear();
-                        console.log(data);
+                        // console.log(data);
                         if(data['Header']['Status'] == 0 ){
                             Swal.fire(
                                 'تغییر مورد نظر اعمال گردید',
@@ -586,16 +620,16 @@
                         $('#loader').hide();
                     }
                 });
-                console.log('city_id : ' + city_id) ;
-                console.log('province_id : ' + province_id) ;
-                console.log('location_id : ' + location_id) ;
-                console.log('service_id : ' + service_id) ;
-                console.log('------------------') ;
-                console.log('project_id : ' + project_id) ;
-                console.log('terminal_type_id : ' + terminal_type_id) ;
-                console.log('voucher_type_id : ' + voucher_type_id) ;
-                console.log('sale_type_id : ' + sale_type_id) ;
-                console.log('sib_user_id : ' + sib_user_id) ;
+                // console.log('city_id : ' + city_id) ;
+                // console.log('province_id : ' + province_id) ;
+                // console.log('location_id : ' + location_id) ;
+                // console.log('service_id : ' + service_id) ;
+                // console.log('------------------') ;
+                // console.log('project_id : ' + project_id) ;
+                // console.log('terminal_type_id : ' + terminal_type_id) ;
+                // console.log('voucher_type_id : ' + voucher_type_id) ;
+                // console.log('sale_type_id : ' + sale_type_id) ;
+                // console.log('sib_user_id : ' + sib_user_id) ;
             });
         });
     </script>

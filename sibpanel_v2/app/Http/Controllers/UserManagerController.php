@@ -220,7 +220,7 @@ class UserManagerController extends Controller
     }
     public function GetUserInfo(Request $request  ){
         $id = $request->get('UserId');
-        $User_info = $this->api->GetUserInfo( $id);
+        $User_info = $this->api->GetUserInfo( $id , "ajax");
        return $User_info['ContentData'];
     }
     public function setUserPermission($id=null){

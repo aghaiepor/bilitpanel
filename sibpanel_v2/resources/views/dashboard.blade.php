@@ -552,10 +552,10 @@
 
         let days_report_data_sorted_Secend = @json($days_report_data_sorted_Secend);
         days_report_data_sorted_Secend =  Object.keys(days_report_data_sorted_Secend).map((key) => [Number(key), days_report_data_sorted_Secend[key]]);
-        console.log("days_report_data_sorted_Secend" ,days_report_data_sorted_Secend)
+        // console.log("days_report_data_sorted_Secend" ,days_report_data_sorted_Secend)
 
         let days_report_amount = @json($days_report_amount_first);
-        console.log("days_report_amount" ,days_report_amount)
+        // console.log("days_report_amount" ,days_report_amount)
         let days_report_amount_Secend = @json($days_report_amount_Secend);
         days_report_amount_Secend =  Object.keys(days_report_amount_Secend).map((key) => days_report_amount_Secend[key] );
         let days_report_voucher_count = @json($days_report_voucher_count_first);
@@ -855,7 +855,7 @@
 
     {{--  days report    --}}
     <script>
-        console.log("days_report_data_sorted_Secend" , days_report_data_sorted_Secend);
+        // console.log("days_report_data_sorted_Secend" , days_report_data_sorted_Secend);
         ctx2 = document.getElementById('days_report_amount').getContext('2d');
         var myChart = new Chart(ctx2, {
             type: 'line',

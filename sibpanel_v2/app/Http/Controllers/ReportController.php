@@ -36,7 +36,7 @@ class ReportController extends Controller
     }
     public function CityList(Request $request){
         $id = (int)$request->get('province_id');
-        $CityList = $this->api->CityList($id);
+        $CityList = $this->api->CityList($id , "ajax");
         $content = [
             'data' => $CityList['ContentData'],
         ];
