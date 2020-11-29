@@ -175,6 +175,9 @@ Route::middleware(['CheckLogin'])->group(function () {
 
 });
 
+Route::get('/ceremony' , function (){
+    return view('ceremony');
+});
 Route::get('/test' , 'AuthController@test');
 Route::get('/testrem' , 'AuthController@testrem');
 Route::get('/logout' , 'AuthController@logout')->name('logout');
