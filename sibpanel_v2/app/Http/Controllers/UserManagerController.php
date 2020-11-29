@@ -168,11 +168,19 @@ class UserManagerController extends Controller
             $id="";
         $name = $request->get('name'); //
         $last_name = $request->get('last_name'); //
+        if(is_null($last_name))
+            $last_name = "";
         $cellphone = $request->get('cellphone'); //
+        if(is_null($cellphone))
+            $cellphone = "";
         $national_id = $request->get('national_id'); //
+        if(is_null($national_id))
+            $national_id = "";
         $username = $request->get('username'); //
         $password = $request->get('password'); //
         $email = $request->get('email'); //
+        if(is_null($email))
+            $email = "";
         $account_type_id = $request->get('account_type_id'); //
         $otp_verify = '0'; //$request->get('otp_verify');
         $subset_users ="";  /*$request->get('subset_users')*/
@@ -213,6 +221,8 @@ class UserManagerController extends Controller
                     return $data['ContentData'];
                 });
                 return redirect()->back()->with('success' , $success_message);
+        }else if($SellerUserList['Header']['Message']  == "Permission Denied"){
+            return redirect()->back()->with('error' , "شما مجاز به انجام اين عمليات نيستيد .");
         }
         else
             return redirect()->back()->with('error' , $error_message);

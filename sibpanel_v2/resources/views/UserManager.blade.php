@@ -430,16 +430,14 @@
             $("#addUserSubmit").submit( function (e) {
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
                 let addUser_name = $("#addUser_name").val();
-                let addUser_lastname = $("#addUser_lastname").val();
+                // let addUser_lastname = $("#addUser_lastname").val();
                 let addUser_username = $("#addUser_username").val();
                 let addUser_password = $("#addUser_password").val();
-                let addUser_mobile = $("#addUser_mobile").val();
-                let addUser_ssn = $("#addUser_ssn").val();
                 let addUser_account_type_id = $("#addUser_account_type_id").val();
                 let addUser_imei = $("#addUser_imei").val();
                 // console.log('addUser_account_type_id' , addUser_account_type_id == null);
                 // console.log('addUser_lastname : ' , addUser_lastname == "")
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || !addUser_account_type_id == null || !addUser_lastname.match(pattern)   || !addUser_mobile.match(pattern) || !addUser_ssn.match(pattern) || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || !addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         $("#addUser_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
@@ -481,34 +479,6 @@
                         $("#addUser_account_type_id").removeAttr("style");
                         $("#addUser_account_type_id").parent().prev().removeAttr("style") ;
                     }
-                    if(!addUser_lastname.match(pattern)) {
-                        $("#addUser_lastname").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
-                        $("#addUser_lastname").parent().prev().css("color" , "#e91e63") ;
-                    }
-                    else
-                    {
-                        $("#addUser_lastname").removeAttr("style");
-                        $("#addUser_lastname").parent().prev().removeAttr("style") ;
-                    }
-
-                    if(!addUser_mobile.match(pattern)) {
-                        $("#addUser_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
-                        $("#addUser_mobile").parent().prev().css("color" , "#e91e63") ;
-                    }
-                    else
-                    {
-                        $("#addUser_mobile").removeAttr("style");
-                        $("#addUser_mobile").parent().prev().removeAttr("style") ;
-                    }
-                    if(!addUser_ssn.match(pattern)) {
-                        $("#addUser_ssn").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
-                        $("#addUser_ssn").parent().prev().css("color" , "#e91e63") ;
-                    }
-                    else
-                    {
-                        $("#addUser_ssn").removeAttr("style");
-                        $("#addUser_ssn").parent().prev().removeAttr("style") ;
-                    }
 
                     if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
                         if (addUser_imei == "") {
@@ -535,13 +505,12 @@
             $("#edit_form_btn").click( function (e) {
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
                 let addUser_name = $("#user_first_name").val();
-                let addUser_lastname = $("#user_last_name").val();
                 let addUser_username = $("#user_username").val();
                 let error = 0 ;
                 let addUser_account_type_id = $("#user_account_type_id").val();
                 console.log("addUser_account_type_id => " , addUser_account_type_id)
                 let addUser_imei = $("#user_imei").val();
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null || !addUser_lastname.match(pattern)   || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) ){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) ){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         error++ ;
@@ -573,16 +542,6 @@
                     {
                         $("#user_account_type_id").removeAttr("style");
                         $("#user_account_type_id").parent().prev().removeAttr("style") ;
-                    }
-                    if(!addUser_lastname.match(pattern)) {
-                        error++ ;
-                        $("#user_last_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
-                        $("#user_last_name").parent().prev().css("color" , "#e91e63") ;
-                    }
-                    else
-                    {
-                        $("#user_last_name").removeAttr("style");
-                        $("#user_last_name").parent().prev().removeAttr("style") ;
                     }
 
                     if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
@@ -767,6 +726,7 @@
                             }
                         },
                         success:function(data) {
+                            console.log("data =>" , data)
                             $('#form_edit').attr('action' , action_url );
                            $('#user_first_name').val(data.first_name);
                             $('#user_last_name').val(data.last_name);
