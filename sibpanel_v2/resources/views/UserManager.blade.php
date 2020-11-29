@@ -427,8 +427,9 @@
 
             $("#addUser_password").val(" ")
 
-            $("#addUserSubmit").submit( function (e) {
+            $("#addUser").click( function (e) {
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
+                let error = 0 ;
                 let addUser_name = $("#addUser_name").val();
                 // let addUser_lastname = $("#addUser_lastname").val();
                 let addUser_username = $("#addUser_username").val();
@@ -437,9 +438,10 @@
                 let addUser_imei = $("#addUser_imei").val();
                 // console.log('addUser_account_type_id' , addUser_account_type_id == null);
                 // console.log('addUser_lastname : ' , addUser_lastname == "")
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || !addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
+                        error++;
                         $("#addUser_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_name").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -450,6 +452,7 @@
                     }
 
                     if(!addUser_username.match(pattern) ) {
+                        error++;
                         $("#addUser_username").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_username").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -460,6 +463,7 @@
                     }
 
                     if(!addUser_password.match(pattern) ) {
+                        error++;
                         $("#addUser_password").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_password").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -470,7 +474,8 @@
                     }
 
 
-                    if(!addUser_account_type_id == null) {
+                    if(addUser_account_type_id == null) {
+                        error++;
                         $("#addUser_account_type_id").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_account_type_id").parent().prev().css("color" , "#e91e63") ;
                     }
@@ -482,6 +487,7 @@
 
                     if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
                         if (addUser_imei == "") {
+                            error++;
                             $("#addUser_imei").css("cssText", "border : solid 2px #e91e63 !important");
                             $("#addUser_imei").parent().prev().css("color", "#e91e63");
                         } else {
@@ -489,11 +495,16 @@
                             $("#addUser_imei").parent().prev().removeAttr("style");
                         }
                     }
-                    Swal.fire(
-                        'خطا ! ',
-                        'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
-                        'error'
-                    )
+                    console.log("error => " , error)
+                    if(error == 0 )
+                        $("#addUserSubmit").submit();
+                    else{
+                        Swal.fire(
+                            'خطا ! ',
+                            'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                            'error'
+                        )
+                    }
                 }
                 else
                 {
