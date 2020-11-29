@@ -484,10 +484,14 @@
                         $("#addUser_account_type_id").removeAttr("style");
                         $("#addUser_account_type_id").parent().prev().removeAttr("style") ;
                     }
-
+                    let NOTcashUser =true ;
                     if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
-                        if (addUser_imei == "") {
+                        if (addUser_imei == "" || addUser_imei != addUser_username ) {
                             error++;
+
+                            if(addUser_imei != addUser_username)
+                                NOTcashUser = false ;
+
                             $("#addUser_imei").css("cssText", "border : solid 2px #e91e63 !important");
                             $("#addUser_imei").parent().prev().css("color", "#e91e63");
                         } else {
@@ -496,15 +500,25 @@
                         }
                     }
                     console.log("error => " , error)
-                    if(error == 0 )
-                        $("#addUserSubmit").submit();
-                    else{
+                    if (NOTcashUser){
+                        if(error == 0 )
+                            $("#addUserSubmit").submit();
+                        else{
+                            Swal.fire(
+                                'خطا ! ',
+                                'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                                'error'
+                            )
+                        }
+                    } else
+                    {
                         Swal.fire(
                             'خطا ! ',
-                            'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                            'نام کاربري با IMEI برابر نيست . ',
                             'error'
                         )
                     }
+
                 }
                 else
                 {
@@ -554,10 +568,13 @@
                         $("#user_account_type_id").removeAttr("style");
                         $("#user_account_type_id").parent().prev().removeAttr("style") ;
                     }
-
+                    let NOTcashUser =true ;
                     if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
-                        if (addUser_imei == "") {
+                        if (addUser_imei == "" || addUser_imei != addUser_username) {
                             error++ ;
+                            if(addUser_imei != addUser_username)
+                                NOTcashUser = false ;
+
                             $("#user_imei").css("cssText", "border : solid 2px #e91e63 !important");
                             $("#user_imei").parent().prev().css("color", "#e91e63");
                         } else {
@@ -565,15 +582,25 @@
                             $("#user_imei").parent().prev().removeAttr("style");
                         }
                     }
-                    if(error == 0 )
-                        $("#form_edit").submit();
-                    else{
+                    if (NOTcashUser){
+                        if(error == 0 )
+                            $("#form_edit").submit();
+                        else{
+                            Swal.fire(
+                                'خطا ! ',
+                                'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                                'error'
+                            )
+                        }
+                    } else
+                    {
                         Swal.fire(
                             'خطا ! ',
-                            'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                            'نام کاربري با IMEI برابر نيست . ',
                             'error'
                         )
                     }
+
 
                 }
                 else
