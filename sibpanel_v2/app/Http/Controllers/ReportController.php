@@ -312,7 +312,7 @@ class ReportController extends Controller
             $voucher_type_id = '';
 
         $start_date = $request->get('startDate','');
-        $end_date = $request->get('endDate','');
+        $end_date = $request->get('endtDate','');
 
         if ($start_date !='')
             $start_date = Verta::parse($this->fa2en($start_date).' 00:00:00')->timestamp;
@@ -332,7 +332,7 @@ class ReportController extends Controller
             $page = 1;
 
         $voucher_number = (int)$request->get('voucher_number',"");
-        if(is_null($voucher_number))
+        if($voucher_number == 0)
             $voucher_number = "";
 
         $rrn = $request->get('rrn',"");

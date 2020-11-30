@@ -166,6 +166,10 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // Project manager
         Route::get('/projectManager' , 'projectManagerController@index')->name('projectManager');
+        Route::post('/AddProject' , 'projectManagerController@AddProject')->name('AddProject');
+        Route::post('/EditProject/{id?}' , 'projectManagerController@EditProject')->name('EditProject');
+        Route::post('/GetProject' , 'projectManagerController@GetProject')->name('GetProject');
+        Route::post('/AddProjectPicture/{id?}' , 'projectManagerController@AddProjectPicture')->name('AddProjectPicture');
 
         // Off Managers
         Route::get('/Off' , 'OffController@index')->name('Off');

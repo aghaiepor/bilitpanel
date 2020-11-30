@@ -642,19 +642,6 @@ class Api
     }
 
     // ******************* UserManagement *******************
-    public function ProjectList(){
-        $data=null;
-        $client = new Client();
-        $result = $client->post($this->url . 'ProjectList' ,[
-                'headers'=>$this->getHeader(),
-                'json'=>$data
-            ]
-        );
-        $response = json_decode($result->getBody(),true);
-
-        $this->checkError($response);
-        return $response;
-    }
     public function GetSubUserList(){
         $data = null ;
         $client = new Client();
@@ -1292,17 +1279,67 @@ class Api
     }
 
     // ******************** Project Manager ****************
-    public function GetProjectList($type=null)
+    public function ProjectList($type=null)
     {
         $data = null ;
         $client = new Client();
-        $result = $client->post($this->url . 'GetProjectList' ,[
+        $result = $client->post($this->url . 'ProjectList' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
         );
         $response = json_decode($result->getBody(),true);
 
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function AddProject($project_name ,$description ,  $type=null)
+    {
+        $data = [
+            "project_name" => $project_name,
+            "description" => $description
+        ] ;
+        $client = new Client();
+        $result = $client->post($this->url . 'AddProject' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function EditProject($project_id , $project_name ,$description ,  $type=null)
+    {
+        $data = [
+            "project_id" => $project_id,
+            "project_name" => $project_name,
+            "description" => $description
+        ] ;
+        $client = new Client();
+        $result = $client->post($this->url . 'EditProject' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function GetProject($project_id , $type=null)
+    {
+        $data = [
+            "project_id" => $project_id,
+        ] ;
+        $client = new Client();
+        $result = $client->post($this->url . 'GetProject' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
         $this->checkError($response , $type);
         return $response;
     }
@@ -1530,4 +1567,5 @@ class Api
     public function fa2en($number){
         return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
     }
+
 }

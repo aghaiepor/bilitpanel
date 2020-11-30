@@ -144,7 +144,7 @@
 
             @if(session('UserInfo')['account_type_id'] != 2)
             @php
-                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' , 'alerts' , 'presellManger' ] ;
+                $serviceUrl = ['places','stateMg','voucherTypeList','voucherText' , 'UserManager' , 'group_times' , 'terminals' , 'alerts' , 'presellManger' , "projectManager" ] ;
             @endphp
             <li class="nav-item @if(in_array(Route::current()->getName(),$serviceUrl))  active  @endif">
                 <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
@@ -233,10 +233,17 @@
                                     </a>
                                 </li>
                             @endif
+                            <li class="nav-item @if(Route::current()->getName() === 'projectManager' )  active  @endif" ">
+                                <a class="nav-link" href="{{Route('projectManager')}}">
+                                    <i class="material-icons">account_tree</i>
+                                    <p> مدیریت پروژه </p>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </li>
             @endif
+
            {{-- <li class="nav-item ">
                 <a class="nav-link" data-toggle="collapse" href="#formsExamples">
                     <i class="material-icons">content_paste</i>
@@ -333,12 +340,7 @@
                     </ul>
                 </div>
             </li>--}}
-            <li class="nav-item d-none ">
-                <a class="nav-link" href="{{Route('projectManager')}}">
-                    <i class="material-icons">account_tree</i>
-                    <p> مدیریت پروژه </p>
-                </a>
-            </li>
+
             <li class="nav-item d-none ">
                 <a class="nav-link" href="{{Route('Off')}}">
                     <i class="material-icons">local_offer</i>

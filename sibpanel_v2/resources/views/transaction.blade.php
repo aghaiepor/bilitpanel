@@ -180,12 +180,12 @@
                                 {{-- **** Voucher Number  **** --}}
                                 <div class="col-md-3 text-right">
                                     <label for="">  شماره بلیت </label>
-                                    <input  name="voucher_number" type="text" class="form-control" placeholder="شماره بلیت">
+                                    <input  name="voucher_number" value="{{request('voucher_number')}}" type="text" class="form-control" placeholder="شماره بلیت">
                                 </div>
                                 {{-- **** RRN Number  **** --}}
                                 <div class="col-md-3 text-right">
                                     <label for="">  شماره RRN  </label>
-                                    <input  name="rrn" type="text" class="form-control" placeholder="شماره RRN">
+                                    <input  name="rrn" value="{{request('rrn')}}" type="text" class="form-control" placeholder="شماره RRN">
                                 </div>
 
                                 <div class="col-md-3 text-right">
