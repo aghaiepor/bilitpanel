@@ -19,6 +19,7 @@ class OffController extends Controller
         $locations = Cache::get('LocationList') ;
         $ServiceList = Cache::get('ServiceList') ;
         $VoucherTypeList = Cache::get('VoucherTypeList');
+//        $VoucherTypeList = $this->api->VoucherInfoList();
         $SellerUserList = Cache::get('SellerUserList');
 //        return $GetSibUser ;
 //        return $SellerUserList ;
@@ -29,7 +30,7 @@ class OffController extends Controller
         $service_pics = [];
 //        return $SellerUserList ;
         return view('off' , ["ProjectList" => $Project_list , "locations" => $locations ,
-            "ServiceList" => $ServiceList , "VoucherTypeList" => $VoucherTypeList , "SellerUserList" => $SellerUserList] ) ;
+            "ServiceList" => $ServiceList , "VoucherTypeList" => $VoucherTypeList["ContentData"] , "SellerUserList" => $SellerUserList] ) ;
     }
     public function AddDiscountPolicy(Request $request){
         $project_id = (int)$request->get("project_id") ;
