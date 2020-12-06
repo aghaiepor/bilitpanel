@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\Api;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class projectManagerController extends Controller
 {
@@ -14,9 +15,10 @@ class projectManagerController extends Controller
     }
 
     public function index(){
-        $GetProjectList = $this->api->ProjectList();
+
+        $GetProjectList = Cache::get('ProjectList');
 //        return $GetProjectList ;
-        return view("ProjectManager" ,["GetProjectList" => $GetProjectList["ContentData"]]) ;
+        return view("ProjectManager" ,["GetProjectList" => $GetProjectList]) ;
     }
 
     public function AddProject(Request $request){
@@ -26,8 +28,14 @@ class projectManagerController extends Controller
             $description = "";
         $AddProject = $this->api->AddProject($project_name , $description);
 //        return $AddProject;
-        if($AddProject["Header"]["Status"] == 0 )
+        if($AddProject["Header"]["Status"] == 0 ){
+            Cache::forget('ProjectList');
+            Cache::rememberForever('ProjectList', function(){
+                $ProvinceList  = $this->api->ProjectList();
+                return $ProvinceList['ContentData'];
+            });
             return redirect()->back()->with("success" , " پروژه جدید ساخته شد .  ");
+        }
         else if ($AddProject["Header"]["Message"] == "Permission Denied"){
             return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
         }
@@ -46,8 +54,15 @@ class projectManagerController extends Controller
 
         $EditProject = $this->api->EditProject($project_id ,$project_name , $description);
 //        return $EditProject;
-        if($EditProject["Header"]["Status"] == 0 )
-            return redirect()->back()->with("success" , " پروژه جدید ساخته شد .  ");
+        if($EditProject["Header"]["Status"] == 0 ){
+            Cache::forget('ProjectList');
+            Cache::rememberForever('ProjectList', function(){
+                $ProvinceList  = $this->api->ProjectList();
+                return $ProvinceList['ContentData'];
+            });
+            return redirect()->back()->with("success" , " ویرایش با موفقیت اعمال شد .  ");
+        }
+
         else if ($EditProject["Header"]["Message"] == "Permission Denied"){
             return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
         }

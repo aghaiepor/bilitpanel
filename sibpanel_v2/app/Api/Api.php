@@ -3,12 +3,7 @@
 
 namespace App\Api;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Boolean;
 
 
 class Api
@@ -502,7 +497,6 @@ class Api
         return $response;
     }
 
-
     // ******************* CancelVoucher *******************
     public function CancelVoucher($voucher_number){
         $data = [
@@ -735,6 +729,21 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
+    public function GetSibUser($user_id , $type=null){
+        $data= [
+            'sib_user_id' => $user_id ,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetSibUser' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
     public function GetInfo($type=null){
         $data=null;
         $client = new Client();
@@ -869,7 +878,6 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
         $this->checkError($response , $type);
         return $response;
     }
@@ -1344,6 +1352,88 @@ class Api
         return $response;
     }
 
+    // ******************** Discount Manager ****************
+    public function AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage , $type=null)
+    {
+        $data = [
+               "project_id" =>$project_id,
+                "location_id"=> $location_id,
+                "service_id"=>$service_id,
+                "voucher_info_id"=> $voucher_info_id,
+                "sib_user_id"=> $sib_user_id,
+                "description"=> $description,
+                "percentage"=> $percentage
+        ];
+        Log::info("AddDiscountPolicy => " , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'AddDiscountPolicy' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function GetDiscountPolicyList($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id , $type=null)
+    {
+        $data = [
+               "project_id" =>$project_id,
+                "location_id"=> $location_id,
+                "service_id"=>$service_id,
+                "voucher_info_id"=> $voucher_info_id,
+                "sib_user_id"=> $sib_user_id,
+        ];
+//        Log::info("GetDiscountPolicyList => " , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'GetDiscountPolicyList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage ,  $type=null)
+    {
+        $data = [
+            "discount_policy_id" => $discount_policy_id,
+            "active" => $active,
+            "description" => $description,
+            "percentage" => $percentage ,
+        ];
+        Log::info("EditDiscountPolicy => " , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'EditDiscountPolicy' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function GetDiscountPolicy($discount_policy_id , $type=null)
+    {
+        $data = [
+            "discount_policy_id" =>$discount_policy_id,
+        ];
+        Log::info("GetDiscountPolicy => " , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'GetDiscountPolicy' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $type);
+        return $response;
+    }
+
     // ******************** Presell ****************
     public function GetAccountProvince($province_id , $type=null){
         $data = [
@@ -1360,7 +1450,6 @@ class Api
         $this->checkError($response , "ajax");
         return $response;
     }
-
     public function LocationAccountActivation($locationaccount_id  ,$activation){
         $data = [
             "locationaccount_id" => $locationaccount_id,

@@ -878,19 +878,94 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                         }
                                                                                                     },
                                                                                                     success:function(data8) {
-
                                                                                                         if(data8.status == 0 ){
                                                                                                             currentNumber++;
                                                                                                             $('#current').text(currentNumber);
-                                                                                                            $('#LoadingText').text(' در حال ورود ');
-                                                                                                            let url = "{{session()->get('previous_url')}}";
-                                                                                                            // console.log(url);
-                                                                                                            if(url == "")
-                                                                                                                url = "{{Route('dashboard')}}";
-                                                                                                           setTimeout(function(){
-                                                                                                                window.location.href = url ;
-                                                                                                            }, 600);
+                                                                                                            $.ajax({
+                                                                                                                xhr: function () {
+                                                                                                                    var xhr = new window.XMLHttpRequest();
+                                                                                                                    xhr.upload.addEventListener("progress", function (evt) {
+                                                                                                                        if (evt.lengthComputable) {
+                                                                                                                            percentComplete += evt.loaded / evt.total;
+                                                                                                                            // console.log(percentComplete);
+                                                                                                                            $('#pro').css({
+                                                                                                                                width: (percentComplete * 100)/num + '%'
+                                                                                                                            });
+                                                                                                                            /*if (percentComplete === 1) {
+                                                                                                                                $('#pro').addClass('hide');
+                                                                                                                            }*/
+                                                                                                                        }
+                                                                                                                    }, false);
+                                                                                                                    xhr.addEventListener("progress", function (evt) {
+                                                                                                                        if (evt.lengthComputable) {
+                                                                                                                            percentComplete += evt.loaded / evt.total;
+                                                                                                                            // console.log(percentComplete);
+                                                                                                                            $('#pro').css({
+                                                                                                                                width: (percentComplete * 100)/num + '%'
+                                                                                                                            });
+                                                                                                                        }
+                                                                                                                    }, false);
+                                                                                                                    return xhr;
+                                                                                                                },
+                                                                                                                type:'POST',
+                                                                                                                url:"{{Route('ProjectListCashe')}}",
+                                                                                                                dataType:'json',
+                                                                                                                data:{
+                                                                                                                    '_token ': '<?php echo csrf_token() ?>',
+                                                                                                                    'currentNumber' : currentNumber ,
+                                                                                                                }, statusCode: {
+                                                                                                                    500: function() {
+                                                                                                                        $("#loader").hide();
+                                                                                                                        Swal.fire(
+                                                                                                                            'خطا در دريافت اطلاعات ! ',
+                                                                                                                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                                                                                            'error'
+                                                                                                                        )
+                                                                                                                    } ,
+                                                                                                                    400: function() {
+                                                                                                                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                                                                                        let x = 1 ;
+                                                                                                                        let dots = "";
+                                                                                                                        setInterval(function () {
+                                                                                                                            dots += ".";
+                                                                                                                            x++  ;
+                                                                                                                            // console.log(x)
+                                                                                                                            if(x >= 8 ){
+                                                                                                                                x = 1 ;
+                                                                                                                                dots = ".";
+                                                                                                                            }
+                                                                                                                            $("#dots").html(dots)
+                                                                                                                        } , 300)
+                                                                                                                        $("#loader").hide();
+                                                                                                                        Swal.fire(
+                                                                                                                            'نشست  شما پایان یافته است ! ',
+                                                                                                                            html,
+                                                                                                                            'warning' ,
+                                                                                                                        )
+                                                                                                                        setTimeout(function () {
+                                                                                                                            window.location.href = "{{Route("logout")}}";
+                                                                                                                        } , 1500)
+
+                                                                                                                    }
+                                                                                                                },
+                                                                                                                success:function(data9) {
+
+                                                                                                                    if(data9.status == 0 ){
+                                                                                                                        currentNumber++;
+                                                                                                                        $('#current').text(currentNumber);
+                                                                                                                        $('#LoadingText').text(' در حال ورود ');
+                                                                                                                        let url = "{{session()->get('previous_url')}}";
+                                                                                                                        // console.log(url);
+                                                                                                                        if(url == "")
+                                                                                                                            url = "{{Route('dashboard')}}";
+                                                                                                                        setTimeout(function(){
+                                                                                                                            window.location.href = url ;
+                                                                                                                        }, 600);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            });
                                                                                                         }
+
                                                                                                     }
                                                                                                 });
                                                                                             }

@@ -39,6 +39,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/VoucherTypeListCashe' , 'LoadingController@VoucherTypeList')->name('VoucherTypeListCashe');
         Route::post('/GetInfoCashe' , 'LoadingController@GetInfo')->name('GetInfoCashe');
         Route::post('/GetVoucherTextCashe' , 'LoadingController@GetVoucherText')->name('GetVoucherTextCashe');
+        Route::post('/ProjectListCashe' , 'LoadingController@ProjectListCashe')->name('ProjectListCashe');
 
         // home Dashboard
         Route::get('/', function () {
@@ -173,6 +174,12 @@ Route::middleware(['CheckLogin'])->group(function () {
 
         // Off Managers
         Route::get('/Off' , 'OffController@index')->name('Off');
+        Route::post('/AddDiscountPolicy' , 'OffController@AddDiscountPolicy')->name('AddDiscountPolicy');
+        Route::post('/GetDiscountPolicyList' , 'OffController@GetDiscountPolicyList')->name('GetDiscountPolicyList');
+        Route::post('/GetSibUser' , 'OffController@GetSibUser')->name('GetSibUser');
+        Route::post('/EditDiscountPolicy/{id?}' , 'OffController@EditDiscountPolicy')->name('EditDiscountPolicy');
+        Route::post('/GetDiscountPolicy' , 'OffController@GetDiscountPolicy')->name('GetDiscountPolicy');
+        Route::post('/DiscountPolicyَActivaion' , 'OffController@DiscountPolicyَActivaion')->name('DiscountPolicyَActivaion');
 
 
     });

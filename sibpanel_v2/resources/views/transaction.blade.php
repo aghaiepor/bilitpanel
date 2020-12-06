@@ -327,19 +327,27 @@
                                             </tr>
                                         @endforeach
                                         <tr class="bg-light">
-                                            <th colspan="6" class="text-right" >
-                                                جمع
+                                            <th colspan="3"  class="text-center">
+                                                مجموع پرداختی :
+                                                @if(request('reportType') == 1)
+                                                    {{ number_format($data['total_paid_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
+                                                @else
+                                                    {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
+                                                @endif
                                             </th>
-                                            <th colspan="2" class="text-center" >
+                                            <th colspan="3" class="text-center" >
+                                                تعداد :
                                                 {{ number_format($data['total_count'] , 0 , '.' , ',')}}
                                             </th>
-                                            <th colspan="2" class="text-center">
+                                            <th colspan="4" class="text-center">
+                                                جمع :
                                                 @if(request('reportType') == 1)
                                                     {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @else
                                                     {{ number_format($data['total_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @endif
                                             </th>
+
                                         </tr>
                                     @endif
                                     </tbody>

@@ -18,7 +18,7 @@ class LoadingController extends Controller
     }
 
     public function index(){
-        $num = 8 ;
+        $num = 9 ;
         return view('loading' , ['num' => $num]);
 
     }
@@ -101,6 +101,17 @@ class LoadingController extends Controller
         $value = Cache::rememberForever('GetVoucherText', function(){
             $GetInfo  = $this->api->GetVoucherText("ajax");
             return $GetInfo['ContentData'];
+        });
+        // notify success
+        return $this->response_ok;
+    }
+    public function ProjectListCashe(){
+
+        //cache SaleTypeList
+        Cache::forget('ProjectList');
+        $value = Cache::rememberForever('ProjectList', function(){
+            $ProvinceList  = $this->api->ProjectList("ajax");
+            return $ProvinceList['ContentData'];
         });
         // notify success
         return $this->response_ok;
