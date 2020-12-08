@@ -59,6 +59,7 @@ class AuthController extends Controller
         $password = $request->get('password');
         $cont = new Api();
         $response = $cont->login($username,$password);
+//        return $response ;
         if ($response['Header']['Status'] == 0 && $response['ContentData']['panel_access']){
             if($response['ContentData']['otp_verify']){
                 return redirect()->route('otp');

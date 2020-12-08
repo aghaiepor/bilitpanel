@@ -233,7 +233,8 @@
                                     </a>
                                 </li>
                             @endif
-                            <li class="nav-item @if(Route::current()->getName() === 'projectManager' )  active  @endif" ">
+                            @if(session('UserInfo')['is_superuser'])
+                            <li class="nav-item @if(Route::current()->getName() === 'projectManager' )  active  @endif" >
                                 <a class="nav-link" href="{{Route('projectManager')}}">
                                     <i class="material-icons">account_tree</i>
                                     <p> مدیریت پروژه </p>
@@ -245,6 +246,7 @@
                                     <p> تخفیف </p>
                                 </a>
                             </li>
+                            @endif
                     </ul>
                 </div>
             </li>

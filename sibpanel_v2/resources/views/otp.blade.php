@@ -323,16 +323,19 @@
       }, 700);
     }
     );
-    let time = 60 ;
+    let time = 300 ;
+
     $("#timer").css("font-weight" , "bold");
     setInterval(function () {
+        let date =  new Date(time * 1000).toISOString().substr(14, 5) ;
         if(time >= 0){
-                let current_time =  (time == 60) ? "01:00" :  (time < 10) ?  "00:0"+ time :"00:"+ time ;
+                let current_time =  date;
                 if(time <= 5 ){
                     $("#timer").css("color" , "red");
                 }
                 $("#timer").text(current_time);
                 time--;
+
                 if(time < 0){
                     $('#accept').css("display" , "none");
                     $('#resend').show();

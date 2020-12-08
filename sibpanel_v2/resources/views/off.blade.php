@@ -82,7 +82,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md text-right">
+                              {{--  <div class="col-md text-right">
                                     <label for="" class="text-right"> بلیت  </label>
                                     <select id="voucher_info_id" name="voucher_info_id" data-live-search="true" class="selectpicker" data-style="btn btn-primary border-dark" title="مکان">
                                         <option selected value="0"> همه </option>
@@ -90,7 +90,7 @@
                                             <option value="{{$VoucherType["voucher_type_id"]}}"> {{$VoucherType["voucher_type"]}} </option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div>--}}
                                 <div class="col-md text-right">
                                     <label for="" class="text-right">  کاربر </label>
                                     <select id="sib_user_id" name="sib_user_id" data-live-search="true" class="selectpicker" data-style="btn btn-primary border-dark" title="کاربر">
@@ -195,15 +195,6 @@
                         </div>
                     </div>
                     <div class="form-row mt-3">
-                        <div class="col-md text-right">
-                            <label for="" class="text-right"> بلیت  </label>
-                            <select  name="voucher_info_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="مکان">
-                                <option selected value=""> همه </option>
-                                @foreach($VoucherTypeList as $VoucherType)
-                                    <option value="{{$VoucherType["voucher_type_id"]}}"> {{$VoucherType["voucher_type"]}} </option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="col-md text-right">
                             <label for="" class="text-right">  کاربر </label>
                             <select  name="sib_user_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="کاربر">
@@ -599,15 +590,5 @@
             });
             // return Username ;
         }
-       /* function VoucherTypeList(id , className) {
-            let Username = "" ;
-            let cName = "." + className ;
-            console.log("cName" , cName);
-            let VocherInfo = @json($VoucherTypeList);
-            let Vocher = VocherInfo.filter(d =>  (d.voucher_type_id == id) );
-            console.log("voucher number => " , Vocher[0]);
-            $(cName).html(Vocher[0].voucher_type)
-            // return Username ;
-        }*/
     </script>
 @endsection
