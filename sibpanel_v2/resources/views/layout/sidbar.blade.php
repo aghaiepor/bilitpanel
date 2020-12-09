@@ -112,7 +112,9 @@
                                     <span class="sidebar-normal"> ریز تراکنش های پیش فروش </span>
                                 </a>
                             </li>
+
                         @endif
+
                         {{--<li class="nav-item ">
                             <a class="nav-link" href="../examples/pages/register.html">
                                 <span class="sidebar-mini"> RP </span>
@@ -250,6 +252,32 @@
                     </ul>
                 </div>
             </li>
+            @endif
+            @if(session('UserInfo')['account_type_id'] == 2)
+                @if(session('UserInfo')['presell'])
+                    @php
+                        $serviceUrl = ['presellManger' ] ;
+                    @endphp
+                    <li class="nav-item @if(in_array(Route::current()->getName(),$serviceUrl))  active  @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
+                            <i class="material-icons">apps</i>
+                            <p>   خدمات
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        {{--  Terminal manager  --}}
+                        <div class="collapse @if(in_array(Route::current()->getName(),$serviceUrl))  show  @endif" id="componentsExamples">
+                            <ul class="nav">
+                                <li class="nav-item @if(Route::current()->getName() === 'presellManger' )  active  @endif">
+                                    <a class="nav-link"  href="{{Route('presellManger')}}" >
+                                        <span class="sidebar-mini"> <i class="material-icons">assignment</i> </span>
+                                        <span class="sidebar-normal"> مدیریت پیش فروش </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
             @endif
 
            {{-- <li class="nav-item ">

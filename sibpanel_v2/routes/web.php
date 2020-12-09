@@ -83,6 +83,8 @@ Route::middleware(['CheckLogin'])->group(function () {
         // services Route
         Route::get('/GetService/{id}' ,'LocationController@GetService' )->name('GetService');
         Route::get('/VoucherInfoList/{service_id}/{location_id}' ,'LocationController@VoucherInfoList' )->name('VoucherInfoList');
+        Route::post('/AddVoucherInfoOff/{id}' ,'LocationController@AddVoucherInfoOff' )->name('AddVoucherInfoOff');
+        Route::get('/VoucherInfoOff/{id}' ,'LocationController@VoucherInfoOff' )->name('VoucherInfoOff');
         Route::post('/AddService/{location_id}' ,'LocationController@AddService' )->name('AddService');
         Route::post('/EditService/{service_id}/{location_id}' ,'LocationController@EditService' )->name('EditService');
         Route::post('/DeleteService/{service_id}' ,'LocationController@DeleteService' )->name('DeleteService');
@@ -171,6 +173,8 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/EditProject/{id?}' , 'projectManagerController@EditProject')->name('EditProject');
         Route::post('/GetProject' , 'projectManagerController@GetProject')->name('GetProject');
         Route::post('/AddProjectPicture/{id?}' , 'projectManagerController@AddProjectPicture')->name('AddProjectPicture');
+        Route::get('/ProjectOff/{id}' , 'projectManagerController@ProjectOff')->name('ProjectOff');
+        Route::post('/AddProjectOff/{id}' , 'projectManagerController@AddProjectOff')->name('AddProjectOff');
 
         // Off Managers
         Route::get('/Off' , 'OffController@index')->name('Off');

@@ -107,6 +107,9 @@
                                             عکس بلیت
                                         </th>
                                         <th >
+                                            تخفيف
+                                        </th>
+                                        <th >
                                             ویرایش
                                         </th>
                                     </tr>
@@ -166,6 +169,11 @@
                                                         @endif
                                                     @endif
 {{--                                                    <img data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">--}}
+                                                </td>
+                                                <td>
+                                                    <a href="{{Route("VoucherInfoOff" , [$VoucherInfo[$i]['id']])}}" class="btn btn-info btn-simple">
+                                                        مديريت تخفيف
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <button data-id="{{ $VoucherInfo[$i]['id'] }}" data-service_id="{{$VoucherInfo[$i]['service_id']}}" data-location_id="{{$VoucherInfo[$i]['location_id']}}" data-validity_period="{{$VoucherInfo[$i]['validity_period']}}" data-expiration_date="{{$VoucherInfo[$i]['expiration_date']}}"  data-voucher_type_name="{{$VoucherInfo[$i]['voucher_type_name']}}" data-toggle="modal" data-target="#Edit" type="button" rel="tooltip" class="btn TableEditBtn edit_btn  btn-success btn-simple">
@@ -400,6 +408,55 @@
     </div>
 </div>
 
+{{-- Off modal --}}
+{{--
+<div class="modal fade" id="off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" action="#">--}}
+{{--{{Route('AddVoucherInfoOff' , ['id'=>$VoucherInfo[$i]['id']])}}--}}{{--
+
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="edit1Label">  افزودن تخفيف </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row mt-3">
+                        <div class="col-sm text-right">
+                            <label for="">  تخفيف به درصد </label>
+                            <input value="" name="percentage" type="text" class="form-control"  placeholder="تخفيف به درصد">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-sm text-right">
+                            <label for="">  تاريخ فعال سازي </label>
+                            <input dir="ltr" value="" name="activation_date" id="activation_date_off" type="text" class="form-control text-center"  placeholder="تخفيف به درصد">
+                        </div>
+                        <div class="col-sm text-right">
+                            <label for="">  تاريخ انقضا </label>
+                            <input dir="ltr" value="" name="expiration_date" id="expiration_date_off" type="text" class="form-control text-center"  placeholder="تخفيف به درصد">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-sm text-right">
+                            <label for=""> توضيحات  </label>
+                            <textarea style="min-height: 150px !important;" name="description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                    <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+--}}
 
 {{-- Modal for singel images   --}}
 <div class="modal fade" id="image_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -473,7 +530,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             // console.log("test");
-            $('#expiration_date , #Edit_expiration_date').persianDatepicker({
+            $('#expiration_date , #Edit_expiration_date ,#activation_date_off , #expiration_date_off ').persianDatepicker({
                 initialValue: true,
                 autoClose : true ,
                 altField: '#inlineExampleAlt',

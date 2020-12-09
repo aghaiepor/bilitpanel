@@ -1353,7 +1353,7 @@ class Api
     }
 
     // ******************** Discount Manager ****************
-    public function AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage , $type=null)
+    public function AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage ,$activation_date=null , $expiration_date=null ,$type=null)
     {
         $data = [
                "project_id" =>$project_id,
@@ -1362,7 +1362,9 @@ class Api
                 "voucher_info_id"=> $voucher_info_id,
                 "sib_user_id"=> $sib_user_id,
                 "description"=> $description,
-                "percentage"=> $percentage
+                "percentage"=> $percentage ,
+                "activation_date"=> $activation_date ,
+                "expiration_date"=> $expiration_date ,
         ];
         Log::info("AddDiscountPolicy => " , $data);
         $client = new Client();
@@ -1655,6 +1657,13 @@ class Api
     }
     public function fa2en($number){
         return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
+    }
+    function fa_number($number) {
+        if(empty($number))
+            return '۰';
+        $en = array("0","1","2","3","4","5","6","7","8","9");
+        $fa = array("۰","۱","۲","۳","۴","۵","۶","۷","۸","۹");
+        return str_replace($en, $fa, $number);
     }
 
 }

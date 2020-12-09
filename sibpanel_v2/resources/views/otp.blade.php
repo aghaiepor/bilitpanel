@@ -72,6 +72,7 @@
                   <input type="number" class="form-control text-center">
                   <input type="number" class="form-control text-center">
                   <input type="number" class="form-control text-center">
+                  <input type="number" class="form-control text-center">
                 </div>
                   <p class="text-dark" >
                       تا
@@ -374,7 +375,7 @@
                    var element = $(this).val();
                    all_input_value += element ;
                });
-               if(all_input_value.length == 5) {
+               if(all_input_value.length == 6) {
                    $("#loader").css("display" , "flex") ;
                    validation(all_input_value) ;
                }
@@ -400,6 +401,7 @@
             },
             success:function(data) {
                 $("#loader").hide();
+                console.log(data);
                 if(data.Header.Status != 0){
                     Swal.fire(
                         'عدد وارد شده نامعتبر است ! ',
@@ -421,7 +423,7 @@
     }
       $("#accept").click(function () {
           console.log(all_input_value);
-        if(all_input_value.length == 5)
+        if(all_input_value.length == 6)
         {
             validation(all_input_value) ;
         }

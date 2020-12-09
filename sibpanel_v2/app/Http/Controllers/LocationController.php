@@ -355,6 +355,41 @@ class LocationController extends Controller
 //        return $VoucherInfoList ;
 
     }
+    public function AddVoucherInfoOff( Request $request , $id){
+        $project_id = 0 ;
+        $location_id = 0 ;
+        $service_id = 0 ;
+        $voucher_info_id = (int)$id ;
+        $sib_user_id = 0 ;
+        $description = $request->get("description") ;
+        $percentage = (int)$request->get("percentage") ;
+        if(is_null($percentage))
+            return redirect()->back()->with("error" , "خطا در ایجاد تخفیف : لطفا درصد تخفیف را وارد نمایید .  ");
+        $activation_date = $request->get("activation_date") ;
+        $activation_date = $this->fa2en($activation_date);
+        $activation_date = Verta::parse($activation_date)->timestamp;
+        $activation_date = Carbon::createFromTimestamp($activation_date)->format('Y-m-d h:i');
+
+        $expiration_date = $request->get("expiration_date") ;
+        $expiration_date = $this->fa2en($expiration_date);
+        $expiration_date = Verta::parse($expiration_date)->timestamp;
+        $expiration_date = Carbon::createFromTimestamp($expiration_date)->format('Y-m-d h:i');
+
+        $AddDiscountPolicy = $this->api->AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage ,$activation_date ,$expiration_date);
+//        return $AddDiscountPolicy;
+        if($AddDiscountPolicy["Header"]["Status"] == 0 )
+            return redirect()->back()->with("success" , " تخفیف مورد نظر ایجاد گردید ");
+        else if($AddDiscountPolicy["Header"]["Message"] == "Permission Denied")
+            return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
+        else
+            return redirect()->back()->with("error" , "خطا در ایجاد تخفیف !  ");
+
+
+    }
+    public function VoucherInfoOff( Request $request , $id){
+        $GetDiscountPolicyList = $this->api->GetDiscountPolicyList(0 ,0 ,0 , $id ,0 );
+            return view("VoucherInfo_off" , ["GetDiscountPolicyList" =>$GetDiscountPolicyList["ContentData"] , "id" => $id]);
+    }
     public function AddVoucherPicture(Request $request, $id){
         $location_id = $request->get('location_id');
         $voucher_id = $id ;

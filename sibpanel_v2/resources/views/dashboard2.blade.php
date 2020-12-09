@@ -58,6 +58,21 @@
                         </div>
                     </div>
                 </div>
+                    @if(session('UserInfo')['account_type_id'] == 2)
+                        @if(session('UserInfo')['presell'])
+                            <div class="col-lg-3 cards">
+                                <div class="card card-pricing card-raised">
+                                    <div class="card-body">
+                                        <div class="card-icon icon-rose">
+                                            <i class="material-icons">assignment</i>
+                                        </div>
+                                        <h5 class="card-title mt-2 font-weight-normal">مديريت پيش فروش </h5>
+                                        <a href="{{Route('presellManger')}}" class="btn btn-rose btn-round"> مشاهده سرویس </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
                 @endif
                 @if(session('UserInfo')['account_type_id'] != 2 )
                     @if(session('UserInfo')['account_type_id'] != 9 )

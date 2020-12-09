@@ -213,6 +213,8 @@ class UserManagerController extends Controller
         {
             $error_message = "نام کاربري قيلا ثبت شده است .";
         }
+        else if( $SellerUserList['Header']["Message"] == "Duplicate Phone Number")
+            $error_message = "شماره تلفن  قبلا ثبت شده است  .";
 
         if($SellerUserList['Header']['Status'] == 0 ){
                 Cache::forget('GetSubUserList');

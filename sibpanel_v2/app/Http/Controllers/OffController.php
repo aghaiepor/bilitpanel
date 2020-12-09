@@ -106,12 +106,8 @@ class OffController extends Controller
         if(is_null($description))
             $description = "";
         $percentage = (int)$request->get("percentage");
-        $EditDiscountPolicy = $this->api->EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage );
+        $EditDiscountPolicy = $this->api->EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage , "ajax" );
         return $EditDiscountPolicy;
-        if($EditDiscountPolicy["Header"]["Status"] == 0 ){
-            return redirect()->back()->with("success" , " ویرایش تخفیف انجام شد .  ");
-        }else
-            return redirect()->back()->with("error" , " خطا در ویرایش تخفیف ! ");
     }
 //    public function VoucherTypeList(Request $request)
 //    {
