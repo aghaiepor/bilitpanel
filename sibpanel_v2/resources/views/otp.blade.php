@@ -325,10 +325,12 @@
     }
     );
     let time = 300 ;
+    // console.log("time =>" , time)
 
     $("#timer").css("font-weight" , "bold");
     setInterval(function () {
         let date =  new Date(time * 1000).toISOString().substr(14, 5) ;
+        // console.log(date)
         if(time >= 0){
                 let current_time =  date;
                 if(time <= 5 ){
@@ -344,10 +346,37 @@
         }
         } , 1000)
     $('#resend').click(function () {
-        time = 60;
+        time = 300;
         $("#timer").css("color" , "");
         $('#accept').show();
         $('#resend').hide();
+        $("#loader").css("display" , "flex") ;
+        $.ajax({
+            type:'POST',
+            url:"{{Route('VerifyOtpNew')}}",
+            dataType:'json',
+            data:{
+                '_token ': '<?php echo csrf_token() ?>',
+            },
+            success:function(data) {
+                $("#loader").hide();
+                if(data.Header.Status != 0){
+                    Swal.fire(
+                        'خظا در ارسال کد !  ',
+                        ' دوباره سعی کنید ',
+                        'error'
+                    )
+                }
+                else{
+                    Swal.fire(
+                        'کد جدید برای شما فرستاده شد .   ',
+                        '',
+                        'success'
+                    )
+                }
+
+            }
+        });
     });
     let old_value ;
 /*    $("input[type=number]").on('focusin', function(){
@@ -415,14 +444,14 @@
                         '',
                         'success'
                     )
-                    window.location.href = "{{Route('dashboard')}}";
+                    window.location.href = "{{Route('loading')}}";
                 }
 
             }
         });
     }
       $("#accept").click(function () {
-          console.log(all_input_value);
+          // console.log(all_input_value);
         if(all_input_value.length == 6)
         {
             validation(all_input_value) ;

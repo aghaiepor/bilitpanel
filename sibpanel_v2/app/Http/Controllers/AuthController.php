@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\Api;
 use App\Rules\Captcha;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -79,6 +80,8 @@ class AuthController extends Controller
         Cache::flush();
         session()->forget('SessionId');
         session()->forget('UserInfo');
+        session()->forget('otpAccept');
+        session()->forget("expire_otp_time");
         if(!session()->has('SessionId')){
             return redirect('login');
         } else
@@ -88,15 +91,42 @@ class AuthController extends Controller
 
     public function otpIndex()
     {
+
+        $user_id = session('UserInfo')['user_id'] ;
+        if(!session()->has("expire_otp_time")){
+            $GenerateOtp = $this->api->GenerateOtp($user_id);
+//            return $GenerateOtp;
+            session(['expire_otp_time' => Carbon::now()->addMinutes(5)]);
+        }
+        else
+            {
+//                return Carbon::now()->secondsSinceMidnight() /*session()->get("expire_otp_time") * 100*/  ;
+            if(session()->get("expire_otp_time")  < Carbon::now()){
+                session()->forget("expire_otp_time");
+                $GenerateOtp = $this->api->GenerateOtp($user_id);
+                session(['expire_otp_time' => Carbon::now()->addMinutes(5)]);
+            }
+        }
         return view("otp");
     }
     public function VerifyOtp(Request $request)
     {
-        $otp = $request->get("number") ;
+        $otp = (int)$request->get("number") ;
         $VerifyOtp = $this->api->VerifyOtp($otp);
+        if($VerifyOtp["Header"]["Status"] == 0)
+        {
+            session(["otpAccept" => true]);
+        }
         return $VerifyOtp ;
     }
-
+    public function VerifyOtpNew(Request $request)
+    {
+        $user_id = session('UserInfo')['user_id'] ;
+        session()->forget("expire_otp_time");
+        $GenerateOtp = $this->api->GenerateOtp($user_id);
+        session(['expire_otp_time' => Carbon::now()->addMinutes(5)]);
+        return $GenerateOtp ;
+    }
     public function test(){
 
 

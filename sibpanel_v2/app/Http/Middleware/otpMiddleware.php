@@ -15,7 +15,12 @@ class otpMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ( session('UserInfo')['otp_verify'] ) {
+        if(session()->has('otpAccept'))
+            $otpAccept  = false ;
+        else
+            $otpAccept = true ;
+
+        if ( session('UserInfo')['otp_verify'] && $otpAccept  ) {
             return redirect('otp');
         }
         return $next($request);

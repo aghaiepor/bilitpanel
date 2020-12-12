@@ -27,6 +27,7 @@ Route::middleware(['CheckLogin'])->group(function () {
     // OTP Route
     Route::get('/otp' , 'AuthController@otpIndex')->name('otp');
     Route::post('/VerifyOtp' , 'AuthController@VerifyOtp')->name('VerifyOtp');
+    Route::post('/VerifyOtpNew' , 'AuthController@VerifyOtpNew')->name('VerifyOtpNew');
 
     Route::middleware(['otp'])->group(function () {
 

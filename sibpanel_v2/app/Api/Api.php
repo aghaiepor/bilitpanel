@@ -1274,6 +1274,7 @@ class Api
         $data = [
             'otp' => $otp,
         ];
+        Log::info("otp =>" , $data);
         $client = new Client();
         $result = $client->post($this->url . 'VerifyOtp' ,[
                 'headers'=>$this->getHeader(),
@@ -1282,6 +1283,22 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
+        $this->checkError($response);
+        return $response;
+    }
+    public function GenerateOtp($user_id){
+        $data = [
+            "user_id" => $user_id
+        ];
+        Log::info("GenerateOtp =>" , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'GenerateOtp' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        Log::info(json_encode($response["ContentData"]["otp"]));
         $this->checkError($response);
         return $response;
     }

@@ -233,7 +233,7 @@
                                 <table id="TransationTable"  class="table text-center">
                                     <thead class=" text-primary">
                                     <tr>
-                                        <th class="text-left" colspan="10">
+                                        <th class="text-left" colspan="11">
                                             @php
                                                 $url = str_replace("GetTransaction","transactionToExcel",\Illuminate\Support\Facades\URL::full())
                                             @endphp
@@ -245,7 +245,7 @@
                                         <th>
                                             نام مکان
                                         </th>
-                                        <th >
+                                        <th>
                                             نام جاذبه
                                         </th>
                                         <th >
@@ -270,14 +270,17 @@
                                             زمان تراکنش
                                         </th>
                                         <th >
-                                            جمع کل ریال
+                                            جمع کل بدون تخفیف (ریال)
+                                        </th>
+                                        <th >
+                                            جمع کل (ریال)
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @if($data == null || count($data['log']) == 0 )
                                         <tr>
-                                            <td colspan="10">
+                                            <td colspan="11">
                                                 <h6 class="text-center py-5"> موردی یافت نشد ! </h6>
                                             </td>
                                         </tr>
@@ -319,6 +322,13 @@
                                                 </td>
                                                 <td>
                                                     @if(request('reportType') == 1)
+                                                        {{number_format($result['amount_without_discount'] * 0.85 , 0 ,'.' , ',' )}}
+                                                    @else
+                                                        {{number_format($result['amount_without_discount'] , 0 ,'.' , ',' )}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(request('reportType') == 1)
                                                         {{number_format($result['amount'] * 0.85 , 0 ,'.' , ',' )}}
                                                     @else
                                                         {{number_format($result['amount'] , 0 ,'.' , ',' )}}
@@ -327,6 +337,10 @@
                                             </tr>
                                         @endforeach
                                         <tr class="bg-light">
+                                            <th colspan="2" class="text-center" >
+                                                تعداد :
+                                                {{ number_format($data['total_count'] , 0 , '.' , ',')}}
+                                            </th>
                                             <th colspan="3"  class="text-center">
                                                 مجموع پرداختی :
                                                 @if(request('reportType') == 1)
@@ -335,11 +349,15 @@
                                                     {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @endif
                                             </th>
-                                            <th colspan="3" class="text-center" >
-                                                تعداد :
-                                                {{ number_format($data['total_count'] , 0 , '.' , ',')}}
+                                            <th class="text-center" colspan="3">
+                                                جمع بدون تخفیف :
+                                                @if(request('reportType') == 1)
+                                                    {{ number_format($data['total_amount_without_discount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
+                                                @else
+                                                    {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
+                                                @endif
                                             </th>
-                                            <th colspan="4" class="text-center">
+                                            <th  class="text-center" colspan="3">
                                                 جمع :
                                                 @if(request('reportType') == 1)
                                                     {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;

@@ -276,6 +276,9 @@
                                                 </div>
                                             </div>--}}
                                         </th>
+                                        <th>
+                                            قیمت بدون تخفیف
+                                        </th>
                                         <th width="50">
                                             <button onclick="export2excel()" type="button" class="btn btn-success">
                                                 دانلود اکسل
@@ -288,7 +291,7 @@
 
                                     @if($data == null || count($data['result']) == 0 )
                                         <tr>
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <h6 class="text-center py-5"> موردی یافت نشد ! </h6>
                                             </td>
                                         </tr>
@@ -307,6 +310,9 @@
                                                     {{ number_format($result['count'] , 0 , '.' , ',')}}
                                                 </td>
                                                 <td>
+                                                    {{ number_format($result['amount_without_discount'] , 0 , '.' , ',')}}
+                                                </td>
+                                                <td>
                                                     @if(request('reportType') == 1)
                                                         {{number_format($result['amount'] * 0.85 , 0 ,'.' , ',' )}}
                                                     @else
@@ -323,13 +329,19 @@
                                                 </th>
                                                 <th >
                                                     {{ number_format($data['total_count'] , 0 , '.' , ',')}}
-
                                                 </th>
                                                 <th >
                                                     @if(request('reportType') == 1)
                                                         {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @else
                                                         {{ number_format($data['total_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
+                                                    @endif
+                                                </th>
+                                                <th>
+                                                    @if(request('reportType') == 1)
+                                                        {{ number_format($data['total_amount_without_discount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
+                                                    @else
+                                                        {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @endif
                                                 </th>
                                                 <th>

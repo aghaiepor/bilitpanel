@@ -242,7 +242,7 @@
                                     <p> مدیریت پروژه </p>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item d-none">
                                 <a class="nav-link" href="{{Route('Off')}}">
                                     <i class="material-icons">local_offer</i>
                                     <p> تخفیف </p>
