@@ -44,8 +44,10 @@ class VoucherController extends Controller
         $name_en = $request->get("name_en");
         $language = $request->get("language");
         $is_free = $request->get("is_free");
-        $min_count = (empty($request->get("min_count")) ? 0 : $request->get("min_count") );
+        $min_count = (empty($request->get("min_count")) ? "" : $request->get("min_count") );
         $max_count = $request->get("max_count");
+        if(is_null($max_count))
+            $max_count= "";
 
         $AddVoucherType  = $this->api->AddVoucherType($name_fa, $name_en, $language, $is_free, $min_count, $max_count);
 //        return  $AddVoucherType ;
@@ -64,6 +66,9 @@ class VoucherController extends Controller
         $is_free = (int)$request->get("is_free");
         $min_count = (empty($request->get("min_count")) ? 0 : $request->get("min_count") );
         $max_count = $request->get("max_count");
+        if(is_null($max_count))
+            $max_count = "";
+
         $AddVoucherType  = $this->api->EditVoucherType($id ,$name_fa, $name_en, $language, $is_free, $min_count, $max_count) ;
 //        return  $is_free ;
 //        return  $AddVoucherType ;
@@ -85,6 +90,7 @@ class VoucherController extends Controller
     }
     public function AddVoucherText(Request $request)
     {
+
         $top_text = $request->get("top_text");
         $english_top_text = $request->get("english_top_text");
         $bottom_text = $request->get("bottom_text");
@@ -93,6 +99,11 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($AddVoucherText['Header']['Status'] == 0)
         {
+            Cache::forget('GetVoucherText');
+            $value = Cache::rememberForever('GetVoucherText', function(){
+                $GetInfo  = $this->api->GetVoucherText();
+                return $GetInfo['ContentData'];
+            });
             return redirect()->back()->with('success' , 'متن بلیت ایجاد گردید.');
         }
         else
@@ -125,6 +136,11 @@ class VoucherController extends Controller
 //        return  $DelVoucherText ;
         if ($DelVoucherText['Header']['Status'] == 0)
         {
+            Cache::forget('GetVoucherText');
+            $value = Cache::rememberForever('GetVoucherText', function(){
+                $GetInfo  = $this->api->GetVoucherText();
+                return $GetInfo['ContentData'];
+            });
             return redirect()->back()->with('success' , 'متن بلیت حذف گردید');
         }
         else

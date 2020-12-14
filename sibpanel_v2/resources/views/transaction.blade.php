@@ -269,9 +269,9 @@
                                         <th >
                                             زمان تراکنش
                                         </th>
-                                        <th >
+                                       {{-- <th >
                                             جمع کل بدون تخفیف (ریال)
-                                        </th>
+                                        </th>--}}
                                         <th >
                                             جمع کل (ریال)
                                         </th>
@@ -320,13 +320,13 @@
                                                 <td>
                                                     {{$result['get_voucher_date_jalali'] }}
                                                 </td>
-                                                <td>
+                                             {{--   <td>
                                                     @if(request('reportType') == 1)
                                                         {{number_format($result['amount_without_discount'] * 0.85 , 0 ,'.' , ',' )}}
                                                     @else
                                                         {{number_format($result['amount_without_discount'] , 0 ,'.' , ',' )}}
                                                     @endif
-                                                </td>
+                                                </td>--}}
                                                 <td>
                                                     @if(request('reportType') == 1)
                                                         {{number_format($result['amount'] * 0.85 , 0 ,'.' , ',' )}}
@@ -337,11 +337,11 @@
                                             </tr>
                                         @endforeach
                                         <tr class="bg-light">
-                                            <th colspan="2" class="text-center" >
+                                            <th colspan="4" class="text-center" >
                                                 تعداد :
                                                 {{ number_format($data['total_count'] , 0 , '.' , ',')}}
                                             </th>
-                                            <th colspan="3"  class="text-center">
+                                            <th colspan="4"  class="text-center">
                                                 مجموع پرداختی :
                                                 @if(request('reportType') == 1)
                                                     {{ number_format($data['total_paid_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
@@ -357,7 +357,7 @@
                                                     {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @endif
                                             </th>--}}
-                                            <th  class="text-center" colspan="3">
+                                            <th  class="text-center" colspan="4">
                                                 جمع :
                                                 @if(request('reportType') == 1)
                                                     {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
@@ -415,7 +415,12 @@
                     scroll:{
                         enabled:false
                     }
-                },
+                },navigator:{
+                    text:{
+                        btnNextText:'بعدی',
+                        btnPrevText:'قبلی'
+                    }
+                }
             });
             $('#ToDate').persianDatepicker({
                 initialValue: true,

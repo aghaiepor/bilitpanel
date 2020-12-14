@@ -20,7 +20,8 @@ class AuthController extends Controller
     }
 
     public function loginPage(){
-        if(isset($_SERVER['HTTP_REFERER']))
+
+        if(isset($_SERVER['HTTP_REFERER']) )
             $previous_url = $_SERVER['HTTP_REFERER'];
         else
             $previous_url = null;
@@ -66,6 +67,15 @@ class AuthController extends Controller
                 return redirect()->route('otp');
             }
             else{
+                if(session()->has("Per_UserId"))
+                {
+                    if((int)session()->get("Per_UserId") != (int)session('UserInfo')['user_id'] )
+                        $previous_url = null ;
+
+//                return $previous_url ;
+                    session()->forget('Per_UserId');
+                }
+
                 return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
             }
 
@@ -77,6 +87,7 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
+        session(["Per_UserId" => session('UserInfo')['user_id']]);
         Cache::flush();
         session()->forget('SessionId');
         session()->forget('UserInfo');
@@ -91,7 +102,6 @@ class AuthController extends Controller
 
     public function otpIndex()
     {
-
         $user_id = session('UserInfo')['user_id'] ;
         if(!session()->has("expire_otp_time")){
             $GenerateOtp = $this->api->GenerateOtp($user_id);

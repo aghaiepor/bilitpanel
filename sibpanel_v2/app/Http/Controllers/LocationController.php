@@ -214,6 +214,8 @@ class LocationController extends Controller
             $service_english_name = $request->get("service_english_name");
             $model_id = $request->get("model_id");
             $description = $request->get("description");
+            if (is_null($description))
+                $description = "" ;
             $capacity = (int)$request->get("capacity");
             if ($capacity == 0 )
                 $capacity = "";
@@ -241,6 +243,8 @@ class LocationController extends Controller
             if(is_null($description))
                 $description = "";
             $capacity = $request->get("capacity");
+            if(is_null($capacity))
+                $capacity = "" ;
             $normal_sale = ($request->get("normal_sale") == 'on') ? 1 : 0 ;
 
             $EditService  = $this->api->EditService($service_name, $capacity, $service_english_name, $model_id,$service_id, $description, $location_id, $normal_sale);

@@ -276,9 +276,9 @@
                                                 </div>
                                             </div>--}}
                                         </th>
-                                        <th>
+                                       {{-- <th>
                                             قیمت بدون تخفیف
-                                        </th>
+                                        </th>--}}
                                         <th width="50">
                                             <button onclick="export2excel()" type="button" class="btn btn-success">
                                                 دانلود اکسل
@@ -309,9 +309,9 @@
 
                                                     {{ number_format($result['count'] , 0 , '.' , ',')}}
                                                 </td>
-                                                <td>
+                                              {{--  <td>
                                                     {{ number_format($result['amount_without_discount'] , 0 , '.' , ',')}}
-                                                </td>
+                                                </td>--}}
                                                 <td>
                                                     @if(request('reportType') == 1)
                                                         {{number_format($result['amount'] * 0.85 , 0 ,'.' , ',' )}}
@@ -412,6 +412,11 @@
                 },navigator:{
                     scroll:{
                         enabled:false
+                    }
+                },navigator:{
+                    text:{
+                        btnNextText:'بعدی',
+                        btnPrevText:'قبلی'
                     }
                 }
 
