@@ -168,6 +168,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/SetAccountSetting/{id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
         Route::post('/LocationAccountActivation' , 'presellController@LocationAccountActivation')->name('LocationAccountActivation');
         Route::post('/OtpNew' , 'presellController@OtpNew')->name('OtpNew');
+        Route::post('/VerifyOtpNew' , 'presellController@VerifyOtp')->name('VerifyOtpNew');
 
         // Project manager
         Route::get('/projectManager' , 'projectManagerController@index')->name('projectManager');

@@ -454,7 +454,7 @@
                     onOpen : () =>{
                         $.ajax({
                             type:'POST',
-                            url:"{{Route('VerifyOtpNew')}}",
+                            url:"{{Route('OtpNew')}}",
                             dataType:'json',
                             data:{
                                 '_token ': '<?php echo csrf_token() ?>',
@@ -496,11 +496,21 @@
                             success:function(data) {
                                 $("#loader").hide();
                                 if(data.Header.Status != 0){
-                                    Swal.fire(
-                                        'خظا در ارسال کد !  ',
-                                        ' دوباره سعی کنید ',
-                                        'error'
-                                    )
+                                    if(data.Header.MessageCode == 13) {
+                                        Swal.fire(
+                                            'شماره موبايل شما موجود نيست ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                    else
+                                    {
+                                        Swal.fire(
+                                            'خظا در ارسال کد !  ',
+                                            ' دوباره سعی کنید ',
+                                            'error'
+                                        )
+                                    }
                                 }
 
                             }
@@ -509,7 +519,7 @@
                     preConfirm: (login) => {
                         $.ajax({
                             type:'POST',
-                            url:"{{Route('VerifyOtp')}}",
+                            url:"{{Route('VerifyOtpNew')}}",
                             dataType:'json',
                             data:{
                                 '_token ': '<?php echo csrf_token() ?>',
@@ -613,12 +623,22 @@
                                         thisElement.prop( "checked", false );
                                     else
                                         thisElement.prop( "checked", true );
+                                    if(data.Header.MessageCode == 13) {
+                                        Swal.fire(
+                                            'شماره موبايل شما موجود نيست ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                    else
+                                    {
+                                        Swal.fire(
+                                            'ورودی وارد شده نامعتبر است ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
 
-                                    Swal.fire(
-                                        'ورودی وارد شده نامعتبر است ! ',
-                                        '',
-                                        'error'
-                                    )
                                 }
                             }
                         });

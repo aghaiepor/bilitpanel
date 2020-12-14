@@ -250,7 +250,6 @@
         </div>
     </div>
 </div>
-{{--
 <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{{Route('AddVoucherInfo' , ['service_id'=>$service_id , 'location_id' =>$location_id])}}">
@@ -285,20 +284,20 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mt-3">
+                   {{-- <div class="form-row mt-3">
                         <div class="col-sm text-right">
                             <label class="mb-0" for=""> حداکثر تخفيف(درصد) </label>
                             <input min="0" max="100" type="text" class="form-control" name="max_discount_percentage" placeholder="حداکثر تخفيف">
                         </div>
-                        <div class="col-sm">
+                      <div class="col-sm">
                             <label for=""></label>
                             <select name="exprieMode" class="selectpicker" data-style="btn btn-primary border-dark" name="" id="exprieMode">
                                 <option value="time">مدت انقضا  </option>
                                 <option value="date">تاریخ انقضا  </option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row mt-3">
+                    </div>--}}
+                 {{--   <div class="form-row mt-3">
                         <div id="expire_time" class="col-sm text-right">
                             <label class="mb-0" for="" > مدت انقضا </label>
                             <input type="text" class="form-control" name="validity_period" placeholder="مدت انقضا">
@@ -319,17 +318,17 @@
                             <label class="mb-0" for="expiration_date"> تاريخ انقضا </label>
                             <input dir="ltr" id="expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
                 <div class="modal-footer mt-4">
-                    --}}{{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}{{--
+                     <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
                     <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
                 </div>
             </div>
         </form>
 
     </div>
-</div>--}}
+</div>
 
 <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

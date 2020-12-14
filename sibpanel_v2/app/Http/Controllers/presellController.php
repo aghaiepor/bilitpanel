@@ -274,18 +274,13 @@ class presellController extends Controller
     public function OtpNew(Request $request)
     {
         $user_id = session('UserInfo')['user_id'] ;
-        $GenerateOtp = $this->api->GenerateOtp($user_id);
-        session(['expire_otp_time' => Carbon::now()->addMinutes(5)]);
+        $GenerateOtp = $this->Api->GenerateOtp($user_id);
         return $GenerateOtp ;
     }
     public function VerifyOtp(Request $request)
     {
         $otp = (int)$request->get("number") ;
-        $VerifyOtp = $this->api->VerifyOtp($otp);
-        if($VerifyOtp["Header"]["Status"] == 0)
-        {
-            session(["otpAccept" => true]);
-        }
+        $VerifyOtp = $this->Api->VerifyOtp($otp);
         return $VerifyOtp ;
     }
 

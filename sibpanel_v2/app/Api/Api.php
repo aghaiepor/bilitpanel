@@ -1298,7 +1298,6 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-        Log::info(json_encode($response["ContentData"]["otp"]));
         $this->checkError($response);
         return $response;
     }
