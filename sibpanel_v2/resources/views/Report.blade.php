@@ -337,13 +337,13 @@
                                                         {{ number_format($data['total_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @endif
                                                 </th>
-                                                <th>
+                                               {{-- <th>
                                                     @if(request('reportType') == 1)
                                                         {{ number_format($data['total_amount_without_discount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @else
                                                         {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @endif
-                                                </th>
+                                                </th>--}}
                                                 <th>
                                                     مبلغ پرداختی :
                                                     @if(request('reportType') == 1)

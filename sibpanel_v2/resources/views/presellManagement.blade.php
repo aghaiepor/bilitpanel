@@ -62,7 +62,7 @@
                                     <h4 class="card-title text-right font-weight-bold "> مدیریت پیش فروش </h4>
                                 </div>
                                 <div class="col-sm">
-{{--                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> جدید </span>--}}
+{{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> جدید </span>--}}
                                     <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
 
                                 </div>
@@ -440,8 +440,39 @@
 
                 let locationaccount_id = $(this).attr('data-location');
                 let activation = $(this).is(':checked');
-
-                $('#loader').css('display' , 'flex');
+               /* Swal.fire({
+                    title: 'لطفا کد ارسال شده به تلفن همراه خود را وارد نمایید ',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'ثبت',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        return fetch(`//api.github.com/users/${login}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(response.statusText)
+                                }
+                                return response.json()
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                )
+                            })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: `${result.value.login}'s avatar`,
+                            imageUrl: result.value.avatar_url
+                        })
+                    }
+                })*/
+                // $('#loader').css('display' , 'flex');
                 Swal.fire({
                     title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
                     icon: 'warning',
@@ -508,7 +539,7 @@
                         });
 
                     }else{
-                        if(value)
+                        if(activation)
                             $(this).prop( "checked", false );
                         else
                             $(this).prop( "checked", true );

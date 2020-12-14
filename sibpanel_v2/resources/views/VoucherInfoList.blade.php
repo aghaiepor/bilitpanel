@@ -97,18 +97,18 @@
                                         <th >
                                             ظرفیت باقی مانده
                                         </th>
-                                        <th >
+                                      {{--  <th >
                                            حداکثر تخفیف
-                                        </th>
+                                        </th>--}}
                                         <th >
                                             نوع بلیت
                                         </th>
                                         <th >
                                             عکس بلیت
                                         </th>
-                                        <th >
+                                      {{--  <th >
                                             تخفيف
-                                        </th>
+                                        </th>--}}
                                         <th >
                                             ویرایش
                                         </th>
@@ -141,9 +141,9 @@
                                                         {{$VoucherInfo[$i]['remain_capacity']}}
                                                     @endif
                                                 </td>
-                                                <td>
+                                              {{--  <td>
                                                      {{$VoucherInfo[$i]['max_discount_percentage']}} درصد
-                                                </td>
+                                                </td>--}}
                                                 <td>
                                                     {{$VoucherInfo[$i]['voucher_type_name']}}
                                                 </td>
@@ -170,17 +170,21 @@
                                                     @endif
 {{--                                                    <img data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">--}}
                                                 </td>
-                                                <td>
+                                              {{--  <td>
                                                     <a href="{{Route("VoucherInfoOff" , [$VoucherInfo[$i]['id']])}}" class="btn btn-info btn-simple">
                                                         مديريت تخفيف
                                                     </a>
-                                                </td>
+                                                </td>--}}
                                                 <td>
-                                                    <button data-id="{{ $VoucherInfo[$i]['id'] }}" data-service_id="{{$VoucherInfo[$i]['service_id']}}" data-location_id="{{$VoucherInfo[$i]['location_id']}}" data-validity_period="{{$VoucherInfo[$i]['validity_period']}}" data-expiration_date="{{$VoucherInfo[$i]['expiration_date']}}"  data-voucher_type_name="{{$VoucherInfo[$i]['voucher_type_name']}}" data-toggle="modal" data-target="#Edit" type="button" rel="tooltip" class="btn TableEditBtn edit_btn  btn-success btn-simple">
+                                                   {{-- <button data-id="{{ $VoucherInfo[$i]['id'] }}" data-service_id="{{$VoucherInfo[$i]['service_id']}}" data-location_id="{{$VoucherInfo[$i]['location_id']}}" data-validity_period="{{$VoucherInfo[$i]['validity_period']}}" data-expiration_date="{{$VoucherInfo[$i]['expiration_date']}}"  data-voucher_type_name="{{$VoucherInfo[$i]['voucher_type_name']}}" data-toggle="modal" data-target="#Edit" type="button" rel="tooltip" class="btn TableEditBtn edit_btn  btn-success btn-simple">
+                                                        <i class="material-icons">edit</i>
+                                                        ویرایش
+                                                    </button>--}}
+                                                    <button data-id="{{ $VoucherInfo[$i]['id'] }}" data-service_id="{{$VoucherInfo[$i]['service_id']}}" data-location_id="{{$VoucherInfo[$i]['location_id']}}" data-validity_period="{{$VoucherInfo[$i]['validity_period']}}" data-expiration_date="{{$VoucherInfo[$i]['expiration_date']}}"  data-voucher_type_name="{{$VoucherInfo[$i]['voucher_type_name']}}" data-toggle="modal" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn edit_btn  btn-success btn-simple">
                                                         <i class="material-icons">edit</i>
                                                         ویرایش
                                                     </button>
-                                                    {{--<div class="modal fade" id="edit{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+                                                    <div class="modal fade" id="edit{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
                                                             <form method="post" action="{{Route('EditVoucherInfo' , ['service_id'=>$VoucherInfo[$i]['service_id'] , 'location_id'=> $VoucherInfo[$i]['location_id'] ,'id'=>$VoucherInfo[$i]['id']])}}">
                                                                 @csrf
@@ -224,7 +228,7 @@
 
                                                         </div>
 
-                                                    </div>--}}
+                                                    </div>
 
 
 {{--                                                    --}}{{-- DELETE BUTTON  DONT REMOVE THIS PART --}}
@@ -246,6 +250,7 @@
         </div>
     </div>
 </div>
+{{--
 <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{{Route('AddVoucherInfo' , ['service_id'=>$service_id , 'location_id' =>$location_id])}}">
@@ -317,14 +322,14 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
+                    --}}{{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}{{--
                     <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
                 </div>
             </div>
         </form>
 
     </div>
-</div>
+</div>--}}
 
 <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -360,7 +365,8 @@
                             </select>
                         </div>
                     </div>
-<div class="form-row mt-3">
+{{--
+                    <div class="form-row mt-3">
                         <div class="col-sm text-right">
                             <label class="mb-0" for=""> حداکثر تخفيف(درصد) </label>
                             <input id="edit_max_percent" min="0" max="100" type="text" class="form-control" name="max_discount_percentage" placeholder="حداکثر تخفيف">
@@ -395,6 +401,7 @@
                             <input dir="ltr" id="Edit_expiration_date" type="text" class="form-control" name="expiration_date" placeholder="تاريخ انقضا">
                         </div>
                     </div>
+--}}
 
                 </div>
                 <div class="modal-footer mt-4">

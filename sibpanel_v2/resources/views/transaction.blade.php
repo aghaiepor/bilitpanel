@@ -349,14 +349,14 @@
                                                     {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @endif
                                             </th>
-                                            <th class="text-center" colspan="3">
+                                          {{--  <th class="text-center" colspan="3">
                                                 جمع بدون تخفیف :
                                                 @if(request('reportType') == 1)
                                                     {{ number_format($data['total_amount_without_discount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @else
                                                     {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @endif
-                                            </th>
+                                            </th>--}}
                                             <th  class="text-center" colspan="3">
                                                 جمع :
                                                 @if(request('reportType') == 1)
