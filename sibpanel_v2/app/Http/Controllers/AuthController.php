@@ -63,10 +63,10 @@ class AuthController extends Controller
         $response = $cont->login($username,$password);
 //        return $response ;
         if ($response['Header']['Status'] == 0 && $response['ContentData']['panel_access']){
-            if($response['ContentData']['otp_verify']){
-                return redirect()->route('otp');
-            }
-            else{
+//            if($response['ContentData']['otp_verify']){
+//                return redirect()->route('otp');
+//            }
+//            else{
                 if(session()->has("Per_UserId"))
                 {
                     if((int)session()->get("Per_UserId") != (int)session('UserInfo')['user_id'] )
@@ -75,9 +75,8 @@ class AuthController extends Controller
 //                return $previous_url ;
                     session()->forget('Per_UserId');
                 }
-
                 return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
-            }
+//            }
 
         }else
         {

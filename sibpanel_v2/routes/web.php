@@ -29,7 +29,7 @@ Route::middleware(['CheckLogin'])->group(function () {
     Route::post('/VerifyOtp' , 'AuthController@VerifyOtp')->name('VerifyOtp');
     Route::post('/VerifyOtpNew' , 'AuthController@VerifyOtpNew')->name('VerifyOtpNew');
 
-    Route::middleware(['otp'])->group(function () {
+//    Route::middleware(['otp'])->group(function () {
 
         // loading Route
         Route::post('/locationCache' , 'LoadingController@locationCache')->name('locationCache');
@@ -189,7 +189,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/DiscountPolicyَActivaion' , 'OffController@DiscountPolicyَActivaion')->name('DiscountPolicyَActivaion');
 
 
-    });
+//    });
 
 });
 
