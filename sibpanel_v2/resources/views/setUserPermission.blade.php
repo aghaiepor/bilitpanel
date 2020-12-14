@@ -603,6 +603,10 @@
                                 '',
                                 'success'
                             )
+                            setInterval(function () {
+                                window.location.href = "{{Route("UserManager")}}";
+                            } , 1000)
+
                         }
                         else if(data['Header']['Status'] == 2){
                             Swal.fire(
