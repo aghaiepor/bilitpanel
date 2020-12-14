@@ -20,7 +20,7 @@ class presellController extends Controller
 
     public function indexPage(){
         $ProvinceList =  Cache::get('ProvinceList');
-        return $ProvinceList;
+//        return $ProvinceList;
         return view("presellManagement" , ['ProvinceList' => $ProvinceList]) ;
     }
     public function transaction(Request $request , $id=null , $province_id=null){
