@@ -440,7 +440,9 @@
 
                 let locationaccount_id = $(this).attr('data-location');
                 let activation = $(this).is(':checked');
-               /* Swal.fire({
+                let thisElement =  $(this) ;
+                let failed = true ;
+                Swal.fire({
                     title: 'لطفا کد ارسال شده به تلفن همراه خود را وارد نمایید ',
                     input: 'text',
                     inputAttributes: {
@@ -449,31 +451,198 @@
                     showCancelButton: true,
                     confirmButtonText: 'ثبت',
                     showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        return fetch(`//api.github.com/users/${login}`)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error(response.statusText)
+                    onOpen : () =>{
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('VerifyOtpNew')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                            },statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
                                 }
-                                return response.json()
-                            })
-                            .catch(error => {
-                                Swal.showValidationMessage(
-                                    `Request failed: ${error}`
-                                )
-                            })
+                            },
+                            success:function(data) {
+                                $("#loader").hide();
+                                if(data.Header.Status != 0){
+                                    Swal.fire(
+                                        'خظا در ارسال کد !  ',
+                                        ' دوباره سعی کنید ',
+                                        'error'
+                                    )
+                                }
+
+                            }
+                        });
+                    } ,
+                    preConfirm: (login) => {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('VerifyOtp')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'number' : login ,
+                            },statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
+                                }
+                            },
+                            success:function(data) {
+
+                                if (data.Header.Status ==  0){
+                                    failed = false ;
+                                    $.ajax({
+                                        type:'POST',
+                                        url:"{{Route('LocationAccountActivation')}}",
+                                        dataType:'json',
+                                        data:{
+                                            '_token ': '<?php echo csrf_token() ?>',
+                                            'id' : locationaccount_id ,
+                                            'activation' : activation ,
+                                        },
+                                        statusCode: {
+                                            500: function() {
+                                                $("#loader").hide();
+                                                Swal.fire(
+                                                    'خطا در دريافت اطلاعات ! ',
+                                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                    'error'
+                                                )
+                                            } ,
+                                            400: function() {
+                                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                let x = 1 ;
+                                                let dots = "";
+                                                setInterval(function () {
+                                                    dots += ".";
+                                                    x++  ;
+                                                    // console.log(x)
+                                                    if(x >= 8 ){
+                                                        x = 1 ;
+                                                        dots = ".";
+                                                    }
+                                                    $("#dots").html(dots)
+                                                } , 300)
+                                                $("#loader").hide();
+                                                Swal.fire(
+                                                    'نشست  شما پایان یافته است ! ',
+                                                    html,
+                                                    'warning' ,
+                                                )
+                                                setTimeout(function () {
+                                                    window.location.href = "{{Route("logout")}}";
+                                                } , 1500)
+
+                                            }
+                                        },
+                                        success:function(data) {
+                                            // console.log(data);
+                                            $('#loader').hide();
+                                            Swal.fire(
+                                                'تغییر مورد نظر اعمال گردید',
+                                                '',
+                                                'success'
+                                            )
+                                        }
+                                    });
+                                }
+                                else {
+                                    if(activation)
+                                        thisElement.prop( "checked", false );
+                                    else
+                                        thisElement.prop( "checked", true );
+
+                                    Swal.fire(
+                                        'ورودی وارد شده نامعتبر است ! ',
+                                        '',
+                                        'error'
+                                    )
+                                }
+                            }
+                        });
+
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: `${result.value.login}'s avatar`,
-                            imageUrl: result.value.avatar_url
-                        })
-                    }
-                })*/
+                        if (result.value) {
+                            $('#loader').hide();
+                        }else{
+                            if(activation)
+                                $(this).prop( "checked", false );
+                            else
+                                $(this).prop( "checked", true );
+                            $('#loader').hide();
+                        }
+
+
+                }
+
+                )
                 // $('#loader').css('display' , 'flex');
-                Swal.fire({
+
+                /*Swal.fire({
                     title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
                     icon: 'warning',
                     showCancelButton: true,
@@ -545,7 +714,7 @@
                             $(this).prop( "checked", true );
                         $('#loader').hide();
                     }
-                })
+                })*/
 
             });
             let FirstProvince = "{{$ProvinceList[0]["id"]}}";
@@ -642,7 +811,7 @@
                     }
                 },
                 success : function (data) {
-                    console.log("data : " , data["ContentData"]);
+                    // console.log("data : " , data["ContentData"]);
                     let account  = data["ContentData"]["location_accounts"] ;
                     let total_inv = data["ContentData"]["total_inventory"] ;
                     $("#total_inventory").text(number_format(total_inv , 0, "." , ","));

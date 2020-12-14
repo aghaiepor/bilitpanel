@@ -271,6 +271,23 @@ class presellController extends Controller
         return $LocationAccountActivation;
     }
 
+    public function OtpNew(Request $request)
+    {
+        $user_id = session('UserInfo')['user_id'] ;
+        $GenerateOtp = $this->api->GenerateOtp($user_id);
+        session(['expire_otp_time' => Carbon::now()->addMinutes(5)]);
+        return $GenerateOtp ;
+    }
+    public function VerifyOtp(Request $request)
+    {
+        $otp = (int)$request->get("number") ;
+        $VerifyOtp = $this->api->VerifyOtp($otp);
+        if($VerifyOtp["Header"]["Status"] == 0)
+        {
+            session(["otpAccept" => true]);
+        }
+        return $VerifyOtp ;
+    }
 
     private function fa2en($number){
         return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
