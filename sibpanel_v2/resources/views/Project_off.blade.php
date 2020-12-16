@@ -302,22 +302,16 @@
 
             $(document).on( "click" , "input[name=active]" , function () {
                 let id = $(this).attr("data-id");
-                // console.log("id => ", id);
-                let data_percent = $(this).attr("data-percent");
-                let data_description = $(this).attr("data-description");
                 let data_active =  $(this).is(':checked');
-                // console.log(data_active);
                 $("#loader").css("display" , "flex");
                 $.ajax({
                     type:'POST',
-                    url:"{{Route('DiscountPolicyَActivaion')}}",
+                    url:"{{Route('DiscountPolicyActivation')}}",
                     dataType:'json',
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'id' : id ,
                         'active' : data_active ,
-                        'description' : data_description ,
-                        'percentage' : data_percent ,
                     },
                     statusCode: {
                         500: function() {

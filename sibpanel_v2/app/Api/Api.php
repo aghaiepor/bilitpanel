@@ -884,7 +884,7 @@ class Api
     public function GetStat($location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id){
         $conditions = [
             'location_id'=> $location_id,
-            'procedure_status' =>$status_code,
+            'procedure_status' => $status_code,
             'service_id'=> $service_id,
             'operator_id'=> $operator_id,
             'voucher_type_id'=> $voucher_type_id,
@@ -1449,6 +1449,22 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
         $this->checkError($response , $type);
+        return $response;
+    }
+    public function DiscountPolicyActivation($discount_policy_id , $activation ,  $type=null)
+    {
+        $data = [
+            "discount_policy_id" =>$discount_policy_id,
+            "activation" => $activation
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'DiscountPolicyActivation' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , "ajax");
         return $response;
     }
 

@@ -15,6 +15,7 @@
             overflow-x: scroll;
         }
     </style>
+    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
 
 @section('content')
@@ -95,6 +96,9 @@
                                             آدرس
                                         </th>
                                         <th >
+                                            تخفیف
+                                        </th>
+                                        <th >
                                             مدیریت جاذبه
                                         </th>
                                         <th >
@@ -132,6 +136,12 @@
                                                 </td>
                                                 <td>
                                                     {{$location['location_address']}}
+                                                </td>
+                                                <td>
+                                                    <button data-url="{{Route("AddLocationOff" , [$location['id']])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
+                                                        <i class="material-icons">domain </i>
+                                                        تخفیف
+                                                    </button>
                                                 </td>
                                                 <td>
                                                     <a href="{{Route('GetService' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-info btn-simple">
@@ -310,6 +320,50 @@
         </div>
     </div>
 
+<div class="modal fade" id="add_off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="add_off_form" method="post" action="">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="edit1Label">  افزودن تخفيف </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تخفيف به درصد </label>
+                                <input value="" name="percentage" type="text" class="form-control"  placeholder="تخفيف به درصد">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ فعال سازي </label>
+                                <input dir="ltr" value="" name="activation_date" id="activation_date_off" type="text" class="form-control text-center"  placeholder="">
+                            </div>
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ انقضا </label>
+                                <input dir="ltr" value="" name="expiration_date" id="expiration_date_off" type="text" class="form-control text-center"  placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for=""> توضيحات  </label>
+                                <textarea style="min-height: 150px !important;" name="description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
 <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -437,12 +491,36 @@
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="../assets/js/plugins/sweetalert2.js"></script>
+    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
+    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+            $('#activation_date_off , #expiration_date_off').persianDatepicker({
+                initialValue: true,
+                autoClose : true ,
+                altField: '#inlineExampleAlt',
+                format: 'YYYY/MM/DD hh:mm:ss',
+                timePicker : {
+                    enabled : true
+                } ,
+                calendar:{
+                    persian:{
+                        locale: 'fa'
+                    }
+                },navigator:{
+                    scroll:{
+                        enabled:false
+                    }
+                },
+            });
+            $(document).on(  "click" ,  ".off_btn"  , function () {
+                let url = $(this).attr("data-url");
+                $("#add_off_form").attr("action" , url)
             });
 
             let top_text ,bottom_text, english_top_text, english_bottom_text  ;

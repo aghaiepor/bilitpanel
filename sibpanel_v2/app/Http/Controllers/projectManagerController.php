@@ -102,7 +102,8 @@ class projectManagerController extends Controller
     }
 
     public function ProjectOff( Request $request , $id){
-        $GetDiscountPolicyList = $this->api->GetDiscountPolicyList($id ,0 ,0 , 0 ,0 );
+        $GetDiscountPolicyList = $this->api->GetDiscountPolicyList((int)$id ,0 ,0 , 0 ,0 );
+        return  $GetDiscountPolicyList ;
         return view("Project_off" , ["GetDiscountPolicyList" =>$GetDiscountPolicyList["ContentData"] , "id" => $id]);
     }
     public function AddProjectOff( Request $request , $id){

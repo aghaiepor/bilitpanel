@@ -70,6 +70,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/citizenPanel/{id}' , 'LocationController@citizenPanel')->name('citizenPanel');
         Route::get('/getLocationFilter' , 'LocationController@getLocationFilter')->name('getLocationFilter');
         Route::post('/GetVoucherTextLoc'  , 'LocationController@GetVoucherText' )->name('GetVoucherTextLoc');
+        Route::post('/AddLocationOff/{id}' ,'LocationController@AddLocationOff' )->name('AddLocationOff');
 
         // Citizen
         Route::post('/FullDescription/{id}' , 'LocationController@FullDescription')->name('FullDescription');
@@ -91,6 +92,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/DeleteService/{service_id}' ,'LocationController@DeleteService' )->name('DeleteService');
         Route::post('/ServiceActivation' ,'LocationController@ServiceActivation' )->name('ServiceActivation');
         Route::post('/AddServicePicture/{id?}' ,'LocationController@AddServicePicture' )->name('AddServicePicture');
+        Route::post('/AddServiceOff/{id}' ,'LocationController@AddServiceOff' )->name('AddServiceOff');
 
         // Voucher Route
         Route::post('/AddVoucherInfo/{service_id}/{location_id}' ,'LocationController@AddVoucherInfo' )->name('AddVoucherInfo');
@@ -186,7 +188,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/GetSibUser' , 'OffController@GetSibUser')->name('GetSibUser');
         Route::post('/EditDiscountPolicy/{id?}' , 'OffController@EditDiscountPolicy')->name('EditDiscountPolicy');
         Route::post('/GetDiscountPolicy' , 'OffController@GetDiscountPolicy')->name('GetDiscountPolicy');
-        Route::post('/DiscountPolicyَActivaion' , 'OffController@DiscountPolicyَActivaion')->name('DiscountPolicyَActivaion');
+        Route::post('/DiscountPolicyActivation' , 'OffController@DiscountPolicyActivation')->name('DiscountPolicyActivation');
 
 
 //    });

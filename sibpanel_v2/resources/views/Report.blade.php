@@ -156,7 +156,7 @@
                                     <div class="col-md-3 text-right">
                                         <label for="">  وضعیت بلیت </label>
                                         <select name="status_code" class="selectpicker" data-style="btn btn-primary border-dark" title="وضعیت بلیت">
-                                            <option @if(request('status_code') == "255") selected @endif value="255">همه</option>
+                                            <option @if(request('status_code') == "255" || request('status_code') == "" ) selected @endif value="255">همه</option>
                                             <option @if(request('status_code') == "1") selected @endif value="1">استفاده نشده</option>
                                             <option @if(request('status_code') == "3") selected @endif value="3">حذف شده</option>
                                             <option @if(request('status_code') == "5") selected @endif value="5">استفاده شده</option>

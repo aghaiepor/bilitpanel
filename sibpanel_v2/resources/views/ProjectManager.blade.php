@@ -80,9 +80,9 @@
                                         <th >
                                             لوگو
                                         </th>
-                                        <th >
+                                      {{--  <th >
                                            مدیریت تخفیف
-                                        </th>
+                                        </th>--}}
                                         <th >
                                             ویرایش
                                         </th>
@@ -139,11 +139,11 @@
                                                     @endif
 {{--                                                    <img project_id="{{ $Project["project_id"] }}"  data-toggle="modal" image_id="0" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/image_placeholder2.jpg" rel="placeholder">--}}
                                                 </td>
-                                                <td >
+                                               {{-- <td >
                                                     <a href="{{Route("ProjectOff" , [$Project["project_id"]])}}"  class="btn btn-info edit_btn">
                                                        مدیریت تخفیف
                                                     </a>
-                                                </td>
+                                                </td>--}}
                                                 <td >
                                                     <button data-id="{{$Project["project_id"]}}"  data-toggle="modal" data-target="#edit" class="btn btn-success edit_btn">
                                                         ويرايش

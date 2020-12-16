@@ -14,7 +14,9 @@
     </style>
     <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
-
+@php
+    $Api= new \App\Api\Api();
+@endphp
 @section('content')
     <div class="content">
         @if (session('success'))
@@ -115,7 +117,7 @@
                                                 @endif
                                             </td>
                                             <td >
-                                                <button data-id="{{$GetDiscountPolicy["id"]}}" data-percent="{{$GetDiscountPolicy["percentage"]}}" data-description="{{$GetDiscountPolicy["description"]}}" data-toggle='modal' data-target='#EditModal' class='btn btn-success edit_btn'> ویرایش </button>
+                                                <button data-id="{{$GetDiscountPolicy["id"]}}" data-percent="{{$GetDiscountPolicy["percentage"]}}" data-activation_date="{{ $Api->fa_number(new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($GetDiscountPolicy["activation_date"])->toDateTimeString()))  }}" data-description="{{$GetDiscountPolicy["description"]}}" data-expiration_date="{{ $Api->fa_number(new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($GetDiscountPolicy["expiration_date"])->toDateTimeString())) }}" data-toggle='modal' data-target='#EditModal' class='btn btn-success edit_btn'> ویرایش </button>
                                             </td>
                                             </tr>
                                         @endforeach
@@ -173,13 +175,14 @@
         </div>
 
     </div>
-<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+
+    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form id="EditOffForm" action="#" method="post">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title " id="testLabel"> اضافه کردن تخفیف </h5>
+                        <h5 class="modal-title " id="testLabel">  ویرایش تخفیف </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -187,62 +190,24 @@
                     <input type="hidden" name="active" id="edit_active" value="">
                     <div class="modal-body">
                         <div class="form-row mt-3">
-                            <div class="col-md text-right">
-                                <label for="" class="text-right"> درصد تخفیف </label>
+                            <div class="col-sm text-right">
+                                <label for="">  تخفيف به درصد </label>
                                 <input id="edit_percent" name="percentage" type="text" class="form-control">
                             </div>
-                          {{--  <div class="col-md text-right">
-                                <label for="" class="text-right">  پروژه </label>
-                                <select id="edit_project_id" name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="پروژه">
-                                    <option selected  value=""  > همه </option>
-
-                                </select>
-                            </div>--}}
                         </div>
-                       {{-- <div class="form-row mt-3">
-                            <div class="col-md text-right">
-                                <label for="" class="text-right"> مکان </label>
-                                <select id="edit_location_id" name="location_id" class="selectpicker" data-live-search="true" data-width="75%" data-style="btn btn-primary border-dark" title="مکان">
-                                    <option selected value=""  > همه </option>
-                                    @foreach($locations as $location)
-                                        <option value="{{$location['id']}}"> {{$location['location_name']}} </option>
-                                    @endforeach
-
-                                </select>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ فعال سازي </label>
+                                <input dir="ltr" value="" name="activation_date" id="edit_activation_date_off" type="text" class="form-control text-center"  placeholder="">
                             </div>
-                            <div class="col-md text-right">
-                                <label for="" class="text-right">  سرویس </label>
-                                <select  name="service_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark w-100" title="سرویس">
-                                    <option selected value=""  > همه </option>
-                                    @foreach($ServiceList as $Service)
-                                        <option value="{{$Service["service_id"]}}"  > {{$Service["service_name"]}}  </option>
-                                    @endforeach
-                                </select>
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ انقضا </label>
+                                <input dir="ltr" value="" name="expiration_date" id="edit_expiration_date_off" type="text" class="form-control text-center"  placeholder="">
                             </div>
                         </div>
                         <div class="form-row mt-3">
-                            <div class="col-md text-right">
-                                <label for="" class="text-right"> بلیت  </label>
-                                <select  name="voucher_info_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="مکان">
-                                    <option selected value=""> همه </option>
-                                    @foreach($VoucherTypeList as $VoucherType)
-                                        <option value="{{$VoucherType["voucher_type_id"]}}"> {{$VoucherType["voucher_type"]}} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md text-right">
-                                <label for="" class="text-right">  کاربر </label>
-                                <select  name="sib_user_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="کاربر">
-                                    <option selected value=""  > همه </option>
-                                    @foreach($SellerUserList as $SellerUser)
-                                        <option value="{{$SellerUser["sib_user_id"]}}"  >{{$SellerUser["first_name"] . " " . $SellerUser["last_name"] }}  </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>--}}
-                        <div class="form-row mt-3">
-                            <div class="col-md text-right">
-                                <label for=""> توضیحات </label>
+                            <div class="col-sm text-right">
+                                <label for=""> توضيحات  </label>
                                 <textarea id="edit_description" class="form-control" name="description" style="min-height: 150px"></textarea>
                             </div>
                         </div>
@@ -262,7 +227,7 @@
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#activation_date_off , #expiration_date_off ').persianDatepicker({
+            $('#activation_date_off , #expiration_date_off').persianDatepicker({
                 initialValue: true,
                 autoClose : true ,
                 altField: '#inlineExampleAlt',
@@ -284,7 +249,9 @@
                 let id = $(this).attr("data-id");
                 let data_percent = $(this).attr("data-percent");
                 let data_description = $(this).attr("data-description");
-                let data_active = $(this).parent().parent().children().eq(2).find("input").val();
+                let activation_date = $(this).attr("data-activation_date");
+                let expiration_date = $(this).attr("data-expiration_date");
+                let data_active = $(this).parent().parent().children().eq(3).find("input").val();
                 if(data_active == "on")
                     data_active = true ;
                 else
@@ -294,6 +261,9 @@
                 $("#EditOffForm").attr("action" , url);
                 $("#edit_percent").val(data_percent);
                 $("#edit_active").val(data_active);
+                $("#edit_activation_date_off").val(activation_date);
+                $("#edit_expiration_date_off").val(expiration_date);
+
                 if(data_description == "null" )
                     data_description=""
                 $("#edit_description").val(data_description);
@@ -303,21 +273,17 @@
             $(document).on( "click" , "input[name=active]" , function () {
                 let id = $(this).attr("data-id");
                 // console.log("id => ", id);
-                let data_percent = $(this).attr("data-percent");
-                let data_description = $(this).attr("data-description");
                 let data_active =  $(this).is(':checked');
                 // console.log(data_active);
                 $("#loader").css("display" , "flex");
                 $.ajax({
                     type:'POST',
-                    url:"{{Route('DiscountPolicyَActivaion')}}",
+                    url:"{{Route('DiscountPolicyActivation')}}",
                     dataType:'json',
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'id' : id ,
                         'active' : data_active ,
-                        'description' : data_description ,
-                        'percentage' : data_percent ,
                     },
                     statusCode: {
                         500: function() {

@@ -168,6 +168,46 @@ class LocationController extends Controller
 //        return $locations;
         return view('places' , ['locations' => $locations['ContentData'], 'province' => $province , 'GetVoucherText' => $GetVoucherText ]);
     }
+
+    public function AddLocationOff( Request $request , $id){
+//        return json_encode($request->all());
+        $project_id = 0 ;
+        $location_id = (int)$id ;
+        $service_id = 0 ;
+        $voucher_info_id =  0;
+        $sib_user_id = 0 ;
+        $description = $request->get("description") ;
+        if(is_null($description))
+            $description = "";
+
+        $percentage = (int)$request->get("percentage") ;
+        if(is_null($percentage))
+            return redirect()->back()->with("error" , "خطا در ایجاد تخفیف : لطفا درصد تخفیف را وارد نمایید .  ");
+
+        $activation_date = $request->get("activation_date") ;
+        $activation_date = $this->fa2en($activation_date);
+        $activation_date = Verta::parse($activation_date)->timestamp;
+        $activation_date = Carbon::createFromTimestamp($activation_date)->format('Y-m-d h:i');
+
+        $expiration_date = $request->get("expiration_date") ;
+        $expiration_date = $this->fa2en($expiration_date);
+        $expiration_date = Verta::parse($expiration_date)->timestamp;
+        $expiration_date = Carbon::createFromTimestamp($expiration_date)->format('Y-m-d h:i');
+
+            $AddDiscountPolicy = $this->api->AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage ,$activation_date ,$expiration_date);
+//        return $AddDiscountPolicy;
+        if($AddDiscountPolicy["Header"]["Status"] == 0 )
+            return redirect()->back()->with("success" , " تخفیف مورد نظر ایجاد گردید ");
+        else if($AddDiscountPolicy["Header"]["Message"] == "Permission Denied")
+            return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
+        else if($AddDiscountPolicy["Header"]["MessageCode"] == 158)
+            return redirect()->back()->with("error" , "خطا در ايجاد تخفيف : تاريخ وارد شده نامعتبر است !   ");
+        else
+            return redirect()->back()->with("error" , "خطا در ایجاد تخفیف !  ");
+
+
+    }
+
     // ******* Service
     public function GetService($id){
         $GetServices = Cache::get('ServiceList');
@@ -320,7 +360,44 @@ class LocationController extends Controller
             return redirect()->back()->with('error' , 'فایلی جهت آپلود موجود نمی باشد .');
 
     }
+    public function AddServiceOff( Request $request , $id){
+//        return json_encode($request->all());
+        $project_id = 0 ;
+        $location_id = 0 ;
+        $service_id = (int)$id ;
+        $voucher_info_id =  0;
+        $sib_user_id = 0 ;
+        $description = $request->get("description") ;
+        if(is_null($description))
+            $description = "";
 
+        $percentage = (int)$request->get("percentage") ;
+        if(is_null($percentage))
+            return redirect()->back()->with("error" , "خطا در ایجاد تخفیف : لطفا درصد تخفیف را وارد نمایید .  ");
+
+        $activation_date = $request->get("activation_date") ;
+        $activation_date = $this->fa2en($activation_date);
+        $activation_date = Verta::parse($activation_date)->timestamp;
+        $activation_date = Carbon::createFromTimestamp($activation_date)->format('Y-m-d h:i');
+
+        $expiration_date = $request->get("expiration_date") ;
+        $expiration_date = $this->fa2en($expiration_date);
+        $expiration_date = Verta::parse($expiration_date)->timestamp;
+        $expiration_date = Carbon::createFromTimestamp($expiration_date)->format('Y-m-d h:i');
+
+        $AddDiscountPolicy = $this->api->AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage ,$activation_date ,$expiration_date);
+//        return $AddDiscountPolicy;
+        if($AddDiscountPolicy["Header"]["Status"] == 0 )
+            return redirect()->back()->with("success" , " تخفیف مورد نظر ایجاد گردید ");
+        else if($AddDiscountPolicy["Header"]["Message"] == "Permission Denied")
+            return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
+        else if($AddDiscountPolicy["Header"]["MessageCode"] == 158)
+            return redirect()->back()->with("error" , "خطا در ايجاد تخفيف : تاريخ وارد شده نامعتبر است !   ");
+        else
+            return redirect()->back()->with("error" , "خطا در ایجاد تخفیف !  ");
+
+
+    }
     // ******* Voucher
     public function VoucherInfoList($service_id , $location_id){
         $GetServices = Cache::get('ServiceList');

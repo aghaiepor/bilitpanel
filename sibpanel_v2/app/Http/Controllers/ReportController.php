@@ -89,19 +89,21 @@ class ReportController extends Controller
             $location_id = '';
         $key = $request->get('key' , 'province');
         $values = ['amount' , 'count'];
-        $status_code= $request->get('status_code');
+        $status_code = $request->get('status_code');
+//        dd ($status_code , $status_code != 255) ;
         $status_codeArray = [] ;
-        if($status_code != 225 ){
-            if($status_code == 1 ){
-                $status_codeArray = [1,10];
-            }else if($status_code == 5){
-                $status_codeArray = [5,11];
-            }else if ($status_code == 3){
-                $status_codeArray = [3];
-            }
-        }
-        else {
+        if ($status_code == 255 ) {
             $status_codeArray = ["1","10","5","11"];
+        }
+        else
+        {
+            if($status_code == 1 ){
+                $status_codeArray = ["1","10"];
+            }else if($status_code == 5){
+                $status_codeArray = ["5","11"];
+            }else if ($status_code == 3){
+                $status_codeArray = ["3"];
+            }
         }
 //        return $status_codeArray ;
         $service_id = (int)$request->get('service_id','');
@@ -186,18 +188,20 @@ class ReportController extends Controller
 
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
+        
         $status_codeArray = [] ;
-        if($status_code != 225 ){
-            if($status_code == 1 ){
-                $status_codeArray = [1,10];
-            }else if($status_code == 5){
-                $status_codeArray = [5,11];
-            }else if ($status_code == 3){
-                $status_codeArray = [3];
-            }
-        }
-        else {
+        if ($status_code == 255 ) {
             $status_codeArray = ["1","10","5","11"];
+        }
+        else
+        {
+            if($status_code == 1 ){
+                $status_codeArray = ["1","10"];
+            }else if($status_code == 5){
+                $status_codeArray = ["5","11"];
+            }else if ($status_code == 3){
+                $status_codeArray = ["3"];
+            }
         }
         $key = $request->get('key' , 'province');
         $service_id = (int)$request->get('service_id','');
@@ -282,17 +286,18 @@ class ReportController extends Controller
         $values = ['amount' , 'count'];
         $status_code= $request->get('status_code');
         $status_codeArray = [] ;
-        if($status_code != 225){
-            if($status_code == 1 ){
-                $status_codeArray = [1,10];
-            }else if($status_code == 5){
-                $status_codeArray = [5,11];
-            }else if ($status_code == 3){
-                $status_codeArray = [3];
-            }
-        }
-        else {
+        if ($status_code == 255 ) {
             $status_codeArray = ["1","10","5","11"];
+        }
+        else
+        {
+            if($status_code == 1 ){
+                $status_codeArray = ["1","10"];
+            }else if($status_code == 5){
+                $status_codeArray = ["5","11"];
+            }else if ($status_code == 3){
+                $status_codeArray = ["3"];
+            }
         }
         $key = $request->get('key' , 'province');
         $service_id = (int)$request->get('service_id','');

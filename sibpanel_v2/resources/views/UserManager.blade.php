@@ -311,6 +311,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-row mt-3">
+                        <div class="col-sm-6 text-right">
+                            <label for=""> فعال سازی otp </label>
+                            <select id="addUser_otp_verify" name="otp_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                <option selected value="0"> خیر</option>
+                                <option value="1"> بله</option>
+                            </select>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer mt-4">
@@ -404,6 +413,15 @@
                                 <input id="user_password" autocomplete="false" name="password" type="password" class="form-control "  placeholder="کلمه عبور">
                             </div>
                         </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm-6 text-right">
+                                <label for=""> فعال سازی otp </label>
+                                <select id="user_otp_verify" name="otp_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <option selected value="0"> خیر</option>
+                                    <option value="1"> بله</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer mt-4">
                         <button id="edit_form_btn" type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش  </button>
@@ -436,9 +454,11 @@
                 let addUser_password = $("#addUser_password").val();
                 let addUser_account_type_id = $("#addUser_account_type_id").val();
                 let addUser_imei = $("#addUser_imei").val();
+                let addUser_mobile = $("#addUser_mobile").val();
+                let errorMessage = " لطفا فيلد ها مشخص شده را تکميل نماييد . " ;
                 // console.log('addUser_account_type_id' , addUser_account_type_id == null);
                 // console.log('addUser_lastname : ' , addUser_lastname == "")
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 || addUser_mobile ==""){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         error++;
@@ -471,6 +491,17 @@
                     {
                         $("#addUser_password").removeAttr("style");
                         $("#addUser_password").parent().prev().removeAttr("style") ;
+                    }
+                    if(addUser_mobile != "" && addUser_mobile.length != 11 ) {
+                        error++;
+                        $("#addUser_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_mobile").parent().prev().css("color" , "#e91e63") ;
+                        errorMessage = " شماره موبایل باید 11 کاراکتر باشد .  ";
+                    }
+                    else
+                    {
+                        $("#addUser_mobile").removeAttr("style");
+                        $("#addUser_mobile").parent().prev().removeAttr("style") ;
                     }
 
 
@@ -506,7 +537,7 @@
                         else{
                             Swal.fire(
                                 'خطا ! ',
-                                'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                                errorMessage,
                                 'error'
                             )
                         }
@@ -533,9 +564,11 @@
                 let addUser_username = $("#user_username").val();
                 let error = 0 ;
                 let addUser_account_type_id = $("#user_account_type_id").val();
-                console.log("addUser_account_type_id => " , addUser_account_type_id)
+                let user_mobile = $("#user_mobile").val();
+                let errorMessage = "لطفا فيلد ها مشخص شده را تکميل نماييد ." ;
+                console.log("user_mobile => " , user_mobile)
                 let addUser_imei = $("#user_imei").val();
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) ){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) || user_mobile != "" ){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         error++ ;
@@ -558,6 +591,18 @@
                         $("#user_username").removeAttr("style");
                         $("#user_username").parent().prev().removeAttr("style") ;
                     }
+                    if(user_mobile != "" && user_mobile.length != 11 ) {
+                        error++;
+                        $("#user_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#user_mobile").parent().prev().css("color" , "#e91e63") ;
+                        errorMessage = " شماره موبایل باید 11 کاراکتر باشد .  ";
+                    }
+                    else
+                    {
+                        $("#user_mobile").removeAttr("style");
+                        $("#user_mobile").parent().prev().removeAttr("style") ;
+                    }
+
                     if(!addUser_account_type_id == null) {
                         error++ ;
                         $("#user_account_type_id").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
@@ -588,7 +633,7 @@
                         else{
                             Swal.fire(
                                 'خطا ! ',
-                                'لطفا فيلد ها مشخص شده را تکميل نماييد . ',
+                                errorMessage,
                                 'error'
                             )
                         }
@@ -772,12 +817,20 @@
                             $('#user_mobile').val(data.mobile);
                             $('#user_account_type_id').find("option[value="+ data.account_type_id + "]").attr('selected' , true);
                             $('#user_national_id').val(data.national_id);
+                            console.log( "data otp_verify => " , data.otp_verify)
+                            let otp_verify = 0  ;
+                            if(data.otp_verify)
+                            {
+                                otp_verify = 1 ;
+                            }
+                            console.log( "otp_verify => " , otp_verify)
+                            $('#user_otp_verify').find("option[value="+ otp_verify + "]").attr('selected' , true);
                             $('#user_email').val(data.email);
                             let pre_sale = (data.presell)  ? '1' : '0' ;
                             $('#user_pre_sell').find("option[value="+ pre_sale + "]").attr('selected' , true);
                             // Element.find("input[name=pre_sell]").val(data.presell);
                             // console.log(data.presell);
-                            $('#user_imei').val(data.imei);
+                            $('#user_imei').val((data.imei == "None" ) ? "" : data.imei );
                             $('#user_password').val('');
                             $('#loader').hide();
                             $('.selectpicker').selectpicker('refresh');

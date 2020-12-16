@@ -496,9 +496,16 @@
                             success:function(data) {
                                 $("#loader").hide();
                                 if(data.Header.Status != 0){
-                                    if(data.Header.MessageCode == 13) {
+                                    if (data.Header.MessageCode == 181) {
                                         Swal.fire(
-                                            'شماره موبايل شما موجود نيست ! ',
+                                            ' تاییده ی پیامکی شما غیرفعال است ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                    else if (data.Header.MessageCode == 179) {
+                                        Swal.fire(
+                                            ' شماره تلفن شما معتبر نیست ! ',
                                             '',
                                             'error'
                                         )
@@ -511,6 +518,10 @@
                                             'error'
                                         )
                                     }
+                                    if(activation)
+                                        thisElement.prop( "checked", false );
+                                    else
+                                        thisElement.prop( "checked", true );
                                 }
 
                             }

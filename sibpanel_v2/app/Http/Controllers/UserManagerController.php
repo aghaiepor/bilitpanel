@@ -182,7 +182,7 @@ class UserManagerController extends Controller
         if(is_null($email))
             $email = "";
         $account_type_id = $request->get('account_type_id'); //
-        $otp_verify = '0'; //$request->get('otp_verify');
+        $otp_verify = $request->get('otp_verify');
         $subset_users ="";  /*$request->get('subset_users')*/
         $panel_access = false ;  /*$request->get('panel_access');*/
         $pre_sell = $request->get('pre_sell');

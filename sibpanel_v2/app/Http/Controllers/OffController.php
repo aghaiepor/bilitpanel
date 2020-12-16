@@ -98,15 +98,10 @@ class OffController extends Controller
         return $GetDiscountPolicy;
 
     }
-    public function DiscountPolicyَActivaion(Request $request ){
-
+    public function DiscountPolicyActivation(Request $request ){
         $discount_policy_id = (int)$request->get("id");
         $active = (($request->get("active") == "true") ? true : false) ;
-        $description = $request->get("description");
-        if(is_null($description))
-            $description = "";
-        $percentage = (int)$request->get("percentage");
-        $EditDiscountPolicy = $this->api->EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage , "ajax" );
+        $EditDiscountPolicy = $this->api->DiscountPolicyActivation($discount_policy_id ,$active );
         return $EditDiscountPolicy;
     }
 //    public function VoucherTypeList(Request $request)
