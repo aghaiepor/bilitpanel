@@ -25,6 +25,7 @@
             transition: .1s filter;
         }
     </style>
+    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
 
 @section('content')
@@ -58,7 +59,11 @@
                                     <h4 class="card-title text-right font-weight-bold "> مدیریت پروژه </h4>
                                 </div>
                                 <div class="col-sm">
-                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> افزودن </span>
+                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> افزودن پروژه </span>
+                                    <button type="button" data-target="#add_User_off" data-toggle="modal" rel="tooltip" class="btn add_User_off off_btn btn-primary btn-simple">
+                                        <i class="material-icons">local_offer </i>
+                                        افزودن تخفیف کاربران
+                                    </button>
                                     <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
@@ -80,9 +85,9 @@
                                         <th >
                                             لوگو
                                         </th>
-                                      {{--  <th >
+                                        <th >
                                            مدیریت تخفیف
-                                        </th>--}}
+                                        </th>
                                         <th >
                                             ویرایش
                                         </th>
@@ -139,11 +144,16 @@
                                                     @endif
 {{--                                                    <img project_id="{{ $Project["project_id"] }}"  data-toggle="modal" image_id="0" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/image_placeholder2.jpg" rel="placeholder">--}}
                                                 </td>
-                                               {{-- <td >
-                                                    <a href="{{Route("ProjectOff" , [$Project["project_id"]])}}"  class="btn btn-info edit_btn">
+                                                <td >
+                                                   {{-- <a href="{{Route("ProjectOff" , [$Project["project_id"]])}}"  class="btn btn-info edit_btn">
                                                        مدیریت تخفیف
-                                                    </a>
-                                                </td>--}}
+                                                    </a>--}}
+                                                    <button data-url="{{Route("AddProjectOff" , [$Project["project_id"]])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
+                                                        <i class="material-icons">local_offer</i>
+                                                        تخفیف
+                                                    </button>
+
+                                                </td>
                                                 <td >
                                                     <button data-id="{{$Project["project_id"]}}"  data-toggle="modal" data-target="#edit" class="btn btn-success edit_btn">
                                                         ويرايش
@@ -161,6 +171,102 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="add_off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="add_off_form" method="post" action="">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="edit1Label">  افزودن تخفيف </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تخفيف به درصد </label>
+                                <input value="" name="percentage" type="text" class="form-control"  placeholder="تخفيف به درصد">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ فعال سازي </label>
+                                <input dir="ltr" value="" name="activation_date" id="activation_date_off" type="text" class="form-control text-center"  placeholder="">
+                            </div>
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ انقضا </label>
+                                <input dir="ltr" value="" name="expiration_date" id="expiration_date_off" type="text" class="form-control text-center"  placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for=""> توضيحات  </label>
+                                <textarea style="min-height: 150px !important;" name="description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="modal fade" id="add_User_off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="add_off_form" method="post" action="{{Route("AddUserOff")}}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="edit1Label">  افزودن تخفيف </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تخفيف به درصد </label>
+                                <input value="" name="percentage" type="text" class="form-control"  placeholder="تخفيف به درصد">
+                            </div>
+                            <div class="col-sm text-right">
+                                <label for="" class="text-right">  کاربر </label>
+                                <select id="sib_user_id" name="sib_user_id" data-live-search="true" class="selectpicker" data-style="btn btn-primary border-dark" title="کاربر">
+                                    <option selected value="0"  > همه </option>
+                                    @foreach($SellerUserList as $SellerUser)
+                                        <option value="{{$SellerUser["sib_user_id"]}}"  >{{$SellerUser["first_name"] . " " . $SellerUser["last_name"] }}  </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ فعال سازي </label>
+                                <input dir="ltr" value="" name="activation_date" id="activation_date_off" type="text" class="form-control text-center"  placeholder="">
+                            </div>
+                            <div class="col-sm text-right">
+                                <label for="">  تاريخ انقضا </label>
+                                <input dir="ltr" value="" name="expiration_date" id="expiration_date_off" type="text" class="form-control text-center"  placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for=""> توضيحات  </label>
+                                <textarea style="min-height: 150px !important;" name="description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> افزودن </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
 
 <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
@@ -290,6 +396,8 @@
 @endsection
 @section('AddJs')
     <script src="{{asset("")}}assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
+    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
         $(document).ready(function () {
             $(".edit_btn").click(function () {
@@ -352,6 +460,28 @@
 
             });
 
+            $('#activation_date_off , #expiration_date_off').persianDatepicker({
+                initialValue: true,
+                autoClose : true ,
+                altField: '#inlineExampleAlt',
+                format: 'YYYY/MM/DD hh:mm:ss',
+                timePicker : {
+                    enabled : true
+                } ,
+                calendar:{
+                    persian:{
+                        locale: 'fa'
+                    }
+                },navigator:{
+                    scroll:{
+                        enabled:false
+                    }
+                },
+            });
+            $(document).on(  "click" ,  ".off_btn"  , function () {
+                let url = $(this).attr("data-url");
+                $("#add_off_form").attr("action" , url)
+            });
             // for show image and id on modal
             $(".citzen_main_img").click(function () {
                 let src = $(this).attr("src") ;

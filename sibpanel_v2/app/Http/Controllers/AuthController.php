@@ -86,7 +86,9 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
-        session(["Per_UserId" => session('UserInfo')['user_id']]);
+        if(session()->has("UserInfo"))
+            session(["Per_UserId" => session('UserInfo')['user_id']]);
+        
         Cache::flush();
         session()->forget('SessionId');
         session()->forget('UserInfo');

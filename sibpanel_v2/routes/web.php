@@ -180,6 +180,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/AddProjectPicture/{id?}' , 'projectManagerController@AddProjectPicture')->name('AddProjectPicture');
         Route::get('/ProjectOff/{id}' , 'projectManagerController@ProjectOff')->name('ProjectOff');
         Route::post('/AddProjectOff/{id}' , 'projectManagerController@AddProjectOff')->name('AddProjectOff');
+        Route::post('/AddUserOff' , 'projectManagerController@AddUserOff')->name('AddUserOff');
 
         // Off Managers
         Route::get('/Off' , 'OffController@index')->name('Off');

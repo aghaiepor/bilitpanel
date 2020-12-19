@@ -139,7 +139,7 @@
                                                 </td>
                                                 <td>
                                                     <button data-url="{{Route("AddLocationOff" , [$location['id']])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
-                                                        <i class="material-icons">domain </i>
+                                                        <i class="material-icons">local_offer</i>
                                                         تخفیف
                                                     </button>
                                                 </td>
