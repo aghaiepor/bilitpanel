@@ -753,9 +753,9 @@
             $(document).on("change",'input[name=location_id_active]' ,function () {
 
                 let locationaccount_id = $(this).attr('data-location');
-                console.log("locationaccount_id => " , locationaccount_id);
+                // console.log("locationaccount_id => " , locationaccount_id);
                 let activation = $(this).is(':checked');
-                console.log("activation => " , activation);
+                // console.log("activation => " , activation);
                 let thisElement =  $(this) ;
                 let failed = true ;
                 Swal.fire({
@@ -937,7 +937,7 @@
                                         success:function(data) {
                                             // console.log("data => " , data);
                                             thisElement.parent().parent().parent().next().children().find("input").prop( "checked", activation );
-                                            console.log("inputs => " , thisElement.parent().parent().parent().parent().next("tr").children().find("input").prop( "checked", activation ))
+
                                             $('#loader').hide();
                                             Swal.fire(
                                                 'تغییر مورد نظر اعمال گردید',
