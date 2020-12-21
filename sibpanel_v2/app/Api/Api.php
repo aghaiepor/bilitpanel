@@ -1500,6 +1500,23 @@ class Api
         $this->checkError($response , "ajax");
         return $response;
     }
+    public function AccountActivation($account_id  ,$activation){
+        $data = [
+            "account_id" => $account_id,
+            "activation" => $activation
+        ];
+        Log::info("AccountActivation => "  , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'LocationAccountActivation' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , "ajax");
+        return $response;
+    }
     public function SetAccountSetting($account_id ,$average_balance_use , $red_percentage ,$orange_percentage , $yellow_percentage , $green_percentage){
         $data = [
             "account_id" =>  $account_id,

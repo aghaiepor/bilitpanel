@@ -164,6 +164,7 @@ class UserManagerController extends Controller
         return $user_activation ;
     }
     public function RegisterUser(Request $request , $id=null){
+//        return json_encode($request->all());
         if($id == null)
             $id="";
         $name = $request->get('name'); //

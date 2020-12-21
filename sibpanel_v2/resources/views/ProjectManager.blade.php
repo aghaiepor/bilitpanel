@@ -175,7 +175,7 @@
 
     <div class="modal fade" id="add_off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form id="add_off_form" method="post" action="">
+            <form id="add_off_form" method="postس" action="">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">

@@ -115,6 +115,7 @@
                                                     </th>
                                                     <th > موجودی <small class="text-secondary" style="font-size: 8pt">(ريال)</small> </th>
                                                     <th >وضعیت</th>
+                                                    <th >مکان ها</th>
                                                     <th > خدمات</th>
                                                 </tr>
                                                 </thead>
@@ -748,6 +749,324 @@
                 })*/
 
             });
+
+            $(document).on("change",'input[name=location_id_active]' ,function () {
+
+                let locationaccount_id = $(this).attr('data-location');
+                console.log("locationaccount_id => " , locationaccount_id);
+                let activation = $(this).is(':checked');
+                console.log("activation => " , activation);
+                let thisElement =  $(this) ;
+                let failed = true ;
+                Swal.fire({
+                    title: 'لطفا کد ارسال شده به تلفن همراه خود را وارد نمایید ',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'ثبت',
+                    showLoaderOnConfirm: true,
+                    onOpen : () =>{
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('OtpNew')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                            },statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
+                                }
+                            },
+                            success:function(data) {
+                                $("#loader").hide();
+                                if(data.Header.Status != 0){
+                                    if (data.Header.MessageCode == 181) {
+                                        Swal.fire(
+                                            ' تاییده ی پیامکی شما غیرفعال است ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                    else if (data.Header.MessageCode == 179) {
+                                        Swal.fire(
+                                            ' شماره تلفن شما معتبر نیست ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                    else
+                                    {
+                                        Swal.fire(
+                                            'خظا در ارسال کد !  ',
+                                            ' دوباره سعی کنید ',
+                                            'error'
+                                        )
+                                    }
+                                    if(activation)
+                                        thisElement.prop( "checked", false );
+                                    else
+                                        thisElement.prop( "checked", true );
+                                }
+
+                            }
+                        });
+                    } ,
+                    preConfirm: (login) => {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('VerifyOtpNew')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'number' : login ,
+                            },statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
+                                }
+                            },
+                            success:function(data) {
+
+                                if (data.Header.Status ==  0){
+                                    failed = false ;
+                                    $.ajax({
+                                        type:'POST',
+                                        url:"{{Route('AccountActivation')}}",
+                                        dataType:'json',
+                                        data:{
+                                            '_token ': '<?php echo csrf_token() ?>',
+                                            'id' : locationaccount_id ,
+                                            'activation' : activation ,
+                                        },
+                                        statusCode: {
+                                            500: function() {
+                                                $("#loader").hide();
+                                                Swal.fire(
+                                                    'خطا در دريافت اطلاعات ! ',
+                                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                                    'error'
+                                                )
+                                            } ,
+                                            400: function() {
+                                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                                let x = 1 ;
+                                                let dots = "";
+                                                setInterval(function () {
+                                                    dots += ".";
+                                                    x++  ;
+                                                    // console.log(x)
+                                                    if(x >= 8 ){
+                                                        x = 1 ;
+                                                        dots = ".";
+                                                    }
+                                                    $("#dots").html(dots)
+                                                } , 300)
+                                                $("#loader").hide();
+                                                Swal.fire(
+                                                    'نشست  شما پایان یافته است ! ',
+                                                    html,
+                                                    'warning' ,
+                                                )
+                                                setTimeout(function () {
+                                                    window.location.href = "{{Route("logout")}}";
+                                                } , 1500)
+
+                                            }
+                                        },
+                                        success:function(data) {
+                                            // console.log("data => " , data);
+                                            thisElement.parent().parent().parent().next().children().find("input").prop( "checked", activation );
+                                            console.log("inputs => " , thisElement.parent().parent().parent().parent().next("tr").children().find("input").prop( "checked", activation ))
+                                            $('#loader').hide();
+                                            Swal.fire(
+                                                'تغییر مورد نظر اعمال گردید',
+                                                '',
+                                                'success'
+                                            )
+                                        }
+                                    });
+                                }
+                                else {
+                                    if(activation)
+                                        thisElement.prop( "checked", false );
+                                    else
+                                        thisElement.prop( "checked", true );
+                                    if(data.Header.MessageCode == 13) {
+                                        Swal.fire(
+                                            'شماره موبايل شما موجود نيست ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                    else
+                                    {
+                                        Swal.fire(
+                                            'ورودی وارد شده نامعتبر است ! ',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+
+                                }
+                            }
+                        });
+
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                        if (result.value) {
+                            $('#loader').hide();
+                        }else{
+                            if(activation)
+                                $(this).prop( "checked", false );
+                            else
+                                $(this).prop( "checked", true );
+                            $('#loader').hide();
+                        }
+
+
+                    }
+
+                )
+                // $('#loader').css('display' , 'flex');
+
+                /*Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('LocationAccountActivation')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'id' : locationaccount_id ,
+                                'activation' : activation ,
+                            },
+                            statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
+                                }
+                            },
+                            success:function(data) {
+                                // console.log(data);
+                                $('#loader').hide();
+                                Swal.fire(
+                                    'تغییر مورد نظر اعمال گردید',
+                                    '',
+                                    'success'
+                                )
+                            }
+                        });
+
+                    }else{
+                        if(activation)
+                            $(this).prop( "checked", false );
+                        else
+                            $(this).prop( "checked", true );
+                        $('#loader').hide();
+                    }
+                })*/
+
+            });
+
             let FirstProvince = "{{$ProvinceList[0]["id"]}}";
             GetAccountProvince(FirstProvince);
 
@@ -862,6 +1181,7 @@
                         let saba_number ;
                         let mojodi ;
                         let state ;
+                        let place ;
                         let service ;
                         let setting = [] ;
                         for(let i = 0 ; i < account.length ; i++){
@@ -870,6 +1190,7 @@
                             saba_number = row.insertCell();
                             mojodi = row.insertCell();
                             state = row.insertCell();
+                            place = row.insertCell();
                             service = row.insertCell();
 
                             name.innerHTML = account[i].name ;
@@ -889,7 +1210,18 @@
                             else
                                 mojodi.className = "";
 
-                            state.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
+                            let state_html = ' <div class="togglebutton">' + '<label>' ;
+
+                            if (account[i].account_status)
+                                state_html += '<input  data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active" checked="">'  ;
+                            else
+                                state_html += '<input data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active">'  ;
+
+                            state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
+
+                            state.innerHTML =  state_html;
+
+                            place.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
 
                             let service_html = '<button data-id= ' + account[i].account_id  + '  type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1 chargeBtn" data-toggle="modal" data-target="#charge" data-original-title="" title="">\n' +
                                 '<i class="material-icons">flash_on</i>\n' +
@@ -913,7 +1245,7 @@
                             row.className = "subRow";
                             cell = row.insertCell();
                             cell.className = "myTd";
-                            cell.colSpan = "5";
+                            cell.colSpan = "6";
                             cell.appendChild(tbl);
                             // cell.innerHTML = ;
 
@@ -921,7 +1253,7 @@
                                 row = tbl.insertRow();
                                 row.class = "myTr";
                                 location_name = row.insertCell();
-                                location_name.colSpan = "3"
+                                location_name.colSpan = "4"
                                 location_name.innerHTML = location[x].location_name;
                                 location_state = row.insertCell();
                                 location_state.colSpan = "2"

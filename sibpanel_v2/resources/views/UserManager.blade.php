@@ -455,10 +455,11 @@
                 let addUser_account_type_id = $("#addUser_account_type_id").val();
                 let addUser_imei = $("#addUser_imei").val();
                 let addUser_mobile = $("#addUser_mobile").val();
+                let addUser_otp_verify = $("#addUser_otp_verify").val();
                 let errorMessage = " لطفا فيلد ها مشخص شده را تکميل نماييد . " ;
                 // console.log('addUser_account_type_id' , addUser_account_type_id == null);
                 // console.log('addUser_lastname : ' , addUser_lastname == "")
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 || addUser_mobile ==""){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 || addUser_mobile =="" || addUser_otp_verify == 1){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         error++;
@@ -503,7 +504,16 @@
                         $("#addUser_mobile").removeAttr("style");
                         $("#addUser_mobile").parent().prev().removeAttr("style") ;
                     }
-
+                    if(addUser_mobile == "" && addUser_otp_verify == 1 ) {
+                        error++;
+                        $("#addUser_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#addUser_mobile").parent().prev().css("color" , "#e91e63") ;
+                    }
+                    else
+                    {
+                        $("#addUser_mobile").removeAttr("style");
+                        $("#addUser_mobile").parent().prev().removeAttr("style") ;
+                    }
 
                     if(addUser_account_type_id == null) {
                         error++;
@@ -565,10 +575,12 @@
                 let error = 0 ;
                 let addUser_account_type_id = $("#user_account_type_id").val();
                 let user_mobile = $("#user_mobile").val();
+                let user_otp_verify = $("#user_otp_verify").val();
+
                 let errorMessage = "لطفا فيلد ها مشخص شده را تکميل نماييد ." ;
                 console.log("user_mobile => " , user_mobile)
                 let addUser_imei = $("#user_imei").val();
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) || user_mobile != "" ){
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) || user_mobile != "" || user_otp_verify == 1 ){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         error++ ;
@@ -596,6 +608,16 @@
                         $("#user_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#user_mobile").parent().prev().css("color" , "#e91e63") ;
                         errorMessage = " شماره موبایل باید 11 کاراکتر باشد .  ";
+                    }
+                    else
+                    {
+                        $("#user_mobile").removeAttr("style");
+                        $("#user_mobile").parent().prev().removeAttr("style") ;
+                    }
+                    if(user_mobile == "" && user_otp_verify == 1 ) {
+                        error++;
+                        $("#user_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
+                        $("#user_mobile").parent().prev().css("color" , "#e91e63") ;
                     }
                     else
                     {
@@ -772,7 +794,6 @@
                             '_token ': '<?php echo csrf_token() ?>',
                             'UserId' : UserId ,
                         },
-
                         statusCode: {
                             500: function() {
                                 $("#loader").hide();
@@ -815,6 +836,7 @@
                             $('#user_last_name').val(data.last_name);
                             $('#user_username').val(data.username);
                             $('#user_mobile').val(data.mobile);
+                            $('#user_account_type_id').find("option").attr('selected' , false);
                             $('#user_account_type_id').find("option[value="+ data.account_type_id + "]").attr('selected' , true);
                             $('#user_national_id').val(data.national_id);
                             console.log( "data otp_verify => " , data.otp_verify)
@@ -824,9 +846,12 @@
                                 otp_verify = 1 ;
                             }
                             console.log( "otp_verify => " , otp_verify)
+
+                            $('#user_otp_verify').find("option").attr('selected' , false);
                             $('#user_otp_verify').find("option[value="+ otp_verify + "]").attr('selected' , true);
                             $('#user_email').val(data.email);
                             let pre_sale = (data.presell)  ? '1' : '0' ;
+                            $('#user_pre_sell').find("option").attr('selected' , false);
                             $('#user_pre_sell').find("option[value="+ pre_sale + "]").attr('selected' , true);
                             // Element.find("input[name=pre_sell]").val(data.presell);
                             // console.log(data.presell);
