@@ -177,7 +177,7 @@
                         <li class="nav-item ">
                             <a href="#" data-toggle="modal" data-target="#deleteVoucher" class="nav-link" >
                                 <span class="sidebar-mini"> <i class="material-icons">backspace</i>   </span>
-                                <span class="sidebar-normal"> باطل کردن بلیت </span>
+                                <span class="sidebar-normal"> حذف بلیت </span>
                             </a>
                         </li>
                             @if(session('UserInfo')['account_type_id'] != 9)

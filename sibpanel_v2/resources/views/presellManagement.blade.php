@@ -459,7 +459,8 @@
                             dataType:'json',
                             data:{
                                 '_token ': '<?php echo csrf_token() ?>',
-                            },statusCode: {
+                            },
+                            statusCode: {
                                 500: function() {
                                     $("#loader").hide();
                                     Swal.fire(
@@ -536,7 +537,8 @@
                             data:{
                                 '_token ': '<?php echo csrf_token() ?>',
                                 'number' : login ,
-                            },statusCode: {
+                            },
+                            statusCode: {
                                 500: function() {
                                     $("#loader").hide();
                                     Swal.fire(
@@ -650,7 +652,10 @@
                                             'error'
                                         )
                                     }
-
+                                    if(activation)
+                                        thisElement.prop( "checked", false );
+                                    else
+                                        thisElement.prop( "checked", true );
                                 }
                             }
                         });
