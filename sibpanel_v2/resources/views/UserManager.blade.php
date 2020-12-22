@@ -264,7 +264,7 @@
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for=""> شماره موبایل </label>
-                            <input id="addUser_mobile" name="cellphone" type="number" class="form-control"  placeholder="شمار موبایل">
+                            <input id="addUser_mobile" name="cellphone" type="number" class="form-control"  placeholder="شماره موبایل">
                         </div>
                     </div>
                     <div class="form-row mt-3">
@@ -295,7 +295,7 @@
                         </div>
                         <div class="col-sm-6 text-right">
                             <label for="">   رمزعبور </label>
-                            <input id="addUser_password" autocomplete="false" name="password" type="password" class="form-control"  placeholder="کلمه عبور">
+                            <input id="addUser_password" autocomplete="new-password" name="password" type="password" class="form-control"  placeholder="کلمه عبور">
                         </div>
                     </div>
                     <div class="form-row mt-3">
@@ -361,7 +361,7 @@
                             </div>
                             <div class="col-sm-6 text-right">
                                 <label for=""> شماره موبایل </label>
-                                <input id="user_mobile" name="cellphone" type="number" class="form-control"  placeholder="شمار موبایل">
+                                <input id="user_mobile" name="cellphone" type="number" class="form-control"  placeholder="شماره موبایل">
                             </div>
                         </div>
                         <div class="form-row mt-3">
@@ -443,7 +443,7 @@
                 }
             });
 
-            $("#addUser_password").val(" ")
+            $("#addUser_password").val("")
 
             $("#addUser").click( function (e) {
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
