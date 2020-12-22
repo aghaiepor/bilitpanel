@@ -24,8 +24,9 @@ class LocationController extends Controller
     {
         $locations = Cache::get('LocationList') ;
         $province = Cache::get('ProvinceList') ;
+        $GetProjectList = Cache::get('ProjectList');
         $GetVoucherText = Cache::get("GetVoucherText");
-        return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText ]);
+        return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList ]);
     }
     public function AddLocation(Request $request){
         $location_name = $request->get('location_name') ;
@@ -37,9 +38,10 @@ class LocationController extends Controller
         $text_id = $request->get('text_id');
         $longitude= $request->get('longitude');
         $latitude = $request->get('latitude');
+        $project_id = $request->get('project_id');
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
 //        Log::info( 'mandatory_entrance' . $mandatory_entrance);
-        $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude);
+        $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude ,$project_id );
 
 //        return $addLocation;
         if ($addLocation['Header']['MessageCode'] == 0){

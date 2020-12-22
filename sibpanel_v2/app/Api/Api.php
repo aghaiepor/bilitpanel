@@ -117,7 +117,7 @@ class Api
 
         return array_values($locations);
     }
-    public function AddLocation($location_name, $province_id, $text_id, $city_id, $location_english_name, $location_address, $location_english_address,$mandatory_entrance ,$longitude , $latitude){
+    public function AddLocation($location_name, $province_id, $text_id, $city_id, $location_english_name, $location_address, $location_english_address,$mandatory_entrance ,$longitude , $latitude , $project_id){
         $data = [
             "location_name"=> $location_name,
             "location_english_name"=> $location_english_name,
@@ -129,6 +129,7 @@ class Api
             "mandatory_entrance"=> $mandatory_entrance,
             "latitude" => $latitude ,
             "longitude" => $longitude ,
+            "project_id" => $project_id ,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddLocation' ,[

@@ -247,6 +247,20 @@
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
+                                                                      {{--  <div class="col-md text-right">
+                                                                            <label for=""> انتخاب پروژه </label>
+                                                                            <select id="project_id" name="project_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                                                                <option disabled > انتخاب پروژه </option>
+                                                                                @foreach($GetProjectList as $GetProject)
+                                                                                    @if($GetProject['project_id'] == 1 )
+                                                                                        <option selected value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                                                                    @else
+                                                                                        <option value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                                                                    @endif
+
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>--}}
                                                                     </div>
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
@@ -442,6 +456,26 @@
                     <div class="col-md text-right">
                         <label for=""> عرض جغرافیایی </label>
                         <input name="latitude" type="text" class="form-control"  placeholder="عرض جغرافیایی">
+                    </div>
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب پروژه </label>
+                        <select id="project_id" name="project_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                            <option disabled > انتخاب پروژه </option>
+                            @foreach($GetProjectList as $GetProject)
+                                @if($GetProject['project_id'] == 1 )
+                                    <option selected value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                @else
+                                    <option value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                @endif
+
+                            @endforeach
+                            {{-- <option value="3">تست</option>
+                             <option value="5">سال رونق تولید مبارک</option>
+                             <option value="1">سال جهش تولید</option>
+                             <option value="4">ستاد گردشگری شهرداری تهران</option>
+                             <option value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
+                         --}}
+                        </select>
                     </div>
                 </div>
                 <div class="form-row mt-2">
