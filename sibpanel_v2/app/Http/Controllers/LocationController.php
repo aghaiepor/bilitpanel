@@ -29,6 +29,8 @@ class LocationController extends Controller
         return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList ]);
     }
     public function AddLocation(Request $request){
+        return json_encode($request->all());
+
         $location_name = $request->get('location_name') ;
         $location_english_name = $request->get('location_english_name') ;
         $location_address = $request->get('location_address') ;
@@ -42,8 +44,8 @@ class LocationController extends Controller
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
 //        Log::info( 'mandatory_entrance' . $mandatory_entrance);
         $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude ,$project_id );
-
 //        return $addLocation;
+
         if ($addLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){
@@ -59,7 +61,7 @@ class LocationController extends Controller
                 $shaba = "123";
                 $payment_id = $request->get("officeNo");
                 $AddClearingAccount = $this->api->AddClearingAccount($location_id, $project_name, $owner_name, $shaba, $payment_id);
-                return $AddClearingAccount ;
+//                return $AddClearingAccount ;
             }
             return redirect()->back()->with('success' , ' مکان مورد نظر اضافه گردید . ');
         }

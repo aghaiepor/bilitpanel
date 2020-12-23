@@ -111,6 +111,9 @@
                                             تخفیف
                                         </th>
                                         <th >
+                                            تخفیف
+                                        </th>
+                                        <th >
                                             مدیریت بلیت ها
                                         </th>
 
@@ -161,6 +164,11 @@
                                                     @else
                                                         {{$GetServices[$array_keys[$i]]['capacity']}}
                                                     @endif
+                                                </td>
+                                                <td>
+                                                    <a href="#" class="btn off_btn btn-primary btn-simple">
+                                                        سانس
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <button data-url="{{Route("AddServiceOff" , [ $GetServices[$array_keys[$i]]['service_id'] ])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">

@@ -417,47 +417,6 @@
                 </div>
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
-                        <label for=""> انتخاب استان </label>
-                            <select id="province" name="province_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                <option disabled selected> انتخاب استان </option>
-                                @foreach($province as $item )
-                                    <option value="{{$item['id']}}"> {{$item['province_name']}}</option>
-                                @endforeach
-                            </select>
-                </div>
-                    <div class="col-md text-right">
-                        <label for=""> انتخاب شهر </label>
-                        <select id="cityList" name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                            <option disabled selected> انتخاب شهر </option>
-                            <option value="1">شیراز</option>
-                        </select>
-                    </div>
-                    <div class="col-md text-right">
-                        <label for=""> انتخاب متن </label>
-                        <select id="voucherText" name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                            <option disabled selected> انتخاب متن </option>
-                            @foreach($GetVoucherText as $text)
-                                <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
-                            @endforeach
-                           {{-- <option value="3">تست</option>
-                            <option value="5">سال رونق تولید مبارک</option>
-                            <option value="1">سال جهش تولید</option>
-                            <option value="4">ستاد گردشگری شهرداری تهران</option>
-                            <option value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
-                        --}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row mt-2">
-                    <div class="col-md text-right">
-                        <label for=""> طول جغرافیایی </label>
-                        <input name="longitude" type="text" class="form-control" placeholder="طول جغرافیایی">
-                    </div>
-                    <div class="col-md text-right">
-                        <label for=""> عرض جغرافیایی </label>
-                        <input name="latitude" type="text" class="form-control"  placeholder="عرض جغرافیایی">
-                    </div>
-                    <div class="col-md text-right">
                         <label for=""> انتخاب پروژه </label>
                         <select id="project_id" name="project_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled > انتخاب پروژه </option>
@@ -477,6 +436,49 @@
                          --}}
                         </select>
                     </div>
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب استان </label>
+                            <select id="province" name="province_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                <option disabled selected> انتخاب استان </option>
+                                @foreach($province as $item )
+                                    <option value="{{$item['id']}}"> {{$item['province_name']}}</option>
+                                @endforeach
+                            </select>
+                </div>
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب شهر </label>
+                        <select id="cityList" name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                            <option disabled selected> انتخاب شهر </option>
+                            <option value="1">شیراز</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-md text-right">
+                        <label for=""> طول جغرافیایی </label>
+                        <input name="longitude" type="text" class="form-control" placeholder="طول جغرافیایی">
+                    </div>
+                    <div class="col-md text-right">
+                        <label for=""> عرض جغرافیایی </label>
+                        <input name="latitude" type="text" class="form-control"  placeholder="عرض جغرافیایی">
+                    </div>
+                    <div class="col-md text-right">
+                        <label for=""> انتخاب متن </label>
+                        <select id="voucherText" name="text_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                            <option disabled selected> انتخاب متن </option>
+                            @foreach($GetVoucherText as $text)
+                                <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
+                            @endforeach
+                            {{-- <option value="3">تست</option>
+                             <option value="5">سال رونق تولید مبارک</option>
+                             <option value="1">سال جهش تولید</option>
+                             <option value="4">ستاد گردشگری شهرداری تهران</option>
+                             <option value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
+                         --}}
+                        </select>
+                    </div>
+
                 </div>
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
