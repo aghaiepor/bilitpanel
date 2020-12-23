@@ -51,7 +51,7 @@ The above copyright notice and this permission notice shall be included in all c
                 <div style="direction: ltr" class="col-md-5 ml-auto mr-auto">
 {{--                    <div class="spinner-border mx-auto d-block mb-3" style="width: 25px;height: 25px;"></div>--}}
                     <div >
-                        <img class="mx-auto d-block" style="width: 100px" src="../assets/img/loading.gif" alt="">
+                        <img class="mx-auto d-block" style="width: 100px" src="{{asset("")}}assets/img/loading.gif" alt="">
                     </div>
                     <div class="progress rounded" style="height: 7px;">
                         <div id="pro" class="progress-bar rounded progress-bar-danger progress-bar-animated progress-bar-striped" role="progressbar"  {{--@if(Cache::has('LocationList')) style="width: 100%;" @else style="width: 37%;" @endif--}} aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>

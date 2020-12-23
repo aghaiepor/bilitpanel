@@ -29,7 +29,7 @@ class LocationController extends Controller
         return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList ]);
     }
     public function AddLocation(Request $request){
-        return json_encode($request->all());
+//        return json_encode($request->all());
 
         $location_name = $request->get('location_name') ;
         $location_english_name = $request->get('location_english_name') ;
@@ -65,7 +65,8 @@ class LocationController extends Controller
             }
             return redirect()->back()->with('success' , ' مکان مورد نظر اضافه گردید . ');
         }
-
+        elseif ($addLocation['Header']['MessageCode'] ==36)
+            return redirect()->back()->with('error' , ' مکان مورد نظر در استان و شهر انتخابي تعريف شده است . ');
         else
           return redirect()->back()->with('error' , ' خطا در ایجاد مکان . ');
 
