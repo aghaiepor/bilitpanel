@@ -4,7 +4,7 @@
 namespace App\Api;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
-
+use App\UserJob;
 
 class Api
 {
@@ -15,9 +15,14 @@ class Api
     private $CONTENT_TYPE = 'application/json';
     private $AUTHORIZATION = 'basic aG9zc2VpbjpAZG1pbjEyMw==';
     public $session_id;
+    protected $session_from_job;
 
     function __construct($from='') {
         $this->url = env('API_ADDRESS') ;
+    }
+
+    public function set_session_id($session_from_job=''){
+        $this->session_from_job = $session_from_job;
     }
 
     public function login($username, $password, $debug = false)
@@ -33,9 +38,16 @@ class Api
             ]
         ]);
         $response = json_decode($result->getBody(),true);
+
+//        Log::debug($response);
         if ($response['Header']['Status'] == 0 && $response['ContentData']['panel_access']){
             session(['SessionId' => $response['ContentData']['SessionId']]);
             session(['UserInfo' => $response['ContentData']] );
+            session(['user_name' => $username] );
+            //update session for jobs
+            UserJob::where('user_name',$username)
+                ->where('finished',false)
+                ->update(['session_id'=>$response['ContentData']['SessionId']]);
         }
         return $response;
     }
@@ -914,7 +926,8 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id, $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id,$rrn , $voucher_number){
+    public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id,
+     $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id,$rrn , $voucher_number){
         $conditions = [
             'location_id'=> $location_id,
             'procedure_status' =>$status_code,
@@ -1656,6 +1669,8 @@ class Api
     // ******************* Methods *******************
     private function getHeader(){
         $this->session_id = (session()->has('SessionId')) ?  session('SessionId') : null ;
+        if ($this->session_id == null)
+            $this->session_id = $this->session_from_job;
         $header = [
             'Content-Type'=>$this->CONTENT_TYPE,
             'Authorization'=>$this->AUTHORIZATION,

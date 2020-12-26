@@ -133,6 +133,8 @@ Route::middleware(['CheckLogin'])->group(function () {
         // Transaction Route
         Route::get('/transaction' ,'ReportController@transaction')->name('transaction');
         Route::get('/transactionToExcel' ,'ReportController@transactionToExcel')->name('transactionToExcel');
+        Route::get('/exports' ,'ReportController@exports')->name('exports');
+        Route::post('/export_dl' ,'ReportController@download_file')->name('export_dl');
 
         // Place & Province Route
         Route::get('/stateMg' , 'provinceController@index')->name('stateMg');
