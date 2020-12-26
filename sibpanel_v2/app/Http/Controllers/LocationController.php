@@ -53,7 +53,7 @@ class LocationController extends Controller
                 return $Locations['ContentData'];
             });
 
-            if(env("HAS_OFFICE_NO")) {
+           /* if(env("HAS_OFFICE_NO")) {
                 // **** for shahdari project *****
                 $location_id = $addLocation['ContentData']['location_id'];
                 $project_name = "shahrdari";
@@ -62,7 +62,7 @@ class LocationController extends Controller
                 $payment_id = $request->get("officeNo");
                 $AddClearingAccount = $this->api->AddClearingAccount($location_id, $project_name, $owner_name, $shaba, $payment_id);
 //                return $AddClearingAccount ;
-            }
+            }*/
             return redirect()->back()->with('success' , ' مکان مورد نظر اضافه گردید . ');
         }
         elseif ($addLocation['Header']['MessageCode'] ==36)
@@ -165,13 +165,16 @@ class LocationController extends Controller
     }
 
     public function getLocationFilter(Request $request){
+        $project_id = $request->get("project_id");
         $city_id = $request->get("city_id");
         $province_id = $request->get("province_id");
-        $locations = $this->api->location_list( $province_id , $city_id);
+        $locations = $this->api->location_list( $province_id , $city_id , null ,$project_id);
         $province = Cache::get('ProvinceList') ;
         $GetVoucherText = Cache::get("GetVoucherText");
+        $GetProjectList = Cache::get('ProjectList');
 //        return $locations;
-        return view('places' , ['locations' => $locations['ContentData'], 'province' => $province , 'GetVoucherText' => $GetVoucherText ]);
+
+        return view('places' , ['locations' => $locations['ContentData'], 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList" => $GetProjectList ]);
     }
 
     public function AddLocationOff( Request $request , $id){

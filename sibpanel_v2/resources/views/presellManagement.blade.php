@@ -472,7 +472,7 @@
                                     else
                                     {
                                         Swal.fire(
-                                            'خظا در ارسال کد !  ',
+                                            'خطا در ارسال کد !  ',
                                             ' دوباره سعی کنید ',
                                             'error'
                                         )
@@ -679,7 +679,7 @@
                                     else
                                     {
                                         Swal.fire(
-                                            'خظا در ارسال کد !  ',
+                                            'خطا در ارسال کد !  ',
                                             ' دوباره سعی کنید ',
                                             'error'
                                         )
@@ -943,7 +943,8 @@
                             dataType:'json',
                             data:{
                                 '_token ': '<?php echo csrf_token() ?>',
-                            },statusCode: {
+                            },
+                            statusCode: {
                                 500: function() {
                                     $("#loader").hide();
                                     Swal.fire(
@@ -980,6 +981,7 @@
                             },
                             success:function(data) {
                                 $("#loader").hide();
+                                console.log("data => " , data);
                                 if(data.Header.Status != 0){
                                     if (data.Header.MessageCode == 181) {
                                         Swal.fire(
@@ -998,7 +1000,7 @@
                                     else
                                     {
                                         Swal.fire(
-                                            'خظا در ارسال کد !  ',
+                                            'خطا در ارسال کد !',
                                             ' دوباره سعی کنید ',
                                             'error'
                                         )
@@ -1008,7 +1010,6 @@
                                     else
                                         thisElement.prop( "checked", true );
                                 }
-
                             }
                         });
                     } ,
@@ -1105,8 +1106,7 @@
                                         },
                                         success:function(data) {
                                             // console.log("data => " , data);
-                                            thisElement.parent().parent().parent().next().children().find("input").prop( "checked", activation );
-
+                                            thisElement.parent().parent().parent().parent().next().children().find("input").prop( "checked", activation );
                                             $('#loader').hide();
                                             Swal.fire(
                                                 'تغییر مورد نظر اعمال گردید',
@@ -1262,7 +1262,7 @@
                         var cell = row.insertCell();
                         cell.id = "myTd";
                         cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";
-                        document.getElementById("myTd").colSpan = "5";
+                        document.getElementById("myTd").colSpan = "6";
                         $("#loader").hide();
                     }else {
                         $("#AccountTableTbody").html(" ");

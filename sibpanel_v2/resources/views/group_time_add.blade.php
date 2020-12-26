@@ -42,8 +42,24 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show text-right" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    @elseif(session('error'))
+
+                        <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    @endif
                     <div class="card">
-                        <div class="card-header card-header-icon card-header-rose titleStyle">
+                        <div class="card-header card-header-icon position-relative card-header-rose titleStyle">
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="card-icon float-right ml-3 mr-0">
@@ -52,7 +68,7 @@
                                     <h4 class="card-title text-right font-weight-bold ">  مدیریت سانس ها </h4>
                                 </div>
                                 <div class="col-sm">
-                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>
+{{--                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
                                     <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
@@ -63,18 +79,24 @@
                                 <div class="col-md">
                                     <form method="post" id="form" enctype="multipart/form-data">
                                         <div class="form-row">
-                                            <div class="col-md-4 mx-auto text-right">
+                                            <div class="col-md-4 ml-auto text-right">
                                                 <label for="group_name">نام گروه سانس</label>
                                                 <input type="text" class="form-control" id="group_name" name="group_name"
                                                        placeholder="نام گروه سانس">
                                             </div>
-
+                                            <div class="col-md-4 text-right">
+                                                <label for="group_name"> &nbsp; </label>
+                                                    <select name="model_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
+                                                        <option disabled selected> روزانه </option>
+                                                        <option value="1">هفتگی</option>
+                                                        <option value="3">ماهانه</option>
+                                                    </select>
+                                            </div>
                                             <input type="hidden" name="serviceId" value="">
                                             <input type="hidden" id="service_times" name="service_times" value="">
                                             <div class="col-md-offset-4 col-md-4 col-md-offset-4" style="margin-top:50px;">
                                                 <img id='img-upload' style="max-width:100%;"/>
                                             </div>
-
                                             </div>
                                             @csrf
                                         </div>

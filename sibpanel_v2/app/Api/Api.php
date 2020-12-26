@@ -853,10 +853,11 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function location_list($province_id , $city_id , $type=null){
+    public function location_list($province_id , $city_id , $type=null , $project_id=null){
         $data = [
             "province_id" => $province_id,
-            "city_id" => $city_id
+            "city_id" => $city_id ,
+            "project_id" => $project_id
         ];
         $client = new Client();
         $result = $client->post($this->url . 'LocationList' ,[

@@ -280,7 +280,7 @@ class presellController extends Controller
 
     public function OtpNew(Request $request)
     {
-        $user_id = session('UserInfo')['user_id'] ;
+        $user_id = (int)session('UserInfo')['user_id'] ;
         $GenerateOtp = $this->Api->GenerateOtp($user_id);
         return $GenerateOtp ;
     }

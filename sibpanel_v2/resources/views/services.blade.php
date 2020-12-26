@@ -107,16 +107,15 @@
                                         <th >
                                             ظرفیت
                                         </th>
-                                        <th >
-                                            تخفیف
-                                        </th>
+                                       {{-- <th >
+                                            سانس
+                                        </th>--}}
                                         <th >
                                             تخفیف
                                         </th>
                                         <th >
                                             مدیریت بلیت ها
                                         </th>
-
                                         <th >
                                          تصویر سرویس
                                         </th>
@@ -165,11 +164,11 @@
                                                         {{$GetServices[$array_keys[$i]]['capacity']}}
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    <a href="#" class="btn off_btn btn-primary btn-simple">
-                                                        سانس
+                                               {{-- <td>
+                                                    <a href="{{Route("add_group_time_index")}}" class="btn off_btn btn-dribbble btn-simple">
+                                                        مديريت سانس ها
                                                     </a>
-                                                </td>
+                                                </td>--}}
                                                 <td>
                                                     <button data-url="{{Route("AddServiceOff" , [ $GetServices[$array_keys[$i]]['service_id'] ])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
                                                         <i class="material-icons">local_offer</i>

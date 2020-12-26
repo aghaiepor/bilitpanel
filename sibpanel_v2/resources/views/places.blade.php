@@ -59,10 +59,23 @@
                                     <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
-                                <form  class="form-row mt-2" action="{{Route("getLocationFilter")}}" method="get">
-                                    <div class="col-md-4">
+                                <form  class="form-row mt-3" action="{{Route("getLocationFilter")}}" method="get">
+                                    <div class="col-md">
+                                        <select name="project_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                            <option disabled > انتخاب پروژه </option>
+                                            @foreach($GetProjectList as $GetProject)
+                                                @if($GetProject['project_id'] == 1 || $GetProject["project_id"] == request("project_id") )
+                                                    <option selected value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                                @else
+                                                    <option value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                                @endif
+
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md">
                                         <select name="province_id" id="province_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب استان">
-                                            <option value="0" >همه</option>
+                                            <option value="" >همه</option>
                                             @foreach($province as $item )
                                                 @if(request('province_id') ==  $item['id'])
                                                     <option selected value="{{$item['id']}}"> {{$item['province_name']}}</option>
@@ -72,10 +85,10 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <select name="city_id" id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
                                             <option disabled selected> انتخاب شهر </option>
-                                            <option value="2"> همه </option>
+                                            <option value=""> همه </option>
                                         </select>
                                     </div>
                                     <div class="col-md-auto ml-auto">
@@ -124,7 +137,7 @@
                                     @endphp
                                     @if(count($locations) <=0)
                                         <tr>
-                                            <td colspan="8">
+                                            <td colspan="9">
                                             <h6 class="text-center py-5"> اطلاعات مکانی وجود ندارد.  </h6>
                                             </td>
                                         </tr>
@@ -810,7 +823,7 @@
 
             $('#province_filter').change(function () {
                 var province_id = $('#province_filter').val();
-                $('#loader').css('display' , 'flex');
+                // $('#loader').css('display' , 'flex');
                 $.ajax({
                     type:'POST',
                     url:"{{Route('CityList')}}",

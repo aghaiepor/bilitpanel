@@ -41,12 +41,13 @@ class seanceController extends Controller
 
     public function add_group_time(Request $request){
         $service_times = $request->input('service_times');
+//        return $service_times;
         $time_templates = $this->api->AddTimeTemplate(json_decode($service_times,true));
         $time_templates_ids = $time_templates['ContentData']['time_template_ids'];
         $group_name = $request->input('group_name');
         $group_time = $this->api->AddTimeGroup($group_name,$time_templates_ids);
         if($group_time['Header']['Status'] == 0 )
-            return redirect('group_times')->with('success' , "گروه سانس با موفقیت ایجاد شد .");
+            return redirect()->back()->with('success' , "گروه سانس با موفقیت ایجاد شد .");
         else
             return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");
 
