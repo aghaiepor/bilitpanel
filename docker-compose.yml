@@ -17,10 +17,12 @@ services:
   sib-panel-v2-supervisor:
       build:
         context: ./supervisor/.
-      restart: always
+      restart: unless-stopped
+      depends_on:
+      - sib-panel-v2-app
       working_dir: /var/www/
       volumes:
-          - ./sibpanel_v2:/var/www/
+        - ./sibpanel_v2:/var/www/
 
   sib-panel-v2-nginx:
     build:
