@@ -117,7 +117,7 @@
                                     <tbody>
                                     @if(count($VoucherInfo) == 0)
                                         <tr>
-                                            <td colspan="7">
+                                            <td colspan="8">
                                                 <h6 class="py-5 text-center"> بلیتی یافت نشد ! </h6>
                                             </td>
                                         </tr>

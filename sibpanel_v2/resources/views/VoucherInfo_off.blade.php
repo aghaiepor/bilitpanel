@@ -227,11 +227,11 @@
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#activation_date_off , #expiration_date_off').persianDatepicker({
+            $('#activation_date_off , #expiration_date_off  , #edit_activation_date_off , #edit_expiration_date_off ').persianDatepicker({
                 initialValue: true,
                 autoClose : true ,
                 altField: '#inlineExampleAlt',
-                format: 'YYYY/MM/DD hh:mm:ss',
+                format: 'YYYY/MM/DD H:mm:ss',
                 timePicker : {
                     enabled : true
                 } ,
@@ -261,13 +261,14 @@
                 $("#EditOffForm").attr("action" , url);
                 $("#edit_percent").val(data_percent);
                 $("#edit_active").val(data_active);
+                $("#edit_activation_date_off").attr("value" , activation_date);
                 $("#edit_activation_date_off").val(activation_date);
+                $("#edit_expiration_date_off").attr("value" , expiration_date);
                 $("#edit_expiration_date_off").val(expiration_date);
 
                 if(data_description == "null" )
                     data_description=""
                 $("#edit_description").val(data_description);
-
             });
 
             $(document).on( "click" , "input[name=active]" , function () {

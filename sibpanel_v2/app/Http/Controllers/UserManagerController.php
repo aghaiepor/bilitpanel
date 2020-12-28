@@ -292,6 +292,14 @@ class UserManagerController extends Controller
         ];
         return $data ;*/
         $AssignPermission = $this->api->AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id, $switch_web_service_ids);
+        if($AssignPermission["Header"]["Status"] == 0 )
+        {
+            Cache::forget("GetSubUserList");
+            Cache::rememberForever('GetSubUserList' , function (){
+                $data = $this->api->GetSubUserList() ;
+                return $data['ContentData'];
+            });
+        }
         return $AssignPermission;
 
     }

@@ -447,6 +447,7 @@
 
             $("#addUser").click( function (e) {
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
+                let Mobule_pattern = /^[0][9][0-9]+$/ ;
                 let error = 0 ;
                 let addUser_name = $("#addUser_name").val();
                 // let addUser_lastname = $("#addUser_lastname").val();
@@ -493,11 +494,11 @@
                         $("#addUser_password").removeAttr("style");
                         $("#addUser_password").parent().prev().removeAttr("style") ;
                     }
-                    if(addUser_mobile != "" && addUser_mobile.length != 11 ) {
+                    if(addUser_mobile != "" && (addUser_mobile.length != 11 || !addUser_mobile.match(Mobule_pattern) )) {
                         error++;
                         $("#addUser_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#addUser_mobile").parent().prev().css("color" , "#e91e63") ;
-                        errorMessage = " شماره موبایل باید 11 کاراکتر باشد .  ";
+                        errorMessage = " فرمت شماره موبایل وارد شده صحیح نمی باشد  .  ";
                     }
                     else
                     {
@@ -570,6 +571,7 @@
 
             $("#edit_form_btn").click( function (e) {
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
+                let Mobule_pattern = /^[0][9][0-9]+$/ ;
                 let addUser_name = $("#user_first_name").val();
                 let addUser_username = $("#user_username").val();
                 let error = 0 ;
@@ -603,11 +605,11 @@
                         $("#user_username").removeAttr("style");
                         $("#user_username").parent().prev().removeAttr("style") ;
                     }
-                    if(user_mobile != "" && user_mobile.length != 11 ) {
+                    if(user_mobile != "" && (user_mobile.length != 11 || !user_mobile.match(Mobule_pattern) ) ) {
                         error++;
                         $("#user_mobile").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
                         $("#user_mobile").parent().prev().css("color" , "#e91e63") ;
-                        errorMessage = " شماره موبایل باید 11 کاراکتر باشد .  ";
+                        errorMessage = " فرمت شماره موبایل وارد شده صحیح نمی باشد  .  ";
                     }
                     else
                     {

@@ -543,8 +543,7 @@
             }
 
         });
-        $('#FromDate').val("");
-        $('#ToDate').val("");
+
     </script>
     <script>
         $(document).ready(function () {

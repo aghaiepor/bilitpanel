@@ -67,7 +67,7 @@
                                 </h4>
                             </div>
                             <div class="card-body text-center">
-                                <h2>۲۲۹</h2>
+                                <h2>۲۴۲</h2>
                                 <h4>نقطه فعال</h4>
                             </div>
                         </div>

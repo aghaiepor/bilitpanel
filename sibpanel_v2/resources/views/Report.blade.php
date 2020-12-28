@@ -330,7 +330,7 @@
                                                 <th >
                                                     {{ number_format($data['total_count'] , 0 , '.' , ',')}}
                                                 </th>
-                                                <th >
+                                                <th>
                                                     @if(request('reportType') == 1)
                                                         {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @else
@@ -345,12 +345,14 @@
                                                     @endif
                                                 </th>--}}
                                                 <th>
-                                                    مبلغ پرداختی :
+
+                                                    {{--مبلغ پرداختی :
                                                     @if(request('reportType') == 1)
                                                         {{ number_format($data['total_paid_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @else
                                                         {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                     @endif
+                                                    --}}
                                                 </th>
                                             </tr>
 
@@ -419,8 +421,6 @@
                         btnPrevText:'قبلی'
                     }
                 }
-
-
             });
             $('#ToDate').persianDatepicker({
                 initialValue: true,

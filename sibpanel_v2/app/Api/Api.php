@@ -853,13 +853,14 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function location_list($province_id , $city_id , $type=null , $project_id=null){
+    public function location_list($province_id , $city_id , $type=null , $project_id=1){
         $data = [
             "province_id" => $province_id,
             "city_id" => $city_id ,
             "project_id" => $project_id
         ];
         $client = new Client();
+        Log::info("location data => " , $data);
         $result = $client->post($this->url . 'LocationList' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data

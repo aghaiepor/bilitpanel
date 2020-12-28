@@ -543,6 +543,7 @@
                 // console.log("sale_type_id" , sale_type_id);
                 // console.log("sib_user_id" , sib_user_id);
                 // console.log("switch_web_service_ids" , switch_web_service_ids);
+                $("#loader").css("display" , "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('AssignPermission')}}",
@@ -603,9 +604,9 @@
                                 '',
                                 'success'
                             )
-                            setInterval(function () {
+                          /*  setInterval(function () {
                                 window.location.href = "{{Route("UserManager")}}";
-                            } , 1000)
+                            } , 1000)*/
 
                         }
                         else if(data['Header']['Status'] == 2){

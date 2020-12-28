@@ -342,12 +342,14 @@
                                                 {{ number_format($data['total_count'] , 0 , '.' , ',')}}
                                             </th>
                                             <th colspan="4"  class="text-center">
-                                                مجموع پرداختی :
+
+                                                {{--مجموع پرداختی :
                                                 @if(request('reportType') == 1)
                                                     {{ number_format($data['total_paid_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @else
                                                     {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
                                                 @endif
+                                                --}}
                                             </th>
                                           {{--  <th class="text-center" colspan="3">
                                                 جمع بدون تخفیف :
