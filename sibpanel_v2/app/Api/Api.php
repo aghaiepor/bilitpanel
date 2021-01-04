@@ -1721,7 +1721,7 @@ class Api
     public function checkError($response , $type=null)
     {
 
-        if($type == "ajax"){
+        if($from =! 'job' && $type == "ajax"){
             if($response['Header']['MessageCode'] == 141){
                 \App::abort(400);
             }
@@ -1729,7 +1729,7 @@ class Api
         }
 
 
-        if ($response['Header']['MessageCode'] == 141) {
+        if ($from =! 'job' && $response['Header']['MessageCode'] == 141) {
             session()->forget('SessionId');
             session()->forget('UserInfo');
 //            return Redirect::to('login')->with('message', 'your message');
