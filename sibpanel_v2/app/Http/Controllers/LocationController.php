@@ -26,7 +26,8 @@ class LocationController extends Controller
         $province = Cache::get('ProvinceList') ;
         $GetProjectList = Cache::get('ProjectList');
         $GetVoucherText = Cache::get("GetVoucherText");
-        return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList ]);
+        $city_id_list = null ;
+        return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList , "city_id_list"=>$city_id_list ]);
     }
     public function AddLocation(Request $request){
 //        return json_encode($request->all());
