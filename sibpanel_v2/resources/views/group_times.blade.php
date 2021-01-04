@@ -8,6 +8,12 @@
         .bootstrap-select{
             width: 100% !important;
         }
+        .sanasCard{
+            color: #3C4858 !important;
+            font-size: 14pt;
+            font-weight: 400;
+        }
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/seance.css') }}">
 
@@ -27,7 +33,6 @@
                 </button>
             </div>
         @elseif(session('error'))
-
             <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
                 {{ session('error') }}
                 <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
@@ -55,6 +60,72 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-rose titleStyle">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="card-icon float-right ml-3 mr-0">
+                                    <i class="material-icons"> watch_later </i>
+                                </div>
+                                <h4 class="card-title text-right font-weight-bold ">     مدیریت سانس ها </h4>
+                            </div>
+                            <div class="col-sm">
+{{--                                <a href="{{ route('add_group_time_index') }}"  class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </a>--}}
+                                <a href="{{Route("dashboard")}}" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-lg-3">
+                            <div class="card card-pricing bg-light"><div class="card-body ">
+                                    <div class="card-icon">
+                                        <i class="material-icons">event_note</i>
+                                    </div>
+                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
+                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round "> مشاهده</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card card-pricing bg-light">
+                                <div class="card-body ">
+                                    <div class="card-icon">
+                                        <i class="material-icons">event_note</i>
+                                    </div>
+                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
+                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round"> مشاهده</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card card-pricing bg-light"><div class="card-body ">
+                                    <div class="card-icon">
+                                        <i class="material-icons">event_note</i>
+                                    </div>
+                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
+                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round"> مشاهده</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card card-pricing bg-light"><div class="card-body ">
+                                    <div class="card-icon">
+                                        <i class="material-icons">event_note</i>
+                                    </div>
+                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
+                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round"> مشاهده</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {{--      old      --}}
+            {{--<div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header card-header-icon card-header-rose titleStyle">
@@ -127,13 +198,156 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>--}}
         </div>
     </div>
+            <div class="modal fade" id="showSanas" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <form method="post" action="">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title " id="testLabel"> سانس ها  </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
 
+                                <table class="table table-striped text-center">
+                                    <thead class="text-primary">
+                                    <tr>
+                                        <th>
+                                            سانس
+                                        </th>
+                                        <th>
+                                            تاریخ
+                                        </th>
+                                        <th>
+                                            زمان شروع
+                                        </th>
+                                        <th>
+                                            زمان پایان
+                                        </th>
+                                        <th>
+                                            شماره بلیت
+                                        </th>
+                                        <th>
+                                            ويرايش
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                           شماره یک
+                                        </td>
+                                        <td>
+                                           1399/01/01
+                                        </td>
+                                        <td>
+                                            9:00
+                                        </td>
+                                        <td>
+                                            10:00
+                                        </td>
+                                        <td>
+                                           23
+                                        </td>
+                                        <td>
+                                           <button class="btn btn-danger">
+                                               حذف
+                                           </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer mt-4">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                                <button data-toggle="modal" data-target="#sanas" type="button" class="btn px-5 btn-success ml-0 mr-auto"> افزودن سانس هاي ديگر مکان ها </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal fade" id="sanas" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <form method="post" action="">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title " id="testLabel"> افزودن سانس مکان  </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <table class="table table-striped ">
+                                    <thead class="text-primary">
+                                    <tr>
+                                        <th class="text-right">
+                                            نام مکان
+                                        </th>
+                                        <th>
+                                        -
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-right">
+                                            شماره یک
+                                        </td>
+                                        <td class="text-left">
+                                            <button class="btn btn-success">
+                                                <span class="material-icons">add_circle_outline</span>
+                                                افزودن
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right">
+                                            شماره دو
+                                        </td>
+                                        <td class="text-left">
+                                            <button class="btn btn-success">
+                                                <span class="material-icons">add_circle_outline</span>
+                                                افزودن
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right">
+                                            شماره سه
+                                        </td>
+                                        <td class="text-left">
+                                            <button class="btn btn-success">
+                                                <span class="material-icons">add_circle_outline</span>
+                                                افزودن
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer mt-4">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                                <button type="button" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
 @endsection
 @section('AddJs')
-    <script>
+ {{--   <script>
 
         let tagsToReplace = {
             '&': '&amp;',
@@ -150,7 +364,7 @@
         }
 
 
-        let locations = JSON.parse('@json($locations)');
+        --}}{{--let locations = JSON.parse('@json($locations)');--}}{{--
         for (let i =0 ; i<locations.length;i++){
             let obj = locations[i];
             let id = obj['id'];
@@ -476,5 +690,5 @@
             show();
         });
 
-    </script>
+    </script>--}}
 @endsection

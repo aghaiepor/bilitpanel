@@ -102,6 +102,7 @@ class LocationController extends Controller
 
     }
     public function DeleteLocation($id){
+
         $DeleteLocation = $this->api->DeleteLocation($id);
         if ($DeleteLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
@@ -111,8 +112,12 @@ class LocationController extends Controller
             });
             return redirect()->back()->with('success' , ' مکان مورد حذف گردید . ');
         }
+        else if ($DeleteLocation['Header']['MessageCode'] == 133){
+            return redirect()->back()->with('error' , ' شما مجاز به انجام این عملیات نیستید . ');
+        }
         else
-            return json_encode($DeleteLocation);
+            return redirect()->back()->with('error' , ' خطا در حدف مکان . ');
+
     }
 
     public function LocationActivation( Request $request ){
@@ -127,6 +132,9 @@ class LocationController extends Controller
                 return $Locations['ContentData'];
             });
             return  $data = [ 'data' => true ];
+        }
+        else if ($LocationActivation['Header']['MessageCode'] == 133){
+            return  $data = [ 'data' => "Permission Denied" ];
         }
         else
             return $data;
@@ -168,13 +176,20 @@ class LocationController extends Controller
         $project_id = $request->get("project_id");
         $city_id = $request->get("city_id");
         $province_id = $request->get("province_id");
+
         $locations = $this->api->location_list( $province_id , $city_id , null ,$project_id);
         $province = Cache::get('ProvinceList') ;
         $GetVoucherText = Cache::get("GetVoucherText");
         $GetProjectList = Cache::get('ProjectList');
-//        return $locations;
+        if(is_null($province_id))
+            $city_id_list = null ;
+        else{
+            $city_id_list = $this->api->CityList($province_id , null ) ;
+            $city_id_list = $city_id_list["ContentData"] ;
+        }
+//        return $city_id_list;
 
-        return view('places' , ['locations' => $locations['ContentData'], 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList" => $GetProjectList ]);
+        return view('places' , ['locations' => $locations['ContentData'], 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList" => $GetProjectList , "city_id_list"=>$city_id_list ]);
     }
 
     public function AddLocationOff( Request $request , $id){
@@ -219,6 +234,7 @@ class LocationController extends Controller
     // ******* Service
     public function GetService($id){
         $GetServices = Cache::get('ServiceList');
+//        return $GetServices ;
         $projectList = $this->api->ProjectList();
         $locationID = $id ;
         $GetServices = array_filter($GetServices, function ($event) use ($locationID) {

@@ -78,6 +78,7 @@ class Api
         ) ;
 
         $response = json_decode($result->getBody(),true);
+
         $this->checkError($response , $type);
         return $response;
     }
@@ -87,7 +88,28 @@ class Api
             $data = ['location_id'=>$id];
 
         $client = new Client();
+//        $result = $client->post($this->url . 'ServiceListNew' ,[
         $result = $client->post($this->url . 'ServiceList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+         ) ;
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function AddServiceTime($service_id , $start , $end , $sex  , $voucher_infos ,  $type = null){
+        $data= [
+            "service_id" => $service_id,
+            "start" => $start,
+            "end" => $end,
+            "sex" => $sex,
+            "voucher_infos" => $voucher_infos
+        ];
+
+        $client = new Client();
+        $result = $client->post($this->url . 'AddServiceTime' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
@@ -279,6 +301,22 @@ class Api
         $this->checkError($response);
         return $response;
 
+    }
+
+    public function GetVoucherInfo($voucher_info_id){
+        $data = [
+            "voucher_info_id" => $voucher_info_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetVoucherInfo' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
     }
     public function AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id, $normal_sale){
         $data = [
@@ -838,9 +876,10 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function CityList($province_id , $type=null){
+    public function CityList($province_id  , $type=null , $project_id=1){
         $data = [
             'province_id' => $province_id ,
+            'project_id' => $project_id ,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'CityList' ,[
@@ -849,7 +888,6 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
         $this->checkError($response , $type);
         return $response;
     }
@@ -867,7 +905,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
+        Log::info("CityList => " , $this->getHeader());
         $this->checkError($response , $type);
         return $response;
     }

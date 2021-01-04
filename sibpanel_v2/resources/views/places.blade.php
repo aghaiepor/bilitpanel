@@ -87,8 +87,15 @@
                                     </div>
                                     <div class="col-md">
                                         <select name="city_id" id="cityList_filter" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
-                                            <option disabled selected> انتخاب شهر </option>
-                                            <option value=""> همه </option>
+
+                                            @if(is_null($city_id_list))
+                                                <option selected value=""> همه </option>
+                                                @else
+                                                <option @if(is_null(request("city_id"))) selected @endif value=""> همه </option>
+                                                @foreach($city_id_list as $city_id)
+                                                    <option @if($city_id["id"] == request("city_id")) selected @endif  value="{{$city_id["id"]}}"> {{$city_id["city_name"]}} </option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                     <div class="col-md-auto ml-auto">
@@ -325,9 +332,9 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                    <form action="{{Route('DeleteLocation' , ['id'=> $location['id']])}}" method="post">
+                                                    <form id="DeleteLocationFrom" action="{{Route('DeleteLocation' , ['id'=> $location['id']])}}" method="post">
                                                         @csrf
-                                                        <button style="width: 110px" type="submit" rel="tooltip" class="btn  btn-danger btn-simple">
+                                                        <button  id="DeleteLocationBtn" style="width: 110px" type="submit" class="btn  btn-danger btn-simple">
                                                             <i class="material-icons">close</i>
                                                             حذف
                                                         </button>
@@ -538,8 +545,8 @@
 </div>
 @endsection
 @section('AddJs')
-    <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
-    <script src="../assets/js/plugins/sweetalert2.js"></script>
+    <script src="{{asset('')}}assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="{{asset('')}}assets/js/plugins/sweetalert2.js"></script>
     <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
@@ -571,6 +578,23 @@
                 let url = $(this).attr("data-url");
                 $("#add_off_form").attr("action" , url)
             });
+
+            $(document).on("click" , "#DeleteLocationBtn" , function (e) {
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        $("#DeleteLocationFrom").submit();
+                    }else
+                        e.preventDefault();
+                })
+            })
 
             let top_text ,bottom_text, english_top_text, english_bottom_text  ;
             $('.changeText').change(function () {
@@ -647,9 +671,12 @@
             });
 
             let pro_id = "{{request('province_id')}} ";
+            let city_id = "{{request('city_id')}} ";
+/*
             if(pro_id != ''){
                 var province_id = pro_id;
                 // $('#loader').css('display' , 'flex');
+
                 $.ajax({
                     type:'POST',
                     url:"{{Route('CityList')}}",
@@ -696,17 +723,24 @@
                     success:function(data) {
                         $("#cityList_filter").html('');
                         $("#cityList_filter").append(new Option( 'همه' , '',true));
+
+                        console.log("pro_id => "  , city_id )
+
                         for(var i = 0 ; i < data.data.length ; i++){
-                            if (data.data[i].id == pro_id){
+                            console.log("data.data[i].id =>" , data.data[i].id)
+                            if (data.data[i].id == city_id){
+                                $("#cityList_filter").find("option").attr('selected' , false);
                                 $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id , true));
                             }else
                                 $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id));
                         }
-                        $('.selectpicker').selectpicker('refresh');
+
                         // $('#loader').hide();
+                        $('.selectpicker').selectpicker('refresh');
                     }
+
                 });
-            }
+            }*/
 
             $('#province').change(function () {
                 var province_id = $('#province').val();
@@ -763,6 +797,7 @@
                     }
                 });
             });
+
             $('#voucherText').change(function () {
                     var voucherText = $('#voucherText').val();
                     $.ajax({
@@ -939,12 +974,32 @@
                                 }
                             },
                             success:function(data) {
+                                console.log(data)
                                 $('#loader').hide();
-                                Swal.fire(
-                                    'تغییر مورد نظر اعمال گردید',
-                                    '',
-                                    'success'
-                                )
+                                if(data.data)
+                                {
+                                    Swal.fire(
+                                        'تغییر مورد نظر اعمال گردید',
+                                        '',
+                                        'success'
+                                    )
+                                }
+                                else if (data.data == "Permission Denied") {
+                                    Swal.fire(
+                                        'شما مجاز به انجام اين عمليات نمي باشيد ',
+                                        '',
+                                        'warning'
+                                    )
+                                }else
+                                {
+                                    Swal.fire(
+                                        'خطا در اعمال تغيير ',
+                                        '',
+                                        'error'
+                                    )
+                                }
+
+
                             }
                         });
 

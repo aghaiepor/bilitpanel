@@ -87,32 +87,32 @@
                             <div class="table-responsive table-striped">
                                 <table class="table text-center">
                                     <thead class=" text-primary">
-                                    <tr class="">
-                                        <th >
-                                            مبلغ
-                                        </th>
-                                        <th >
-                                            ظرفیت کل
-                                        </th>
-                                        <th >
-                                            ظرفیت باقی مانده
-                                        </th>
-                                        <th >
-                                           حداکثر تخفیف
-                                        </th>
-                                        <th >
-                                            نوع بلیت
-                                        </th>
-                                        <th >
-                                            عکس بلیت
-                                        </th>
-                                        <th >
-                                            تخفيف
-                                        </th>
-                                        <th >
-                                            ویرایش
-                                        </th>
-                                    </tr>
+                                        <tr class="">
+                                            <th >
+                                                مبلغ
+                                            </th>
+                                            <th >
+                                                ظرفیت کل
+                                            </th>
+                                            <th >
+                                                ظرفیت باقی مانده
+                                            </th>
+                                            <th >
+                                               حداکثر تخفیف
+                                            </th>
+                                            <th >
+                                                نوع بلیت
+                                            </th>
+                                            <th >
+                                                عکس بلیت
+                                            </th>
+                                            <th >
+                                                تخفيف
+                                            </th>
+                                            <th >
+                                                ویرایش
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     @if(count($VoucherInfo) == 0)
@@ -617,12 +617,12 @@
                 $('#Edit_exprieMode').find("option[value="+ Edit_exprieMode + "]").attr('selected' , true);
                 $('#edit_timetype').find("option").attr('selected' , false);
                 $('#edit_timetype').find("option[value="+ edit_validity_period + "]").attr('selected' , true);
-                console.log("voucher_type_id =>" , edit_voucher_type);
+                // console.log("voucher_type_id =>" , edit_voucher_type);
                 $('#edit_voucher_type').find("option").attr('selected' , false);
                 let edit_voucher_type_value = $("#edit_voucher_type option").filter(function() {
                     return $(this).text() === edit_voucher_type;
                 }).val();
-                console.log("edit_voucher_type_value => " , edit_voucher_type_value)
+                // console.log("edit_voucher_type_value => " , edit_voucher_type_value)
                 $('#edit_voucher_type').find("option[value="+ edit_voucher_type_value + "]").attr('selected' , true);
                 $("#edit_validity_period").val(validity_period);
                 $("#Edit_expiration_date").val(expiration_date);
@@ -656,6 +656,7 @@
                     $("#timetype").show();
                 }
             });
+
             // for show image and id on modal
             $(".citzen_main_img").click(function () {
                 let src = $(this).attr("src") ;
