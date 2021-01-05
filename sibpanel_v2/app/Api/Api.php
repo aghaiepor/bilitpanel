@@ -367,6 +367,7 @@ class Api
         $data = [
             "service_id" => $service_id,
         ];
+        Log::info("DeleteService => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'DeleteService' ,[
                 'headers'=>$this->getHeader(),
@@ -384,6 +385,7 @@ class Api
             "service_id" => $service_id,
             "service_activation"=> $service_activation,
         ];
+        Log::info("erviceActivation" , $data);
         $client = new Client();
         $result = $client->post($this->url . 'ServiceActivation' ,[
                 'headers'=>$this->getHeader(),

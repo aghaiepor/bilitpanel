@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\Api;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class seanceController extends Controller
 {
@@ -14,9 +15,10 @@ class seanceController extends Controller
     }
 
     public function group_times(){
-        $GetTimeGroup = $this->api->GetTimeGroup();
-        $AllLocationServices = $this->api->AllLocationServiceList();
-        return view('group_times' , ['locations'=>$AllLocationServices,'result_data' => $GetTimeGroup['ContentData']] );
+//        $GetTimeGroup = $this->api->GetTimeGroup();
+//        $AllLocationServices = $this->api->AllLocationServiceList();
+//        return view('group_times' , ['locations'=>$AllLocationServices,'result_data' => $GetTimeGroup['ContentData']] );
+        return view('group_times' );
     }
 
     public function edit_time_group(Request $request){
@@ -35,13 +37,43 @@ class seanceController extends Controller
 
 
     // new group time
-    public function add_group_time_index(){
-        return view('group_time_add');
+    public function add_group_time_index($service_id , $location_id){
+        $VoucherTypeList = Cache::get('VoucherTypeList');
+//        return $VoucherTypeList ;
+        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  ]);
     }
 
     public function add_group_time(Request $request){
-        $service_times = $request->input('service_times');
+//        return $request->get("service_times");
+        $service_id = $request->get("serviceId");
+        $service_times = $request->input('service_times') ;
+        $service_times = json_decode($service_times) ;
+        $service_times =   json_encode($service_times) ;
+        return  $service_times[10] ;
+        foreach($service_times as $service_time)
+        {
+            $start = $service_time["time"][0]["start"] ;
+            $end = $service_time["time"][0]["end"] ;
+            $sex = $service_time["time"][0]["sex"] ;
+            $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
+            $voucher_infos = explode(",",$voucher_infos);
+            $vouchers = [] ;
+            foreach ($voucher_infos as $voucher_info)
+            {
+                $voucher_info = $this->api->GetVoucherInfo($voucher_info) ;
+                array_push($vouchers  , $voucher_info );
+
+            }
+            break;
+//            $AddServiceTime = $this->api->AddServiceTime($service_id , $start , $end , $sex  , $voucher_infos);
+        }
+
+        return $vouchers ;
 //        return $service_times;
+
+
+
+
         $time_templates = $this->api->AddTimeTemplate(json_decode($service_times,true));
         $time_templates_ids = $time_templates['ContentData']['time_template_ids'];
         $group_name = $request->input('group_name');

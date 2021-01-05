@@ -28,6 +28,9 @@
         .datepicker-plot-area .datepicker-day-view .table-days td div:hover{
             background-color: #ececec !important;
         }
+        .sanseBtn:hover{
+            background: #FFC107 !important;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
@@ -36,8 +39,6 @@
 @endsection
 
 @section('content')
-<div class="content">
-
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -68,7 +69,7 @@
                                     <h4 class="card-title text-right font-weight-bold ">  مدیریت سانس ها </h4>
                                 </div>
                                 <div class="col-sm">
-{{--                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
+{{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
                                     <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
@@ -77,41 +78,36 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md">
-                                    <form method="post" id="form" enctype="multipart/form-data">
+                                    <form action="{{Route("add_group_time")}}" method="post" id="form" enctype="multipart/form-data">
+                                        @csrf
                                         <div class="form-row">
                                             <div class="col-md-4 ml-auto text-right">
                                                 <label for="group_name">نام گروه سانس</label>
                                                 <input type="text" class="form-control" id="group_name" name="group_name"
                                                        placeholder="نام گروه سانس">
                                             </div>
-                                            <div class="col-md-4 text-right">
-                                                <label for="group_name"> &nbsp; </label>
-                                                    <select name="model_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
-                                                        <option disabled selected> روزانه </option>
-                                                        <option value="1">هفتگی</option>
-                                                        <option value="3">ماهانه</option>
-                                                    </select>
-                                            </div>
-                                            <input type="hidden" name="serviceId" value="">
+                                            <input type="hidden" name="serviceId" value="{{$id}}">
                                             <input type="hidden" id="service_times" name="service_times" value="">
                                             <div class="col-md-offset-4 col-md-4 col-md-offset-4" style="margin-top:50px;">
                                                 <img id='img-upload' style="max-width:100%;"/>
                                             </div>
-                                            </div>
-                                            @csrf
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-                        {{--   capecity and ...   --}}
+
+                                </div>
+                            {{--   capecity and ...   --}}
                             <div class="row">
-                                <div style="padding: 10px;overflow:hidden">
-                                    <button class="btn btn-primary float-right btn-sm" onclick="selectAll()">انتخاب همه</button>
-                                    <button class="btn btn-danger float-right mr-2 btn-sm" onclick="deselctAll()">لغو انتخاب ها</button>
+                                <div class="col-md-12">
+                                    <div style="padding: 10px;overflow:hidden">
+                                        <button class="btn btn-primary float-right btn-sm" onclick="selectAll()">انتخاب همه</button>
+                                        <button class="btn btn-danger float-right mr-2 btn-sm" onclick="deselctAll()">لغو انتخاب ها</button>
+                                        <button class="btn btn-success mr-atuo btn-sm" data-toggle="modal" data-target="#test"> افزودن سانس </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row" id="div_seance" style="display: none">
-                                <div class="col-lg-8 panel panel-default">
+                                <div class="col-lg panel panel-default">
                                     <div class="panel-body" style="font-family: iransans !important;">
                                         <div class="form-group">
                                             <div id="inline2">
@@ -120,12 +116,13 @@
                                     </div>
                                     <button onclick="removeTime()" class="btn btn-sm btn-danger " style="margin-top: 10px">حذف انتخاب شده
                                     </button>
-                                    <button onclick="setTime()" class="btn btn-sm btn-primary" style="margin-top: 10px">اعمال</button>
+{{--                                    <button onclick="setTime()" class="btn btn-sm btn-primary" style="margin-top: 10px">اعمال</button>--}}
                                     <div class="col-md text-right" style="margin-top: 35px;margin-bottom: 10px">
                                         <button onclick="submit()" class="btn btn-success c-font-bold btn-lg">تایید نهایی و اعمال تغییرات</button>
                                     </div>
                                 </div>
-                                <div class="col-lg-4" style="margin-top: 30px">
+{{--                                <div class="col-lg-4" style="margin-top: 30px">--}}
+                                    {{--
                                     <div class="col-md-5 mr-3 text-center pull-right"
                                          style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                         <div class="row justify-content-center">
@@ -147,9 +144,7 @@
                                                     style=";margin-left: 4px"><i class="fa fa-chevron-down"></i></button>
                                             <button onclick="changeHour('start_hour','minus')" class="btn btn-primary btn-time"
                                                     style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
-
                                         </div>
-
                                     </div>
                                     <div class="col-md-5 mr-3 text-center pull-right"
                                          style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
@@ -161,7 +156,6 @@
                                                     style="margin-left: 4px"><i class="fa fa-chevron-up"></i></button>
                                             <button onclick="changeHour('end_hour','add')" class="btn btn-primary btn-time"
                                                     style="margin-right: 4px"><i class="fa fa-chevron-up"></i></button>
-
                                         </div>
                                         <div class="row justify-content-center time-select" style="margin-top: 4px;margin-bottom: 4px">
                                             <input id="end_minute" value="00" disabled>
@@ -178,12 +172,27 @@
 
                                     </div>
                                     <div class="col-lg-12  pull-right" style="margin-top: 20px">
+
                                         <div class="form-row text-right">
                                             <div class="col">
-                                                <label for=""> ظرفیت </label>
-                                                <input class="form-control" id="seance_capacity"
-                                                       style="text-align: center;width: 100%;height: 40px;border: 2px solid #2d2d2d" placeholder="ظرفیت" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                                                <label class="w-100" for=""> نوع بليت
+                                                </label>
+                                                @php
+                                                    $VoucherList = [];
+                                                @endphp
+                                                <select id="vouchers" name="vouchers" class="selectpicker" data-style="btn btn-primary border-dark" title="بلیت">
+                                                    @foreach($VoucherTypeList as $VoucherType)
+                                                        @php
+                                                            array_push($VoucherList , ["VoucherInfo_id" => $VoucherType["voucher_type_id"] , "voucher_type_name" => $VoucherType["voucher_type"]]);
+                                                        @endphp
+                                                        <option value="{{$VoucherType["voucher_type_id"] .  "-" . $VoucherType["voucher_type"] }}">
+                                                            {{$VoucherType["voucher_type"]}}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
+
+
                                             <div class="col">
                                                 <label for=""> جنسیت </label>
                                                 <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
@@ -194,23 +203,37 @@
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <button onclick="addSeance()" class="btn btn-info float-right" style="margin-top: 10px">
-                                            اضافه
-                                            کردن سانس
-                                        </button>
-                                        <button onclick="removeAllSeance()" class="btn btn-danger float-right"
-                                                style="margin-top: 10px">حذف همه سانس ها
-                                        </button>
+                                        <div class="form-row text-right mt-2">
+                                            <div class="col text-right">
+                                                <label class="w-100" for=""> ظرفيت</label>
+                                                <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
+                                            </div>
+                                            <div class="col">
+                                                <label class="w-100" for=""> مقدار</label>
+                                                <input type="text" name="cap" class="form-control" placeholder="مقدار">
+                                            </div>
+                                            <div class="col">
+                                                <label class="w-100" for=""> حداکثر تخفيف</label>
+                                                <input type="text" name="cap" class="form-control" placeholder="حداکثر تخفيف">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col text-right">
+                                                <button onclick="addSeance()" class="btn btn-info mt-3">اضافه کردن سانس</button>
+                                                <button onclick="removeAllSeance()" class="btn btn-danger mt-3">حذف همه سانس ها</button>
+                                            </div>
+                                        </div>
+                                        <hr>
                                     </div>
-                                    <div class="row">
+                                    --}}
+                                  {{--  <div class="row">
                                         <div class="col-md-12">
                                             <div id="seances" class="col-lg-12"></div>
                                         </div>
-                                    </div>
-                                </div>
-
+                                    </div>--}}
+{{--                                </div>--}}
                             </div>
+                        </div>
 
                             <div class="clearfix"></div>
                         </div>
@@ -218,13 +241,177 @@
                 </div>
             </div>
         </div>
+
+    <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form method="post" action="">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="testLabel"> افزودن سانس </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt-3">
+                            <div class="col-lg  pull-right" style="margin-top: 20px">
+                                <div class="form-row text-right">
+                                    <div class="col">
+                                        <label class="w-100" for=""> نوع بليت
+                                        </label>
+                                        @php
+                                            $VoucherList = [];
+                                        @endphp
+                                        <select id="vouchers" name="vouchers" class="selectpicker" data-style="btn btn-primary border-dark" title="بلیت">
+                                            @foreach($VoucherTypeList as $VoucherType)
+                                                @php
+                                                    array_push($VoucherList , ["VoucherInfo_id" => $VoucherType["voucher_type_id"] , "voucher_type_name" => $VoucherType["voucher_type"]]);
+                                                @endphp
+                                                <option value="{{$VoucherType["voucher_type_id"] .  "-" . $VoucherType["voucher_type"] }}">
+                                                    {{$VoucherType["voucher_type"]}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for=""> جنسیت </label>
+                                        <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                            <option selected value="dont_care">  همه </option>
+                                            <option value="male" > مردانه </option>
+                                            <option value="female" > زنانه </option>
+                                            <option value="single_sex">  تک جنسیتی </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row text-right mt-2">
+                                    <div class="col text-right">
+                                        <label class="w-100" for=""> ظرفيت</label>
+                                        <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
+                                    </div>
+                                    <div class="col">
+                                        <label class="w-100" for=""> مقدار</label>
+                                        <input type="text" id="amount" name="amount" class="form-control" placeholder="مقدار">
+                                    </div>
+                                    <div class="col">
+                                        <label class="w-100" for=""> حداکثر تخفيف</label>
+                                        <input type="text" id="max_persent" name="max_persent" class="form-control" placeholder="حداکثر تخفيف">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg row">
+                                <div class="col-md text-center pull-right"
+                                     style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
+                                    <div class="row justify-content-center">
+                                        <span style="font-size: 16px">ساعت شروع</span>
+                                    </div>
+                                    <div class="row justify-content-center time-select" style="margin-top: 10px">
+                                        <button type="button" onclick="changeMin('start_minute','add')" class="btn btn-primary btn-time"
+                                                style="margin-left: 4px"><i class="fa fa-chevron-up"></i></button>
+                                        <button type="button" onclick="changeHour('start_hour','add')" class="btn btn-primary btn-time"
+                                                style="margin-right: 4px"><i class="fa fa-chevron-up"></i></button>
+                                    </div>
+                                    <div class="row justify-content-center time-select" style="margin-top: 4px;margin-bottom: 4px">
+                                        <input id="start_minute" value="00" disabled>
+                                        <span style="font-size: 20px">:</span>
+                                        <input id="start_hour" value="8" disabled>
+                                    </div>
+                                    <div class="row justify-content-center time-select">
+                                        <button type="button" onclick="changeMin('start_minute','minus')" class="btn btn-primary btn-time"
+                                                style=";margin-left: 4px"><i class="fa fa-chevron-down"></i></button>
+                                        <button type="button" onclick="changeHour('start_hour','minus')" class="btn btn-primary btn-time"
+                                                style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-md mx-3 text-center pull-right"
+                                     style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
+                                    <div class="row justify-content-center">
+                                        <span style="font-size: 16px">ساعت پایان</span>
+                                    </div>
+                                    <div class="row justify-content-center time-select" style="margin-top: 10px">
+                                        <button type="button" onclick="changeMin('end_minute','add')" class="btn btn-primary btn-time"
+                                                style="margin-left: 4px"><i class="fa fa-chevron-up"></i></button>
+                                        <button type="button" onclick="changeHour('end_hour','add')" class="btn btn-primary btn-time"
+                                                style="margin-right: 4px"><i class="fa fa-chevron-up"></i></button>
+                                    </div>
+                                    <div class="row justify-content-center time-select" style="margin-top: 4px;margin-bottom: 4px">
+                                        <input id="end_minute" value="00" disabled>
+                                        <span style="font-size: 20px">:</span>
+                                        <input id="end_hour" value="9" disabled>
+                                    </div>
+                                    <div class="row justify-content-center time-select">
+                                        <button type="button" onclick="changeMin('end_minute','minus')" class="btn btn-primary btn-time"
+                                                style=";margin-left: 4px"><i class="fa fa-chevron-down"></i></button>
+                                        <button type="button" onclick="changeHour('end_hour','minus')" class="btn btn-primary btn-time"
+                                                style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 text-right">
+                                <button type="button" onclick="addSeance()" class="btn btn-sm btn-success mt-3 ">اضافه کردن سانس<div class="ripple-container"></div></button>
+                                <button type="button" onclick="removeAllSeance()" class="btn btn-sm btn-danger float-left mt-3">حذف همه سانس ها</button>
+                            </div>
+                        </div>
+                        <hr class="my-1">
+                        <div class="row">
+                            <div class="col-md">
+                                <div  class="col-lg-12 px-0">
+                                    <table class="table table-striped text-center" id="SansaTable">
+                                        <thead class="text-primary">
+                                        <tr>
+
+                                            <th>
+                                                زمان شروع
+                                            </th>
+                                            <th>
+                                                زمان پایان
+                                            </th>
+                                            <th>
+                                                ظرفیت
+                                            </th>
+                                            <th>
+                                                نوع بلیت
+                                            </th>
+                                            <th>
+                                                جنسیت
+                                            </th>
+                                            <th>
+                                                مقدار
+                                            </th>
+                                            <th>
+                                                درصد تخفیف
+                                            </th>
+                                            <th>
+                                               حذف
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="seances">
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> اعمال کامل </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
     </div>
-</div>
+
 
 @endsection
 @section('AddJs')
 
-    <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script src="{{asset("")}}assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
     <script src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
 
@@ -233,8 +420,32 @@
 
         let selectedDays = [];
         let serviceTimes = [];
+        /*$(document).on('click', ".table-days tr td" ,  function (e) {
+            console.log("clicked !! " , $(this).attr("data-date"))
+            $('#test').modal('show')
+        });*/
+
+
+        $("#expire_date").hide();
+        $("#exprieMode").change(function () {
+            let value = $(this).val() ;
+            console.log(value);
+            if(value == "date"){
+                $("#expire_date").show();
+                $("#expire_time").hide();
+                $("#timetype").hide();
+            }
+            else{
+                $("#expire_date").hide();
+                $("#expire_time").show();
+                $("#timetype").show();
+            }
+        });
 
         $(document).ready(function () {
+            $(".optgroup-2 .opt").click(function () {
+                console.log(" clicked ! ")
+            });
 
             $("#inline2").persianDatepicker({
                 calendar: {
@@ -324,6 +535,11 @@
 
         });
 
+
+        $('#test').on('hidden.bs.modal', function () {
+            deselctAll()
+        })
+
         $(document).on('click', '.dt-selected', function () {
 
             $(this).attr('class', 'dt-deselected');
@@ -331,6 +547,7 @@
             let index = selectedDays.indexOf(id);
             if(index != -1)
                 selectedDays.splice(index, 1);
+
 
         });
 
@@ -342,15 +559,16 @@
 
                 if(!otherMonth){
                     if (selectedDays.includes(id)){
-
                         $(this).attr('class', 'dt-selected');
                         $(this).attr('id', id);
-
                     }
-
                     let timesLength = getTimesLength(id);
-                    if (timesLength !=-1)
-                        $(this).find('.seance').text('سانس ها: ' + timesLength);
+                    // console.log("serviceTimes => " , serviceTimes);
+
+                    if (timesLength !=-1){
+                        let html = '<a data-toggle="modal" data-target="#test"  class="px-2 rounded sanseBtn" style="background: #FFEB3B"> سانس ها :  '+ timesLength+'</a>';
+                        $(this).find('.seance').html(html);
+                    }
 
                 }
 
@@ -364,28 +582,110 @@
                 }
 
                 let timesLength = getTimesLength(id);
-                if (timesLength !=-1)
-                    $(this).find('.seance').text('سانس ها: ' + timesLength);
+                if (timesLength !=-1){
+                    let html = '<a data-toggle="modal" data-target="#test" class="px-2 rounded sanseBtn" style="background: #FFEB3B"> سانس ها :  '+ timesLength+'</a>';
+                    $(this).find('.seance').html(html);
+                }
 
             });
 
 
         }
 
+        $(document).on("click" , ".sanseBtn" , function () {
+            let sansId = $(this).parent().parent().parent().attr("data-date").replace(/,/g, '-');
+            console.log("id ==> " , sansId)
+            console.log("serviceTimes ==> " , serviceTimes)
+            let sanas = [] ;
+            for(let i = 0 ; i < serviceTimes.length ; i++){
+                if( serviceTimes[i]["day"]== sansId ) {
+                    sanas.push(serviceTimes[i]) ;
+                }
+            }
+            showSans(sanas);
+            // console.log("sanas => " , sanas);
+        })
 
+        function showSans(sanas) {
+            $("#seances").html("");
+            let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
+            let start_Sanse ;
+            let end_Sanse ;
+            let capacity_Sanse ;
+            let vouchertyppe_Sanse ;
+            let sex ;
+            let amount_Sanse ;
+            let percent ;
+            let remove  ;
+
+            for(let i = 0 ; i < sanas.length ; i++ ){
+                let data = sanas[i].times ;
+
+                for(let j = 0 ; j < data.length ; j++ ){
+                    let row = table.insertRow();
+                    // seance_date = row.insertCell();
+                    start_Sanse = row.insertCell();
+                    end_Sanse = row.insertCell();
+                    capacity_Sanse = row.insertCell();
+                    vouchertyppe_Sanse = row.insertCell();
+                    sex = row.insertCell();
+                    amount_Sanse = row.insertCell();
+                    percent = row.insertCell();
+                    remove = row.insertCell();
+
+                    // seance_date.innerHTML = "2020-12-12" ;
+                    // seance_date.setAttribute("value", "2020-12-12") ;
+                    // seance_date.setAttribute("class", "d-none") ;
+
+                    start_Sanse.innerHTML = data[j].start ;
+                    start_Sanse.setAttribute("value", data[j].start) ;
+                    start_Sanse.setAttribute("class", "seance_start") ;
+
+                    end_Sanse.innerHTML = data[j].end ;
+                    end_Sanse.setAttribute("value", data[j].end) ;
+                    end_Sanse.setAttribute("class", "seance_end");
+
+                    capacity_Sanse.innerHTML = data[j].capacity ;
+                    capacity_Sanse.setAttribute("value", data[j].capacity) ;
+                    capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
+                    vouchertyppe_Sanse.innerHTML =  data[j].vouchersInfo_name;
+                    vouchertyppe_Sanse.setAttribute("value",data[j].vouchersInfo ) ;
+                    vouchertyppe_Sanse.setAttribute("vouchersInfo_name", data[j].vouchersInfo_name) ;
+                    vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
+
+                    sex.innerHTML = data[j].gender ;
+                    sex.setAttribute("gender_name", data[j].gender) ;
+                    sex.setAttribute("value", data[j].gender_value) ;
+                    sex.setAttribute("class", "seance_gender") ;
+
+                    amount_Sanse.innerHTML = data[j].seance_amount ;
+                    amount_Sanse.setAttribute("value", data[j].seance_amount) ;
+                    amount_Sanse.setAttribute("class", "seance_amount") ;
+
+                    percent.innerHTML = data[j].seance_percent ;
+                    percent.setAttribute("value", data[j].seance_percent) ;
+                    percent.setAttribute("class", "seance_percent") ;
+
+                    remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+                }
+                // console.log("sanas =>" ,
+
+
+            }
+        }
 
         function setTime() {
+            $('#test').modal('hide')
             let seances = getAllSeances();
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
                 removeDayIfExists(day);
                 serviceTimes.push({'day':day,'times':seances})
             }
-
+            console.log("selectedDays => " , selectedDays)
             selectedDays = [];
             setSelected();
-
-
             removeAllSeance();
             resetTime();
         }
@@ -416,6 +716,7 @@
             setSelected();
 
         }
+
         function deselctAll() {
             $('.dt-selected').each(function() {
                 let id = $(this).parent().attr("data-date").replace(/,/g, '-');
@@ -439,7 +740,6 @@
 
             return times;
         }
-
         function isOtherMonth(elemnt) {
             let otherMonth = false;
             $(elemnt).children('span').each(function () {
@@ -449,8 +749,6 @@
             });
             return otherMonth;
         }
-
-
         function changeMin(id, type) {
 
             let element = document.getElementById(id);
@@ -462,7 +760,6 @@
             }
 
         }
-
         function changeHour(id, type) {
 
             let element = document.getElementById(id);
@@ -475,12 +772,18 @@
 
         }
 
-
+        let VoucherList = @json($VoucherList) ;
         function addSeance() {
 
             let start = $('#start_hour').val() + ":" + $('#start_minute').val();
             let end = $('#end_hour').val() + ":" + $('#end_minute').val();
             let gender_val = $("select[name='seance_gender']").val();
+            let voucherType = $("#vouchers").val();
+            let capacity = $("#capacity").val();
+            let amount = $("#amount").val();
+            let max_persent = $("#max_persent").val();
+
+
             let gender="";
 
             if(gender_val === 'male')
@@ -492,18 +795,79 @@
             if(gender_val === 'single_sex')
                 gender='تک جنسیتی';
 
-            let capacity = $('#seance_capacity').val();
-            if (capacity === '')
-                capacity = 'نامحدود';
-            let capacity_val = $('#seance_capacity').val();
+            let filteredArray = [];
+            let voucherType_val = voucherType.split("-") ;
+           /* for(let  i = 0 ; i < VoucherList.length ; i++){
+               for  ( let j = 0 ; j < voucherType.length ; j++) {
+                   if (VoucherList[i].VoucherInfo_id == voucherType[j]){
+                       filteredArray.push(VoucherList[i]);
+                       if (filteredArray.length != 1 ) {
+                           capacity_val += "<br> " ;
+                       }
+                       capacity_val += VoucherList[i].voucher_type_name  ;
 
-            $('#seances').append("<div class=\"col-md-3 pull-left seance\" style=\"margin-right: 20px;margin-top:20px;border-radius: 5px;text-align: right;background-color: #ececec;box-shadow: 1px 2px 5px -1px #ccc;padding: 10px;color: black;font-size: 12px\">\n" +
-                "                <div onclick='removeSeance(this)' class=\"delete\" ><i  class=\"fa fa-trash dot\"></i></div>\n" +
-                "                <div class=\"items\"><span class=\"seance_start\" value=" + start + ">شروع: " + start + "</span></div>\n" +
-                "                <div class=\"items\"><span class=\"seance_end\" value=" + end + ">پایان: " + end + "</span></div>\n" +
-                "                <div class=\"items\"><span class=\"seance_capacity\" value=" + capacity_val + ">ظرفیت: " + capacity + "</span></div>\n" +
-                "                <div class=\"items\"><span class=\"seance_gender\" value=" + gender_val + ">جنسیت: " + gender + "</span></div>\n" +
-                "        </div>");
+
+                   }
+               }
+            }*/
+            let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
+
+            let start_Sanse ;
+            let end_Sanse ;
+            let capacity_Sanse ;
+            let vouchertyppe_Sanse ;
+            let sex ;
+            let amount_Sanse ;
+            let percent ;
+            let remove  ;
+
+            let row = table.insertRow();
+
+            // seance_date = row.insertCell();
+            start_Sanse = row.insertCell();
+            end_Sanse = row.insertCell();
+            capacity_Sanse = row.insertCell();
+            vouchertyppe_Sanse = row.insertCell();
+            sex = row.insertCell();
+            amount_Sanse = row.insertCell();
+            percent = row.insertCell();
+            remove = row.insertCell();
+
+            // seance_date.innerHTML = "2020-12-12" ;
+            // seance_date.setAttribute("value", "2020-12-12") ;
+            // seance_date.setAttribute("class", "d-none") ;
+
+            start_Sanse.innerHTML = start ;
+            start_Sanse.setAttribute("value", start) ;
+            start_Sanse.setAttribute("class", "seance_start") ;
+
+            end_Sanse.innerHTML = end ;
+            end_Sanse.setAttribute("value", end) ;
+            end_Sanse.setAttribute("class", "seance_end");
+
+            capacity_Sanse.innerHTML = capacity ;
+            capacity_Sanse.setAttribute("value", capacity) ;
+            capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
+            vouchertyppe_Sanse.innerHTML = voucherType_val[1] ;
+            vouchertyppe_Sanse.setAttribute("value", voucherType_val[0]) ;
+            vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherType_val[1]) ;
+            vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
+
+            sex.innerHTML = gender ;
+            sex.setAttribute("gender_name", gender) ;
+            sex.setAttribute("value", gender_val) ;
+            sex.setAttribute("class", "seance_gender") ;
+
+            amount_Sanse.innerHTML = amount ;
+            amount_Sanse.setAttribute("value", amount) ;
+            amount_Sanse.setAttribute("class", "seance_amount") ;
+
+            percent.innerHTML = max_persent ;
+            percent.setAttribute("value", max_persent) ;
+            percent.setAttribute("class", "seance_percent") ;
+
+            remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
 
 
         }
@@ -514,10 +878,14 @@
             $('#end_hour').val("9");
             $('#end_minute').val("0");
             $('#capacity').val("");
+            $('#amount').val("");
+            $('#max_persent').val("");
+            $('#seance_gender').find("option").attr("selected" , false);
+            $('#seance_gender').selectpicker('refresh');
         }
 
         function removeSeance(element) {
-            let el = $(element).parent();
+            let el = $(element).parent().parent();
             el.animate({opacity: '0'}, 150, function () {
                 el.animate({width: '0'}, 150, function () {
                     el.remove();
@@ -527,9 +895,7 @@
 
         function removeAllSeance() {
             $('#seances').children().each(function () {
-
                 $(this).remove();
-
             });
         }
 
@@ -558,17 +924,29 @@
             let times = [];
 
             $('#seances').children().each(function () {
-
+                // let Date =  $(this).find('.seance_date').attr("value") ;
                 let start = $(this).find('.seance_start').attr("value");
                 let end = $(this).find('.seance_end').attr("value");
                 let capacity = $(this).find('.seance_capacity').attr("value");
-                let gender = $(this).find('.seance_gender').attr("value");
+                let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
+                let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
 
-                times.push({'start': start, 'end': end, 'capacity': capacity,'remain':capacity,'sex':gender});
+                let gender = $(this).find('.seance_gender').attr("gender_name");
+                let gender_value = $(this).find('.seance_gender').attr("value");
+
+                let seance_amount = $(this).find('.seance_amount').attr("value");
+                let seance_percent = $(this).find('.seance_percent').attr("value");
+
+                times.push({'start': start, 'end': end, 'capacity': capacity,
+                    'vouchersInfo': vouchertyppe_Sanse,'vouchersInfo_name': vouchersInfo_id,'remain':capacity,'gender':gender ,
+                    'seance_amount': seance_amount,
+                    'seance_percent': seance_percent,
+                    'gender_value':gender_value ,
+                });
 
             });
 
-            console.log(times);
+            // console.log(times);
             return times;
         }
 
@@ -604,8 +982,6 @@
                         $(this).parent().attr('dt-active',true);
                         $(this).find('.seance').text("سانس ها: "+ times.length)
                     }
-
-
                 });
 
             });

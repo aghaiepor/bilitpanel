@@ -332,9 +332,9 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                    <form id="DeleteLocationFrom" action="{{Route('DeleteLocation' , ['id'=> $location['id']])}}" method="post">
+                                                    <form class="DeleteLocationFrom" action="{{Route('DeleteLocation' , ['id'=> $location['id']])}}" method="post">
                                                         @csrf
-                                                        <button  id="DeleteLocationBtn" style="width: 110px" type="submit" class="btn  btn-danger btn-simple">
+                                                        <button style="width: 110px" type="submit" class="btn  btn-danger btn-simple DeleteLocationBtn">
                                                             <i class="material-icons">close</i>
                                                             حذف
                                                         </button>
@@ -579,7 +579,8 @@
                 $("#add_off_form").attr("action" , url)
             });
 
-            $(document).on("click" , "#DeleteLocationBtn" , function (e) {
+            $(document).on("click" , ".DeleteLocationBtn" , function (e) {
+                e.preventDefault();
                 Swal.fire({
                     title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
                     icon: 'warning',
@@ -590,9 +591,9 @@
                     cancelButtonText: 'خیر' ,
                 }).then((result) => {
                     if (result.value) {
-                        $("#DeleteLocationFrom").submit();
-                    }else
-                        e.preventDefault();
+                        $(this).parent().submit()
+                    }
+
                 })
             })
 
@@ -985,6 +986,11 @@
                                     )
                                 }
                                 else if (data.data == "Permission Denied") {
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
                                     Swal.fire(
                                         'شما مجاز به انجام اين عمليات نمي باشيد ',
                                         '',
@@ -992,14 +998,17 @@
                                     )
                                 }else
                                 {
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
                                     Swal.fire(
                                         'خطا در اعمال تغيير ',
                                         '',
                                         'error'
                                     )
                                 }
-
-
                             }
                         });
 
@@ -1008,6 +1017,7 @@
                             $(this).prop( "checked", false );
                         else
                             $(this).prop( "checked", true );
+
                         $('#loader').hide();
                     }
                 })

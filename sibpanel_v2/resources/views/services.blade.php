@@ -107,7 +107,7 @@
                                         <th >
                                             ظرفیت
                                         </th>
-                                        {{--<th >
+                                      {{--  <th >
                                             سانس
                                         </th>--}}
                                         <th >
@@ -130,7 +130,7 @@
                                     <tbody>
                                     @if(count($array_keys) == 0)
                                         <tr>
-                                            <td colspan="9" >
+                                            <td colspan="11" >
                                                 <h6 class="py-5">
                                                     موردی یافت نشد .
                                                 </h6>
@@ -164,7 +164,7 @@
                                                         {{$GetServices[$array_keys[$i]]['capacity']}}
                                                     @endif
                                                 </td>
-                                               {{-- <td>
+                                                {{--<td>
                                                     <a href="{{Route("add_group_time_index" , ["service_id"  => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id']  ])}}" class="btn off_btn btn-dribbble btn-simple">
                                                       افزودن سانس
                                                     </a>
@@ -232,27 +232,27 @@
                                                                     <div class="form-row mt-3">
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  نام جاذبه </label>
-                                                                            <input value="{{ $GetServices[$array_keys[$i]]['service_name'] }}" name="service_name" type="text" class="form-control" id="nameStateFa" placeholder="نام جاذبه">
+                                                                            <input value="{{ $GetServices[$array_keys[$i]]['service_name'] }}" name="service_name" type="text" class="form-control"  placeholder="نام جاذبه">
                                                                         </div>
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  نام انگلیسی جاذبه </label>
-                                                                            <input value="{{$GetServices[$array_keys[$i]]['english_name']}}" name="service_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام انگلیسی جاذبه">
+                                                                            <input value="{{$GetServices[$array_keys[$i]]['english_name']}}" name="service_english_name" type="text" class="form-control"  placeholder="نام انگلیسی جاذبه">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-4">
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  ظرفیت جاذبه </label>
-                                                                            <input value="{{$GetServices[$array_keys[$i]]['capacity']}}" name="capacity" type="text" class="form-control" id="nameStateEn" placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
+                                                                            <input value="{{$GetServices[$array_keys[$i]]['capacity']}}" name="capacity" type="text" class="form-control"  placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
                                                                         </div>
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  عکس جاذبه </label>
-                                                                            <input type="file" class="form-control" id="nameStateEn" placeholder=" عکس جاذبه">
+                                                                            <input type="file" class="form-control"  placeholder=" عکس جاذبه">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-4">
                                                                         <div class="col-sm text-right">
                                                                             <label for=""> توضیحات </label>
-                                                                            <textarea style="height: 64px !important;" class="form-control" name="description" id="" cols="30" rows="3"> {{$GetServices[$array_keys[$i]]['description']}}</textarea>
+                                                                            <textarea style="height: 64px !important;" class="form-control" name="description" cols="30" rows="3"> {{$GetServices[$array_keys[$i]]['description']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-4">
@@ -286,7 +286,7 @@
                                                     </div>
                                                     <form action="{{Route('DeleteService' , ['service_id' => $GetServices[$array_keys[$i]]['service_id']])}}" method="post">
                                                         @csrf
-                                                        <button type="submit" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
+                                                        <button type="submit" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple ServiceDeleteBtn">
                                                             <i class="material-icons">close</i>
                                                             حدف
                                                         </button>
@@ -368,17 +368,17 @@
                     <div class="form-row mt-3">
                         <div class="col-sm text-right">
                             <label for="">  نام جاذبه </label>
-                            <input name="service_name" type="text" class="form-control" id="nameStateFa" placeholder="نام جاذبه">
+                            <input name="service_name" type="text" class="form-control"  placeholder="نام جاذبه">
                         </div>
                         <div class="col-sm text-right">
                             <label for="">  نام انگلیسی جاذبه </label>
-                            <input name="service_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام انگلیسی جاذبه">
+                            <input name="service_english_name" type="text" class="form-control"  placeholder="نام انگلیسی جاذبه">
                         </div>
                     </div>
                     <div class="form-row mt-4">
                         <div class="col-sm text-right">
                             <label for="">  ظرفیت جاذبه </label>
-                            <input name="capacity" type="text" class="form-control" id="nameStateEn" placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
+                            <input name="capacity" type="text" class="form-control"  placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
                         </div>
                         <div class="col-sm text-right">
                             <label for="">  عکس جاذبه </label>
@@ -388,7 +388,7 @@
                     <div class="form-row mt-4">
                         <div class="col-sm text-right">
                             <label for=""> توضیحات </label>
-                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" id="" cols="30" rows="3"></textarea>
+                            <textarea name="description" style="height: 64px !important;" class="form-control" name="location_address" cols="30" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="form-row mt-4">
@@ -515,6 +515,26 @@
                     }
                 },
             });
+
+            // for DeleteBtn Question
+            $(document).on("click" , ".ServiceDeleteBtn" , function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        $(this).parent().submit()
+                    }
+
+                })
+            })
+
             // get location address
             $(document).on(  "click" ,  ".off_btn"  , function () {
                 let url = $(this).attr("data-url");
@@ -553,64 +573,111 @@
             $('input[name=activation]').change(function () {
                 var service =$(this).attr('data-service') ;
                 var value = ($(this).is(':checked'));
+                console.log("activation clicked !  " )
                 $('#loader').css('display' , 'flex');
-              $.ajax({
-                    type:'POST',
-                    url:"{{Route('ServiceActivation')}}",
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'service' : service ,
-                        'value' : value ,
-                    },
-                  statusCode: {
-                      500: function() {
-                          $("#loader").hide();
-                          Swal.fire(
-                              'خطا در دريافت اطلاعات ! ',
-                              'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                              'error'
-                          )
-                      } ,
-                      400: function() {
-                          let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                          let x = 1 ;
-                          let dots = "";
-                          setInterval(function () {
-                              dots += ".";
-                              x++  ;
-                              // console.log(x)
-                              if(x >= 8 ){
-                                  x = 1 ;
-                                  dots = ".";
-                              }
-                              $("#dots").html(dots)
-                          } , 300)
-                          $("#loader").hide();
-                          Swal.fire(
-                              'نشست  شما پایان یافته است ! ',
-                              html,
-                              'warning' ,
-                          )
-                          setTimeout(function () {
-                              window.location.href = "{{Route("logout")}}";
-                          } , 1500)
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('ServiceActivation')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'service' : service ,
+                                'value' : value ,
+                            },
+                            statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
 
-                      }
-                  },
-                    success:function(data) {
-                        $('#loader').hide();
-                        Swal.fire(
-                            'تغییرات با موفقیت اعمال گردید .',
-                            "" ,
-                            'success' ,
-                        )
-                       /* if(data.data)
-                            alert('true');
+                                }
+                            },
+                            success:function(data) {
+                                $('#loader').hide();
+                                if(data.data)
+                                {
+                                    Swal.fire(
+                                        'تغییرات با موفقیت اعمال گردید .',
+                                        "" ,
+                                        'success' ,
+                                    )
+                                }
+                                else if (data.data == "Permission Denied")
+                                {
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
+                                    Swal.fire(
+                                        'شما مجاز به انجام چنین عملیاتی نیستید .',
+                                        "" ,
+                                        'warning' ,
+                                    )
+                                }
+                                else {
+
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
+                                    Swal.fire(
+                                        'خطا در اعمال تفییرات .',
+                                        "" ,
+                                        'error' ,
+                                    )
+                                }
+                            }
+                        });
+
+                    }else{
+                        if(value)
+                            $(this).prop( "checked", false );
                         else
-                            alert('false')*/
+                            $(this).prop( "checked", true );
+                        $('#loader').hide();
                     }
-                });
+                })
+
+
             });
 
         });

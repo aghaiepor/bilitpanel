@@ -103,8 +103,8 @@ class LocationController extends Controller
 
     }
     public function DeleteLocation($id){
-
         $DeleteLocation = $this->api->DeleteLocation($id);
+//        return $DeleteLocation ;
         if ($DeleteLocation['Header']['MessageCode'] == 0){
             Cache::forget('LocationList');
             Cache::rememberForever('LocationList', function(){
@@ -358,7 +358,11 @@ class LocationController extends Controller
                     });
                     $data = [ 'data' => true ];
                     return $data ;
-                }else
+                }
+                else if ($ServiceActivation['Header']['MessageCode'] == 133){
+                    return  $data = [ 'data' => "Permission Denied" ];
+                }
+                else
                     return $data ;
 //        return $EditService ;
     }
