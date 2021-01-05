@@ -264,7 +264,7 @@
                                                                                 <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Service') selected @endif value="2"> جاذبه مکان</option>
                                                                             </select>
                                                                         </div>
-                                                                        <div class="col-sm text-right">
+                                                                       {{-- <div class="col-sm text-right">
                                                                             <div class="togglebutton text-center">
                                                                                 <label dir="ltr">
                                                                                     <input name="normal_sale" type="checkbox" @if($GetServices[$array_keys[$i]]['normal_sale']) checked @endif>
@@ -272,7 +272,7 @@
                                                                                     شامل سانس
                                                                                 </label>
                                                                             </div>
-                                                                        </div>
+                                                                        </div>--}}
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer mt-4">
@@ -400,7 +400,7 @@
                                 <option value="2"> جاذبه مکان</option>
                             </select>
                         </div>
-                        <div class="col-sm text-right">
+                       {{-- <div class="col-sm text-right">
                             <div class="togglebutton text-center">
                                 <label dir="ltr">
                                     <input name="normal_sale" type="checkbox">
@@ -408,7 +408,7 @@
                                     شامل سانس
                                 </label>
                             </div>
-                        </div>
+                        </div>--}}
                     </div>
                 </div>
                 <div class="modal-footer mt-4">

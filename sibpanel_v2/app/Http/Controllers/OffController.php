@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use Carbon\Carbon;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -76,6 +78,7 @@ class OffController extends Controller
         return $userInfo ;
     }
     public function EditDiscountPolicy(Request $request , $id){
+//        return json_encode($request->all());
         if(is_null($id))
             return redirect()->back();
 
@@ -85,11 +88,25 @@ class OffController extends Controller
         if(is_null($description))
             $description = "";
         $percentage = (int)$request->get("percentage");
-        $EditDiscountPolicy = $this->api->EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage );
+
+        $activation_date = $request->get("activation_date");
+        $activation_date = $this->fa2en($activation_date);
+        $activation_date = Verta::parse($activation_date)->timestamp;
+        $activation_date = Carbon::createFromTimestamp($activation_date)->format('Y-m-d H:i');
+
+        $expiration_date = $request->get("expiration_date") ;
+        $expiration_date = $this->fa2en($expiration_date);
+        $expiration_date = Verta::parse($expiration_date)->timestamp;
+        $expiration_date = Carbon::createFromTimestamp($expiration_date)->format('Y-m-d H:i');
+
+        $EditDiscountPolicy = $this->api->EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage , $activation_date , $expiration_date );
 //        return $EditDiscountPolicy;
         if($EditDiscountPolicy["Header"]["Status"] == 0 ){
             return redirect()->back()->with("success" , " ویرایش تخفیف انجام شد .  ");
-        }else
+        }else if ($EditDiscountPolicy["Header"]["MessageCode"] == 158 ) {
+            return redirect()->back()->with("error" , " خطا : تاریخ نامعتبر است  ! ");
+        }
+        else
             return redirect()->back()->with("error" , " خطا در ویرایش تخفیف ! ");
     }
     public function GetDiscountPolicy(Request $request){
@@ -110,4 +127,7 @@ class OffController extends Controller
 //        $userInfo = $this->api->VoucherTypeList($id , "ajax");
 //        return $userInfo ;
 //    }
+    private function fa2en($number){
+        return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
+    }
 }

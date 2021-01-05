@@ -132,13 +132,13 @@ class LocationController extends Controller
                 $Locations  = $this->api->LocationList();
                 return $Locations['ContentData'];
             });
-            return  $data = [ 'data' => true ];
+//            return  $data = [ 'data' => true ];
         }
-        else if ($LocationActivation['Header']['MessageCode'] == 133){
-            return  $data = [ 'data' => "Permission Denied" ];
-        }
-        else
-            return $data;
+//        else if ($LocationActivation['Header']['MessageCode'] == 133){
+//            return  $data = [ 'data' => "Permission Denied" ];
+//        }
+//        else
+            return $LocationActivation;
     }
     public function PosPrintActivation( Request $request ){
         $data = [ 'data' => false ];
@@ -285,7 +285,7 @@ class LocationController extends Controller
             if ($capacity == 0 )
                 $capacity = "";
             $normal_sale = ($request->get("normal_sale") == 'on') ? 1 : 0 ;
-            $AddService  = $this->api->AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id, $normal_sale);
+            $AddService  = $this->api->AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id);
 //            return $AddService;
             if ($AddService['Header']['Status'] == 0){
                 Cache::forget('ServiceList');
@@ -498,7 +498,7 @@ class LocationController extends Controller
     }
     public function VoucherInfoOff( Request $request , $id){
         $GetDiscountPolicyList = $this->api->GetDiscountPolicyList(0 ,0 ,0 , $id ,0 );
-            return view("VoucherInfo_off" , ["GetDiscountPolicyList" =>$GetDiscountPolicyList["ContentData"] , "id" => $id]);
+        return view("VoucherInfo_off" , ["GetDiscountPolicyList" =>$GetDiscountPolicyList["ContentData"] , "id" => $id]);
     }
     public function AddVoucherPicture(Request $request, $id){
         $location_id = $request->get('location_id');

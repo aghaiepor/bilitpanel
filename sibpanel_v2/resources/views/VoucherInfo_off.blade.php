@@ -231,7 +231,7 @@
                 initialValue: true,
                 autoClose : true ,
                 altField: '#inlineExampleAlt',
-                format: 'YYYY/MM/DD H:mm:ss',
+                format: 'YYYY-MM-DD H:mm:ss',
                 timePicker : {
                     enabled : true
                 } ,
@@ -274,65 +274,131 @@
             $(document).on( "click" , "input[name=active]" , function () {
                 let id = $(this).attr("data-id");
                 // console.log("id => ", id);
-                let data_active =  $(this).is(':checked');
+                var data_active =  $(this).is(':checked');
+                let Element = $(this) ;
                 // console.log(data_active);
                 $("#loader").css("display" , "flex");
-                $.ajax({
-                    type:'POST',
-                    url:"{{Route('DiscountPolicyActivation')}}",
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'id' : id ,
-                        'active' : data_active ,
-                    },
-                    statusCode: {
-                        500: function() {
-                            $("#loader").hide();
-                            Swal.fire(
-                                'خطا در دريافت اطلاعات ! ',
-                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                                'error'
-                            )
-                        } ,
-                        400: function() {
-                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                            let x = 1 ;
-                            let dots = "";
-                            setInterval(function () {
-                                dots += ".";
-                                x++  ;
-                                // console.log(x)
-                                if(x >= 8 ){
-                                    x = 1 ;
-                                    dots = ".";
-                                }
-                                $("#dots").html(dots)
-                            } , 300)
-                            $("#loader").hide();
-                            Swal.fire(
-                                'نشست  شما پایان یافته است ! ',
-                                html,
-                                'warning' ,
-                            )
-                            setTimeout(function () {
-                                window.location.href = "{{Route("logout")}}";
-                            } , 1500)
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('DiscountPolicyActivation')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'id' : id ,
+                                'active' : data_active ,
+                            },
+                            statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
 
-                        }
-                    },
-                    success:function(data) {
-                        $("#loader").hide();
-                        if(data["Header"]["Status"] == 0)
-                        {
-                            Swal.fire(
-                                'تغییرات با موفقیت اعمال گردید .',
-                                "" ,
-                                'success' ,
-                            )
-                        }
+                                }
+                            },
+                            success:function(data) {
+                                $("#loader").hide();
+                                console.log("data =>" , data)
+                                if(data["Header"]["Status"] == 0)
+                                {
+                                    Swal.fire(
+                                        'تغییرات با موفقیت اعمال گردید .',
+                                        "" ,
+                                        'success' ,
+                                    )
+                                }
+                                else if (data["Header"]["MessageCode"] == 133)
+                                {
+                                    if(data_active)
+                                        Element.prop( "checked", false );
+                                    else
+                                        Element.prop( "checked", true );
+
+                                    Swal.fire(
+                                        'شما مجاز به انجام چنین عملیاتی نیستید .',
+                                        "" ,
+                                        'warning' ,
+                                    )
+                                }
+                                else if (data["Header"]["MessageCode"] == 158)
+                                {
+                                    if(data_active)
+                                        Element.prop( "checked", false );
+                                    else
+                                        Element.prop( "checked", true );
+
+                                    Swal.fire(
+                                        'تاریخ نامعتبر است  !',
+                                        "" ,
+                                        'error' ,
+                                    )
+                                }
+                                else
+                                {
+                                    console.log("data_active => " ,data_active)
+                                    if(data_active)
+                                        Element.prop( "checked", false );
+                                    else
+                                        Element.prop( "checked", true );
+
+                                    Swal.fire(
+                                        'خطا در اعمال تغییرات !  ',
+                                        "" ,
+                                        'error' ,
+                                    )
+                                }
+                            }
+                        });
+
                     }
-                });
+                    else{
+                        if(data_active)
+                            Element.prop( "checked", false );
+                        else
+                            Element.prop( "checked", true );
+
+                        $('#loader').hide();
+                    }
+                })
+
+
+
 
             });
         });

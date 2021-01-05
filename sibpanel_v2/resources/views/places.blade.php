@@ -977,7 +977,7 @@
                             success:function(data) {
                                 console.log(data)
                                 $('#loader').hide();
-                                if(data.data)
+                                if(data['Header']['MessageCode'] == 0)
                                 {
                                     Swal.fire(
                                         'تغییر مورد نظر اعمال گردید',
@@ -985,7 +985,7 @@
                                         'success'
                                     )
                                 }
-                                else if (data.data == "Permission Denied") {
+                                else if (data['Header']['MessageCode'] == 133) {
                                     if(value)
                                         $(this).prop( "checked", false );
                                     else
@@ -996,7 +996,32 @@
                                         '',
                                         'warning'
                                     )
-                                }else
+                                }
+                                else if (data['Header']['MessageCode'] == 104) {
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
+                                    Swal.fire(
+                                        'مکان مورد نظر یافت نشد !  ',
+                                        '',
+                                        'warning'
+                                    )
+                                }
+                                else if (data['Header']['MessageCode'] == 5) {
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
+                                    Swal.fire(
+                                        'خطا در اعمال تغيير ',
+                                        '',
+                                        'error'
+                                    )
+                                }
+                                else
                                 {
                                     if(value)
                                         $(this).prop( "checked", false );

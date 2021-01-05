@@ -318,7 +318,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id, $normal_sale){
+    public function AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id){
         $data = [
             "service_name"=> $service_name,
             "service_english_name" => $service_english_name,
@@ -326,7 +326,6 @@ class Api
             "description"=> $description,
             "location_id" => $location_id,
             "capacity" => $capacity,
-            "normal_sale" => $normal_sale
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddService' ,[
@@ -1471,13 +1470,15 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage ,  $type=null)
+    public function EditDiscountPolicy($discount_policy_id ,$active ,$description ,$percentage ,$activation_date ,  $expiration_date, $type=null)
     {
         $data = [
             "discount_policy_id" => $discount_policy_id,
             "active" => $active,
             "description" => $description,
             "percentage" => $percentage ,
+            "activation_date"=> $activation_date ,
+            "expiration_date"=> $expiration_date ,
         ];
         Log::info("EditDiscountPolicy => " , $data);
         $client = new Client();
