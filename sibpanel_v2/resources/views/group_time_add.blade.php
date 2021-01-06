@@ -76,33 +76,14 @@
                             <!-- Modal -->
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md">
-                                    <form action="{{Route("add_group_time")}}" method="post" id="form" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="form-row">
-                                            <div class="col-md-4 ml-auto text-right">
-                                                <label for="group_name">نام گروه سانس</label>
-                                                <input type="text" class="form-control" id="group_name" name="group_name"
-                                                       placeholder="نام گروه سانس">
-                                            </div>
-                                            <input type="hidden" name="serviceId" value="{{$id}}">
-                                            <input type="hidden" id="service_times" name="service_times" value="">
-                                            <div class="col-md-offset-4 col-md-4 col-md-offset-4" style="margin-top:50px;">
-                                                <img id='img-upload' style="max-width:100%;"/>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
 
-                                </div>
                             {{--   capecity and ...   --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div style="padding: 10px;overflow:hidden">
                                         <button class="btn btn-primary float-right btn-sm" onclick="selectAll()">انتخاب همه</button>
                                         <button class="btn btn-danger float-right mr-2 btn-sm" onclick="deselctAll()">لغو انتخاب ها</button>
-                                        <button class="btn btn-success mr-atuo btn-sm" data-toggle="modal" data-target="#test"> افزودن سانس </button>
+                                        <button id="addSans" class="btn btn-success mr-atuo btn-sm" data-toggle="modal" data-target="#test"> افزودن سانس </button>
                                     </div>
                                 </div>
                             </div>
@@ -233,6 +214,25 @@
                                     </div>--}}
 {{--                                </div>--}}
                             </div>
+                            <div class="row">
+                                <div class="col-md">
+                                    <form action="{{Route("add_group_time")}}" method="post" id="form" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-row">
+                                            {{--<div class="col-md-4 ml-auto text-right">
+                                                <label for="group_name">نام گروه سانس</label>
+                                                <input type="text" class="form-control" id="group_name" name="group_name"
+                                                       placeholder="نام گروه سانس">
+                                            </div>--}}
+                                            <input type="hidden" name="serviceId" value="{{$id}}">
+                                            <input type="hidden" id="service_times" name="service_times" value="">
+                                            <div class="col-md-offset-4 col-md-4 col-md-offset-4" style="margin-top:50px;">
+                                                <img id='img-upload' style="max-width:100%;"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
 
                             <div class="clearfix"></div>
@@ -255,7 +255,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row mt-3">
-                            <div class="col-lg  pull-right" style="margin-top: 20px">
+                            <div id="formSans" class="col-lg  pull-right" style="margin-top: 20px">
                                 <div class="form-row text-right">
                                     <div class="col">
                                         <label class="w-100" for=""> نوع بليت
@@ -299,7 +299,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg row">
+                            <div class="col-lg id row">
                                 <div class="col-md text-center pull-right"
                                      style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                     <div class="row justify-content-center">
@@ -426,6 +426,7 @@
         });*/
 
 
+
         $("#expire_date").hide();
         $("#exprieMode").change(function () {
             let value = $(this).val() ;
@@ -514,10 +515,22 @@
             });
         });
 
+        let sizeSelected = 0 ;
+        showAddButten(sizeSelected);
+
+        function showAddButten(sizeSelected)
+        {
+            if(sizeSelected <= 0 )
+                $("#addSans").hide();
+            else
+                $("#addSans").show();
+        }
 
         $(document).on('click', '.dt-deselected', function () {
 
             $(this).attr('class', 'dt-selected');
+            ++sizeSelected;
+            showAddButten(sizeSelected)
             let id = $(this).parent().attr("data-date").replace(/,/g, '-');
             $(this).attr('id', id);
 
@@ -538,11 +551,16 @@
 
         $('#test').on('hidden.bs.modal', function () {
             deselctAll()
+            sizeSelected = 0 ;
+            showAddButten(sizeSelected)
         })
 
         $(document).on('click', '.dt-selected', function () {
 
             $(this).attr('class', 'dt-deselected');
+            --sizeSelected;
+            showAddButten(sizeSelected)
+
             let id =$(this).attr('id');
             let index = selectedDays.indexOf(id);
             if(index != -1)
@@ -569,7 +587,6 @@
                         let html = '<a data-toggle="modal" data-target="#test"  class="px-2 rounded sanseBtn" style="background: #FFEB3B"> سانس ها :  '+ timesLength+'</a>';
                         $(this).find('.seance').html(html);
                     }
-
                 }
 
             });
@@ -674,10 +691,19 @@
 
             }
         }
-
         function setTime() {
-            $('#test').modal('hide')
             let seances = getAllSeances();
+            console.log(seances.length)
+            if(seances.length == 0 )
+            {
+                Swal.fire(
+                    ' خطا ',
+                    ' سانسی اضافه نشده است! ',
+                    'error'
+                )
+                return ;
+            }
+            $('#test').modal('hide')
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
                 removeDayIfExists(day);
@@ -685,11 +711,12 @@
             }
             console.log("selectedDays => " , selectedDays)
             selectedDays = [];
+            sizeSelected = 0 ;
+            showAddButten(sizeSelected)
             setSelected();
             removeAllSeance();
             resetTime();
         }
-
         function removeTime() {
             $('.dt-selected').each(function (event) {
                 $(this).find('.seance').text('');
@@ -699,7 +726,6 @@
                 $(this).parent().attr('dt-active', 'false');
             });
         }
-
         function selectAll() {
 
             $('.dt-deselected').each(function(){
@@ -774,6 +800,47 @@
 
         let VoucherList = @json($VoucherList) ;
         function addSeance() {
+
+            /*if($("#vouchers").val() == ""){
+                console.log("OK !!")
+                return ;
+            }*/
+
+            let NotValid = false;
+            $("#formSans input , #formSans select ").each(function() {
+                var element = $(this);
+
+                if (element.val() == "" && element.attr("id") != "max_persent") {
+
+                    Swal.fire(
+                        ' خطا ',
+                        '  لطفا فيلد هاي مشخص شده را پر نماييد ! ',
+                        'error'
+                    )
+                    element.parent().prev().css("color", "red");
+                    element.addClass("border-danger");
+                    NotValid = true;
+                } else {
+                    element.parent().prev().css("color", "");
+                    element.removeClass("border-danger");
+                }
+            });
+            let FistTime = eval($("#start_hour").val()) * 100 + eval($("#start_minute").val());
+            let EndTime = eval($("#end_hour").val())  * 100 + eval( $("#end_minute").val());
+            // console.log("EndTime => " , EndTime )
+            // console.log("FistTime => " , FistTime )
+            if (FistTime > EndTime){
+                NotValid = true;
+                Swal.fire(
+                    ' خطا ',
+                    'زمان پایان باید بیشتر از زمان شروع باشد . ',
+                    'error'
+                )
+            }
+
+            if(NotValid)
+                return;
+
 
             let start = $('#start_hour').val() + ":" + $('#start_minute').val();
             let end = $('#end_hour').val() + ":" + $('#end_minute').val();
