@@ -37,6 +37,7 @@ class presellController extends Controller
         $GetDechargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
 //        return $GetChargeTransaction;
 //          return $GetDechargeTransaction ;
+//        return $GetDechargeTransaction ;
         if(count($GetDechargeTransaction["ContentData"]) != 0 )
             $total_buy = $GetDechargeTransaction["ContentData"]["total_amount"];
         else
@@ -160,6 +161,7 @@ class presellController extends Controller
             "GetChargeTransactions" => $GetChargeTransactions ,
             "images_url" => $images_url ,
             "total_pages" => $total_pages ,
+            "Header" => $GetChargeTransaction["Header"] ,
         ] ;
         return $data;
     }

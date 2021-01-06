@@ -886,7 +886,7 @@
                     }
                 },
                 success : function (data) {
-                    // console.log("data : " , data);
+                    console.log("data : " , data["Header"]["MessageCode"]);
                     // console.log("page : " , page);
                     let account  = data["GetChargeTransactions"] ;
                     let images = data["images_url"] ;
@@ -938,62 +938,87 @@
                     else
                         $("#pagination").hide();
 
-                    // console.log("total_pages : " , total_pages);
-                    let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
-                    if(account.length == 0 ){
-                        $("#tbody").html(" ");
-                        var row = table.insertRow();
-                        var cell = row.insertCell();
-                        cell.id = "myTd";
-                        cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";
-                        document.getElementById("myTd").colSpan = "6";
-                        $("#loader").hide();
-                    }else {
-                        $("#tbody").html(" ");
-                        let row ;
-                        let transition_amount ;
-                        let date ;
-                        let transaction_type ;
-                        let pigiri_number ;
-                        let discripton ;
-                        let setting ;
-                        for(let i = 0 ; i < account.length ; i++){
-                            row = table.insertRow();
-                            transition_amount = row.insertCell();
-                            date = row.insertCell();
-                            transaction_type = row.insertCell();
-                            pigiri_number = row.insertCell();
-                            discripton = row.insertCell();
-                            setting = row.insertCell();
-
-                            transition_amount.innerHTML = number_format(eval(account[i].transaction_amount) , 0 , "." , ",") ;
-                            transition_amount.className = "h5 text-success" ;
-                            date.innerHTML = account[i].created_jalali ;
-                            let showType  = "" ;
-                            if( $("#transaction_type").val() == "charge"){
-                                showType = "افزایش اعتبار"
-                            }
-                            else{
-                                showType = "خرید"
-                            }
-                            transaction_type.innerHTML = showType ;
-                            pigiri_number.innerHTML = account[i].trace_number ;
-                            discripton.innerHTML = "-" ;
-                            let typeT = $("#transaction_type").val();
-                            if(typeT == "charge"){
-                            let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;
-                            if(images[i] != 0 ){
-                                image = " <a href='" + images[i] + "' class=\"btn btn-success docDownload \">دانلود مستندات</a>" ;
-                            }
-                            setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;
-                            }else
-                                setting.innerHTML = '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactorBuy"  class="btn btn-primary factorBuy "> مشخصات تراکنش</a>' ;
-
-                            // document.getElementsByClassName("myTr").colSpan = "5";
-
-                        }
+                    if(data["Header"]["MessageCode"] == 112)
+                    {
+                        Swal.fire(
+                            'خطایی از سمت سوییچ رخ داده است !  ',
+                            '',
+                            'warning'
+                        )
                         $("#loader").hide();
                     }
+                    else if (data["Header"]["MessageCode"] == 0)
+                    {
+                        // console.log("MessageCode zero");
+                        // console.log("total_pages : " , total_pages);
+                        let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
+                        if(account.length == 0 ){
+                            $("#tbody").html(" ");
+                            var row = table.insertRow();
+                            var cell = row.insertCell();
+                            cell.id = "myTd";
+                            cell.innerHTML = "<h6 class ='text-center py-5'> موردی یافت نشد!  </h6>";
+                            document.getElementById("myTd").colSpan = "6";
+                            $("#loader").hide();
+                        }
+                        else {
+                            $("#tbody").html(" ");
+                            let row ;
+                            let transition_amount ;
+                            let date ;
+                            let transaction_type ;
+                            let pigiri_number ;
+                            let discripton ;
+                            let setting ;
+                            for(let i = 0 ; i < account.length ; i++){
+                                row = table.insertRow();
+                                transition_amount = row.insertCell();
+                                date = row.insertCell();
+                                transaction_type = row.insertCell();
+                                pigiri_number = row.insertCell();
+                                discripton = row.insertCell();
+                                setting = row.insertCell();
+
+                                transition_amount.innerHTML = number_format(eval(account[i].transaction_amount) , 0 , "." , ",") ;
+                                transition_amount.className = "h5 text-success" ;
+                                date.innerHTML = account[i].created_jalali ;
+                                let showType  = "" ;
+                                if( $("#transaction_type").val() == "charge"){
+                                    showType = "افزایش اعتبار"
+                                }
+                                else{
+                                    showType = "خرید"
+                                }
+                                transaction_type.innerHTML = showType ;
+                                pigiri_number.innerHTML = account[i].trace_number ;
+                                discripton.innerHTML = "-" ;
+                                let typeT = $("#transaction_type").val();
+                                if(typeT == "charge"){
+                                    let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;
+                                    if(images[i] != 0 ){
+                                        image = " <a href='" + images[i] + "' class=\"btn btn-success docDownload \">دانلود مستندات</a>" ;
+                                    }
+                                    setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;
+                                }else
+                                    setting.innerHTML = '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactorBuy"  class="btn btn-primary factorBuy "> مشخصات تراکنش</a>' ;
+
+                                // document.getElementsByClassName("myTr").colSpan = "5";
+
+                            }
+                            $("#loader").hide();
+                        }
+                    }
+                    else
+                    {
+                        Swal.fire(
+                            'خطایی از سمت سوییچ رخ داده است !  ',
+                            '',
+                            'warning'
+                        )
+                        $("#loader").hide();
+                    }
+
+
                 }
             })
         }
