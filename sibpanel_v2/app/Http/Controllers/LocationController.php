@@ -568,6 +568,9 @@ class LocationController extends Controller
         else if( $AddVoucherInfo['Header']['Message'] == "Repetitious Voucher Info"){
             return redirect()->back()->with('error' , 'نوع بلیت انتخابی موجود است ! ');
         }
+        else if( $AddVoucherInfo['Header']['MessageCode'] == 158){
+            return redirect()->back()->with('error' , 'خطا : تاریخ نامتعبر است ! ');
+        }
         else
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');
 
@@ -612,6 +615,9 @@ class LocationController extends Controller
 //        return $EditVoucherInfo;
         if ($EditVoucherInfo['Header']['Status'] == 0){
             return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
+        }
+        else if( $EditVoucherInfo['Header']['MessageCode'] == 158){
+            return redirect()->back()->with('error' , 'خطا : تاریخ نامتعبر است ! ');
         }
         else
             return redirect()->back()->with('error' , 'خطا در اعمال تغییرات! ');

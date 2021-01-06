@@ -107,7 +107,7 @@ class Api
             "sex" => $sex,
             "voucher_infos" => $voucher_infos
         ];
-
+        Log::info("AddServiceTime => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'AddServiceTime' ,[
                 'headers'=>$this->getHeader(),

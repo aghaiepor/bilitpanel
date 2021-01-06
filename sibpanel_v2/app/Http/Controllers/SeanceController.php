@@ -44,44 +44,75 @@ class seanceController extends Controller
     }
 
     public function add_group_time(Request $request){
-//        return $request->get("service_times");
+//        return $request->json()->all();
         $service_id = $request->get("serviceId");
-        $service_times = $request->input('service_times') ;
-        $service_times = json_decode($service_times) ;
-        $service_times =   json_encode($service_times) ;
-        return  $service_times[10] ;
-        foreach($service_times as $service_time)
+        $service_times = json_decode($request->input('service_times') , true) ;
+//        $service_times = json_decode($service_times) ;
+//        $service_times =   json_encode($service_times) ;
+//        return  $service_times;
+//        return  gettype($service_times);
+//        dd($service_times );
+/*
+        "voucher_infos":[
         {
-            $start = $service_time["time"][0]["start"] ;
-            $end = $service_time["time"][0]["end"] ;
-            $sex = $service_time["time"][0]["sex"] ;
-            $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
-            $voucher_infos = explode(",",$voucher_infos);
-            $vouchers = [] ;
-            foreach ($voucher_infos as $voucher_info)
+            "total_capacity":1,
+            "amount":23,
+            "voucher_type_id":1,
+            "max_discount_percentage":50
+        }
+	]
+     */
+        try {
+            foreach($service_times as $service_time)
             {
-                $voucher_info = $this->api->GetVoucherInfo($voucher_info) ;
-                array_push($vouchers  , $voucher_info );
+                $day = $service_time["day"] ;
+                $times = $service_time["times"] ;
+                foreach ($times as $time) {
+                    $start = $day . " " . $time["start"] ;
+                    $end = $day . " " . $time["end"] ;
+                    $sex = $time["gender_value"] ;
+                    $voucher_infos = [
+                        "total_capacity" => $time["capacity"],
+                        "amount" => $time["seance_amount"],
+                        "voucher_type_id" => $time["vouchersInfo"],
+                        "max_discount_percentage" => $time["seance_percent"]
+                    ] ;
+                    $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos  ) ;
+                }
 
-            }
-            break;
+                /* $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
+                 $voucher_infos = explode(",",$voucher_infos);
+                 $vouchers = [] ;
+                 foreach ($voucher_infos as $voucher_info)
+                 {
+                     $voucher_info = $this->api->GetVoucherInfo($voucher_info) ;
+                     array_push($vouchers  , $voucher_info );
+
+                 }*/
+
 //            $AddServiceTime = $this->api->AddServiceTime($service_id , $start , $end , $sex  , $voucher_infos);
+                return redirect()->back()->with('success' , "گروه سانس با موفقیت ایجاد شد .");
+            }
+        }catch (\Exception $e) {
+//            return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");
+            return redirect()->back()->with('error' , $e->getMessage());
         }
 
-        return $vouchers ;
+
+//        return $vouchers ;
 //        return $service_times;
 
 
 
 
-        $time_templates = $this->api->AddTimeTemplate(json_decode($service_times,true));
+        /*$time_templates = $this->api->AddTimeTemplate(json_decode($service_times,true));
         $time_templates_ids = $time_templates['ContentData']['time_template_ids'];
         $group_name = $request->input('group_name');
         $group_time = $this->api->AddTimeGroup($group_name,$time_templates_ids);
         if($group_time['Header']['Status'] == 0 )
             return redirect()->back()->with('success' , "گروه سانس با موفقیت ایجاد شد .");
         else
-            return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");
+            return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");*/
 
     }
 
