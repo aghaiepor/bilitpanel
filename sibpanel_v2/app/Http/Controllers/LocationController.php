@@ -599,9 +599,9 @@ class LocationController extends Controller
             else if ($timetype == "week" )
                 $validity_period *= 604800 ;
             else if ($timetype == "month" )
-                $validity_period *= 2419200 ;
+                $validity_period *= 2628000 ;
             else if ($timetype == "year" )
-                $validity_period *= 29030400 ;
+                $validity_period *= 31536000   ;
         }
         else if($exprieMode == "date" ){
             $validity_period = null;
