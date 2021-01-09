@@ -138,6 +138,7 @@ class presellController extends Controller
         if($type == "charge"){
             $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax" ) ;
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
+            $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
             foreach ($GetChargeTransactions as $GetChargeTransaction)
             {
@@ -153,6 +154,7 @@ class presellController extends Controller
         else{
             $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax") ;
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
+            $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
         }
 //        return $GetChargeTransaction ;
@@ -161,7 +163,7 @@ class presellController extends Controller
             "GetChargeTransactions" => $GetChargeTransactions ,
             "images_url" => $images_url ,
             "total_pages" => $total_pages ,
-            "Header" => $GetChargeTransaction["Header"] ,
+            "Header" => $Header["Header"] ,
         ] ;
         return $data;
     }

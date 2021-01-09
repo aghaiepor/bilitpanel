@@ -448,6 +448,8 @@
                 console.log(" clicked ! ")
             });
 
+
+
             $("#inline2").persianDatepicker({
                 calendar: {
                     persian: {
@@ -469,7 +471,8 @@
                 },
 
                 dayPicker: {
-                    enabled: true
+                    enabled: true ,
+                    titleFormat : "MMMM"
                 },
                 yearPicker: {
                     enabled: true
@@ -719,6 +722,8 @@
         }
         function removeTime() {
             $('.dt-selected').each(function (event) {
+                sizeSelected = 0 ;
+                showAddButten(sizeSelected)
                 $(this).find('.seance').text('');
                 $(this).find('.seance').removeAttr('val');
                 $(this).css("background-color", "");
@@ -730,6 +735,8 @@
 
             $('.dt-deselected').each(function(){
                 let id = $(this).parent().attr("data-date").replace(/,/g, '-');
+                ++sizeSelected ;
+                showAddButten(sizeSelected)
                 if (!selectedDays.includes(id)){
 
                     let otherMonth = isOtherMonth($(this));
@@ -746,6 +753,8 @@
         function deselctAll() {
             $('.dt-selected').each(function() {
                 let id = $(this).parent().attr("data-date").replace(/,/g, '-');
+                sizeSelected = 0 ;
+                showAddButten(sizeSelected);
                 let index = selectedDays.indexOf(id);
                 if (index != -1)
                     selectedDays.splice(index, 1);
@@ -961,10 +970,11 @@
         }
 
         function removeAllSeance() {
-            $('#seances').children().each(function () {
-                $(this).remove();
-            });
+
         }
+
+
+
 
 
         function removeDayIfExists(day){
