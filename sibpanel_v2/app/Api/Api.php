@@ -1183,6 +1183,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
+
     public function EditServiceTime($data)
     {
         $client = new Client();
@@ -1244,6 +1245,23 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public function GetServiceTimeList($service_id , $ajax=null)
+    {
+        $data = [
+            "service_id" => $service_id ,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetServiceTimeList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $ajax) ;
+        return $response;
+    }
+
 
     // ******************* Alerts *******************
     public function GetLocationAlerts($location_id)

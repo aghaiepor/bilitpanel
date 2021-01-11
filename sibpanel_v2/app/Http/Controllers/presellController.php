@@ -263,6 +263,9 @@ class presellController extends Controller
         if($AccountList["Header"]["Status"] == 0 ){
             return redirect()->back()->with("success" , " ويرايش تنظيمات انجام گرديد . ");
         }
+        else if ($AccountList['Header']['MessageCode'] == 133){
+            return redirect()->back()->with('error' , ' شما مجاز به انجام این عملیات نیستید . ');
+        }
         else {
             return redirect()->back()->with("error" , "خطا در ويرايش تنظيمات .");
         }

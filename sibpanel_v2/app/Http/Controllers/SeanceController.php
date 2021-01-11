@@ -44,7 +44,7 @@ class seanceController extends Controller
     }
 
     public function add_group_time(Request $request){
-//        return $request->json()->all();
+//        return json_encode($request->all());
         $service_id = $request->get("serviceId");
         $service_times = json_decode($request->input('service_times') , true) ;
 //        $service_times = json_decode($service_times) ;
@@ -71,11 +71,13 @@ class seanceController extends Controller
                     $start = $day . " " . $time["start"] ;
                     $end = $day . " " . $time["end"] ;
                     $sex = $time["gender_value"] ;
+                    $voucher_infos = $time["voucher_infos"] ;
+                    foreach ($voucher_infos as $voucher_info )
                     $voucher_infos = [
-                        "total_capacity" => $time["capacity"],
-                        "amount" => $time["seance_amount"],
-                        "voucher_type_id" => $time["vouchersInfo"],
-                        "max_discount_percentage" => $time["seance_percent"]
+                        "total_capacity" => $voucher_info["capacity"],
+                        "amount" => $voucher_info["seance_amount"],
+                        "voucher_type_id" => $voucher_info["vouchersInfo"],
+                        "max_discount_percentage" => $voucher_info["seance_percent"]
                     ] ;
                     $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos  ) ;
                 }

@@ -177,7 +177,7 @@ class ReportController extends Controller
 //        return $SellerUsersList ;
         return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList , 'report_type'=>$report_type , 'data'=> null , 'SaleTypeList'=>$SaleTypeList , 'ProjectList' =>$Project_list['ContentData'] ]);
     }
-    
+
 
     // GetTransaction
     public function GetTransaction(Request $request){
@@ -463,7 +463,7 @@ class ReportController extends Controller
         }
         return false;
     }
-    
+
     public function download_file(Request $request){
 
         $job_id = $request->input('job_id');

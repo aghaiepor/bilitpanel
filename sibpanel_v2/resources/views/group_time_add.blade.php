@@ -98,9 +98,9 @@
                                     <button onclick="removeTime()" class="btn btn-sm btn-danger " style="margin-top: 10px">حذف انتخاب شده
                                     </button>
 {{--                                    <button onclick="setTime()" class="btn btn-sm btn-primary" style="margin-top: 10px">اعمال</button>--}}
-                                    <div class="col-md text-right" style="margin-top: 35px;margin-bottom: 10px">
+                                  {{--  <div class="col-md text-right" style="margin-top: 35px;margin-bottom: 10px">
                                         <button onclick="submit()" class="btn btn-success c-font-bold btn-lg">تایید نهایی و اعمال تغییرات</button>
-                                    </div>
+                                    </div>--}}
                                 </div>
 {{--                                <div class="col-lg-4" style="margin-top: 30px">--}}
                                     {{--
@@ -243,7 +243,7 @@
         </div>
 
     <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <form method="post" action="">
                 @csrf
                 <div class="modal-content">
@@ -255,7 +255,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row mt-3">
-                            <div id="formSans" class="col-lg  pull-right" style="margin-top: 20px">
+                           {{-- <div id="formSans" class="col-lg  pull-right" style="margin-top: 20px">
                                 <div class="form-row text-right">
                                     <div class="col">
                                         <label class="w-100" for=""> نوع بليت
@@ -274,15 +274,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col">
-                                        <label for=""> جنسیت </label>
-                                        <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                            <option selected value="dont_care">  همه </option>
-                                            <option value="male" > مردانه </option>
-                                            <option value="female" > زنانه </option>
-                                            <option value="single_sex">  تک جنسیتی </option>
-                                        </select>
-                                    </div>
+
                                 </div>
                                 <div class="form-row text-right mt-2">
                                     <div class="col text-right">
@@ -298,9 +290,9 @@
                                         <input type="text" id="max_persent" name="max_persent" class="form-control" placeholder="حداکثر تخفيف">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg id row">
-                                <div class="col-md text-center pull-right"
+                            </div>--}}
+                            <div class="col-lg id mx-auto row">
+                                <div class="col text-center pull-right"
                                      style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                     <div class="row justify-content-center">
                                         <span style="font-size: 16px">ساعت شروع</span>
@@ -323,7 +315,7 @@
                                                 style=";margin-right: 4px"><i class="fa fa-chevron-down"></i></button>
                                     </div>
                                 </div>
-                                <div class="col-md mx-3 text-center pull-right"
+                                <div class="col mr-3 text-center pull-right"
                                      style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                     <div class="row justify-content-center">
                                         <span style="font-size: 16px">ساعت پایان</span>
@@ -348,6 +340,15 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-12 px-0 my-3 text-right">
+                                    <label for=""> جنسیت </label>
+                                    <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                        <option selected value="dont_care">  همه </option>
+                                        <option value="male" > مردانه </option>
+                                        <option value="female" > زنانه </option>
+                                        <option value="single_sex">  تک جنسیتی </option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-12 text-right">
                                 <button type="button" onclick="addSeance()" class="btn btn-sm btn-success mt-3 ">اضافه کردن سانس<div class="ripple-container"></div></button>
@@ -369,19 +370,10 @@
                                                 زمان پایان
                                             </th>
                                             <th>
-                                                ظرفیت
-                                            </th>
-                                            <th>
-                                                نوع بلیت
-                                            </th>
-                                            <th>
                                                 جنسیت
                                             </th>
                                             <th>
-                                                مقدار
-                                            </th>
-                                            <th>
-                                                درصد تخفیف
+                                                مدیریت بلیت
                                             </th>
                                             <th>
                                                حذف
@@ -398,8 +390,8 @@
                         </div>
                     </div>
                     <div class="modal-footer mt-4">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
-                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> اعمال کامل </button>
+                        <button type="button" class="btn btn-primary ml-auto" data-dismiss="modal">بستن </button>
+{{--                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> ثبت سانس </button>--}}
                     </div>
                 </div>
             </form>
@@ -407,6 +399,104 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="show_tickes" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="testLabel"> افزودن بلیت </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                             <div id="formSans" class="col-lg  pull-right">
+                                 <div class="form-row text-right">
+                                     <div class="col">
+                                         <label class="w-100" for=""> نوع بليت
+                                         </label>
+                                         @php
+                                             $VoucherList = [];
+                                         @endphp
+                                         <select id="vouchers" name="vouchers" class="selectpicker" data-style="btn btn-primary border-dark" title="بلیت">
+                                             @foreach($VoucherTypeList as $VoucherType)
+                                                 @php
+                                                     array_push($VoucherList , ["VoucherInfo_id" => $VoucherType["voucher_type_id"] , "voucher_type_name" => $VoucherType["voucher_type"]]);
+                                                 @endphp
+                                                 <option value="{{$VoucherType["voucher_type_id"] .  "-" . $VoucherType["voucher_type"] }}">
+                                                     {{$VoucherType["voucher_type"]}}
+                                                 </option>
+                                             @endforeach
+                                         </select>
+                                     </div>
+
+                                 </div>
+                                 <div class="form-row text-right mt-2">
+                                     <div class="col text-right">
+                                         <label class="w-100" for=""> ظرفيت</label>
+                                         <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
+                                     </div>
+                                     <div class="col">
+                                         <label class="w-100" for=""> مقدار</label>
+                                         <input type="text" id="amount" name="amount" class="form-control" placeholder="مقدار">
+                                     </div>
+                                     <div class="col">
+                                         <label class="w-100" for=""> حداکثر تخفيف</label>
+                                         <input type="text" id="max_persent" name="max_persent" class="form-control" placeholder="حداکثر تخفيف">
+                                     </div>
+                                 </div>
+                             </div>
+                            <div class="col-12 text-right">
+                                <button type="button" onclick="addTicket()" class="btn btn-sm btn-success mt-3 ">اضافه کردن بلیت<div class="ripple-container"></div></button>
+                                <button type="button" onclick="removeAllTicket()" class="btn btn-sm btn-danger float-left mt-3">حذف همه بلیت ها</button>
+                            </div>
+                        </div>
+                        <hr class="my-1">
+                        <div class="row">
+                            <div class="col-md">
+                                <div  class="col-lg-12 px-0">
+                                    <table class="table table-striped text-center" id="TicketTable">
+                                        <thead class="text-primary">
+                                        <tr>
+
+                                            <th>
+                                                ظرفیت
+                                            </th>
+                                            <th>
+                                               نوع بلیت
+                                            </th>
+                                            <th>
+                                                مقدار
+                                            </th>
+                                            <th>
+                                                درصد تخفیف
+                                            </th>
+                                            <th>
+                                                حذف
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="seances_voucherInfo">
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
 
 @endsection
 @section('AddJs')
@@ -626,31 +716,77 @@
             // console.log("sanas => " , sanas);
         })
 
+        $(document).on("click" , ".settingNew" , function () {
+            $("#seances_voucherInfo").html(" ");
+        })
+
+        $(document).on("click" , ".setting" , function () {
+            console.log("setting clicked! ")
+            let sansId = $(this).attr("data-date").replace(/,/g, '-');
+            let start = $(this).attr("data-start");
+            let end = $(this).attr("data-end");
+            let cotactTime = start + end ;
+            // console.log("start => ", start)
+            // console.log("start => ", end)
+            // console.log("id ==> " , sansId)
+            // console.log("serviceTimes ==> " , serviceTimes)
+            let voucher = [] ;
+            for(let i = 0 ; i < serviceTimes.length ; i++){
+
+                if(serviceTimes[i]["day"] == sansId)
+                {
+                    let times = serviceTimes[i].times ;
+                    console.log("times => " , times )
+                    for (let j = 0 ; j < times.length  ; j++)
+                    {
+
+                        let service_time_contact = times[j]["start"] + times[j]["end"] ;
+
+                        // console.log( " times[j][\"start\"] : " ,  times[j]["start"] );
+                        // console.log( " start : " ,  start );
+                        console.log("comper =>" , service_time_contact == cotactTime)
+                        if( service_time_contact == cotactTime ) {
+                            voucher.push(times[j]) ;
+                        }
+                    }
+                }
+
+            }
+            console.log("serviceTimes  :  " , serviceTimes)
+            console.log("voucher push :  " , voucher)
+
+            showVoucher(voucher);
+
+        })
+
         function showSans(sanas) {
             $("#seances").html("");
             let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
             let start_Sanse ;
             let end_Sanse ;
-            let capacity_Sanse ;
-            let vouchertyppe_Sanse ;
+            // let capacity_Sanse ;
+            // let vouchertyppe_Sanse ;
             let sex ;
-            let amount_Sanse ;
-            let percent ;
+            // let amount_Sanse ;
+            // let percent ;
             let remove  ;
+            let setting  ;
 
             for(let i = 0 ; i < sanas.length ; i++ ){
                 let data = sanas[i].times ;
+                let date = sanas[i].day ;
 
                 for(let j = 0 ; j < data.length ; j++ ){
                     let row = table.insertRow();
                     // seance_date = row.insertCell();
                     start_Sanse = row.insertCell();
                     end_Sanse = row.insertCell();
-                    capacity_Sanse = row.insertCell();
-                    vouchertyppe_Sanse = row.insertCell();
+                    // capacity_Sanse = row.insertCell();
+                    // vouchertyppe_Sanse = row.insertCell();
                     sex = row.insertCell();
-                    amount_Sanse = row.insertCell();
-                    percent = row.insertCell();
+                    // amount_Sanse = row.insertCell();
+                    // percent = row.insertCell();
+                    setting = row.insertCell();
                     remove = row.insertCell();
 
                     // seance_date.innerHTML = "2020-12-12" ;
@@ -665,28 +801,28 @@
                     end_Sanse.setAttribute("value", data[j].end) ;
                     end_Sanse.setAttribute("class", "seance_end");
 
-                    capacity_Sanse.innerHTML = data[j].capacity ;
-                    capacity_Sanse.setAttribute("value", data[j].capacity) ;
-                    capacity_Sanse.setAttribute("class", "seance_capacity") ;
-
-                    vouchertyppe_Sanse.innerHTML =  data[j].vouchersInfo_name;
-                    vouchertyppe_Sanse.setAttribute("value",data[j].vouchersInfo ) ;
-                    vouchertyppe_Sanse.setAttribute("vouchersInfo_name", data[j].vouchersInfo_name) ;
-                    vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
-
+                    // capacity_Sanse.innerHTML = data[j].capacity ;
+                    // capacity_Sanse.setAttribute("value", data[j].capacity) ;
+                    // capacity_Sanse.setAttribute("class", "seance_capacity") ;
+                    //
+                    // vouchertyppe_Sanse.innerHTML =  data[j].vouchersInfo_name;
+                    // vouchertyppe_Sanse.setAttribute("value",data[j].vouchersInfo ) ;
+                    // vouchertyppe_Sanse.setAttribute("vouchersInfo_name", data[j].vouchersInfo_name) ;
+                    // vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
+                    //
                     sex.innerHTML = data[j].gender ;
                     sex.setAttribute("gender_name", data[j].gender) ;
                     sex.setAttribute("value", data[j].gender_value) ;
                     sex.setAttribute("class", "seance_gender") ;
 
-                    amount_Sanse.innerHTML = data[j].seance_amount ;
-                    amount_Sanse.setAttribute("value", data[j].seance_amount) ;
-                    amount_Sanse.setAttribute("class", "seance_amount") ;
+                    // amount_Sanse.innerHTML = data[j].seance_amount ;
+                    // amount_Sanse.setAttribute("value", data[j].seance_amount) ;
+                    // amount_Sanse.setAttribute("class", "seance_amount") ;
 
-                    percent.innerHTML = data[j].seance_percent ;
-                    percent.setAttribute("value", data[j].seance_percent) ;
-                    percent.setAttribute("class", "seance_percent") ;
-
+                    // percent.innerHTML = data[j].seance_percent ;
+                    // percent.setAttribute("value", data[j].seance_percent) ;
+                    // percent.setAttribute("class", "seance_percent") ;
+                    setting.innerHTML = '<button data-date='+ date +' data-start='+ data[j].start +' data-end='+ data[j].end +'   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
                     remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
                 }
                 // console.log("sanas =>" ,
@@ -694,9 +830,88 @@
 
             }
         }
+
+
+        function showVoucher(sanas) {
+            $("#seances_voucherInfo").html(" ");
+            console.log("showVoucher callded !! ") ;
+            let table = document.getElementById("TicketTable").getElementsByTagName('tbody')[0];
+            // let start_Sanse ;
+            // let end_Sanse ;
+            let capacity_Sanse ;
+            let vouchertyppe_Sanse ;
+            // let sex ;
+            let amount_Sanse ;
+            let percent ;
+            let remove  ;
+            // let setting  ;
+            let data = sanas ;
+                for(let x = 0 ; x < data.length ; x++ ) {
+                    let voucherInfos = data[x].voucher_infos;
+                    // console.log("vouchers =>  " , voucher) ;
+                    // console.log("vouchers length =>  " , voucher.length) ;
+                    for (let j = 0; j < voucherInfos.length; j++) {
+                        console.log("voucher[j] : ", voucherInfos[j]);
+                        // console.log("voucher inner  =>  " , voucher[j]) ;
+                        let row = table.insertRow();
+                        // seance_date = row.insertCell();
+                        // start_Sanse = row.insertCell();
+                        // end_Sanse = row.insertCell();
+                        capacity_Sanse = row.insertCell();
+                        vouchertyppe_Sanse = row.insertCell();
+                        // sex = row.insertCell();
+                        amount_Sanse = row.insertCell();
+                        percent = row.insertCell();
+                        // setting = row.insertCell();
+                        remove = row.insertCell();
+
+                        // seance_date.innerHTML = "2020-12-12" ;
+                        // seance_date.setAttribute("value", "2020-12-12") ;
+                        // seance_date.setAttribute("class", "d-none") ;
+
+                        // start_Sanse.innerHTML = data[j].start ;
+                        // start_Sanse.setAttribute("value", data[j].start) ;
+                        // start_Sanse.setAttribute("class", "seance_start") ;
+
+                        // end_Sanse.innerHTML = data[j].end ;
+                        // end_Sanse.setAttribute("value", data[j].end) ;
+                        // end_Sanse.setAttribute("class", "seance_end");
+
+                        capacity_Sanse.innerHTML = voucherInfos[j].capacity;
+                        capacity_Sanse.setAttribute("value", voucherInfos[j].capacity);
+                        capacity_Sanse.setAttribute("class", "seance_capacity");
+                        //
+                        vouchertyppe_Sanse.innerHTML = voucherInfos[j].vouchersInfo_name;
+                        vouchertyppe_Sanse.setAttribute("value", voucherInfos[j].vouchersInfo);
+                        vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherInfos[j].vouchersInfo_name);
+                        vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse");
+                        //
+                        // sex.innerHTML = data[j].gender ;
+                        // sex.setAttribute("gender_name", data[j].gender) ;
+                        // sex.setAttribute("value", data[j].gender_value) ;
+                        // sex.setAttribute("class", "seance_gender") ;
+
+                        amount_Sanse.innerHTML = voucherInfos[j].seance_amount;
+                        amount_Sanse.setAttribute("value", voucherInfos[j].seance_amount);
+                        amount_Sanse.setAttribute("class", "seance_amount");
+
+                        percent.innerHTML = voucherInfos[j].seance_percent;
+                        percent.setAttribute("value", voucherInfos[j].seance_percent);
+                        percent.setAttribute("class", "seance_percent");
+                        // setting.innerHTML = '<button data-date='+ date +' type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
+                        remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+
+                    }
+                }
+
+                // console.log("sanas =>" ,
+
+
+            }
+
         function setTime() {
             let seances = getAllSeances();
-            console.log(seances.length)
+            console.log("sanse => " , seances);
             if(seances.length == 0 )
             {
                 Swal.fire(
@@ -707,6 +922,35 @@
                 return ;
             }
             $('#test').modal('hide')
+            for(let i=0; i<selectedDays.length; i++){
+                let day = selectedDays[i];
+                removeDayIfExists(day);
+                serviceTimes.push({'day':day,'times':seances})
+            }
+            console.log("selectedDays => " , selectedDays)
+            selectedDays = [];
+            sizeSelected = 0 ;
+            showAddButten(sizeSelected)
+            setSelected();
+            removeAllSeance();
+            removeAllTicket();
+            resetTime();
+            submit() ;
+        }
+        function setVoucher() {
+            let seances = getAllSeances();
+            console.log("sanse => " , seances);
+            if(seances.length == 0 )
+            {
+                Swal.fire(
+                    ' خطا ',
+                    ' سانسی اضافه نشده است! ',
+                    'error'
+                )
+                return ;
+            }
+            $('.modal').modal('hide')
+
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
                 removeDayIfExists(day);
@@ -807,13 +1051,153 @@
 
         }
 
-        let VoucherList = @json($VoucherList) ;
+        {{--let VoucherList = @json($VoucherList) ;--}}
         function addSeance() {
 
             /*if($("#vouchers").val() == ""){
                 console.log("OK !!")
                 return ;
             }*/
+
+            let NotValid = false;
+            /*
+            $("#formSans input , #formSans select ").each(function() {
+                var element = $(this);
+
+                if (element.val() == "" && element.attr("id") != "max_persent") {
+
+                    Swal.fire(
+                        ' خطا ',
+                        '  لطفا فيلد هاي مشخص شده را پر نماييد ! ',
+                        'error'
+                    )
+                    element.parent().prev().css("color", "red");
+                    element.addClass("border-danger");
+                    NotValid = true;
+                } else {
+                    element.parent().prev().css("color", "");
+                    element.removeClass("border-danger");
+                }
+            });
+            */
+            let FistTime = eval($("#start_hour").val()) * 100 + eval($("#start_minute").val());
+            let EndTime = eval($("#end_hour").val())  * 100 + eval( $("#end_minute").val());
+            // console.log("EndTime => " , EndTime )
+            // console.log("FistTime => " , FistTime )
+            if (FistTime > EndTime){
+                NotValid = true;
+                Swal.fire(
+                    ' خطا ',
+                    'زمان پایان باید بیشتر از زمان شروع باشد . ',
+                    'error'
+                )
+            }
+
+            if(NotValid)
+                return;
+
+
+            let start = $('#start_hour').val() + ":" + $('#start_minute').val();
+            let end = $('#end_hour').val() + ":" + $('#end_minute').val();
+            let gender_val = $("select[name='seance_gender']").val();
+            // let voucherType = $("#vouchers").val();
+            // let capacity = $("#capacity").val();
+            // let amount = $("#amount").val();
+            // let max_persent = $("#max_persent").val();
+
+
+            let gender="";
+
+            if(gender_val === 'male')
+                gender='مردانه';
+            if(gender_val === 'female')
+                gender='زنانه';
+            if(gender_val === 'dont_care')
+                gender='همه';
+            if(gender_val === 'single_sex')
+                gender='تک جنسیتی';
+
+            let filteredArray = [];
+            // let voucherType_val = voucherType.split("-") ;
+           /* for(let  i = 0 ; i < VoucherList.length ; i++){
+               for  ( let j = 0 ; j < voucherType.length ; j++) {
+                   if (VoucherList[i].VoucherInfo_id == voucherType[j]){
+                       filteredArray.push(VoucherList[i]);
+                       if (filteredArray.length != 1 ) {
+                           capacity_val += "<br> " ;
+                       }
+                       capacity_val += VoucherList[i].voucher_type_name  ;
+
+
+                   }
+               }
+            }*/
+            let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
+
+            let start_Sanse ;
+            let end_Sanse ;
+            // let capacity_Sanse ;
+            // let vouchertyppe_Sanse ;
+            let sex ;
+            // let amount_Sanse ;
+            // let percent ;
+            let remove  ;
+            let setting  ;
+
+            let row = table.insertRow();
+
+            // seance_date = row.insertCell();
+            start_Sanse = row.insertCell();
+            end_Sanse = row.insertCell();
+            // capacity_Sanse = row.insertCell();
+            // vouchertyppe_Sanse = row.insertCell();
+            sex = row.insertCell();
+            // amount_Sanse = row.insertCell();
+            // percent = row.insertCell();
+            setting = row.insertCell();
+            remove = row.insertCell();
+
+            // seance_date.innerHTML = "2020-12-12" ;
+            // seance_date.setAttribute("value", "2020-12-12") ;
+            // seance_date.setAttribute("class", "d-none") ;
+
+            start_Sanse.innerHTML = start ;
+            start_Sanse.setAttribute("value", start) ;
+            start_Sanse.setAttribute("class", "seance_start") ;
+
+            end_Sanse.innerHTML = end ;
+            end_Sanse.setAttribute("value", end) ;
+            end_Sanse.setAttribute("class", "seance_end");
+
+            /*capacity_Sanse.innerHTML = capacity ;
+            capacity_Sanse.setAttribute("value", capacity) ;
+            capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
+            vouchertyppe_Sanse.innerHTML = voucherType_val[1] ;
+            vouchertyppe_Sanse.setAttribute("value", voucherType_val[0]) ;
+            vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherType_val[1]) ;
+            vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;*/
+
+            sex.innerHTML = gender ;
+            sex.setAttribute("gender_name", gender) ;
+            sex.setAttribute("value", gender_val) ;
+            sex.setAttribute("class", "seance_gender") ;
+
+           /* amount_Sanse.innerHTML = amount ;
+            amount_Sanse.setAttribute("value", amount) ;
+            amount_Sanse.setAttribute("class", "seance_amount") ;
+
+            percent.innerHTML = max_persent ;
+            percent.setAttribute("value", max_persent) ;
+            percent.setAttribute("class", "seance_percent") ;
+            */
+
+            setting.innerHTML = '<button type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
+            remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+
+
+        }
+        function addTicket() {
 
             let NotValid = false;
             $("#formSans input , #formSans select ").each(function() {
@@ -851,76 +1235,54 @@
                 return;
 
 
-            let start = $('#start_hour').val() + ":" + $('#start_minute').val();
-            let end = $('#end_hour').val() + ":" + $('#end_minute').val();
-            let gender_val = $("select[name='seance_gender']").val();
+            // let start = $('#start_hour').val() + ":" + $('#start_minute').val();
+            // let end = $('#end_hour').val() + ":" + $('#end_minute').val();
+            // let gender_val = $("select[name='seance_gender']").val();
             let voucherType = $("#vouchers").val();
             let capacity = $("#capacity").val();
             let amount = $("#amount").val();
             let max_persent = $("#max_persent").val();
 
 
-            let gender="";
-
-            if(gender_val === 'male')
-                gender='مردانه';
-            if(gender_val === 'female')
-                gender='زنانه';
-            if(gender_val === 'dont_care')
-                gender='همه';
-            if(gender_val === 'single_sex')
-                gender='تک جنسیتی';
-
             let filteredArray = [];
             let voucherType_val = voucherType.split("-") ;
-           /* for(let  i = 0 ; i < VoucherList.length ; i++){
-               for  ( let j = 0 ; j < voucherType.length ; j++) {
-                   if (VoucherList[i].VoucherInfo_id == voucherType[j]){
-                       filteredArray.push(VoucherList[i]);
-                       if (filteredArray.length != 1 ) {
-                           capacity_val += "<br> " ;
-                       }
-                       capacity_val += VoucherList[i].voucher_type_name  ;
+            let table = document.getElementById("TicketTable").getElementsByTagName('tbody')[0];
 
-
-                   }
-               }
-            }*/
-            let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
-
-            let start_Sanse ;
-            let end_Sanse ;
+            // let start_Sanse ;
+            // let end_Sanse ;
             let capacity_Sanse ;
             let vouchertyppe_Sanse ;
-            let sex ;
+            // let sex ;
             let amount_Sanse ;
             let percent ;
             let remove  ;
+            // let setting  ;
 
             let row = table.insertRow();
 
             // seance_date = row.insertCell();
-            start_Sanse = row.insertCell();
-            end_Sanse = row.insertCell();
+            // start_Sanse = row.insertCell();
+            // end_Sanse = row.insertCell();
             capacity_Sanse = row.insertCell();
             vouchertyppe_Sanse = row.insertCell();
-            sex = row.insertCell();
+            // sex = row.insertCell();
             amount_Sanse = row.insertCell();
             percent = row.insertCell();
+            // setting = row.insertCell();
             remove = row.insertCell();
 
             // seance_date.innerHTML = "2020-12-12" ;
             // seance_date.setAttribute("value", "2020-12-12") ;
             // seance_date.setAttribute("class", "d-none") ;
 
-            start_Sanse.innerHTML = start ;
-            start_Sanse.setAttribute("value", start) ;
-            start_Sanse.setAttribute("class", "seance_start") ;
-
-            end_Sanse.innerHTML = end ;
-            end_Sanse.setAttribute("value", end) ;
-            end_Sanse.setAttribute("class", "seance_end");
-
+            // start_Sanse.innerHTML = start ;
+            // start_Sanse.setAttribute("value", start) ;
+            // start_Sanse.setAttribute("class", "seance_start") ;
+            //
+            // end_Sanse.innerHTML = end ;
+            // end_Sanse.setAttribute("value", end) ;
+            // end_Sanse.setAttribute("class", "seance_end");
+            //
             capacity_Sanse.innerHTML = capacity ;
             capacity_Sanse.setAttribute("value", capacity) ;
             capacity_Sanse.setAttribute("class", "seance_capacity") ;
@@ -930,24 +1292,23 @@
             vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherType_val[1]) ;
             vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
 
-            sex.innerHTML = gender ;
-            sex.setAttribute("gender_name", gender) ;
-            sex.setAttribute("value", gender_val) ;
-            sex.setAttribute("class", "seance_gender") ;
+            // sex.innerHTML = gender ;
+            // sex.setAttribute("gender_name", gender) ;
+            // sex.setAttribute("value", gender_val) ;
+            // sex.setAttribute("class", "seance_gender") ;
 
-            amount_Sanse.innerHTML = amount ;
-            amount_Sanse.setAttribute("value", amount) ;
-            amount_Sanse.setAttribute("class", "seance_amount") ;
+             amount_Sanse.innerHTML = amount ;
+             amount_Sanse.setAttribute("value", amount) ;
+             amount_Sanse.setAttribute("class", "seance_amount") ;
 
-            percent.innerHTML = max_persent ;
-            percent.setAttribute("value", max_persent) ;
-            percent.setAttribute("class", "seance_percent") ;
-
+             percent.innerHTML = max_persent ;
+             percent.setAttribute("value", max_persent) ;
+             percent.setAttribute("class", "seance_percent") ;
+            // setting.innerHTML = '<button type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
             remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
 
 
         }
-
         function resetTime() {
             $('#start_hour').val("8");
             $('#start_minute').val("0");
@@ -970,12 +1331,16 @@
         }
 
         function removeAllSeance() {
-
+            $('#seances').children().each(function () {
+                $(this).remove();
+            });
         }
 
-
-
-
+        function removeAllTicket() {
+            $('#seances_voucherInfo').children().each(function () {
+                $(this).remove();
+            });
+        }
 
         function removeDayIfExists(day){
 
@@ -999,29 +1364,52 @@
         function getAllSeances() {
 
             let times = [];
+            let vouchers = [];
+            $('#seances_voucherInfo').children().each(function () {
+                // let Date =  $(this).find('.seance_date').attr("value") ;
+                let capacity = $(this).find('.seance_capacity').attr("value");
+                let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
+                let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
+                let seance_amount = $(this).find('.seance_amount').attr("value");
+                let seance_percent = $(this).find('.seance_percent').attr("value");
+
+                vouchers.push({
+                    'capacity': capacity,
+                    'vouchersInfo': vouchertyppe_Sanse,
+                    'vouchersInfo_name': vouchersInfo_id,
+                    'remain':capacity,
+                    'seance_amount': seance_amount,
+                    'seance_percent': seance_percent,
+                });
+
+            });
 
             $('#seances').children().each(function () {
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 let start = $(this).find('.seance_start').attr("value");
                 let end = $(this).find('.seance_end').attr("value");
-                let capacity = $(this).find('.seance_capacity').attr("value");
-                let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
-                let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
+                // let capacity = $(this).find('.seance_capacity').attr("value");
+                // let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
+                // let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
 
                 let gender = $(this).find('.seance_gender').attr("gender_name");
                 let gender_value = $(this).find('.seance_gender').attr("value");
 
-                let seance_amount = $(this).find('.seance_amount').attr("value");
-                let seance_percent = $(this).find('.seance_percent').attr("value");
+                // let seance_amount = $(this).find('.seance_amount').attr("value");
+                // let seance_percent = $(this).find('.seance_percent').attr("value");
 
-                times.push({'start': start, 'end': end, 'capacity': capacity,
-                    'vouchersInfo': vouchertyppe_Sanse,'vouchersInfo_name': vouchersInfo_id,'remain':capacity,'gender':gender ,
-                    'seance_amount': seance_amount,
-                    'seance_percent': seance_percent,
+                times.push({'start': start,
+                    'end': end,
                     'gender_value':gender_value ,
+                    'gender':gender ,
+                    "voucher_infos" : vouchers ,
                 });
 
             });
+
+
+
+
 
             // console.log(times);
             return times;
