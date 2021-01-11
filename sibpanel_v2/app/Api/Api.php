@@ -2,6 +2,7 @@
 
 
 namespace App\Api;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use App\UserJob;
@@ -108,6 +109,7 @@ class Api
             "voucher_infos" => $voucher_infos
         ];
         Log::info("AddServiceTime => " , $data);
+//        Log::info(gettype($voucher_infos) );
         $client = new Client();
         $result = $client->post($this->url . 'AddServiceTime' ,[
                 'headers'=>$this->getHeader(),
@@ -1632,7 +1634,13 @@ class Api
         return $response;
     }
     public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date="", $ajax=null){
-            $data = [
+        if($date == "")
+        {
+            $now = Carbon::now()->timestamp ;
+            $date = [$now,$now] ;
+        }
+
+        $data = [
                 "page" => $page,
                 "conditions" =>
                     [
@@ -1656,6 +1664,12 @@ class Api
         return $response;
     }
     public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date="", $ajax=null){
+        if($date == "")
+        {
+            $now = Carbon::now()->timestamp ;
+            $date = [$now,$now] ;
+        }
+
         $data = [
             "page" => $page,
             "conditions" =>

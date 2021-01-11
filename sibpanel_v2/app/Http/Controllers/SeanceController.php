@@ -40,12 +40,14 @@ class seanceController extends Controller
     public function add_group_time_index($service_id , $location_id){
         $VoucherTypeList = Cache::get('VoucherTypeList');
 //        return $VoucherTypeList ;
-        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  ]);
+        $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
+//        return $GetServiceTimeList["ContentData"] ;
+        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] ]);
     }
 
     public function add_group_time(Request $request){
 //        return json_encode($request->all());
-        $service_id = $request->get("serviceId");
+        $service_id = (int)$request->get("serviceId");
         $service_times = json_decode($request->input('service_times') , true) ;
 //        $service_times = json_decode($service_times) ;
 //        $service_times =   json_encode($service_times) ;
@@ -72,14 +74,18 @@ class seanceController extends Controller
                     $end = $day . " " . $time["end"] ;
                     $sex = $time["gender_value"] ;
                     $voucher_infos = $time["voucher_infos"] ;
-                    foreach ($voucher_infos as $voucher_info )
-                    $voucher_infos = [
-                        "total_capacity" => $voucher_info["capacity"],
-                        "amount" => $voucher_info["seance_amount"],
-                        "voucher_type_id" => $voucher_info["vouchersInfo"],
-                        "max_discount_percentage" => $voucher_info["seance_percent"]
-                    ] ;
-                    $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos  ) ;
+                    $voucher_infos_data = [] ;
+                    foreach ($voucher_infos as $voucher_info ) {
+                        $voucher = [
+                            "total_capacity" => (int)$voucher_info["capacity"],
+                            "amount" => (int)$voucher_info["seance_amount"],
+                            "voucher_type_id" => (int)$voucher_info["vouchersInfo"],
+                            "max_discount_percentage" => (int)$voucher_info["seance_percent"]
+                        ];
+                        array_push( $voucher_infos_data ,  $voucher) ;
+                    }
+                    $test = $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
+                    return $test ;
                 }
 
                 /* $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
@@ -97,7 +103,8 @@ class seanceController extends Controller
             }
         }catch (\Exception $e) {
 //            return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");
-            return redirect()->back()->with('error' , $e->getMessage());
+//            return redirect()->back()->with('error' , $e->getMessage());
+            return $e->getMessage();
         }
 
 

@@ -507,8 +507,24 @@
 
 
     <script>
+        let GetServiceTimeList = @json($GetServiceTimeList) ;
+        for (let i = 0; i < GetServiceTimeList.length; i++) {
+            let item = GetServiceTimeList[i];
+            let day = item['day'];
+            let dt = day.split('-').map(Number);
+            let y = dt[0];
+            let m = dt[1] - 1;
+            let d = dt[2];
+            item['day'] = new persianDate(new Date(y, m, d)).toLocale('en').format('YYYY-M-D');
+        }
+        // console.log("GetServiceTimeList : " , GetServiceTimeList)
 
         let selectedDays = [];
+        if(GetServiceTimeList.length != 0 )
+            selectedDays = GetServiceTimeList;
+
+        console.log("selectedDays" , selectedDays);
+
         let serviceTimes = [];
         /*$(document).on('click', ".table-days tr td" ,  function (e) {
             console.log("clicked !! " , $(this).attr("data-date"))
@@ -532,80 +548,81 @@
                 $("#timetype").show();
             }
         });
-
-        $(document).ready(function () {
-            $(".optgroup-2 .opt").click(function () {
-                console.log(" clicked ! ")
-            });
-
-
-
-            $("#inline2").persianDatepicker({
-                calendar: {
-                    persian: {
-                        enabled: true,
-                        locale: 'fa',
-                        showHint: false,
-                        leapYearMode: "astronomical" // "astronomical"
-                    },
-
-                },
-                altFormat: 'LLLL',
-                inline: true,
-                viewMode: 'day',
-                format: "lll",
-                navigator: {
-                    scroll: {
-                        enabled: false
-                    }
+        $("#inline2").persianDatepicker({
+            calendar: {
+                persian: {
+                    enabled: true,
+                    locale: 'fa',
+                    showHint: false,
+                    leapYearMode: "astronomical" // "astronomical"
                 },
 
-                dayPicker: {
-                    enabled: true ,
-                    titleFormat : "MMMM"
-                },
-                yearPicker: {
+            },
+            altFormat: 'LLLL',
+            inline: true,
+            viewMode: 'day',
+            format: "lll",
+            navigator: {
+                scroll: {
+                    enabled: false
+                }
+            },
+
+            dayPicker: {
+                enabled: true ,
+                titleFormat : "MMMM"
+            },
+            yearPicker: {
+                enabled: true
+            },
+            timePicker: {
+                enabled: false,
+                meridian: {
                     enabled: true
-                },
-                timePicker: {
-                    enabled: false,
-                    meridian: {
-                        enabled: true
-                    }
-                },
-                toolbox: {
-                    calendarSwitch: {
-                        enabled: false
-                    }, todayButton: {
-                        text: {
-                            fa: 'ماه فعلی'
-                        }
-                    }
-                },
-                navigator: {
-                    text:{
-                        btnNextText:'ماه بعد',
-                        btnPrevText:'ماه قبل'
-                    },
-                    scroll:{
-                        enabled: false
-                    },
-
-                    onNext: function(){
-                        setSelected();
-                    },
-                    onPrev: function(){
-                        setSelected();
-                    },onSwitch:function (state) {
-                        console.log("on switch:"+state);
-                    }
-                },
-                monthPicker:{
-                    onSelect:function (monthIndex) {
-                        setSelected();
+                }
+            },
+            toolbox: {
+                calendarSwitch: {
+                    enabled: false
+                }, todayButton: {
+                    text: {
+                        fa: 'ماه فعلی'
                     }
                 }
-            });
+            },
+            navigator: {
+                text:{
+                    btnNextText:'ماه بعد',
+                    btnPrevText:'ماه قبل'
+                },
+                scroll:{
+                    enabled: false
+                },
+
+                onNext: function(){
+                    setSelected();
+                },
+                onPrev: function(){
+                    setSelected();
+                },onSwitch:function (state) {
+                    console.log("on switch:"+state);
+                }
+            },
+            monthPicker:{
+                onSelect:function (monthIndex) {
+                    setSelected();
+                }
+            }
+        });
+        $(document).ready(function () {
+
+
+            /*$(".optgroup-2 .opt").click(function () {
+                console.log(" clicked ! ")
+            });*/
+
+
+            setSelected() ;
         });
 
         let sizeSelected = 0 ;
@@ -637,9 +654,8 @@
                     setSelected();
                 }, 50);
             }
-
-
         });
+
 
 
         $('#test').on('hidden.bs.modal', function () {
@@ -663,7 +679,7 @@
         });
 
         function setSelected(){
-
+            console.log("selectedDays in setSelected => " , selectedDays);
             $('.dt-deselected').each(function(){
                 let id = $(this).parent().attr("data-date").replace(/,/g, '-');
                 let otherMonth = isOtherMonth($(this));
