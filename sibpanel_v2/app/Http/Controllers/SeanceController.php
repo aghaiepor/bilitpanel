@@ -85,7 +85,7 @@ class seanceController extends Controller
                         array_push( $voucher_infos_data ,  $voucher) ;
                     }
                     $test = $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
-                    return $test ;
+//                    return $test ;
                 }
 
                 /* $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
@@ -99,12 +99,12 @@ class seanceController extends Controller
                  }*/
 
 //            $AddServiceTime = $this->api->AddServiceTime($service_id , $start , $end , $sex  , $voucher_infos);
-                return redirect()->back()->with('success' , "گروه سانس با موفقیت ایجاد شد .");
+                return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");
             }
         }catch (\Exception $e) {
-//            return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");
+            return redirect()->back()->with('error' , " خطا در ایجاد سانس ");
 //            return redirect()->back()->with('error' , $e->getMessage());
-            return $e->getMessage();
+//            return $e->getMessage();
         }
 
 

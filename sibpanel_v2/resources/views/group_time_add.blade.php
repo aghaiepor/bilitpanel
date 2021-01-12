@@ -511,21 +511,24 @@
         for (let i = 0; i < GetServiceTimeList.length; i++) {
             let item = GetServiceTimeList[i];
             let day = item['day'];
+            console.log("day" , day);
             let dt = day.split('-').map(Number);
             let y = dt[0];
             let m = dt[1] - 1;
             let d = dt[2];
             item['day'] = new persianDate(new Date(y, m, d)).toLocale('en').format('YYYY-M-D');
+
         }
         // console.log("GetServiceTimeList : " , GetServiceTimeList)
 
         let selectedDays = [];
-        if(GetServiceTimeList.length != 0 )
-            selectedDays = GetServiceTimeList;
+
 
         console.log("selectedDays" , selectedDays);
 
         let serviceTimes = [];
+        if(GetServiceTimeList.length != 0 )
+            serviceTimes = GetServiceTimeList;
         /*$(document).on('click', ".table-days tr td" ,  function (e) {
             console.log("clicked !! " , $(this).attr("data-date"))
             $('#test').modal('show')
@@ -615,14 +618,11 @@
             }
         });
         $(document).ready(function () {
-
-
             /*$(".optgroup-2 .opt").click(function () {
                 console.log(" clicked ! ")
             });*/
-
-
             setSelected() ;
+
         });
 
         let sizeSelected = 0 ;
@@ -679,9 +679,10 @@
         });
 
         function setSelected(){
-            console.log("selectedDays in setSelected => " , selectedDays);
+
             $('.dt-deselected').each(function(){
                 let id = $(this).parent().attr("data-date").replace(/,/g, '-');
+                // console.log("id : " , id);
                 let otherMonth = isOtherMonth($(this));
 
                 if(!otherMonth){
@@ -690,7 +691,7 @@
                         $(this).attr('id', id);
                     }
                     let timesLength = getTimesLength(id);
-                    // console.log("serviceTimes => " , serviceTimes);
+                    console.log("timesLength => " , timesLength);
 
                     if (timesLength !=-1){
                         let html = '<a data-toggle="modal" data-target="#test"  class="px-2 rounded sanseBtn" style="background: #FFEB3B"> سانس ها :  '+ timesLength+'</a>';
@@ -952,6 +953,18 @@
             removeAllTicket();
             resetTime();
             submit() ;
+        }
+
+        function setTimeFirst() {
+
+            console.log("selectedDays => " , selectedDays)
+            sizeSelected = 0 ;
+            showAddButten(sizeSelected)
+            setSelected();
+            removeAllSeance();
+            removeAllTicket();
+            resetTime();
+            // submit() ;
         }
         function setVoucher() {
             let seances = getAllSeances();
