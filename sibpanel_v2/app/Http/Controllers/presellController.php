@@ -226,6 +226,7 @@ class presellController extends Controller
         $payment_datetime = Verta::getGregorian($payment_datetime[0],$payment_datetime[1],$payment_datetime[2]);
         $payment_datetime =  $payment_datetime[0] . "-" . $payment_datetime[1] . "-" . $payment_datetime[2];
         $description = $request->get("description");
+//        dd($request->hasFile("pic_str")) ;
         if($request->hasFile("pic_str")){
             $image = base64_encode(file_get_contents($request->file('pic_str')->path()));
             $pic_str = $image;
