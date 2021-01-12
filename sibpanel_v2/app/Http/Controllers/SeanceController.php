@@ -86,6 +86,9 @@ class seanceController extends Controller
                     }
                     $test = $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
 //                    return $test ;
+                    if($test["Header"]["MessageCode"] == 158) {
+                        return redirect()->back()->with('error' , " خطا : تاریخ انتخاب شده نامعتبر است . ");
+                     }
                 }
 
                 /* $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
@@ -102,9 +105,9 @@ class seanceController extends Controller
                 return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");
             }
         }catch (\Exception $e) {
-            return redirect()->back()->with('error' , " خطا در ایجاد سانس ");
+//            return redirect()->back()->with('error' , " خطا در ایجاد سانس ");
 //            return redirect()->back()->with('error' , $e->getMessage());
-//            return $e->getMessage();
+            return $e->getMessage();
         }
 
 
@@ -125,7 +128,11 @@ class seanceController extends Controller
 
     }
 
-
+    public function GetServiceTimes(Request $request) {
+        $service_id = [$request->get("service_id")] ;
+        $service_info = $this->api->GetServiceTimes($service_id);
+        return $service_info["ContentData"] ;
+    }
 
     public function edit_group_time_index(Request $request){
 

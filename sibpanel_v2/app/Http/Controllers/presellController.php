@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
+
 
 class presellController extends Controller
 {
@@ -100,9 +102,11 @@ class presellController extends Controller
             $url = 0 ;
             if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
                 array_push($images_url , $url);
-            }else
+            }else{
                 $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
-            array_push($images_url , $url);
+                array_push($images_url , $url);
+            }
+
         }
         $data = [
             "GetChargeTransactions" => $GetChargeTransactions ,
@@ -215,6 +219,11 @@ class presellController extends Controller
         if(is_null($id))
             return  redirect()->back()->with("error" , "خطا در شارژ حساب ! ");
 
+
+//        return  $img->filesize();
+//        $show = $width. " " . $height ;
+//        return $show ;
+
         $charge_amount = $request->get("charge_amount");
         $account_id = $id;
         $project_name = "TourismSystem";
@@ -228,9 +237,16 @@ class presellController extends Controller
         $description = $request->get("description");
 //        dd($request->hasFile("pic_str")) ;
         if($request->hasFile("pic_str")){
-            $image = base64_encode(file_get_contents($request->file('pic_str')->path()));
-            $pic_str = $image;
-//            return $image;
+//            $image = base64_encode(file_get_contents($request->file('pic_str')->path()));
+//            $pic_str = $image ;
+            $upload_file = $request->file("pic_str");
+            $upload_file = Image::make($upload_file);
+//            $height = Image::make($upload_file)->height();
+//            $width = Image::make($upload_file)->width();
+            $img = $upload_file->resize(300, 200);
+            $img = $img->encode('jpg', 75);
+            $pic_str = $img->encode('data-url');
+            $pic_str = (string)$pic_str ;
         }
         else
             return  redirect()->back()->with("error" , "مستندات واریزی بارگزاری نشده است ! ");

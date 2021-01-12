@@ -622,6 +622,7 @@
                 console.log(" clicked ! ")
             });*/
             setSelected() ;
+            // serviceTimes = [];
 
         });
 
@@ -691,7 +692,7 @@
                         $(this).attr('id', id);
                     }
                     let timesLength = getTimesLength(id);
-                    console.log("timesLength => " , timesLength);
+                    // console.log("timesLength => " , timesLength);
 
                     if (timesLength !=-1){
                         let html = '<a data-toggle="modal" data-target="#test"  class="px-2 rounded sanseBtn" style="background: #FFEB3B"> سانس ها :  '+ timesLength+'</a>';
@@ -742,13 +743,71 @@
             let sansId = $(this).attr("data-date").replace(/,/g, '-');
             let start = $(this).attr("data-start");
             let end = $(this).attr("data-end");
-            let cotactTime = start + end ;
+            let service_id = $(this).attr("data-service-id")
+            console.log("service_id => " , service_id);
+
+
+            $.ajax({
+                type:'POST',
+                url:"{{Route('GetServiceTimes')}}" ,
+                dataType:'json',
+                data:{
+                    '_token ': '<?php echo csrf_token() ?>',
+                    'service_id' : service_id ,
+                },
+                statusCode: {
+                    500: function() {
+                        $("#loader").hide();
+                        Swal.fire(
+                            'خطا در دريافت اطلاعات ! ',
+                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                            'error'
+                        )
+                    } ,
+                    400: function() {
+                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                        let x = 1 ;
+                        let dots = "";
+                        setInterval(function () {
+                            dots += ".";
+                            x++  ;
+                            // console.log(x)
+                            if(x >= 8 ){
+                                x = 1 ;
+                                dots = ".";
+                            }
+                            $("#dots").html(dots)
+                        } , 300)
+                        $("#loader").hide();
+                        Swal.fire(
+                            'نشست  شما پایان یافته است ! ',
+                            html,
+                            'warning' ,
+                        )
+                        setTimeout(function () {
+                            window.location.href = "{{Route("logout")}}";
+                        } , 1500)
+
+                    }
+                },
+                success : function (data) {
+                    let dataVoucherInfo = data[0].voucher_infos ;
+                    let voucher = [] ;
+                    for (let j = 0 ; j < dataVoucherInfo.length  ; j++)
+                    {
+                        voucher.push(dataVoucherInfo[j]) ;
+                    }
+                    showVoucher(voucher);
+                }
+            })
+
+            // let cotactTime = start + end ;
             // console.log("start => ", start)
             // console.log("start => ", end)
             // console.log("id ==> " , sansId)
             // console.log("serviceTimes ==> " , serviceTimes)
-            let voucher = [] ;
-            for(let i = 0 ; i < serviceTimes.length ; i++){
+
+            /*for(let i = 0 ; i < serviceTimes.length ; i++){
 
                 if(serviceTimes[i]["day"] == sansId)
                 {
@@ -768,11 +827,9 @@
                     }
                 }
 
-            }
-            console.log("serviceTimes  :  " , serviceTimes)
-            console.log("voucher push :  " , voucher)
+            }*/
 
-            showVoucher(voucher);
+
 
         })
 
@@ -827,9 +884,21 @@
                     // vouchertyppe_Sanse.setAttribute("vouchersInfo_name", data[j].vouchersInfo_name) ;
                     // vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
                     //
-                    sex.innerHTML = data[j].gender ;
-                    sex.setAttribute("gender_name", data[j].gender) ;
-                    sex.setAttribute("value", data[j].gender_value) ;
+                    let gender_val = data[j].sex ;
+                    let gender="";
+
+                    if(gender_val === 'male')
+                        gender='مردانه';
+                    if(gender_val === 'female')
+                        gender='زنانه';
+                    if(gender_val === 'dont_care')
+                        gender='همه';
+                    if(gender_val === 'single_sex')
+                        gender='تک جنسیتی';
+
+                    sex.innerHTML = gender ;
+                    sex.setAttribute("gender_name", gender) ;
+                    sex.setAttribute("value", data[j].sex) ;
                     sex.setAttribute("class", "seance_gender") ;
 
                     // amount_Sanse.innerHTML = data[j].seance_amount ;
@@ -839,7 +908,7 @@
                     // percent.innerHTML = data[j].seance_percent ;
                     // percent.setAttribute("value", data[j].seance_percent) ;
                     // percent.setAttribute("class", "seance_percent") ;
-                    setting.innerHTML = '<button data-date='+ date +' data-start='+ data[j].start +' data-end='+ data[j].end +'   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
+                    setting.innerHTML = '<button data-service-id="'+ data[j].service_time_id +'" data-date='+ date +' data-start="'+ data[j].start +'" data-end="'+ data[j].end +'"   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
                     remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
                 }
                 // console.log("sanas =>" ,
@@ -862,11 +931,7 @@
             let percent ;
             let remove  ;
             // let setting  ;
-            let data = sanas ;
-                for(let x = 0 ; x < data.length ; x++ ) {
-                    let voucherInfos = data[x].voucher_infos;
-                    // console.log("vouchers =>  " , voucher) ;
-                    // console.log("vouchers length =>  " , voucher.length) ;
+            let voucherInfos = sanas ;
                     for (let j = 0; j < voucherInfos.length; j++) {
                         console.log("voucher[j] : ", voucherInfos[j]);
                         // console.log("voucher inner  =>  " , voucher[j]) ;
@@ -894,13 +959,13 @@
                         // end_Sanse.setAttribute("value", data[j].end) ;
                         // end_Sanse.setAttribute("class", "seance_end");
 
-                        capacity_Sanse.innerHTML = voucherInfos[j].capacity;
-                        capacity_Sanse.setAttribute("value", voucherInfos[j].capacity);
+                        capacity_Sanse.innerHTML = voucherInfos[j].voucher_capacity;
+                        capacity_Sanse.setAttribute("value", voucherInfos[j].voucher_capacity);
                         capacity_Sanse.setAttribute("class", "seance_capacity");
                         //
-                        vouchertyppe_Sanse.innerHTML = voucherInfos[j].vouchersInfo_name;
-                        vouchertyppe_Sanse.setAttribute("value", voucherInfos[j].vouchersInfo);
-                        vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherInfos[j].vouchersInfo_name);
+                        vouchertyppe_Sanse.innerHTML = voucherInfos[j].voucher_type;
+                        vouchertyppe_Sanse.setAttribute("value", voucherInfos[j].voucher_type_id);
+                        vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherInfos[j].voucher_type);
                         vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse");
                         //
                         // sex.innerHTML = data[j].gender ;
@@ -908,8 +973,8 @@
                         // sex.setAttribute("value", data[j].gender_value) ;
                         // sex.setAttribute("class", "seance_gender") ;
 
-                        amount_Sanse.innerHTML = voucherInfos[j].seance_amount;
-                        amount_Sanse.setAttribute("value", voucherInfos[j].seance_amount);
+                        amount_Sanse.innerHTML = voucherInfos[j].amount;
+                        amount_Sanse.setAttribute("value", voucherInfos[j].amount);
                         amount_Sanse.setAttribute("class", "seance_amount");
 
                         percent.innerHTML = voucherInfos[j].seance_percent;
@@ -919,7 +984,7 @@
                         remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
 
                     }
-                }
+
 
                 // console.log("sanas =>" ,
 
