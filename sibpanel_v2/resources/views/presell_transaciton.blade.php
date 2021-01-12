@@ -111,7 +111,7 @@
                                     <input autocomplete="off"  id="FromDate" type="text" placeholder="تاریخ شروع" class="form-control">
                                 </div>
                                 <div class="col-md pl-md-0">
-                                    <input autocomplete="off"  id="ToDate" type="text" placeholder="تاريخ پایان" class="form-control">
+                                    <input autocomplete="off"  id="ToDate" value="{{\Carbon\Carbon::now()->addDay()->format('Y/m/d') }}" type="text" placeholder="تاريخ پایان" class="form-control">
                                 </div>
                                 <div class="col-md-auto">
                                     <button id="Search_btn" class="btn btn-rose px-5">
