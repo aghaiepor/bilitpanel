@@ -17,9 +17,11 @@ class Api
     private $AUTHORIZATION = 'basic aG9zc2VpbjpAZG1pbjEyMw==';
     public $session_id;
     protected $session_from_job;
+    protected $from;
 
     function __construct($from='') {
         $this->url = env('API_ADDRESS') ;
+        $this->from = $from ;
     }
 
     public function set_session_id($session_from_job=''){
@@ -1772,7 +1774,7 @@ class Api
     public function checkError($response , $type=null)
     {
 
-        if($from =! 'job' && $type == "ajax"){
+        if($this->from != 'job' && $type == "ajax"){
             if($response['Header']['MessageCode'] == 141){
                 \App::abort(400);
             }
@@ -1780,7 +1782,7 @@ class Api
         }
 
 
-        if ($from =! 'job' && $response['Header']['MessageCode'] == 141) {
+        if ($this->from != 'job' && $response['Header']['MessageCode'] == 141) {
             session()->forget('SessionId');
             session()->forget('UserInfo');
 //            return Redirect::to('login')->with('message', 'your message');

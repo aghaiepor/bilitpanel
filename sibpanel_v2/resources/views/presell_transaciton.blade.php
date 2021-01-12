@@ -168,7 +168,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="tbody" >
-                                    @if(count($transactions) == 0)
+                                    @if(count($transactions["log"]) == 0)
                                         <tr>
                                             <td colspan="6">
                                                 <h6 class="py-5 text-center"> موردی یافت نشد !  </h6>

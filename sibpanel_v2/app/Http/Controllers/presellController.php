@@ -34,8 +34,8 @@ class presellController extends Controller
         $account_id = $id;
         $trace_number = "";
         $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number) ;
-        $GetDechargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
 //        return $GetChargeTransaction;
+        $GetDechargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number) ;
 //          return $GetDechargeTransaction ;
 //        return $GetDechargeTransaction ;
         if(count($GetDechargeTransaction["ContentData"]) != 0 )
@@ -61,7 +61,7 @@ class presellController extends Controller
 
 //        return $Account ;
 //        dd($this->Api->GetChargeDocument(8));
-
+//        return count($GetChargeTransaction["log"]);
         return view("presell_transaciton"  , ["transactions" => $GetChargeTransaction  , "Account" =>$Account , "province_name" => $province_name , "total_amount" =>$total_amount , "total_buy"=>$total_buy]);
 
     }
