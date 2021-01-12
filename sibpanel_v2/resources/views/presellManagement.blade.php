@@ -397,6 +397,7 @@
             $(document).on("click",'.location_button' , function () {
                 $(this).parent().parent().next().fadeToggle() ;
             });
+/*
 
             $(document).on('click' , "#accpet_charge" , function (e) {
                 e.preventDefault();
@@ -562,6 +563,7 @@
 
                 console.log("Clicked ...! ")
             });
+*/
 
             $(document).on('input' , "#charge_amount" , function () {
                 let charge_amount =  $(this).val() ;

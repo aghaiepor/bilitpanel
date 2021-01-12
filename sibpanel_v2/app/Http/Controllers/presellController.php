@@ -238,7 +238,7 @@ class presellController extends Controller
         $ChargeAccount = $this->Api->ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str,$description);
 //        return $ChargeAccount ;
         if($ChargeAccount["Header"]["Status"] == 0 ) {
-            return  redirect()->back()->with("success" , "شارژ با موقیت انجام گردید  .");
+            return  redirect()->back()->with("success" , "شارژ با موفقیت انجام گردید  .");
         }else
             return  redirect()->back()->with("error" , "خطا در شارژ حساب ! ");
 
