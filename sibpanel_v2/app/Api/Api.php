@@ -1263,6 +1263,22 @@ class Api
         $this->checkError($response , $ajax) ;
         return $response;
     }
+    public function GetServiceTimes($service_time_ids , $ajax=null)
+    {
+        $data = [
+            "service_time_ids" => $service_time_ids ,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetServiceTimes' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $ajax) ;
+        return $response;
+    }
 
 
     // ******************* Alerts *******************

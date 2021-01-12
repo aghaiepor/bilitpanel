@@ -295,6 +295,12 @@ class LocationController extends Controller
                 });
                 return redirect()->back()->with('success' , 'جاذبه مورد نظر ایحاد گردید');
             }
+            else if ($AddService['Header']['MessageCode'] == 133){
+                return redirect()->back()->with('error' , 'خطا : شماا مجاز به انجام این عملیات نیستید  !  ');
+            }
+            else if ($AddService['Header']['MessageCode'] == 15){
+                return redirect()->back()->with('error' , 'خطا : سرویس ایجاد شده تکراریست !  ');
+            }
             else
                 return redirect()->back()->with('error' , 'خطا در ایجاد جاذبه جدید ');
 
