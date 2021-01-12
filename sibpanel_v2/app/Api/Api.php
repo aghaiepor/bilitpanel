@@ -1654,8 +1654,9 @@ class Api
     public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date="", $ajax=null){
         if($date == "")
         {
-            $now = Carbon::now()->timestamp ;
-            $date = [$now,$now] ;
+
+            $now = Carbon::now()->format('Y-m-d') ;
+            $date = [Carbon::parse($now." 00:00:00")->timestamp,Carbon::parse($now." 23:59:59")->timestamp] ;
         }
 
         $data = [
@@ -1670,7 +1671,7 @@ class Api
                     ]
             ];
         Log::info("GetChargeTransaction Log : " , $data);
-        $client = new Client();
+        /*$client = new Client();
         $result = $client->post($this->url . 'GetChargeTransaction' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -1679,13 +1680,13 @@ class Api
         $response = json_decode($result->getBody(),true);
 
         $this->checkError($response , $ajax);
-        return $response;
+        return $response;*/
     }
     public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date="", $ajax=null){
         if($date == "")
         {
-            $now = Carbon::now()->timestamp ;
-            $date = [$now,$now] ;
+            $now = Carbon::now()->format('Y-m-d') ;
+            $date = [Carbon::parse($now." 00:00:00")->timestamp,Carbon::parse($now." 23:59:59")->timestamp] ;
         }
 
         $data = [

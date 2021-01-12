@@ -508,7 +508,7 @@
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
         $('#FromDate').persianDatepicker({
-            initialValue: false,
+            initialValue: true,
             autoClose : true ,
             format: 'YYYY/MM/DD',
             calendar:{
@@ -524,7 +524,7 @@
 
         });
         $('#ToDate').persianDatepicker({
-            initialValue: false,
+            initialValue: true,
             autoClose : true ,
             format: 'YYYY/MM/DD',
             calendar:{
