@@ -1655,7 +1655,7 @@ class Api
         if($date == "")
         {
 
-            $now = Carbon::now()->format('Y-m-d') ;
+            $now = Carbon::now('Asia/Tehran')->format('Y/m/d') ;
             $date = [Carbon::parse($now." 00:00:00")->timestamp,Carbon::parse($now." 23:59:59")->timestamp] ;
         }
 

@@ -164,6 +164,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         // presel Route
         Route::get('/presellTransaction/{id?}/{province_id?}' , 'presellController@transaction')->name('presellTransaction');
         Route::get('/presellManger' , 'presellController@indexPage')->name('presellManger');
+        Route::get('/get_document_picture' , 'presellController@get_document_picture')->name('get_document_picture');
         Route::post('/GetTransactionFilter' , 'presellController@GetTransactionFilter')->name('GetTransactionFilter');
         Route::post('/ChargeAccount/{id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
         Route::post('/GetDechargeTransaction' , 'presellController@GetDechargeTransaction')->name('GetDechargeTransaction');

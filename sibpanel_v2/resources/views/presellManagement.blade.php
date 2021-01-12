@@ -252,25 +252,25 @@
                         <div class="form-row mt-3">
                             <div class="col-md text-right">
                                 <label for="" class="text-right"> مبلغ واریزی (ریال) </label>
-                                <input id="charge_amount" name="charge_amount" type="number" class="form-control">
+                                <input required id="charge_amount" name="charge_amount" type="number" class="form-control">
                             </div>
                             <div class="col-md text-right">
                                 <label for="" class="text-right">
                                     اعتبار بلیت شارژ شده (ریال)
                                 </label>
-                                <input id="ticket_charged" disabled type="text" class="form-control">
+                                <input required id="ticket_charged" disabled type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-row mt-3">
                             <div class="col-md text-right">
                                 <label for="" class="text-right"> بانک مبدا/شعبه </label>
-                                <input name="source_bank" type="text" class="form-control">
+                                <input required name="source_bank" type="text" class="form-control">
                             </div>
                             <div class="col-md text-right">
                                 <label for="" class="text-right">
                                     شماره فیش
                                 </label>
-                                <input name="reference_number" type="text" class="form-control">
+                                <input required name="reference_number" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-row mt-3">
@@ -278,7 +278,7 @@
                                 <label for="" class="text-right">
                                     تاریخ واریز
                                 </label>
-                                <input autocomplete="off" value="" name="payment_datetime" id="FromDate" type="text" class="form-control" placehrequester="">
+                                <input required autocomplete="off" value="" name="payment_datetime" id="FromDate" type="text" class="form-control" placehrequester="">
                             </div>
                             <div class="col-md text-right">
                                 <label for="" class="text-right">
@@ -287,7 +287,7 @@
                                         (PDF|PNG|JPG|JPEG)
                                     </small>
                                 </label>
-                                <input name="pic_str" type="file" class="form-control">
+                                <input required name="pic_str" type="file" class="form-control">
                             </div>
                         </div>
                         <div class="form-row mt-3">

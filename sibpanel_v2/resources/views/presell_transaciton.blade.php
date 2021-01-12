@@ -190,18 +190,18 @@
                                                 <td>-</td>
 
                                                 <td>
-                                                    @if(!is_null( $transaction['picture_id']))
-                                                        @php
-                                                            $api = new \App\Api\Api();
-                                                            $image_id = $transaction['picture_id'];
-                                                            $imageUrl = $api->GetDocumentAddress($image_id) ;
-                                                        @endphp
-                                                    <a  href="{{$imageUrl}}" class="btn btn-success docDownload">دانلود مستندات</a>
+{{--                                                    @if(!is_null( $transaction['picture_id']))--}}
+{{--                                                        @php--}}
+{{--                                                            $api = new \App\Api\Api();--}}
+{{--                                                            $image_id = $transaction['picture_id'];--}}
+{{--                                                            $imageUrl = $api->GetDocumentAddress($image_id) ;--}}
+{{--                                                        @endphp--}}
+                                                    <button trace="{{$transaction['trace_number']}}" img_id="{{$transaction['picture_id']}}" class="btn btn-success docDownload">دانلود مستندات</button>
                                                     <button data_id="{{$transaction['trace_number']}}" data-toggle="modal" data-target="#showFactor" class="btn btn-primary factor ">فاکتور فروش</button>
-                                                    @else
-                                                        <button  disabled class="btn btn-success ">دانلود مستندات</button>
-                                                        <button data_id="{{$transaction['trace_number']}}" data-toggle="modal" data-target="#showFactor" class="btn btn-primary factor ">فاکتور فروش</button>
-                                                    @endif
+{{--                                                    @else--}}
+{{--                                                        <button  disabled class="btn btn-success ">دانلود مستندات</button>--}}
+{{--                                                        <button data_id="{{$transaction['trace_number']}}" data-toggle="modal" data-target="#showFactor" class="btn btn-primary factor ">فاکتور فروش</button>--}}
+{{--                                                    @endif--}}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -546,6 +546,13 @@
 
     </script>
     <script>
+
+        function download_img(id){
+            $.get("/get_document_picture/?picture_id="+id, function(data, status){
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        }
+
         $(document).ready(function () {
 
             $(document).on( "click", ".factorBuy", function () {
@@ -789,10 +796,21 @@
                 // $("body").load();
             });
             $(document).on( "click", ".docDownload", function () {
-                var a = document.createElement("a");
-                a.href = $(this).attr("href") ;
-                a.download = "Image.jpeg";
-                a.click();
+
+                $("#loader").css("display" , "flex");
+                let img_id = $(this).attr("img_id");
+                let trace = $(this).attr("trace");
+                let href="";
+                $.get("/get_document_picture/?picture_id="+img_id, function(data, status){
+                    href = data;
+                    console.log("data:"+data)
+                    let a = document.createElement("a");
+                    a.href = href;
+                    a.download = "doc_"+trace+".jpeg";
+                    a.click();
+                    $("#loader").hide();
+                });
+
             });
 
             $(document).on( "click", ".page_btn", function () {
@@ -995,9 +1013,9 @@
                                 let typeT = $("#transaction_type").val();
                                 if(typeT == "charge"){
                                     let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;
-                                    if(images[i] != 0 ){
-                                        image = " <a href='" + images[i] + "' class=\"btn btn-success docDownload \">دانلود مستندات</a>" ;
-                                    }
+                                    // if(images[i] != 0 ){
+                                        image = " <button  trace='" + account[i].trace_number + "' img_id='" + account[i].picture_id + "' class=\"btn btn-success docDownload \">دانلود مستندات</button>" ;
+                                    // }
                                     setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;
                                 }else
                                     setting.innerHTML = '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactorBuy"  class="btn btn-primary factorBuy "> مشخصات تراکنش</a>' ;

@@ -64,6 +64,7 @@ class presellController extends Controller
 //        return $Account ;
 //        dd($this->Api->GetChargeDocument(8));
 //        return count($GetChargeTransaction["log"]);
+//        return $GetChargeTransaction;
         return view("presell_transaciton"  , ["transactions" => $GetChargeTransaction  , "Account" =>$Account , "province_name" => $province_name , "total_amount" =>$total_amount , "total_buy"=>$total_buy]);
 
     }
@@ -97,17 +98,17 @@ class presellController extends Controller
         $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number) ;
         $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
         $images_url = [] ;
-        foreach ($GetChargeTransactions as $GetChargeTransaction)
-        {
-            $url = 0 ;
-            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
-                array_push($images_url , $url);
-            }else{
-                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
-                array_push($images_url , $url);
-            }
-
-        }
+//        foreach ($GetChargeTransactions as $GetChargeTransaction)
+//        {
+//            $url = 0 ;
+//            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
+//                array_push($images_url , $url);
+//            }else{
+//                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
+//                array_push($images_url , $url);
+//            }
+//
+//        }
         $data = [
             "GetChargeTransactions" => $GetChargeTransactions ,
             "images_url" => $images_url ,
@@ -144,19 +145,20 @@ class presellController extends Controller
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
             $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
-            foreach ($GetChargeTransactions as $GetChargeTransaction)
-            {
-                $url = 0 ;
-                if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
-                    array_push($images_url , $url);
-                }else{
-                    $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
-                    array_push($images_url , $url);
-                }
-            }
+//            foreach ($GetChargeTransactions as $GetChargeTransaction)
+//            {
+//                $url = 0 ;
+//                if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
+//                    array_push($images_url , $url);
+//                }else{
+//                    $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
+//                    array_push($images_url , $url);
+//                }
+//            }
         }
         else{
             $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax") ;
+//            return $GetChargeTransaction;
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
             $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
@@ -181,15 +183,15 @@ class presellController extends Controller
         if($trancation_type == "charge"){
             $GetTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number  ,"","","ajax") ;
             $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
-            foreach ($GetTransactions as $GetTransactions)
-            {
-                $url = 0 ;
-                if( is_null($GetTransactions["picture_id"]) ||  $GetTransactions["picture_id"] === null ) {
-                    array_push($images_url , $url);
-                }else
-                    $url = $this->Api->GetDocumentAddress($GetTransactions["picture_id"]);
-                array_push($images_url , $url);
-            }
+//            foreach ($GetTransactions as $GetTransactions)
+//            {
+//                $url = 0 ;
+//                if( is_null($GetTransactions["picture_id"]) ||  $GetTransactions["picture_id"] === null ) {
+//                    array_push($images_url , $url);
+//                }else
+//                    $url = $this->Api->GetDocumentAddress($GetTransactions["picture_id"]);
+//                array_push($images_url , $url);
+//            }
         }
         else{
             $GetTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number,"","", "ajax") ;
@@ -240,13 +242,16 @@ class presellController extends Controller
 //            $image = base64_encode(file_get_contents($request->file('pic_str')->path()));
 //            $pic_str = $image ;
             $upload_file = $request->file("pic_str");
+            $new_size = $this->getImageSizeKeepAspectRatio($upload_file,1000,1000);
             $upload_file = Image::make($upload_file);
 //            $height = Image::make($upload_file)->height();
 //            $width = Image::make($upload_file)->width();
-            $img = $upload_file->resize(300, 200);
+
+
+            $img = $upload_file->resize($new_size['width'], $new_size['height']);
             $img = $img->encode('jpg', 75);
-            $pic_str = $img->encode('data-url');
-            $pic_str = (string)$pic_str ;
+            $pic_str = base64_encode($img);
+//
         }
         else
             return  redirect()->back()->with("error" , "مستندات واریزی بارگزاری نشده است ! ");
@@ -317,6 +322,37 @@ class presellController extends Controller
 
     private function fa2en($number){
         return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
+    }
+
+    public function getImageSizeKeepAspectRatio( $image, $maxWidth, $maxHeight)
+    {
+        $imageDimensions = getimagesize($image);
+
+        $imageWidth = $imageDimensions[0];
+        $imageHeight = $imageDimensions[1];
+
+        $imageSize['width'] = $imageWidth;
+        $imageSize['height'] = $imageHeight;
+
+        if($imageWidth > $maxWidth || $imageHeight > $maxHeight)
+        {
+            if ( $imageWidth > $imageHeight ) {
+                $imageSize['height'] = floor(($imageHeight/$imageWidth)*$maxWidth);
+                $imageSize['width']  = $maxWidth;
+            } else {
+                $imageSize['width']  = floor(($imageWidth/$imageHeight)*$maxHeight);
+                $imageSize['height'] = $maxHeight;
+            }
+        }
+
+        return $imageSize;
+    }
+
+    public function get_document_picture(Request $request){
+
+        $picture_id = $request->input('picture_id');
+        $url = $this->Api->GetDocumentAddress($picture_id);
+        return $url;//'<img src="' . $url . '" />';
     }
 }
 
