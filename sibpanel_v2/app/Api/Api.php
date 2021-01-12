@@ -1671,7 +1671,7 @@ class Api
                     ]
             ];
         Log::info("GetChargeTransaction Log : " , $data);
-        /*$client = new Client();
+        $client = new Client();
         $result = $client->post($this->url . 'GetChargeTransaction' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -1680,7 +1680,7 @@ class Api
         $response = json_decode($result->getBody(),true);
 
         $this->checkError($response , $ajax);
-        return $response;*/
+        return $response;
     }
     public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date="", $ajax=null){
         if($date == "")
