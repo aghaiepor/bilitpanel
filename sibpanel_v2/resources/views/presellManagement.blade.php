@@ -813,6 +813,20 @@
                                             'error'
                                         )
                                     }
+                                    else if(data.Header.MessageCode == 133) {
+                                        Swal.fire(
+                                            'شما مجاز به انجام این عملیات نیستید ! ',
+                                            '',
+                                            'warning'
+                                        )
+                                    }
+                                    else if(data.Header.MessageCode == 184) {
+                                        Swal.fire(
+                                            'حساب نمی تواند فعال شود ! ',
+                                            '',
+                                            'warning'
+                                        )
+                                    }
                                     else
                                     {
                                         Swal.fire(

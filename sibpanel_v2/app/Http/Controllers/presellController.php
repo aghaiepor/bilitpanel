@@ -160,7 +160,7 @@ class presellController extends Controller
             $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax") ;
 //            return $GetChargeTransaction;
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
-            $Header =  $GetChargeTransaction ;
+//            $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
         }
 //        return $GetChargeTransaction ;

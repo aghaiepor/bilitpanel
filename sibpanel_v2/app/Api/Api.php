@@ -1700,6 +1700,7 @@ class Api
                 ]
         ];
         $client = new Client();
+        Log::info("GetDechargeTransaction Log : " , $data);
         $result = $client->post($this->url . 'GetDechargeTransaction' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
