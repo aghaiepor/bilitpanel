@@ -25,6 +25,9 @@
             display: none;
             position: relative;
         }
+         .text-yellow {
+             color : #ffcf3f !important;
+         }
     </style>
     <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
@@ -1253,7 +1256,7 @@
                     }
                 },
                 success : function (data) {
-                    // console.log("data : " , data["ContentData"]);
+                    console.log("data : " , data["ContentData"]);
                     let account  = data["ContentData"]["location_accounts"] ;
                     let total_inv = data["ContentData"]["total_inventory"] ;
                     $("#total_inventory").text(number_format(total_inv , 0, "." , ","));
@@ -1299,6 +1302,9 @@
                                 mojodi.className = "h6 text-warning";
                             else if (account[i].account_state == "Red")
                                 mojodi.className = "h6 text-danger";
+                            else if (account[i].account_state == "Yellow")
+                                mojodi.className = "h6 text-yellow";
+
                             else
                                 mojodi.className = "";
 
