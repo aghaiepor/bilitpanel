@@ -803,7 +803,7 @@
                 let href="";
                 $.get("/get_document_picture/?picture_id="+img_id, function(data, status){
                     href = data;
-                    console.log("data:"+data)
+                    // console.log("data:"+data)
                     let a = document.createElement("a");
                     a.href = href;
                     a.download = "doc_"+trace+".jpeg";

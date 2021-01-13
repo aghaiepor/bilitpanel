@@ -207,7 +207,7 @@ class presellController extends Controller
             }
         }
 
-        Log::info($payment_datetime);
+//        Log::info($payment_datetime);
 
         $data = [
             "GetChargeTransactions" => $GetTransactions ,
@@ -237,21 +237,19 @@ class presellController extends Controller
         $payment_datetime = Verta::getGregorian($payment_datetime[0],$payment_datetime[1],$payment_datetime[2]);
         $payment_datetime =  $payment_datetime[0] . "-" . $payment_datetime[1] . "-" . $payment_datetime[2];
         $description = $request->get("description");
-//        dd($request->hasFile("pic_str")) ;
         if($request->hasFile("pic_str")){
-//            $image = base64_encode(file_get_contents($request->file('pic_str')->path()));
-//            $pic_str = $image ;
             $upload_file = $request->file("pic_str");
-            $new_size = $this->getImageSizeKeepAspectRatio($upload_file,1000,1000);
-            $upload_file = Image::make($upload_file);
-//            $height = Image::make($upload_file)->height();
-//            $width = Image::make($upload_file)->width();
+            $type = array("jpeg", "jpg", "png");
+            if(in_array(strtolower($upload_file->getClientOriginalExtension()),$type)) {
+                $new_size = $this->getImageSizeKeepAspectRatio($upload_file,1000,1000);
+                $upload_file = Image::make($upload_file);
+                $img = $upload_file->resize($new_size['width'], $new_size['height']);
+                $img = $img->encode('jpg', 75);
+                $pic_str = base64_encode($img);
+            }
+            else
+                return  redirect()->back()->with("error" , "خظا : فرمت مستند واریزی درست نمی باشد ! ");
 
-
-            $img = $upload_file->resize($new_size['width'], $new_size['height']);
-            $img = $img->encode('jpg', 75);
-            $pic_str = base64_encode($img);
-//
         }
         else
             return  redirect()->back()->with("error" , "مستندات واریزی بارگزاری نشده است ! ");
