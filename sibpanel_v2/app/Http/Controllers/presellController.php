@@ -134,7 +134,7 @@ class presellController extends Controller
             if ($FromDate !='')
                 $FromDate = Verta::parse($this->fa2en($FromDate).' 00:00:00')->timestamp ;
             if($ToDate != "")
-                $ToDate = Verta::parse($this->fa2en($ToDate).' 00:00:00')->timestamp ;
+                $ToDate = Verta::parse($this->fa2en($ToDate).' 23:59:59')->timestamp ;
 
             $date = [(string)$FromDate , (string)$ToDate ];
         }
