@@ -28,15 +28,17 @@ RUN apt-get update \
         libpq-dev \
         libjpeg-dev \
         libpng-dev \
+        libjpeg62-turbo-dev \
         libfreetype6-dev \
         libssl-dev \
+        libgmp-dev \
         libmcrypt-dev \
         libzip-dev \
         unzip \
         zip \
         sed \
         nodejs \
-    && docker-php-ext-configure gd \
+    && docker-php-ext-configure gd  --with-jpeg=/usr/include/ --with-freetype=/usr/include/ \
     && docker-php-ext-configure zip \
     && docker-php-ext-install \
         gd \
