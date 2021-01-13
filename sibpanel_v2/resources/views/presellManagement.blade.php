@@ -939,10 +939,26 @@
             });
 
             $(document).on("change",'input[name=location_id_active]' ,function () {
+                let activation = $(this).is(':checked');
+                let color = $(this).attr("data-color")
+                if(color == "Red" )
+                {
+                    Swal.fire(
+                        'خطا !  ',
+                        'فعال یا غیر فعال کردن حساب ممکن نیست . لطفا حساب را شارژ نمایید .',
+                        'error'
+                    )
+
+                    if(activation)
+                        $(this).prop( "checked", false );
+                    else
+                        $(this).prop( "checked", true );
+                    return ;
+                }
 
                 let locationaccount_id = $(this).attr('data-location');
                 // console.log("locationaccount_id => " , locationaccount_id);
-                let activation = $(this).is(':checked');
+
                 // console.log("activation => " , activation);
                 let thisElement =  $(this) ;
                 let failed = true ;
@@ -1325,9 +1341,9 @@
                             let state_html = ' <div class="togglebutton">' + '<label>' ;
 
                             if (account[i].account_status)
-                                state_html += '<input  data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active" checked="">'  ;
+                                state_html += '<input data-color="'+ account[i].account_state +'"  data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active" checked="">'  ;
                             else
-                                state_html += '<input data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active">'  ;
+                                state_html += '<input data-color="'+ account[i].account_state +'"  data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active">'  ;
 
                             state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
 
