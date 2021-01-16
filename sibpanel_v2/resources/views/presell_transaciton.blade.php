@@ -569,7 +569,7 @@
                 // $("#trace_number , #factor_number").text(trace_number);
                 $.ajax({
                     type:'POST',
-                    url: "{{Route("GetTransaction")}}" ,
+                    url: "{{Route("GetTransactionFactor")}}" ,
                     dataType:'json',
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
@@ -648,8 +648,11 @@
                 })
             });
             $(document).on( "click", ".factor", function () {
+
                 $("#loader2").css("display" , "flex");
                 let id = "{{url()->current()}}";
+                let FromDate = $("#FromDate").val();
+                let ToDate = $("#ToDate").val();
                 id = id.split("/");
                 id = id[4];
                 let trace_number = $(this).attr("data_id") ;
@@ -660,7 +663,7 @@
                 $("#trace_number , #factor_number").text(trace_number);
                 $.ajax({
                     type:'POST',
-                    url: "{{Route("GetTransaction")}}" ,
+                    url: "{{Route("GetTransactionFactor")}}" ,
                     dataType:'json',
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
@@ -668,6 +671,8 @@
                         'page' : page ,
                         'type' : type ,
                         'trace_number' : trace_number ,
+                        'FromDate' : FromDate ,
+                        'ToDate' : ToDate ,
                     },
                     statusCode: {
                         500: function() {
@@ -705,8 +710,11 @@
                         }
                     },
                     success : function (data) {
+                        console.log("data => " , data)
                         $("#loader2").hide();
                         let account  = data["GetChargeTransactions"] ;
+                        account  = account[0] ;
+                        console.log("account => " , account)
                         let images = data["images_url"] ;
                         let payment_datetime = data["payment_datetime"] ;
                         // console.log("payment_datetime => " ,payment_datetime)
@@ -830,7 +838,6 @@
                 GetDechargeTransaction();
 
             })
-
 
         });
         $("#pagination").hide();

@@ -1651,8 +1651,8 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date="", $ajax=null){
-        if($date == "")
+    public function GetChargeTransaction($page ,$account_id, $trace_number , $reference_number="" , $date="", $ajax=null , $factor=null){
+        if($date == "" && is_null($factor))
         {
 
             $now = Carbon::now('Asia/Tehran')->format('Y/m/d') ;
@@ -1682,8 +1682,8 @@ class Api
         $this->checkError($response , $ajax);
         return $response;
     }
-    public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date="", $ajax=null){
-        if($date == "")
+    public function GetDechargeTransaction($page ,$account_id, $trace_number, $reference_number="" , $date="", $ajax=null , $factor=null){
+        if($date == "" && is_null($factor))
         {
             $now = Carbon::now()->format('Y-m-d') ;
             $date = [Carbon::parse($now." 00:00:00")->timestamp,Carbon::parse($now." 23:59:59")->timestamp] ;

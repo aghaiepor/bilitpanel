@@ -180,8 +180,22 @@ class presellController extends Controller
         $trace_number = $request->get("trace_number");
         $trancation_type = $request->get("type");
         $images_url = [] ;
+        $ToDate = $request->get("ToDate");
+//        return $ToDate ;
+        $FromDate = $request->get("FromDate");
+        if(is_null($ToDate) && is_null($FromDate) )
+            $date = ["",""] ;
+        else{
+            if ($FromDate !='')
+                $FromDate = Verta::parse($this->fa2en($FromDate).' 00:00:00')->timestamp ;
+            if($ToDate != "")
+                $ToDate = Verta::parse($this->fa2en($ToDate).' 23:59:59')->timestamp ;
+
+            $date = [(string)$FromDate , (string)$ToDate ];
+        }
+
         if($trancation_type == "charge"){
-            $GetTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number  ,"","","ajax") ;
+            $GetTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number  ,"",$date,"ajax" , 1) ;
             $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
 //            foreach ($GetTransactions as $GetTransactions)
 //            {
@@ -194,7 +208,7 @@ class presellController extends Controller
 //            }
         }
         else{
-            $GetTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number,"","", "ajax") ;
+            $GetTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number,"","", "ajax", 1) ;
             $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
         }
         $payment_datetime = "-";
