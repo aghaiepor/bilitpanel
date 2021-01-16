@@ -941,11 +941,11 @@
             $(document).on("change",'input[name=location_id_active]' ,function () {
                 let activation = $(this).is(':checked');
                 let color = $(this).attr("data-color")
-                if(color == "Red" )
+                if(color == "Red" && activation )
                 {
                     Swal.fire(
                         'خطا !  ',
-                        'فعال یا غیر فعال کردن حساب ممکن نیست . لطفا حساب را شارژ نمایید .',
+                        'فعال کردن حساب ممکن نیست . لطفا حساب را شارژ نمایید .',
                         'error'
                     )
 
