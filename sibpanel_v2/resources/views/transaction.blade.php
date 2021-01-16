@@ -25,7 +25,9 @@
         }
     </style>
 @endsection
-
+@php
+    $api = new App\Api\Api() ;
+@endphp
 @section('content')
 <div class="content">
     <div class="content">
@@ -78,22 +80,76 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                {{--  City --}}
+                                @php
+                                    if(!is_null(request('province_id'))){
+                                        $province_id = request('province_id') ;
+                                        $citys = $api->CityList($province_id);
+                                        $citys = $citys["ContentData"];
+                                    }
+                                else
+                                    $citys = [] ;
+                                @endphp
                                 <div class="col-md-3 text-right">
                                     <label for=""> انتخاب شهر  </label>
-                                    <select  name="city_id" id="cityList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
-                                        <option selected value=""> همه </option>
+                                    <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
+                                        <option value=""> همه </option>
+                                        @foreach($citys as $city )
+                                            @if($city["id"] == request("city_id"))
+                                                <option selected value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
+                                            @else
+                                                <option value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
+
+                                {{--  location --}}
+                                @php
+                                    if(!is_null(request('city_id'))){
+                                        $province_id = request('province_id') ;
+                                        $city_id = request('city_id') ;
+                                        $location_lists = $api->location_list($province_id ,$city_id );
+                                        $location_lists = $location_lists["ContentData"];
+                                    }
+                                else
+                                    $location_lists = [] ;
+                                @endphp
                                 <div class="col-md-3 text-right">
                                     <label for=""> انتخاب مکان   </label>
-                                    <select  name="location_id" id="locationList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
-                                        <option selected value=""> همه </option>
+                                    <select name="location_id" id="locationList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
+                                        <option value=""> همه </option>
+                                        @foreach($location_lists as $location_list )
+                                            @if($location_list["id"] == request("location_id"))
+                                                <option selected value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
+                                            @else
+                                                <option value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
+
+                                {{--  museum --}}
+                                @php
+                                    if(!is_null(request('location_id'))){
+                                        $location_id = request('location_id') ;
+                                        $ServiceLists = $api->ServiceList($location_id);
+                                        $ServiceLists = $ServiceLists["ContentData"];
+                                    }
+                                else
+                                    $ServiceLists = [] ;
+                                @endphp
                                 <div class="col-md-3 text-right">
                                     <label for=""> انتخاب موزه </label>
-                                    <select  name="service_id" id="ServiceList"  class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه">
-                                        <option selected value=""> همه </option>
+                                    <select name="service_id" id="ServiceList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه ">
+                                        <option value=""> همه </option>
+                                        @foreach($ServiceLists as $ServiceList )
+                                            @if($ServiceList["service_id"] == request("service_id"))
+                                                <option selected value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
+                                            @else
+                                                <option value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
 
@@ -190,7 +246,7 @@
 
                                 <div class="col-md-3 text-right">
                                     @php
-                                        $api = new App\Api\Api() ;
+
 
                                         $formDate = $api->fa2en(request('startDate'))  ;
                                         $endtDate = $api->fa2en(request('endtDate'))  ;
@@ -468,190 +524,7 @@
             locationList = "{{request('location_id')}}";
             service_id = "{{request('service_id')}}";
             let session_fall = true;
-            if(province != ''){
-                var province_id = province;
-                $.ajax({
-                    type:'POST',
-                    url:"{{Route('CityList')}}",
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'province_id' : province_id ,
-                    },statusCode: {
-                        500: function() {
-                            $("#loader").hide();
-                            Swal.fire(
-                                'خطا در دريافت اطلاعات ! ',
-                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                                'error'
-                            )
-                        } ,
-                        400: function() {
-                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                            let x = 1 ;
-                            let dots = "";
-                            setInterval(function () {
-                                dots += ".";
-                                x++  ;
-                                // console.log(x)
-                                if(x >= 8 ){
-                                    x = 1 ;
-                                    dots = ".";
-                                }
-                                $("#dots").html(dots)
-                            } , 300)
-                            $("#loader").hide();
-                            Swal.fire(
-                                'نشست  شما پایان یافته است ! ',
-                                html,
-                                'warning' ,
-                            )
-                            setTimeout(function () {
-                                window.location.href = "{{Route("logout")}}";
-                            } , 1500)
-                            session_fall = false ;
 
-                        }
-                    },
-                    success:function(data) {
-                        $("#cityList").html('');
-                        $("#cityList").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i < data.data.length ; i++){
-                            if(cityList == data.data[i].id )
-                                $("#cityList").append('<option selected value="' + data.data[i].id + '">' + data.data[i].city_name + '</option>');
-                            else
-                                $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
-
-                        }
-                        $('.selectpicker').selectpicker('refresh');
-                    }
-                });
-            }
-            if(cityList != ''){
-                var province_id = province;
-                var city_id = cityList;
-                $.ajax({
-                    type:'POST',
-                    url:"{{Route('location_list')}}",
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'province_id' : province_id ,
-                        'city_id' : city_id ,
-                    },statusCode: {
-                        500: function() {
-                            $("#loader").hide();
-                            Swal.fire(
-                                'خطا در دريافت اطلاعات ! ',
-                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                                'error'
-                            )
-                        } ,
-                        400: function() {
-                            if(session_fall){
-                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                let x = 1 ;
-                                let dots = "";
-                                setInterval(function () {
-                                    dots += ".";
-                                    x++  ;
-                                    // console.log(x)
-                                    if(x >= 8 ){
-                                        x = 1 ;
-                                        dots = ".";
-                                    }
-                                    $("#dots").html(dots)
-                                } , 300)
-                                $("#loader").hide();
-                                Swal.fire(
-                                    'نشست  شما پایان یافته است ! ',
-                                    html,
-                                    'warning' ,
-                                )
-                                setTimeout(function () {
-                                    window.location.href = "{{Route("logout")}}";
-                                } , 1500)
-                                session_fall = false ;
-                            }
-                        }
-                    },
-                    success:function(data) {
-                        $("#locationList").html('');
-                        $("#locationList").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i< data.data.length ; i++){
-                            if(locationList == data.data[i].id ){
-                                $("#locationList").append('<option selected value="' + data.data[i].id + '">' + data.data[i].location_name + '</option>');
-                            }
-                            else
-                                $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id));
-                        }
-                        $('.selectpicker').selectpicker('refresh');
-                        $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
-                            var selected = $(e.currentTarget).val();
-                        });
-                    }
-                });
-            }
-            if(locationList != ''){
-                var locationID = locationList;
-                $.ajax({
-                    type:'POST',
-                    url:"{{Route('ServiceListReport')}}",
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'locationID' : locationID ,
-                    },statusCode: {
-                        500: function() {
-                            $("#loader").hide();
-                            Swal.fire(
-                                'خطا در دريافت اطلاعات ! ',
-                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                                'error'
-                            )
-                        } ,
-                        400: function() {
-                            if(session_fall){
-                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                let x = 1 ;
-                                let dots = "";
-                                setInterval(function () {
-                                    dots += ".";
-                                    x++  ;
-                                    // console.log(x)
-                                    if(x >= 8 ){
-                                        x = 1 ;
-                                        dots = ".";
-                                    }
-                                    $("#dots").html(dots)
-                                } , 300)
-                                $("#loader").hide();
-                                Swal.fire(
-                                    'نشست  شما پایان یافته است ! ',
-                                    html,
-                                    'warning' ,
-                                )
-                                setTimeout(function () {
-                                    window.location.href = "{{Route("logout")}}";
-                                } , 1500)
-                                session_fall = false  ;
-                            }
-                        }
-                    },
-                    success:function(data) {
-                        $("#ServiceList").html('');
-                        $("#ServiceList").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i< data.array_keys.length ; i++){
-                            if(service_id == data.data[[data.array_keys[i]]].service_id  ){
-                                $("#ServiceList").append('<option selected value="' + data.data[[data.array_keys[i]]].service_id + '">' +  data.data[[data.array_keys[i]]].service_name + '</option>');
-                            }
-                            else
-                                $("#ServiceList").append(new Option( data.data[[data.array_keys[i]]].service_name , data.data[[data.array_keys[i]]].service_id));
-                        }
-                        $('.selectpicker').selectpicker('refresh');
-                    }
-                });
-            }
 
             $('#province').change(function () {
                 var province_id = $('#province').val();

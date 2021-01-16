@@ -25,7 +25,9 @@
         }
     </style>
 @endsection
-
+@php
+    $api = new \App\Api\Api();
+@endphp
 @section('content')
 
     <div class="content">
@@ -68,8 +70,7 @@
                                     <div class="col-md-3 text-right">
                                         <label for=""> نحوه دسته بندی </label>
                                         <select name="key" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                            <option value="province"  selected> همه </option>
-                                            <option @if(request('key') == "province") selected @endif value="province">استان</option>
+                                            <option @if(request('key') == "province" || is_null(request('key')) ) selected @endif value="province">استان</option>
                                             <option @if(request('key') == "city") selected @endif value="city">شهر</option>
                                             <option @if(request('key') == "sale_type") selected @endif value="sale_type">نوع پرداخت</option>
                                             <option @if(request('key') == "voucher_type") selected @endif value="voucher_type">نوع بلیت</option>
@@ -94,24 +95,73 @@
                                         </select>
                                     </div>
                                     {{--  City --}}
+                                    @php
+                                        if(!is_null(request('province_id'))){
+                                            $province_id = request('province_id') ;
+                                            $citys = $api->CityList($province_id);
+                                            $citys = $citys["ContentData"];
+                                        }
+                                    else
+                                        $citys = [] ;
+                                    @endphp
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب شهر  </label>
                                         <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
                                             <option value=""> همه </option>
+                                            @foreach($citys as $city )
+                                                @if($city["id"] == request("city_id"))
+                                                    <option selected value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
+                                                @else
+                                                    <option value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                     {{--  location --}}
+                                    @php
+                                        if(!is_null(request('city_id'))){
+                                            $province_id = request('province_id') ;
+                                            $city_id = request('city_id') ;
+                                            $location_lists = $api->location_list($province_id ,$city_id );
+                                            $location_lists = $location_lists["ContentData"];
+                                        }
+                                    else
+                                        $location_lists = [] ;
+                                    @endphp
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب مکان   </label>
                                         <select name="location_id" id="locationList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
                                             <option value=""> همه </option>
+                                            @foreach($location_lists as $location_list )
+                                                @if($location_list["id"] == request("location_id"))
+                                                    <option selected value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
+                                                @else
+                                                    <option value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                     {{--  museum --}}
+                                    @php
+                                        if(!is_null(request('location_id'))){
+                                            $location_id = request('location_id') ;
+                                            $ServiceLists = $api->ServiceList($location_id);
+                                            $ServiceLists = $ServiceLists["ContentData"];
+                                        }
+                                    else
+                                        $ServiceLists = [] ;
+                                    @endphp
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب موزه </label>
                                         <select name="service_id" id="ServiceList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه ">
                                             <option value=""> همه </option>
+                                            @foreach($ServiceLists as $ServiceList )
+                                                @if($ServiceList["service_id"] == request("service_id"))
+                                                    <option selected value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
+                                                @else
+                                                    <option value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                     @if(env("HAS_TERMINAL"))
@@ -193,7 +243,7 @@
                                         </div>
                                     @endif
                                     @php
-                                        $api = new \App\Api\Api();
+
 
                                         $formDate = $api->fa2en(request('startDate'))  ;
                                         $endtDate = $api->fa2en(request('endDate'))  ;
@@ -464,7 +514,7 @@
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
 
-            if(province != ''){
+            /*if(province != ''){
                 var province_id = province;
                 $.ajax({
                     type:'POST',
@@ -511,9 +561,13 @@
                     success:function(data) {
                         $("#cityList").html('');
                         $("#cityList").append(new Option( 'همه' , '',true));
+
                         for(var i = 0 ; i < data.data.length ; i++){
                             if(cityList == data.data[i].id )
+                            {
+                                $("#cityList").find("option").attr("selected" , false) ;
                                 $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id , true));
+                            }
                             else
                                 $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
                         }
@@ -646,7 +700,7 @@
                         $('.selectpicker').selectpicker('refresh');
                     }
                 });
-            }
+            }*/
 
             $('#province').change(function () {
                 var province_id = $('#province').val();
