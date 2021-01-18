@@ -179,6 +179,9 @@ class UserManagerController extends Controller
             $national_id = "";
         $username = $request->get('username'); //
         $password = $request->get('password'); //
+        if(is_null($password))
+            $password = "";
+
         $email = $request->get('email'); //
         if(is_null($email))
             $email = "";
