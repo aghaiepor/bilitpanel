@@ -304,7 +304,7 @@
                             <input id="addUser_imei" name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
                         </div>
                         <div class="col-sm-6 text-right">
-                            <label for=""> دسترسی به نوع فروش </label>
+                            <label for=""> دسترسی به پیش فروش </label>
                             <select id="addUser_presell" name="pre_sell" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option selected value="0"> خیر</option>
                                 <option value="1"> بله</option>
@@ -390,7 +390,7 @@
                                 <input id="user_email" name="email" type="email" class="form-control"  placeholder="ایمیل ">
                             </div>
                             <div class="col-sm-6 text-right">
-                                <label for=""> دسترسی به نوع فروش </label>
+                                <label for=""> دسترسی به پیش فروش </label>
                                 <select id="user_pre_sell" name="pre_sell" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                     <option selected value="0"> خیر</option>
                                     <option value="1"> بله</option>
