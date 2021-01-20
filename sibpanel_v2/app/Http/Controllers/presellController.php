@@ -76,14 +76,6 @@ class presellController extends Controller
         $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
         $images_url = [] ;
 
-//        foreach ($GetChargeTransactions as $GetChargeTransaction){
-//            $url = 0 ;
-//            if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
-//                array_push($images_url , $url);
-//            }else
-//                $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
-//                array_push($images_url , $url);
-//        }
         $data = [
             "GetChargeTransactions" => $GetChargeTransactions ,
             "images_url" => $images_url ,
@@ -142,19 +134,10 @@ class presellController extends Controller
         $images_url = [] ;
         if($type == "charge"){
             $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax" ) ;
+            Log::info("GetChargeTransaction presell controller => " , $GetChargeTransaction);
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
             $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
-//            foreach ($GetChargeTransactions as $GetChargeTransaction)
-//            {
-//                $url = 0 ;
-//                if( is_null($GetChargeTransaction["picture_id"]) ||  $GetChargeTransaction["picture_id"] === null ) {
-//                    array_push($images_url , $url);
-//                }else{
-//                    $url = $this->Api->GetDocumentAddress($GetChargeTransaction["picture_id"]);
-//                    array_push($images_url , $url);
-//                }
-//            }
         }
         else{
             $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax") ;
@@ -196,32 +179,24 @@ class presellController extends Controller
 
         if($trancation_type == "charge"){
             $GetTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number  ,"",$date,"ajax" , 1) ;
-            $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
-//            foreach ($GetTransactions as $GetTransactions)
-//            {
-//                $url = 0 ;
-//                if( is_null($GetTransactions["picture_id"]) ||  $GetTransactions["picture_id"] === null ) {
-//                    array_push($images_url , $url);
-//                }else
-//                    $url = $this->Api->GetDocumentAddress($GetTransactions["picture_id"]);
-//                array_push($images_url , $url);
-//            }
+            $GetTransactions =  $GetTransaction["ContentData"]["log"];
         }
         else{
             $GetTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number,"","", "ajax", 1) ;
             $GetTransactions =  $GetTransaction["ContentData"]["log"] ;
         }
+
         $payment_datetime = "-";
-        if (array_key_exists( "description_json" ,$GetTransactions )) {
-            if( count($GetTransactions["description_json"]) != 0 ){
-                $payment_datetime = $GetTransactions["description_json"]["payment_datetime"] ;
+        if (array_key_exists( "description_json" ,$GetTransactions[0] ) ) {
+            if( count($GetTransactions[0]["description_json"]) != 0 ){
+                $payment_datetime = $GetTransactions[0]["description_json"]["payment_datetime"] ;
                 $payment_datetime = Carbon::parse($payment_datetime)->timestamp;
                 $payment_datetime = new Verta($payment_datetime);
-                $payment_datetime =$payment_datetime->formatDatetime();
+                $payment_datetime =$payment_datetime->formatDate();
             }
         }
 
-//        Log::info($payment_datetime);
+        Log::info($payment_datetime);
 
         $data = [
             "GetChargeTransactions" => $GetTransactions ,

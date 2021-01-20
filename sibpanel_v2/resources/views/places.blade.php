@@ -490,12 +490,13 @@
                             @foreach($GetVoucherText as $text)
                                 <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
                             @endforeach
-                            {{-- <option value="3">تست</option>
+                            {{--
+                             <option value="3">تست</option>
                              <option value="5">سال رونق تولید مبارک</option>
                              <option value="1">سال جهش تولید</option>
                              <option value="4">ستاد گردشگری شهرداری تهران</option>
                              <option value="6">فرهیخته گرامی،ارزش رسمی بلیت ورودی 50 هزار ریال است که به دلیل نگرش واقف در خدمت رسانی نیک اندیشانه،از شهروندان 20 هزار ریال دریافت می گردد.</option>
-                         --}}
+                            --}}
                         </select>
                     </div>
 
@@ -671,77 +672,8 @@
                 });
             });
 
-            let pro_id = "{{request('province_id')}} ";
-            let city_id = "{{request('city_id')}} ";
-/*
-            if(pro_id != ''){
-                var province_id = pro_id;
-                // $('#loader').css('display' , 'flex');
-
-                $.ajax({
-                    type:'POST',
-                    url:"{{Route('CityList')}}",
-                    dataType:'json',
-                    data:{
-                        '_token ': '<?php echo csrf_token() ?>',
-                        'province_id' : province_id ,
-                    },
-                    statusCode: {
-                        500: function() {
-                            $("#loader").hide();
-                            Swal.fire(
-                                'خطا در دريافت اطلاعات ! ',
-                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                                'error'
-                            )
-                        } ,
-                        400: function() {
-                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                            let x = 1 ;
-                            let dots = "";
-                            setInterval(function () {
-                                dots += ".";
-                                x++  ;
-                                // console.log(x)
-                                if(x >= 8 ){
-                                    x = 1 ;
-                                    dots = ".";
-                                }
-                                $("#dots").html(dots)
-                            } , 300)
-                            $("#loader").hide();
-                            Swal.fire(
-                                'نشست  شما پایان یافته است ! ',
-                                html,
-                                'warning' ,
-                            )
-                            setTimeout(function () {
-                                window.location.href = "{{Route("logout")}}";
-                            } , 1500)
-
-                        }
-                    },
-                    success:function(data) {
-                        $("#cityList_filter").html('');
-                        $("#cityList_filter").append(new Option( 'همه' , '',true));
-
-                        console.log("pro_id => "  , city_id )
-
-                        for(var i = 0 ; i < data.data.length ; i++){
-                            console.log("data.data[i].id =>" , data.data[i].id)
-                            if (data.data[i].id == city_id){
-                                $("#cityList_filter").find("option").attr('selected' , false);
-                                $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id , true));
-                            }else
-                                $("#cityList_filter").append(new Option( data.data[i].city_name , data.data[i].id));
-                        }
-
-                        // $('#loader').hide();
-                        $('.selectpicker').selectpicker('refresh');
-                    }
-
-                });
-            }*/
+            let pro_id = "{{request('province_id')}}";
+            let city_id = "{{request('city_id')}}" ;
 
             $('#province').change(function () {
                 var province_id = $('#province').val();

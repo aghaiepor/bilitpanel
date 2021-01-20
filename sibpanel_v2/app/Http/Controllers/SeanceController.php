@@ -72,7 +72,7 @@ class seanceController extends Controller
                 foreach ($times as $time) {
                     $start = $day . " " . $time["start"] ;
                     $end = $day . " " . $time["end"] ;
-                    $sex = $time["gender_value"] ;
+                    $sex = $time["sex"] ;
                     $voucher_infos = $time["voucher_infos"] ;
                     $voucher_infos_data = [] ;
                     foreach ($voucher_infos as $voucher_info ) {
@@ -84,6 +84,7 @@ class seanceController extends Controller
                         ];
                         array_push( $voucher_infos_data ,  $voucher) ;
                     }
+//                    return $voucher_infos_data ;
                     $test = $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
 //                    return $test ;
                     if($test["Header"]["MessageCode"] == 158) {

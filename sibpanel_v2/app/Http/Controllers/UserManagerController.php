@@ -191,22 +191,6 @@ class UserManagerController extends Controller
         $panel_access = false ;  /*$request->get('panel_access');*/
         $pre_sell = $request->get('pre_sell');
         $imei = $request->get('imei');
-//        $data = [
-//            "name" => $request->get('name') ,
-//            "last_name" => $request->get('last_name') ,  //
-//            "cellphone" => $request->get('cellphone') ,
-//            "national_id" => $request->get('national_id') ,  //
-//            "username" => $request->get('username') ,  //
-//            "password" => $request->get('password') ,  //
-//            "email" => $request->get('email') ,  //
-//            "account_type_id" => $request->get('account_type_id') ,  //
-//            "otp_verify" => '0' ,  //$request->get('otp_verify');
-//            "subset_users" => "" ,   /*$request->get('subset_users')*/
-//            "panel_access" => false  ,   /*$request->get('panel_access');*/
-//            "pre_sell" => $request->get('pre_sell') ,
-//            "imei" => $request->get('imei') ,
-//        ];
-//        return $data ;
         $SellerUserList = $this->api->RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password, $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei ,$id);
 //       return $SellerUserList;
 

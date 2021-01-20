@@ -710,11 +710,11 @@
                         }
                     },
                     success : function (data) {
-                        console.log("data => " , data)
+                        // console.log("data => " , data)
                         $("#loader2").hide();
                         let account  = data["GetChargeTransactions"] ;
                         account  = account[0] ;
-                        console.log("account => " , account)
+                        // console.log("account => " , account)
                         let images = data["images_url"] ;
                         let payment_datetime = data["payment_datetime"] ;
                         // console.log("payment_datetime => " ,payment_datetime)
@@ -737,7 +737,7 @@
                         }else
                         {
                             $("#source_bank").text("");
-                            $("#payment_datetime").text("");
+                            // $("#payment_datetime").text("");
                             $("#userName").text(" - ") ;
                         }
                         $("#payment_datetime").text(payment_datetime);
