@@ -1710,7 +1710,7 @@ class Api
         $this->checkError($response  , $ajax);
         return $response;
     }
-    public function ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str , $description){
+    public function ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str , $description, $tag=""){
         $data = [
             "charge_amount" => $charge_amount,
             "account_id"=>$account_id,
@@ -1720,6 +1720,7 @@ class Api
             "payment_datetime" =>$payment_datetime,
             "pic_str" => $pic_str,
             "description" => $description,
+            "tag" => $tag
         ];
         Log::info( "Charge data : " ,  $data);
         $client = new Client();
@@ -1807,9 +1808,17 @@ class Api
         $base64   = base64_encode($content);
         return ('data:' . $mime . ';base64,' . $base64);
     }
-    function GetDocumentAddress($id)
+    function GetDocumentAddress($id , $tag)
     {
+
         $GetPicture = $this->GetChargeDocument($id);
+        Log::info("GetPicture : " ,$GetPicture );
+        if($tag == "pdf"){
+            $base64 =  base64_encode($GetPicture['content']);
+            return ('data:application/pdf;base64,'. $base64);
+        }
+
+        Log::info("GetPicture : " ,$GetPicture );
         $mime = $GetPicture['type'];
         $content = $GetPicture['content'];
         $base64   = base64_encode($content);

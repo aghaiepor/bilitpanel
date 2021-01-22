@@ -235,6 +235,13 @@ class presellController extends Controller
                 $img = $upload_file->resize($new_size['width'], $new_size['height']);
                 $img = $img->encode('jpg', 75);
                 $pic_str = base64_encode($img);
+                $tag = "" ;
+            }
+            else if(strtolower($upload_file->getClientOriginalExtension()) == "pdf") {
+                $file = file_get_contents($upload_file);
+                $base = (base64_encode($file));
+                $pic_str = $base;
+                $tag = "pdf" ;
             }
             else
                 return  redirect()->back()->with("error" , "خظا : فرمت مستند واریزی درست نمی باشد ! ");
@@ -243,7 +250,7 @@ class presellController extends Controller
         else
             return  redirect()->back()->with("error" , "مستندات واریزی بارگزاری نشده است ! ");
 
-        $ChargeAccount = $this->Api->ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str,$description);
+        $ChargeAccount = $this->Api->ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str,$description , $tag);
 //        return $ChargeAccount ;
         if($ChargeAccount["Header"]["Status"] == 0 ) {
             return  redirect()->back()->with("success" , "شارژ با موفقیت انجام گردید  .");
@@ -338,7 +345,9 @@ class presellController extends Controller
     public function get_document_picture(Request $request){
 
         $picture_id = $request->input('picture_id');
-        $url = $this->Api->GetDocumentAddress($picture_id);
+        $tag = $request->get('tag');
+        Log::info("tag : " . $tag);
+        $url = $this->Api->GetDocumentAddress($picture_id , $tag);
         return $url;//'<img src="' . $url . '" />';
     }
 }

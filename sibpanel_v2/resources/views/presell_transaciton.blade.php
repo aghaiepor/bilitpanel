@@ -196,7 +196,7 @@
 {{--                                                            $image_id = $transaction['picture_id'];--}}
 {{--                                                            $imageUrl = $api->GetDocumentAddress($image_id) ;--}}
 {{--                                                        @endphp--}}
-                                                    <button trace="{{$transaction['trace_number']}}" img_id="{{$transaction['picture_id']}}" class="btn btn-success docDownload">دانلود مستندات</button>
+                                                    <button trace="{{$transaction['trace_number']}}" img_id="{{$transaction['picture_id']}}" data-tag="{{$transaction['tag']}}" class="btn btn-success docDownload">دانلود مستندات</button>
                                                     <button data_id="{{$transaction['trace_number']}}" data-toggle="modal" data-target="#showFactor" class="btn btn-primary factor ">فاکتور فروش</button>
 {{--                                                    @else--}}
 {{--                                                        <button  disabled class="btn btn-success ">دانلود مستندات</button>--}}
@@ -459,7 +459,7 @@
                                         </tr>
                                         <tr>
                                             <th>توضیحات:</th>
-                                            <td>-</td>
+                                            <td id="description">-</td>
                                             <th>شماره پیگیری:</th>
                                             <td id="trace_number"></td>
                                         </tr>
@@ -710,7 +710,7 @@
                         }
                     },
                     success : function (data) {
-                        // console.log("data => " , data)
+                        console.log("data => " , data)
                         $("#loader2").hide();
                         let account  = data["GetChargeTransactions"] ;
                         account  = account[0] ;
@@ -741,6 +741,10 @@
                             $("#userName").text(" - ") ;
                         }
                         $("#payment_datetime").text(payment_datetime);
+                        $("#description").text(account.description);
+                        if(account.description == "")
+                            $("#description").text("-");
+
                         $("#reference_number").text(account.reference_number);
                         $("#created_jalali").text(account.created_jalali);
                         let date = account.created_jalali.split(" ");
@@ -750,7 +754,7 @@
                         let link = "" ;
                         if(images[0] != 0)
                         {
-                            link = "<a href='" + images[0] + "' class='docDownload btn btn-sm btn-outline-info'>  <i class=\"material-icons\"> vertical_align_bottom </i> دانلود تصویر  </a>"
+                            link = "<button data-onModel='true' type='button' trace='" + account.trace_number + "' img_id='" + account.picture_id + "' data-tag='" + account.tag + "'  class='docDownload btn btn-sm btn-outline-info'>  <i class=\"material-icons\"> vertical_align_bottom </i> دانلود تصویر  </button>"
                             $("#account_doc").html(link);
                         }
                         else
@@ -806,19 +810,35 @@
                 // $("body").load();
             });
             $(document).on( "click", ".docDownload", function () {
+                let onModel  = $(this).attr("data-onModel");
+                if (onModel)
+                    $("#loader2").css("display" , "flex");
+                else
+                    $("#loader").css("display" , "flex");
 
-                $("#loader").css("display" , "flex");
                 let img_id = $(this).attr("img_id");
+                let tag  = $(this).attr("data-tag");
+
+                // console.log("tag => " , tag)
                 let trace = $(this).attr("trace");
                 let href="";
-                $.get("/get_document_picture/?picture_id="+img_id, function(data, status){
+                $.get("/get_document_picture/?picture_id="+img_id+"&tag="+tag, function(data, status){
                     href = data;
-                    // console.log("data:"+data)
+                    // console.log("data:" , data)
                     let a = document.createElement("a");
                     a.href = href;
-                    a.download = "doc_"+trace+".jpeg";
+                    if(tag == "pdf")
+                        a.download = "doc_"+trace+".pdf";
+                    else
+                        a.download = "doc_"+trace+".jpeg";
+
                     a.click();
-                    $("#loader").hide();
+                    if (onModel)
+                        $("#loader2").hide();
+                    else
+                        $("#loader").hide();
+
+
                 });
 
             });
@@ -1023,7 +1043,7 @@
                                 if(typeT == "charge"){
                                     let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;
                                     // if(images[i] != 0 ){
-                                        image = " <button  trace='" + account[i].trace_number + "' img_id='" + account[i].picture_id + "' class=\"btn btn-success docDownload \">دانلود مستندات</button>" ;
+                                        image = " <button data-onModel='false'  trace='" + account[i].trace_number + "' img_id='" + account[i].picture_id + "'  data-tag='" + account[i].tag + "'  class=\"btn btn-success docDownload \">دانلود مستندات</button>" ;
                                     // }
                                     setting.innerHTML = image +  '<a href="#" data_id="' + account[i].trace_number+ '"  data-toggle="modal" data-target="#showFactor"  class="btn btn-primary factor ">فاکتور فروش</a>' ;
                                 }else
