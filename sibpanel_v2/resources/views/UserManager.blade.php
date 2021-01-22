@@ -100,6 +100,7 @@
                             <div class="row justify-content-center">
                                 <div data-active="" id="alphabets" class="col-md-auto text-center w-100 text-black alphabets">
 {{--                                    <span class="badge badge-lg badge-primary ">آ</span>--}}
+                                    <span class="badge badge-lg badge-primary ">همه</span>
                                     <span class="badge badge-lg badge-primary ">الف</span>
                                     <span class="badge badge-primary">ب</span>
                                     <span class="badge badge-primary">پ</span>
@@ -879,7 +880,6 @@
                 if (alphabet != "" )
                 {
                     alphabet_index = $("#alphabets").children().eq(alphabet).text();
-
                 }
                 else
                     alphabet_index = null ;
@@ -891,6 +891,8 @@
                 // console.log(alphabet_index)
                 if( alphabet_index == "الف")
                     alphabet_index = "ا" ;
+                else if (alphabet_index == "همه")
+                    alphabet_index = null ;
 
                 if(user_filter == null && alphabet_index == null )
                     users = userData.filter(d =>  ((value == "")  ?  true : (( (d.first_name + " " + d.last_name ).search(value))  != -1) ) );
@@ -931,7 +933,7 @@
                             var activation = row.insertCell();
                             var userEdit = row.insertCell();
 
-                            name.innerHTML = users[i].first_name + " " + users[i].last_name;
+                            name.innerHTML = users[i].last_name + " " + users[i].first_name;
                             mobile.innerHTML = users[i].mobile;
                             account_type.innerHTML =users[i].account_type;
 
@@ -991,7 +993,7 @@
                         user = userData.filter(d => ((user_filter == null)  ?  true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (d.first_name.match(pattern) != null) ) );
                     }
                     else
-                        user = userData.filter(d => ((user_filter == null)  ?  true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (   d.first_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.first_name[0] === "آ" : false  ) ))  );
+                        user = userData.filter(d => ((user_filter == null)  ?  true : d.account_type == user_filter) && ((alphabet_index == null) ? true : (   d.last_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.last_name[0] === "آ" : false  ) ))  );
 
                     let sib_user_id = users.sib_user_id;
                     $("#pagination_links").show();
@@ -1005,7 +1007,7 @@
                         var activation = row.insertCell();
                         var userEdit = row.insertCell();
 
-                        name.innerHTML = user[i].first_name + " " + user[i].last_name;
+                        name.innerHTML = user[i].last_name + " " + user[i].first_name;
                         mobile.innerHTML = user[i].mobile;
                         account_type.innerHTML = user[i].account_type;
 
@@ -1164,7 +1166,9 @@
                 else {
                     if( alphabet_index == "الف")
                         alphabet_index = "ا" ;
-                    users = userData.filter(d => ((alphabet_index == null) ? true : (   d.first_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.first_name[0] === "آ" : false  ) )) && ((value == "")  ?  true : d.account_type === value) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1) );
+                    else if (alphabet_index == "همه")
+                        alphabet_index = null ;
+                    users = userData.filter(d => ((alphabet_index == null) ? true : (   d.last_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.last_name[0] === "آ" : false  ) )) && ((value == "")  ?  true : d.account_type === value) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1) );
                 }
                 // console.log("filter" , users)
                 $('#userInfo tbody').html(" ");
@@ -1191,7 +1195,7 @@
                             var activation = row.insertCell();
                             var userEdit = row.insertCell();
 
-                            name.innerHTML = users[i].first_name + " " + users[i].last_name;
+                            name.innerHTML = users[i].last_name + " " + users[i].first_name;
                             mobile.innerHTML = users[i].mobile;
                             account_type.innerHTML =users[i].account_type;
 
@@ -1244,6 +1248,8 @@
                 {
                     if( alphabet_index == "الف")
                         alphabet_index = "ا" ;
+                    else if (alphabet_index == "همه")
+                        alphabet_index = null ;
 
                     if(alphabet_index == "اعداد")
                     {
@@ -1268,7 +1274,7 @@
                         var activation = row.insertCell();
                         var userEdit = row.insertCell();
 
-                        name.innerHTML = user[i].first_name + " " + user[i].last_name;
+                        name.innerHTML = user[i].last_name + " " + user[i].first_name;
                         mobile.innerHTML = user[i].mobile;
                         account_type.innerHTML = user[i].account_type;
 
@@ -1362,7 +1368,10 @@
                 else {
                     if( value == "الف")
                         value = "ا" ;
-                    users = userData.filter(d => ((value == null) ? true :(d.first_name[0] === value   || ( (value == "ا") ? d.first_name[0] === "آ" : false  ) )) && ((user_filter_value == "")  ?  true : d.account_type === user_filter_value) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1)  );
+                    else if (value == "همه")
+                        value = null ;
+
+                    users = userData.filter(d => ((value == null) ? true :(d.last_name[0] === value   || ( (value == "ا") ? d.last_name[0] === "آ" : false  ) )) && ((user_filter_value == "")  ?  true : d.account_type === user_filter_value) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1)  );
                 }
 
                 // console.log("users : ",users) ;
@@ -1390,7 +1399,7 @@
                             var activation = row.insertCell();
                             var userEdit = row.insertCell();
 
-                            name.innerHTML = users[i].first_name + " " + users[i].last_name;
+                            name.innerHTML = users[i].last_name + " " + users[i].first_name;
                             mobile.innerHTML = users[i].mobile;
                             account_type.innerHTML = users[i].account_type;
 
@@ -1452,7 +1461,7 @@
                         var activation = row.insertCell();
                         var userEdit = row.insertCell();
 
-                        name.innerHTML = user[i].first_name + " " + user[i].last_name;
+                        name.innerHTML = user[i].last_name + " " + user[i].first_name;
                         mobile.innerHTML = user[i].mobile;
                         account_type.innerHTML = user[i].account_type;
 
