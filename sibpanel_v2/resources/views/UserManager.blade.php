@@ -1138,7 +1138,7 @@
                 let value = $(this).val() ;
                 let serach = $("#user_search").val();
                 let pattern = /^[a-zA-Z]/ ;
-                // console.log(value);
+                console.log("value : " , value=="");
                 /*if(value == "")
                     value = null ;*/
                 let alphabet = $("#alphabets").attr("data-active");
@@ -1168,7 +1168,7 @@
                         alphabet_index = "ا" ;
                     else if (alphabet_index == "همه")
                         alphabet_index = null ;
-                    users = userData.filter(d => ((alphabet_index == null) ? true : (   d.last_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.last_name[0] === "آ" : false  ) )) && ((value == "")  ?  true : d.account_type === value) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1) );
+                    users = userData.filter(d => ((alphabet_index == null) ? true : (  d.last_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.last_name[0] === "آ" : false  ) ) ) && ((value == "")  ?  true : d.account_type === value) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1) );
                 }
                 // console.log("filter" , users)
                 $('#userInfo tbody').html(" ");
@@ -1260,7 +1260,7 @@
                         user = userData.filter(d =>  ((alphabet_index == null) ? true : (d.first_name.match(pattern) != null) ) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1));
                     }
                     else
-                        user = userData.filter(d => ((alphabet_index == null) ? true : (   d.first_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.first_name[0] === "آ" : false  ) )) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1)   );
+                        user = userData.filter(d => ((alphabet_index == null) ? true : (   d.last_name[0] === alphabet_index   || ( (alphabet_index == "ا") ? d.last_name[0] === "آ" : false  ) )) && ((serach == "")  ?  true : ( (d.first_name + " " + d.last_name ).search(serach))  != -1)   );
 
                     let sib_user_id = users.sib_user_id;
                     $("#pagination_links").show();
