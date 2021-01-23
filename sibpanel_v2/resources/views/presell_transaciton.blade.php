@@ -159,9 +159,9 @@
                                         <th >
                                             شماره پیگیری
                                         </th>
-                                        <th >
+                                       {{-- <th >
                                             توضیحات
-                                        </th>
+                                        </th>--}}
                                         <th >
 
                                         </th>
@@ -1023,7 +1023,7 @@
                                 date = row.insertCell();
                                 transaction_type = row.insertCell();
                                 pigiri_number = row.insertCell();
-                                discripton = row.insertCell();
+                                // discripton = row.insertCell();
                                 setting = row.insertCell();
 
                                 transition_amount.innerHTML = number_format(eval(account[i].transaction_amount) , 0 , "." , ",") ;
@@ -1038,7 +1038,7 @@
                                 }
                                 transaction_type.innerHTML = showType ;
                                 pigiri_number.innerHTML = account[i].trace_number ;
-                                discripton.innerHTML = "-" ;
+                                // discripton.innerHTML = "-" ;
                                 let typeT = $("#transaction_type").val();
                                 if(typeT == "charge"){
                                     let image = " <button disabled  class=\"btn btn-success \">دانلود مستندات</button>" ;
