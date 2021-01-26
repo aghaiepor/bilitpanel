@@ -692,7 +692,7 @@ class Api
     }
 
     // ******************* UserManagement *******************
-    public function GetSubUserList(){
+    public function GetSubUserList($ajax=null){
         $data = null ;
         $client = new Client();
         $result = $client->post($this->url . 'GetSubUserList' ,[
@@ -702,7 +702,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 
-        $this->checkError($response);
+        $this->checkError($response , $ajax);
         return $response;
     }
     public function RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password,

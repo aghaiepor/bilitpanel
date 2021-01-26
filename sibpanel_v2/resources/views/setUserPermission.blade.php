@@ -81,6 +81,8 @@
                     </button>
                 </div>
             @endif
+
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -99,10 +101,23 @@
                             <!-- Modal -->
                         </div>
                     </div>
+                    @if($GetUserPermissionHeader == 135)
+                        <div class="alert alert-danger text-right alert-dismissible fade show" role="alert">
+                            کاربر مورد نظر غیر فعال می  باشد .
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $(':button').prop('disabled', true);
+                                $(':input').prop('disabled', true);
+                                $('#jstree li').each( function() {
+                                    $("#jstree").jstree().disable_node(this.id);
+                                })
+                            });
+                        </script>
+                    @endif
                 </div>
-
             </div>
-                    <div class="row">
+                    <div  @if($GetUserPermissionHeader == 135) style="opacity: 0.5" @endif class="row">
                         <div class="col-6 text-right">
                             <div class="card">
                                 <div class="card-body">
@@ -400,11 +415,61 @@
         })
 
         let service = data['service_ids'] ;
+
         // console.log(service==null)  ;
         if(service!=null && service[0] == '*')
             $("#jstree").jstree().check_all();
         else
             $("#jstree").jstree().check_node(service);
+
+        // check if city set cheacked
+        let undetermined  = $("#jstree").jstree().get_undetermined();
+        console.log("undetermined : " , undetermined)
+        let cityCheack =  data['city_ids'] ;
+        let cit = [] ;
+        cityCheack.forEach(function (entry) {
+            let string = "C" + entry ;
+            cit.push(string)
+        });
+        cityCheack = cit  ;
+
+        if(cityCheack!=null && cityCheack[0] == '*')
+            $("#jstree").jstree().check_all();
+        else
+            {
+                let check = []
+                $.each(cityCheack, function(i, entry){
+                    if(!undetermined.includes(entry))
+                        check.push(entry);
+                });
+                console.log("check : " , check)
+                $("#jstree").jstree().check_node(check);
+        }
+
+        // check if porvince set cheacked
+        undetermined  = $("#jstree").jstree().get_undetermined();
+        console.log("undetermined : " , undetermined)
+        let provinceCheack =  data['province_ids'] ;
+        let pro = [] ;
+        provinceCheack.forEach(function (entry) {
+            let string = "P" + entry ;
+            pro.push(string)
+        });
+        provinceCheack = pro  ;
+
+        if(provinceCheack!=null && provinceCheack[0] == '*')
+            $("#jstree").jstree().check_all();
+        else
+        {
+            let check = []
+            $.each(provinceCheack, function(i, entry){
+                if(!undetermined.includes(entry))
+                    check.push(entry);
+            });
+            console.log("check : " , check)
+            $("#jstree").jstree().check_node(check);
+        }
+
 
 
 
@@ -473,19 +538,24 @@
                 checked.forEach(function (entry) {
                     dataSelected.push($("#jstree").jstree(true).get_path(entry, "", true))
                 });
+
                 // concat multi array in one
                 var newArr = [];
                 for(var i = 0; i < dataSelected.length; i++)
                 {
                     newArr = newArr.concat(dataSelected[i]);
                 }
+                // console.log("newArr contact array  : "  , newArr);
                 // after that remove duplicate entity
                 var uniqueNames = [];
                 $.each(newArr, function(i, el){
                     if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
                 });
+
                 // After that Definition new value for dataSelect
                 dataSelected  = uniqueNames ;
+                console.log("dataSelected after unique  : "  , dataSelected);
+
                 for(let i = 0 ; i <  dataSelected.length ; i++){
                     if (dataSelected[i][0] == 'L'){
                         let l = dataSelected[i] ;
@@ -504,6 +574,8 @@
                         service_id.push(eval(s));
                     }
                 }
+
+                console.log("city_id  : "  , city_id);
 
                 for(let i = 0 ; i < $("[name=SaleType]").length ; i++){
                     if($("[name=SaleType]")[i].checked)
@@ -525,18 +597,20 @@
                     if($("[name=switch_web_service_ids]")[i].checked)
                         switch_web_service_ids.push(eval($("[name=switch_web_service_ids]")[i].value))
                 }
-               /* if(voucher_type_id.length == $("[name=VoucherType]").length)
+               /*
+               if(voucher_type_id.length == $("[name=VoucherType]").length)
                     voucher_type_id = ['*'];
                 if(project_id.length == $("[name=project]").length)
                     project_id = ['*'];
                 if(sale_type_id.length == $("[name=SaleType]").length)
                     sale_type_id = ['*'];
                 if(terminal_type_id.length == $("[name=Terminal]").length)
-                    terminal_type_id = ['*'];*/
+                    terminal_type_id = ['*'];
+                */
                 // console.log("city_id" , city_id);
-                // console.log("province_id" , province_id);
-                // console.log("location_id" , location_id);
-                // console.log("service_id" , service_id);
+                console.log("province_id" , province_id);
+                console.log("location_id" , location_id);
+                console.log("service_id" , service_id);
                 // console.log("project_id" , project_id);
                 // console.log("terminal_type_id" , terminal_type_id);
                 // console.log("voucher_type_id" , voucher_type_id);
@@ -560,7 +634,8 @@
                         'sale_type_id' : sale_type_id ,
                         'sib_user_id' : sib_user_id ,
                         'switch_web_service_ids' : switch_web_service_ids ,
-                    },statusCode: {
+                    },
+                    statusCode: {
                         500: function() {
                             $("#loader").hide();
                             Swal.fire(

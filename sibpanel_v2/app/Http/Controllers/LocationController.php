@@ -453,6 +453,7 @@ class LocationController extends Controller
         $array_keys = array_keys($GetServices) ;
         $GetServices = $GetServices[$array_keys[0]] ;
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
+//        return $VoucherInfoList ;
 //        return $VoucherInfoList['ContentData'][0]['id']; // 985 for 147 service_id
         $voucher_id_image = [];
         foreach ($VoucherInfoList['ContentData'] as $voucher){

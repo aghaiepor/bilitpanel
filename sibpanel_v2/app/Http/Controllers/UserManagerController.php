@@ -234,8 +234,8 @@ class UserManagerController extends Controller
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
         $User_info = $this->api->GetUserInfo( $id);
-//        return $User_info['ContentData']["presell"];
-//        return $GetUserPermission ;
+//        return $User_info['ContentData'];
+//        return $GetUserPermission["Header"]["MessageCode"] ;
 //        $GetUserPermission = $GetUserPermission["ContentData"];
 //        $terminal_type_ids = (!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
 //        dd(count($GetUserPermission));
@@ -248,7 +248,7 @@ class UserManagerController extends Controller
 //        return $GetInfo ;
         $VoucherTypeList = Cache::get('VoucherTypeList');
         $LocationList = Cache::get('ServiceList');
-        return view('setUserPermission' , ['projectList'=> $projectList['ContentData'] , 'TerminalTypeList' => $TerminalTypeList['ContentData'] ,
+        return view('setUserPermission' , ['projectList'=> $projectList['ContentData'] , 'TerminalTypeList' => $TerminalTypeList['ContentData'] , "GetUserPermissionHeader" => $GetUserPermission["Header"]["MessageCode"] ,
             'VoucherTypeList'=> $VoucherTypeList , 'SaleTypeList'=>$SaleTypeList['ContentData'] , 'GetSwitchWebServiceList'=>$GetSwitchWebServiceList["ContentData"] ,
             'LocationList'=>$LocationList , 'GetInfo'=>$GetInfo ,'GetUserPermission' => $GetUserPermission['ContentData'] , 'userId'=>$id , 'presell' => $User_info['ContentData']["presell"] ]  ) ;
 
@@ -283,8 +283,13 @@ class UserManagerController extends Controller
         {
             Cache::forget("GetSubUserList");
             Cache::rememberForever('GetSubUserList' , function (){
-                $data = $this->api->GetSubUserList() ;
+                $data = $this->api->GetSubUserList("ajax") ;
                 return $data['ContentData'];
+            });
+            Cache::forget("GetInfo");
+            Cache::rememberForever('GetInfo' , function (){
+                $GetInfo  = $this->api->GetInfo("ajax");
+                return $GetInfo['ContentData'];
             });
         }
         return $AssignPermission;
