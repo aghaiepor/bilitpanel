@@ -705,6 +705,19 @@ class Api
         $this->checkError($response , $ajax);
         return $response;
     }
+    public function AccountTypeList($ajax=null){
+        $data = null ;
+        $client = new Client();
+        $result = $client->post($this->url . 'AccountTypeList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $ajax);
+        return $response;
+    }
     public function RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password,
                                  $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei, $user_id=""){
         if (is_null($email) ||  $email == ""){

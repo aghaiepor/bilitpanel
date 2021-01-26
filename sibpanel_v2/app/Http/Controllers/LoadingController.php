@@ -20,7 +20,6 @@ class LoadingController extends Controller
     public function index(){
         $num = 9 ;
         return view('loading' , ['num' => $num]);
-
     }
     public function locationCache(){
 

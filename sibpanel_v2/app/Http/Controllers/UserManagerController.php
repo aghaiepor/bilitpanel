@@ -29,6 +29,7 @@ class UserManagerController extends Controller
         }else
             $SellerUserList = Cache::get('GetSubUserList');
 
+
 //        return $SellerUserList;
 //        $data = $this->api->GetSubUserList() ;
 //        return $data['ContentData'];
@@ -51,7 +52,9 @@ class UserManagerController extends Controller
          $SellerUserList = $this->paginate($SellerUserList);
         $SellerUserList->withPath('UserManager');
         */
-        return view('UserManager' , ['Users' => $SellerUserList , 'userLists' => $userList]);
+        $AccountTypeList = $this->api->AccountTypeList();
+//        return $AccountTypeList ;
+        return view('UserManager' , ['Users' => $SellerUserList , 'userLists' => $userList , "AccountTypeList" => $AccountTypeList["ContentData"]]);
 //        return $SellerUserList ;
     }
     public function getUserWithFilter(Request $request){

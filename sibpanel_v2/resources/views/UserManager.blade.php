@@ -82,15 +82,9 @@
                                 <div class="col-sm-3">
                                     <select id="user_filter" name="user_filter" class="selectpicker " data-width="100%" data-style="btn btn-primary border-dark" title="نوع کاربر">
                                         <option value=""> همه </option>
-                                        <option value="admin user">admin user</option>
-                                        <option value="panel user">panel user</option>
-                                        <option value="validator user">validator user</option>
-                                        <option value="api user">api user</option>
-                                        <option value="operator user">operator user</option>
-                                        <option value="local admin user">local admin user</option>
-                                        <option value="b2b user">b2b user</option>
-                                        <option value="stand user">stand user</option>
-                                        <option value="cash user">cash user</option>س
+                                        @foreach($AccountTypeList as $AccountType)
+                                            <option value="{{$AccountType["account_type"]}}">{{$AccountType["account_type"]}}</option>
+                                        @endforeach
                                         {{--@foreach($userLists as $user)
                                             <option value="{{$user['sib_user_id'] . "-" .  $user['has_permission'] }}"> {{$user['first_name'] . " ". $user['last_name'] . " - " .  $user['account_type'] }}</option>
                                         @endforeach--}}
@@ -273,15 +267,9 @@
                             <label for=""> نوع اکانت </label>
                             <select id="addUser_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option value="" disabled selected>  انتخاب کنید </option>
-                                <option value="1">admin user</option>
-                                <option value="2">panel user</option>
-                                <option value="5">validator user</option>
-                                <option value="6">api user</option>
-                                <option value="8">operator user</option>
-                                <option value="9">local admin user</option>
-                                <option value="7">b2b user</option>
-                                <option value="4">stand user</option>
-                                <option value="3">cash user</option>
+                                @foreach($AccountTypeList as $AccountType)
+                                    <option value="{{$AccountType["account_type_id"]}}">{{$AccountType["account_type"]}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-sm-6 text-right">
@@ -369,15 +357,9 @@
                             <div class="col-sm-6 text-right">
                                 <label for=""> نوع اکانت </label>
                                 <select id="user_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                    <option value="1">admin user</option>
-                                    <option value="2">panel user</option>
-                                    <option value="5">validator user</option>
-                                    <option value="6">api user</option>
-                                    <option value="8">operator user</option>
-                                    <option value="9">local admin user</option>
-                                    <option value="7">b2b user</option>
-                                    <option value="4">stand user</option>
-                                    <option value="3">cash user</option>
+                                    @foreach($AccountTypeList as $AccountType)
+                                        <option value="{{$AccountType["account_type_id"]}}">{{$AccountType["account_type"]}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-sm-6 text-right">

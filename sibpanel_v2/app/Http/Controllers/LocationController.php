@@ -274,7 +274,6 @@ class LocationController extends Controller
 
     }
     public function AddService(Request $request ,$location_id ){
-
             $service_name = $request->get("service_name");
             $service_english_name = $request->get("service_english_name");
             $model_id = $request->get("model_id");
@@ -443,7 +442,8 @@ class LocationController extends Controller
 
     }
     // ******* Voucher
-    public function VoucherInfoList($service_id , $location_id){
+    public function VoucherInfoList($service_id , $location_id)
+    {
         $GetServices = Cache::get('ServiceList');
         $projectList = $this->api->ProjectList();
         $locationID = $location_id ;
