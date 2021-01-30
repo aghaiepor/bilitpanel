@@ -150,8 +150,10 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/add_group_time/{service_id}/{location_id}' , 'SeanceController@add_group_time_index')->name('add_group_time_index');
         Route::post('/add_group_time' , 'SeanceController@add_group_time')->name('add_group_time');
         Route::post('/GetServiceTimes' , 'SeanceController@GetServiceTimes')->name('GetServiceTimes');
-        Route::post('/edit_group_time' , 'SeanceController@edit_group_time_index')->name('edit_group_time');
-        Route::post('/edit_group_time_apply' , 'SeanceController@edit_group_time')->name('edit_group_time_apply');
+//        Route::post('/edit_group_time' , 'SeanceController@edit_group_time_index')->name('edit_group_time');
+//        Route::post('/edit_group_time_apply' , 'SeanceController@edit_group_time')->name('edit_group_time_apply');
+        Route::post('/DeleteServiceTime' , 'SeanceController@DeleteServiceTime')->name('DeleteServiceTime');
+        Route::post('/EditServiceTime' , 'SeanceController@EditServiceTime')->name('EditServiceTime');
 
 
         //Alert Route

@@ -1201,7 +1201,7 @@ class Api
         return $response;
     }
 
-    public function EditServiceTime($data)
+    /*public function EditServiceTime($data)
     {
         $client = new Client();
         $result = $client->post($this->url . 'UpsertDeleteTimeGroup' ,[
@@ -1213,7 +1213,54 @@ class Api
 
         $this->checkError($response);
         return $response;
+    }*/
+
+    public function DeleteServiceTime($service_times_id , $ajax=null)
+    {
+        $data = [
+           "service_times_id" => [$service_times_id] ,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'DeleteServiceTime' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        Log::info("DeleteService : " , $data);
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $ajax);
+        return $response;
     }
+
+    public function EditServiceTime($service_times_id , $start , $end , $sex , $voucher_infos, $ajax=null)
+    {
+            /*
+            "total_capacity":100,
+            "amount":23,
+            "voucher_type_id":3,
+            "max_discount_percentage":50
+            */
+        $data = [
+            "service_time_id" => $service_times_id,
+            "start" => $start,
+            "end" => $end,
+            "sex" => $sex,
+	        "voucher_infos" => $voucher_infos
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'EditServiceTime' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        Log::info("EditServiceTime : " , $data);
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $ajax);
+        return $response;
+    }
+
+
     public function AddTimeTemplate($times_template){
         $data = [
             'times_template' => $times_template

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Api\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class seanceController extends Controller
 {
@@ -41,8 +42,9 @@ class seanceController extends Controller
         $VoucherTypeList = Cache::get('VoucherTypeList');
 //        return $VoucherTypeList ;
         $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
+        $VoucherInfoList = $this->api->VoucherInfoList($service_id);
 //        return $GetServiceTimeList["ContentData"] ;
-        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] ]);
+        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] ]);
     }
 
     public function add_group_time(Request $request){
@@ -54,16 +56,7 @@ class seanceController extends Controller
 //        return  $service_times;
 //        return  gettype($service_times);
 //        dd($service_times );
-/*
-        "voucher_infos":[
-        {
-            "total_capacity":1,
-            "amount":23,
-            "voucher_type_id":1,
-            "max_discount_percentage":50
-        }
-	]
-     */
+
         try {
             foreach($service_times as $service_time)
             {
@@ -92,40 +85,55 @@ class seanceController extends Controller
                      }
                 }
 
-                /* $voucher_infos = $service_time["time"][0]["vouchersInfo"] ;
-                 $voucher_infos = explode(",",$voucher_infos);
-                 $vouchers = [] ;
-                 foreach ($voucher_infos as $voucher_info)
-                 {
-                     $voucher_info = $this->api->GetVoucherInfo($voucher_info) ;
-                     array_push($vouchers  , $voucher_info );
-
-                 }*/
-
-//            $AddServiceTime = $this->api->AddServiceTime($service_id , $start , $end , $sex  , $voucher_infos);
                 return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");
             }
         }catch (\Exception $e) {
 //            return redirect()->back()->with('error' , " خطا در ایجاد سانس ");
-//            return redirect()->back()->with('error' , $e->getMessage());
-            return $e->getMessage();
+            return redirect()->back()->with('error' , $e->getMessage());
+//            return $e->getMessage();
         }
 
 
-//        return $vouchers ;
-//        return $service_times;
+    }
+
+    public function EditServiceTime(Request $request){
+//        return json_encode($request->all());
+
+        $service_times = $request->get('times') ;
+//        $service_times = json_decode($service_times) ;
+//        $service_times =   json_encode($service_times) ;
+//        return  $service_times[0]["end"];
+//        return  gettype($service_times);
+//        dd($service_times );
+            $service_times = $service_times[0];
+            $service_time_id =  $service_times["service_time_id"] ;
+            $start =  $service_times["start"] ;
+            $end =  $service_times["end"] ;
+            $sex =  $service_times["sex"] ;
+            $vouchers = $service_times["voucher_infos"];
+            $voucher_infos_data = [] ;
+            foreach ($vouchers as $voucher_info ) {
+                $voucher = [
+                    "total_capacity" => (int)$voucher_info["capacity"],
+                    "amount" => (int)$voucher_info["seance_amount"],
+                    "voucher_type_id" => (int)$voucher_info["vouchersInfo"],
+                    "max_discount_percentage" => (int)$voucher_info["seance_percent"]
+                ];
+                array_push( $voucher_infos_data ,  $voucher) ;
+    //                    return $voucher_infos_data ;
+    //                    $test = $this->api->EditServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
+
+
+                /*if($test["Header"]["MessageCode"] == 158) {
+                    return redirect()->back()->with('error' , " خطا : تاریخ انتخاب شده نامعتبر است . ");
+                }*/
+            }
+            $test = $this->api->EditServiceTime($service_time_id , $start , $end , $sex , $voucher_infos_data, "ajax") ;
+            return $test ;
+    //                return redirect()->back()->with('success' , " سانس با موفقیت ویرایش شد .");
 
 
 
-
-        /*$time_templates = $this->api->AddTimeTemplate(json_decode($service_times,true));
-        $time_templates_ids = $time_templates['ContentData']['time_template_ids'];
-        $group_name = $request->input('group_name');
-        $group_time = $this->api->AddTimeGroup($group_name,$time_templates_ids);
-        if($group_time['Header']['Status'] == 0 )
-            return redirect()->back()->with('success' , "گروه سانس با موفقیت ایجاد شد .");
-        else
-            return redirect()->back()->with('error' , " خطا در ایجاد گروه سانس ");*/
 
     }
 
@@ -151,7 +159,7 @@ class seanceController extends Controller
 
     }
 
-    public function edit_group_time(Request $request){
+    /*public function edit_group_time(Request $request){
 
         $data = $request->input('service_times');
         $data = json_decode($data,true);
@@ -159,7 +167,18 @@ class seanceController extends Controller
         $response = $this->api->EditServiceTime($data);
         return redirect('group_times');
 
+    }*/
+    public function DeleteServiceTime(Request $request){
+
+        $service_times_id = (int)$request->get('service_time_id');
+        $response = $this->api->DeleteServiceTime($service_times_id , "ajax");
+        return  $response;
+
     }
 
+    /*public function TimeVoucherInfoList($service_id){
+        $VoucherInfoList = $this->api->VoucherInfoList($service_id);
+        return $VoucherInfoList["ContentData"] ;
+    }*/
 
 }

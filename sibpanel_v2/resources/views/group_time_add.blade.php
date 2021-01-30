@@ -413,21 +413,73 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
+                            <div class="col-md">
+                                <table class="table table-striped text-center" id="">
+                                    <thead class="text-primary">
+                                    <tr>
+                                        <th>
+                                            انتخاب
+                                        </th>
+
+                                        <th>
+                                            ظرفیت
+                                        </th>
+                                        <th>
+                                            نوع بلیت
+                                        </th>
+                                        <th>
+                                            مقدار
+                                        </th>
+                                        <th>
+                                            حداکثر تخفیف
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="">
+                                    @foreach($VoucherInfoList as $VoucherInfo)
+                                        <tr add_id="{{$VoucherInfo["id"]}}">
+                                            <td data-cheack-value="1" class="">
+                                                <div  class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input data_voucherTypeValue="{{$VoucherInfo["voucher_type_id"] . "-" . $VoucherInfo["voucher_type_name"]}}" add_id="{{$VoucherInfo["id"]}}" class="form-check-input ServiseVocher" type="checkbox" value="" >
+                                                        <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                    </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td add_id="{{$VoucherInfo["id"]}}" value="{{$VoucherInfo["total_capacity"]}}" class="seance_capacity">
+                                                @if($VoucherInfo["total_capacity"] == "")
+                                                    نامحدود
+                                                @else
+                                                    {{$VoucherInfo["total_capacity"]}}
+                                                @endif
+
+                                            </td>
+                                            <td value="{{$VoucherInfo["voucher_type_id"]}}" data-value="{{$VoucherInfo["voucher_type_id"]}}" vouchersinfo_name="{{$VoucherInfo["voucher_type_name"]}}" class="vouchertyppe_Sanse">
+                                                {{$VoucherInfo["voucher_type_name"]}}
+                                            </td>
+
+                                            <td value="{{$VoucherInfo["amount"]}}" class="seance_amount">{{$VoucherInfo["amount"]}}</td>
+                                            <td value="{{$VoucherInfo["max_discount_percentage"]}}" class="seance_percent">{{$VoucherInfo["max_discount_percentage"]}}</td>
+                                        </tr>
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr class="my-1">
+                        <div class="row">
                              <div id="formSans" class="col-lg  pull-right">
                                  <div class="form-row text-right">
                                      <div class="col">
                                          <label class="w-100" for=""> نوع بليت
                                          </label>
-                                         @php
-                                             $VoucherList = [];
-                                         @endphp
                                          <select id="vouchers" name="vouchers" class="selectpicker" data-style="btn btn-primary border-dark" title="بلیت">
-                                             @foreach($VoucherTypeList as $VoucherType)
-                                                 @php
-                                                     array_push($VoucherList , ["VoucherInfo_id" => $VoucherType["voucher_type_id"] , "voucher_type_name" => $VoucherType["voucher_type"]]);
-                                                 @endphp
-                                                 <option value="{{$VoucherType["voucher_type_id"] .  "-" . $VoucherType["voucher_type"] }}">
-                                                     {{$VoucherType["voucher_type"]}}
+                                             @foreach($VoucherInfoList as $VoucherType)
+                                                 <option value="{{$VoucherType["voucher_type_id"] .  "-" . $VoucherType["voucher_type_name"] }}">
+                                                     {{$VoucherType["voucher_type_name"]}}
                                                  </option>
                                              @endforeach
                                          </select>
@@ -490,7 +542,7 @@
                     </div>
                     <div class="modal-footer mt-4">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
-                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
+                        <button data-tag="" id="saveVoucher" type="button" onclick="setTime(this)" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
                     </div>
                 </div>
             </form>
@@ -525,6 +577,9 @@
 
 
         console.log("selectedDays" , selectedDays);
+        let serviceID = "{{$id}}";
+        let locationID = "{{$location_id}}";
+        console.log("serviceID : "  + serviceID + " , locationID :  " + locationID);
 
         let serviceTimes = [];
         if(GetServiceTimeList.length != 0 )
@@ -622,7 +677,43 @@
                 console.log(" clicked ! ")
             });*/
             setSelected() ;
-            // serviceTimes = [];
+            // serviceTimes = [];add_id
+
+            $(".ServiseVocher").click(function () {
+                let value = $(this).is(":checked");
+                let add_id = $(this).attr("add_id");
+
+
+                if(value){
+                    let voucherTypeValue =  $(this).attr("data_voucherTypeValue") ;
+                    voucherTypeValue = voucherTypeValue.split("-");
+                    let existVoucher = $("#seances_voucherInfo tr td[data-value="+ voucherTypeValue[0] + "]");
+                    console.log("existVoucher : " , );
+                    if(existVoucher.length > 0 )
+                    {
+                        if(value)
+                            $(this).prop('checked', false);
+                        else
+                            $(this).prop('checked', true);
+
+                        let message = "بلیت "  + "  <b> ' " + voucherTypeValue[1] + " ' </b>  " + " قبلا اضافه شده است !" ;
+                        Swal.fire(
+                            ' خطا ',
+                            message,
+                            'error'
+                        )
+
+                        return ;
+                    }
+
+                    $(this).parents("tr").clone().appendTo("#seances_voucherInfo");
+                    $("#seances_voucherInfo tr[add_id="+ add_id +"] td[data-cheack-value=1]").remove();
+                    let html ='<td><button add-id="'+ add_id +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button> </td>' ;
+                    $("#seances_voucherInfo tr[add_id="+ add_id +"]").append(html);
+                }
+                else
+                    $("#seances_voucherInfo td[add_id="+ add_id +"]").parents("tr").remove();
+            });
 
         });
 
@@ -661,6 +752,7 @@
 
         $('#test').on('hidden.bs.modal', function () {
             deselctAll()
+            $("#seances").html("");
             sizeSelected = 0 ;
             showAddButten(sizeSelected)
         })
@@ -725,27 +817,38 @@
             console.log("id ==> " , sansId)
             console.log("serviceTimes ==> " , serviceTimes)
             let sanas = [] ;
+            let day ;
             for(let i = 0 ; i < serviceTimes.length ; i++){
                 if( serviceTimes[i]["day"]== sansId ) {
+                    day = serviceTimes[i]["day"] ;
                     sanas.push(serviceTimes[i]) ;
                 }
             }
-            showSans(sanas);
+            showSans(sanas , day);
             // console.log("sanas => " , sanas);
         })
 
         $(document).on("click" , ".settingNew" , function () {
             $("#seances_voucherInfo").html(" ");
+            $("#saveVoucher").text(" ثبت بلیت ");
+            $("#saveVoucher").attr("data-tag" , "create");
+            $("#saveVoucher").attr("onclick" , "setTime()");
         })
 
         $(document).on("click" , ".setting" , function () {
             console.log("setting clicked! ")
+            $("#saveVoucher").text(" ثبت تغییرات ");
+            $("#saveVoucher").attr("data-tag" , "edit");
+
+
+
+            // $("#saveVoucher").attr("data-id" , "edit");
             let sansId = $(this).attr("data-date").replace(/,/g, '-');
             let start = $(this).attr("data-start");
             let end = $(this).attr("data-end");
             let service_id = $(this).attr("data-service-id")
+            $("#saveVoucher").attr("onclick" , "getSansForUpdate("+service_id+")");
             console.log("service_id => " , service_id);
-
 
             $.ajax({
                 type:'POST',
@@ -791,13 +894,15 @@
                     }
                 },
                 success : function (data) {
+
                     let dataVoucherInfo = data[0].voucher_infos ;
+                    console.log(" dataVoucherInfo => " , dataVoucherInfo)
                     let voucher = [] ;
                     for (let j = 0 ; j < dataVoucherInfo.length  ; j++)
                     {
                         voucher.push(dataVoucherInfo[j]) ;
                     }
-                    showVoucher(voucher);
+                    showVoucher(voucher , service_id);
                 }
             })
 
@@ -833,7 +938,7 @@
 
         })
 
-        function showSans(sanas) {
+        function showSans(sanas, day) {
             $("#seances").html("");
             let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
             let start_Sanse ;
@@ -852,6 +957,7 @@
 
                 for(let j = 0 ; j < data.length ; j++ ){
                     let row = table.insertRow();
+                    row.setAttribute("SansId", data[j].service_time_id) ;
                     // seance_date = row.insertCell();
                     start_Sanse = row.insertCell();
                     end_Sanse = row.insertCell();
@@ -869,6 +975,7 @@
 
                     start_Sanse.innerHTML = data[j].start ;
                     start_Sanse.setAttribute("value", data[j].start) ;
+                    start_Sanse.setAttribute("day-value", day) ;
                     start_Sanse.setAttribute("class", "seance_start") ;
 
                     end_Sanse.innerHTML = data[j].end ;
@@ -908,8 +1015,8 @@
                     // percent.innerHTML = data[j].seance_percent ;
                     // percent.setAttribute("value", data[j].seance_percent) ;
                     // percent.setAttribute("class", "seance_percent") ;
-                    setting.innerHTML = '<button data-service-id="'+ data[j].service_time_id +'" data-date='+ date +' data-start="'+ data[j].start +'" data-end="'+ data[j].end +'"   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-                    remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+                    setting.innerHTML = '<button data-tag="load" data-service-id="'+ data[j].service_time_id +'" data-date='+ date +' data-start="'+ data[j].start +'" data-end="'+ data[j].end +'"   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
+                    remove.innerHTML = '<button add-id="'+ data[j].service_time_id +'" type="button" class="btn px-2 btn-sm btn-rose removeSans text-center" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
                 }
                 // console.log("sanas =>" ,
 
@@ -917,10 +1024,9 @@
             }
         }
 
+        function showVoucher(voucher , serviceID) {
 
-        function showVoucher(sanas) {
             $("#seances_voucherInfo").html(" ");
-            console.log("showVoucher callded !! ") ;
             let table = document.getElementById("TicketTable").getElementsByTagName('tbody')[0];
             // let start_Sanse ;
             // let end_Sanse ;
@@ -931,8 +1037,11 @@
             let percent ;
             let remove  ;
             // let setting  ;
-            let voucherInfos = sanas ;
-                    for (let j = 0; j < voucherInfos.length; j++) {
+
+
+            let voucherInfos = voucher ;
+            console.log("sanas" ,  voucher) ;
+            for (let j = 0; j < voucherInfos.length; j++) {
                         console.log("voucher[j] : ", voucherInfos[j]);
                         // console.log("voucher inner  =>  " , voucher[j]) ;
                         let row = table.insertRow();
@@ -965,6 +1074,8 @@
                         //
                         vouchertyppe_Sanse.innerHTML = voucherInfos[j].voucher_type;
                         vouchertyppe_Sanse.setAttribute("value", voucherInfos[j].voucher_type_id);
+                        vouchertyppe_Sanse.setAttribute("data-value", voucherInfos[j].voucher_type_id);
+                        vouchertyppe_Sanse.setAttribute("data-service", serviceID);
                         vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherInfos[j].voucher_type);
                         vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse");
                         //
@@ -973,25 +1084,24 @@
                         // sex.setAttribute("value", data[j].gender_value) ;
                         // sex.setAttribute("class", "seance_gender") ;
 
-                        amount_Sanse.innerHTML = voucherInfos[j].amount;
-                        amount_Sanse.setAttribute("value", voucherInfos[j].amount);
+                        amount_Sanse.innerHTML = voucherInfos[j].amount_without_discount;
+                        amount_Sanse.setAttribute("value", voucherInfos[j].amount_without_discount);
                         amount_Sanse.setAttribute("class", "seance_amount");
-
-                        percent.innerHTML = voucherInfos[j].seance_percent;
-                        percent.setAttribute("value", voucherInfos[j].seance_percent);
+                        let off = voucherInfos[j].amount_without_discount - voucherInfos[j].amount ;
+                        off = off / voucherInfos[j].amount_without_discount ;
+                        off =  Math.round(off * 100) ;
+                        percent.innerHTML = off ;
+                        percent.setAttribute("value", off);
                         percent.setAttribute("class", "seance_percent");
                         // setting.innerHTML = '<button data-date='+ date +' type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
                         remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
 
                     }
 
-
-                // console.log("sanas =>" ,
-
-
             }
 
-        function setTime() {
+        function setTime(e) {
+
             let seances = getAllSeances();
             console.log("sanse => " , seances);
             if(seances.length == 0 )
@@ -1003,7 +1113,19 @@
                 )
                 return ;
             }
+           /*
+           let tag = e.getAttribute("data-tag");
+            if(tag == "edit")
+            {
+
+            }
+            else
+                console.log("Create")
+            return;
+            */
+
             $('#test').modal('hide')
+            serviceTimes = [] ;
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
                 removeDayIfExists(day);
@@ -1019,6 +1141,7 @@
             resetTime();
             submit() ;
         }
+
 
         function setTimeFirst() {
 
@@ -1286,12 +1409,13 @@
             percent.setAttribute("class", "seance_percent") ;
             */
 
-            setting.innerHTML = '<button type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
+            setting.innerHTML = '<button data-tag="create" type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
             remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
 
 
         }
         function addTicket() {
+
 
             let NotValid = false;
             $("#formSans input , #formSans select ").each(function() {
@@ -1323,6 +1447,24 @@
                     'زمان پایان باید بیشتر از زمان شروع باشد . ',
                     'error'
                 )
+            }
+
+            let voucherTypeValue = $("#vouchers").val()
+            voucherTypeValue = voucherTypeValue.split("-");
+            voucherTypeName =  voucherTypeValue[1];
+            voucherTypeValue = voucherTypeValue[0];
+            console.log("voucherTypeValue : " , voucherTypeValue);
+            let existVoucher = $("#seances_voucherInfo tr td[data-value="+ voucherTypeValue + "]");
+            console.log("existVoucher : " , );
+            if(existVoucher.length > 0 )
+            {
+                let message = "بلیت "  + "  <b> ' " + voucherTypeName + " ' </b>  " + " قبلا اضافه شده است !" ;
+                Swal.fire(
+                    ' خطا ',
+                    message,
+                    'error'
+                )
+                NotValid = true;
             }
 
             if(NotValid)
@@ -1383,6 +1525,7 @@
 
             vouchertyppe_Sanse.innerHTML = voucherType_val[1] ;
             vouchertyppe_Sanse.setAttribute("value", voucherType_val[0]) ;
+            vouchertyppe_Sanse.setAttribute("data-value", voucherType_val[0]) ;
             vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherType_val[1]) ;
             vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
 
@@ -1417,12 +1560,96 @@
 
         function removeSeance(element) {
             let el = $(element).parent().parent();
+            let add_id =  $(element).attr("add-id") ;
+            $(".ServiseVocher[add_id="+ add_id +"]").prop('checked', false);
             el.animate({opacity: '0'}, 150, function () {
                 el.animate({width: '0'}, 150, function () {
                     el.remove();
                 });
             });
         }
+
+        // for button submit
+        // add tag on creat sans and when load sans
+        // if creat chang text to load
+        // and if load chang text to change
+
+        $(document).ready(function () {
+
+            $(document).on('click', ".removeSans" ,  function (e) {
+                let el = $(this) ;
+                $("#loader").css("display" , "flex")
+                $("#loader").css("zIndex" , "90000000")
+                let service_time_id = $(this).attr("add-id") ;
+                console.log("service_time_id : " , service_time_id)
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('DeleteServiceTime')}}" ,
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'service_time_id' : service_time_id ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
+                        }
+                    },
+                    success : function (data) {
+                        $("#loader").hide();
+                        if(data.Header.statusCode == 0  )
+                        {
+                            Swal.fire(
+                                'عملیات با موفقیت انجام گردید . ',
+                                '',
+                                'success'
+                            )
+                            removeSeance(el);
+                        }
+                        else
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                ' دوباره سعی نمایید.',
+                                'error'
+                            )
+                        }
+
+                    }
+                })
+            });
+
+        })
 
         function removeAllSeance() {
             $('#seances').children().each(function () {
@@ -1466,7 +1693,6 @@
                 let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
                 let seance_amount = $(this).find('.seance_amount').attr("value");
                 let seance_percent = $(this).find('.seance_percent').attr("value");
-
                 vouchers.push({
                     'capacity': capacity,
                     'vouchersInfo': vouchertyppe_Sanse,
@@ -1494,18 +1720,139 @@
 
                 times.push({'start': start,
                     'end': end,
-                    'gender_value':gender_value ,
+                    'sex':gender_value ,
                     'gender':gender ,
                     "voucher_infos" : vouchers ,
                 });
 
             });
 
-
-
-
-
             // console.log(times);
+            return times;
+        }
+
+        function getSansForUpdate(sansId) {
+
+            let times = [];
+            let vouchers = [];
+            $('#seances_voucherInfo').children().each(function () {
+                // let Date =  $(this).find('.seance_date').attr("value") ;
+                let capacity = $(this).find('.seance_capacity').attr("value");
+                let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
+                let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
+                let seance_amount = $(this).find('.seance_amount').attr("value");
+                let seance_percent = $(this).find('.seance_percent').attr("value");
+                vouchers.push({
+                    'capacity': capacity,
+                    'vouchersInfo': vouchertyppe_Sanse,
+                    'vouchersInfo_name': vouchersInfo_id,
+                    'remain':capacity,
+                    'seance_amount': seance_amount,
+                    'seance_percent': seance_percent,
+                });
+
+            });
+            let start , end  , gender , gender_value , day;
+            $('#seances tr[SansId='+ sansId +'] td').each(function () {
+                console.log( "this seances : " , $(this).attr("value") );
+                // let Date =  $(this).find('.seance_date').attr("value") ;
+                if($(this).attr("class") == "seance_start" ){
+                    day = $(this).attr("day-value");
+                    day = new persianDate(day).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD')
+                    start = $(this).attr("value");
+                }
+
+                else if($(this).attr("class") == "seance_end" )
+                    end = $(this).attr("value");
+                else if($(this).attr("class") == "seance_gender" )
+                {
+                    gender = $(this).attr("gender_name");
+                    gender_value = $(this).attr("value");
+                }
+            });
+
+            times.push({
+                'service_time_id': sansId,
+                'start': day + " " + start,
+                'end':  day + " " + end,
+                'sex':gender_value ,
+                'gender':gender ,
+                "voucher_infos" : vouchers ,
+            });
+            console.log("times : " , times);
+            $.ajax({
+                type:'POST',
+                url:"{{Route('EditServiceTime')}}" ,
+                dataType:'json',
+                data:{
+                    '_token ': '<?php echo csrf_token() ?>',
+                    'times' : times ,
+                },
+                statusCode: {
+                    500: function() {
+                        $("#loader").hide();
+                        Swal.fire(
+                            'خطا در دريافت اطلاعات ! ',
+                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                            'error'
+                        )
+                    } ,
+                    400: function() {
+                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                        let x = 1 ;
+                        let dots = "";
+                        setInterval(function () {
+                            dots += ".";
+                            x++  ;
+                            // console.log(x)
+                            if(x >= 8 ){
+                                x = 1 ;
+                                dots = ".";
+                            }
+                            $("#dots").html(dots)
+                        } , 300)
+                        $("#loader").hide();
+                        Swal.fire(
+                            'نشست  شما پایان یافته است ! ',
+                            html,
+                            'warning' ,
+                        )
+                        setTimeout(function () {
+                            window.location.href = "{{Route("logout")}}";
+                        } , 1500)
+
+                    }
+                },
+                success : function (data) {
+                    $("#loader").hide();
+                    console.log("data : " , data)
+                    if(data.Header.MessageCode == 0  )
+                    {
+                        Swal.fire(
+                            'عملیات با موفقیت انجام گردید . ',
+                            '',
+                            'success'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 158  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'ویرایش در این تاریخ انتخابی امکان پذیر نیست ! ',
+                            'warning'
+                        )
+                    }
+                    else
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            ' دوباره سعی نمایید.',
+                            'error'
+                        )
+                    }
+
+                }
+            })
             return times;
         }
 
@@ -1524,7 +1871,7 @@
 
         function setCurrentTimes() {
 
-            let service_times = JSON.parse(document.getElementById("service_times").value.replace(/'/g,'"'));
+            let service_times = JSON.$(".ServiseVocher")parse(document.getElementById("service_times").value.replace(/'/g,'"'));
             console.log(service_times);
             service_times.forEach(element => {
                 let day = element.day;
