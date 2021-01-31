@@ -507,6 +507,8 @@ class LocationController extends Controller
             return redirect()->back()->with("success" , " تخفیف مورد نظر ایجاد گردید ");
         else if($AddDiscountPolicy["Header"]["Message"] == "Permission Denied")
             return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
+        else if($AddDiscountPolicy["Header"]["MessageCode"] == 158)
+            return redirect()->back()->with("error" , "خطا : زمان وارد شده نامعتبر است !   ");
         else
             return redirect()->back()->with("error" , "خطا در ایجاد تخفیف !  ");
 

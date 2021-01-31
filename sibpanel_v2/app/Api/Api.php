@@ -1538,12 +1538,12 @@ class Api
     public function AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage ,$activation_date=null , $expiration_date=null ,$type=null)
     {
         $data = [
-               "project_id" =>$project_id,
-                "location_id"=> $location_id,
-                "service_id"=>$service_id,
-                "voucher_info_id"=> $voucher_info_id,
-                "sib_user_id"=> $sib_user_id,
-                "description"=> $description,
+               "project_id" =>$project_id ,
+                "location_id"=> $location_id ,
+                "service_id"=>$service_id ,
+                "voucher_info_id"=> $voucher_info_id ,
+                "sib_user_id"=> $sib_user_id ,
+                "description"=> $description ,
                 "percentage"=> $percentage ,
                 "activation_date"=> $activation_date ,
                 "expiration_date"=> $expiration_date ,
