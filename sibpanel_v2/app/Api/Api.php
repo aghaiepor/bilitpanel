@@ -1218,7 +1218,7 @@ class Api
     public function DeleteServiceTime($service_times_id , $ajax=null)
     {
         $data = [
-           "service_times_id" => [$service_times_id] ,
+           "service_time_id" => $service_times_id ,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'DeleteServiceTime' ,[
@@ -1260,6 +1260,19 @@ class Api
         return $response;
     }
 
+    public function GetServiceListFromServicetime($ajax=null)
+    {
+        $data = null ;
+        $client = new Client();
+        $result = $client->post($this->url . 'GetServiceListFromServicetime' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $ajax);
+        return $response;
+    }
 
     public function AddTimeTemplate($times_template){
         $data = [

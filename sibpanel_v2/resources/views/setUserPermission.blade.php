@@ -422,15 +422,20 @@
         else
             $("#jstree").jstree().check_node(service);
 
+        if(data.length !=0 )
+        {
         // check if city set cheacked
         let undetermined  = $("#jstree").jstree().get_undetermined();
         console.log("undetermined : " , undetermined)
         let cityCheack =  data['city_ids'] ;
+        console.log("city cheack  : " , cityCheack)
         let cit = [] ;
-        cityCheack.forEach(function (entry) {
-            let string = "C" + entry ;
-            cit.push(string)
-        });
+
+            cityCheack.forEach(function (entry) {
+                let string = "C" + entry ;
+                cit.push(string)
+            });
+
         cityCheack = cit  ;
 
         if(cityCheack!=null && cityCheack[0] == '*')
@@ -468,6 +473,8 @@
             });
             console.log("check : " , check)
             $("#jstree").jstree().check_node(check);
+        }
+
         }
 
 
