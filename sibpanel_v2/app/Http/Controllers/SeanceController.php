@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Api\Api;
+use Carbon\Carbon;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +21,8 @@ class seanceController extends Controller
 //        $GetTimeGroup = $this->api->GetTimeGroup();
 //        $AllLocationServices = $this->api->AllLocationServiceList();
 //        return view('group_times' , ['locations'=>$AllLocationServices,'result_data' => $GetTimeGroup['ContentData']] );
-        return view('group_times' );
+        $GetServiceListFromServicetime = $this->api->GetServiceListFromServicetime();
+        return view('group_times' , ["GetServiceListFromServicetime" => $GetServiceListFromServicetime["ContentData"]] ) ;
     }
 
     public function edit_time_group(Request $request){
@@ -168,17 +171,34 @@ class seanceController extends Controller
         return redirect('group_times');
 
     }*/
-    public function DeleteServiceTime(Request $request){
-
+    public function DeleteServiceTime(Request $request)
+    {
         $service_times_id = (int)$request->get('service_time_id');
         $response = $this->api->DeleteServiceTime($service_times_id , "ajax");
         return  $response;
-
     }
 
-    /*public function TimeVoucherInfoList($service_id){
-        $VoucherInfoList = $this->api->VoucherInfoList($service_id);
-        return $VoucherInfoList["ContentData"] ;
-    }*/
+    public function ImportExportServiceTimes(Request $request , $service_id){
+        $import_service_id = $service_id;
+        $export_service_id = $request->get("serviceList");
+
+        $start = $request->get("start");
+        $start = $this->fa2en($start);
+        $start = Verta::parse($start)->timestamp;
+        $start = Carbon::createFromTimestamp($start)->format('Y-m-d h:i');
+
+        $end = $request->get("end");
+        $end = $this->fa2en($end);
+        $end = Verta::parse($end)->timestamp;
+        $end = Carbon::createFromTimestamp($end)->format('Y-m-d h:i');
+
+        $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end) ;
+        return $ImportExportServiceTimes["ContentData"] ;
+    }
+
+
+    private function fa2en($number){
+        return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
+    }
 
 }

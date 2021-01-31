@@ -34,6 +34,7 @@
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
+{{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
 
 
 @endsection
@@ -70,6 +71,7 @@
                                 </div>
                                 <div class="col-sm">
 {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
+{{--                                    <a data-toggle="modal" data-target="#sanas"  --}}{{--onclick="history.go(-1);"--}}{{-- class="btn btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>--}}
                                     <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
@@ -95,7 +97,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button onclick="removeTime()" class="btn btn-sm btn-danger " style="margin-top: 10px">حذف انتخاب شده
+                                    <button onclick="removeTime()" class="btn btn-sm btn-danger d-none" style="margin-top: 10px">حذف انتخاب شده
                                     </button>
 {{--                                    <button onclick="setTime()" class="btn btn-sm btn-primary" style="margin-top: 10px">اعمال</button>--}}
                                   {{--  <div class="col-md text-right" style="margin-top: 35px;margin-bottom: 10px">
@@ -550,13 +552,108 @@
         </div>
     </div>
 
+    <div class="modal fade" id="sanas" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{Route("ImportExportServiceTimes" , ["service_id" => $id ])}}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="testLabel"> افزودن سانس مکان  </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row text-right">
+                            <div class="col-md">
+                                <label for=""> مکان </label>
+                                <select name="locationList" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <option selected value="dont_care">  همه </option>
+                                </select>
+                            </div>
+                             <div class="col-md">
+                                 <label for=""> سرویس </label>
+                                 <select name="serviceList" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                     <option selected value="dont_care">  همه </option>
+                                 </select>
+                             </div>
+                        </div>
+                        <div class="form-row text-right mt-3">
+                            <div class="col-md">
+                                <label for=""> تاریخ شروع </label>
+                                <input id="FromDate" name="start" type="text" class="form-control" placeholder="تاریخ شروع">
+
+
+                            </div>
+                            <div class="col-md">
+                                <label for=""> تاریخ پایان </label>
+                                <input id="ToDate" name="end" type="text" class="form-control" placeholder="تاریخ پايان">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
 @endsection
 @section('AddJs')
 
     <script src="{{asset("")}}assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
     <script src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
+{{--
 
+    <script>
+        $(document).ready(function() {
+            $('#FromDate').persianDatepicker({
+                initialValue: true,
+                autoClose : true ,
+                format: 'YYYY-MM-DD H:mm:ss',
+                calendar:{
+                    persian:{
+                        locale: 'fa'
+                    }
+                },navigator:{
+                    scroll:{
+                        enabled:false
+                    }
+                },navigator:{
+                    text:{
+                        btnNextText:'بعدی',
+                        btnPrevText:'قبلی'
+                    }
+                }
+            });
+            $('#ToDate').persianDatepicker({
+                initialValue: true,
+                autoClose : true ,
+                format: 'YYYY-MM-DD H:mm:ss',
+                calendar:{
+                    persian:{
+                        locale: 'fa'
+                    }
+                },navigator:{
+                    scroll:{
+                        enabled:false
+                    }
+                },navigator:{
+                    text:{
+                        btnNextText:'بعدی',
+                        btnPrevText:'قبلی'
+                    }
+                }
+
+            });
+        });
+    </script>
+--}}
 
     <script>
         let GetServiceTimeList = @json($GetServiceTimeList) ;
@@ -574,8 +671,6 @@
         // console.log("GetServiceTimeList : " , GetServiceTimeList)
 
         let selectedDays = [];
-
-
         console.log("selectedDays" , selectedDays);
         let serviceID = "{{$id}}";
         let locationID = "{{$location_id}}";
@@ -682,8 +777,6 @@
             $(".ServiseVocher").click(function () {
                 let value = $(this).is(":checked");
                 let add_id = $(this).attr("add_id");
-
-
                 if(value){
                     let voucherTypeValue =  $(this).attr("data_voucherTypeValue") ;
                     voucherTypeValue = voucherTypeValue.split("-");
@@ -1569,11 +1662,6 @@
             });
         }
 
-        // for button submit
-        // add tag on creat sans and when load sans
-        // if creat chang text to load
-        // and if load chang text to change
-
         $(document).ready(function () {
 
             $(document).on('click', ".removeSans" ,  function (e) {
@@ -1627,7 +1715,8 @@
                     },
                     success : function (data) {
                         $("#loader").hide();
-                        if(data.Header.statusCode == 0  )
+                        console.log("data : " , data);
+                        if(data.Header.MessageCode == 0  )
                         {
                             Swal.fire(
                                 'عملیات با موفقیت انجام گردید . ',
@@ -1878,12 +1967,10 @@
                 let times = element.times;
 
                 $('.dt-deselected').each(function (event) {
-
                     let dt =  new persianDate($(this).parent().attr('data-date').split(',').map(Number)).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD');
                     if(day === dt){
-
-                        console.log(  $(this).parent().attr('data-date'));
-                        console.log(dt);
+                        // console.log(  $(this).parent().attr('data-date'));
+                        // console.log(dt);
                         $(this).find('.seance').attr('val',JSON.stringify(times));
                         $(this).parent().attr('dt-active',true);
                         $(this).find('.seance').text("سانس ها: "+ times.length)

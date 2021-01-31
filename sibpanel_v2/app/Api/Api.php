@@ -1274,6 +1274,25 @@ class Api
         return $response;
     }
 
+    public function ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , $ajax=null)
+    {
+        $data = [
+        "import_service_id" => $import_service_id,
+        "export_service_id" => $export_service_id,
+        "start" => $start,
+        "end" => $end
+        ] ;
+        $client = new Client();
+        $result = $client->post($this->url . 'ImportExportServiceTimes' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $ajax);
+        return $response;
+    }
+
     public function AddTimeTemplate($times_template){
         $data = [
             'times_template' => $times_template

@@ -154,6 +154,7 @@ Route::middleware(['CheckLogin'])->group(function () {
 //        Route::post('/edit_group_time_apply' , 'SeanceController@edit_group_time')->name('edit_group_time_apply');
         Route::post('/DeleteServiceTime' , 'SeanceController@DeleteServiceTime')->name('DeleteServiceTime');
         Route::post('/EditServiceTime' , 'SeanceController@EditServiceTime')->name('EditServiceTime');
+        Route::post('/ImportExportServiceTimes/{service_id}' , 'SeanceController@ImportExportServiceTimes')->name('ImportExportServiceTimes');
 
 
         //Alert Route

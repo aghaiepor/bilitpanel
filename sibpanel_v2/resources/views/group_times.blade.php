@@ -13,6 +13,8 @@
             font-size: 14pt;
             font-weight: 400;
         }
+        .card-category {
+            font-weight: 400;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/seance.css') }}">
@@ -76,51 +78,19 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        @foreach($GetServiceListFromServicetime as $ServiceList)
                         <div class="col-lg-3">
                             <div class="card card-pricing bg-light"><div class="card-body ">
                                     <div class="card-icon">
                                         <i class="material-icons">event_note</i>
                                     </div>
-                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
-                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round "> مشاهده</a>
+                                    <h3 style="" class="sanasCard card-title "> {{$ServiceList["service_name"]}} </h3>
+                                    <h6 style=" color: #898585 !important;" class="card-category"> {{$ServiceList["location_name"]}} </h6>
+                                    <a {{--data-toggle="modal" data-target="#showSanas"--}} href="{{Route("add_group_time_index" , ["service_id" => $ServiceList["service_id"] , "location_id" => $ServiceList["location_id"] ,  ] )}}" class="btn btn-info btn-round "> مشاهده</a>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-lg-3">
-                            <div class="card card-pricing bg-light">
-                                <div class="card-body ">
-                                    <div class="card-icon">
-                                        <i class="material-icons">event_note</i>
-                                    </div>
-                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
-                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round"> مشاهده</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="card card-pricing bg-light"><div class="card-body ">
-                                    <div class="card-icon">
-                                        <i class="material-icons">event_note</i>
-                                    </div>
-                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
-                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round"> مشاهده</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="card card-pricing bg-light"><div class="card-body ">
-                                    <div class="card-icon">
-                                        <i class="material-icons">event_note</i>
-                                    </div>
-                                    <h3 style="" class="sanasCard card-title ">سانس شماره یک</h3>
-                                    <a data-toggle="modal" data-target="#showSanas" href="javascript:;" class="btn btn-info btn-round"> مشاهده</a>
-                                </div>
-                            </div>
-                        </div>
-
+                    @endforeach
                     </div>
                 </div>
             </div>
