@@ -20,7 +20,8 @@
 
 
     <div class="logo">
-        <img id="logo_image" src="{{asset('')}}assets/img/mirasw_logo.png" style="width: 78px;margin: 15px auto 0px;display: block;">
+{{--        <img id="logo_image" src="{{asset('')}}assets/img/mirasw_logo.png" style="width: 78px;margin: 15px auto 0px;display: block;">--}}
+        <img id="logo_image" src="{{session('logoAddress')}}" style="width: 78px;margin: 15px auto 0px;display: block;">
         <a href="http://www.creative-tim.com" class="simple-text logo-mini">
 
         </a>

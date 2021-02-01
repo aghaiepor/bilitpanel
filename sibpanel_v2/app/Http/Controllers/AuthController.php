@@ -75,6 +75,41 @@ class AuthController extends Controller
 //                return $previous_url ;
                     session()->forget('Per_UserId');
                 }
+
+                // Get project logo
+                $project_ids = $response['ContentData']['project_ids'] ;
+                if($project_ids[0] == "*" )
+                    $logo_id = 1 ;
+                else
+                    $logo_id = min($project_ids) ;
+
+
+                $address = $this->api->GetPicturesInfo(0,0,$logo_id,0) ;
+                $ImageInfo = $address["ContentData"]["project_pics"];
+
+            if(count($ImageInfo) != 0 )
+                {
+                    foreach ($ImageInfo as $pic ) {
+                        if($pic["tag"] == "logo")
+                        {
+                            $project_image = $pic['picture_id'];
+                            $main_image_address = $this->api->GetImageAddress($project_image) ;
+                        }
+                    }
+                }else
+                {
+                    $main_image_address = null ;
+                }
+//                return $main_image_address ;
+
+                if($main_image_address == null )
+                    $address = asset("") .  "assets/img/placeholder.jpg" ;
+                else
+                    $address = $main_image_address ;
+
+
+
+                session(["logoAddress" =>  $address]);
                 return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
 //            }
 
@@ -88,9 +123,10 @@ class AuthController extends Controller
     public function logout(Request $request){
         if(session()->has("UserInfo"))
             session(["Per_UserId" => session('UserInfo')['user_id']]);
-        
+
         Cache::flush();
         session()->forget('SessionId');
+        session()->forget('logoAddress');
         session()->forget('UserInfo');
         session()->forget('otpAccept');
         session()->forget("expire_otp_time");

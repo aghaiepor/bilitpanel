@@ -92,8 +92,12 @@ class projectManagerController extends Controller
             $addPicture = $this->api->AddPicture($project_id , 0 , 0 , 0 , $image , "logo");
 //            return $addPicture;
             if($addPicture['Header']['Status'] == 0){
+                $project_image = $addPicture['ContentData']['picture_id'];
+                $main_image_address = $this->api->GetImageAddress($project_image) ;
+                session(["logoAddress" =>  $main_image_address]);
                 return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
 //                return $addPicture['ContentData']['picture_id'];
+
             }
             else if($addPicture['Header']['Status'] == 2){
                 return redirect()->back()->with('error' , ' تصویر موجود می باشد . برای تعویض تصویر ، تصویر قبلی را حذف نمایید .');

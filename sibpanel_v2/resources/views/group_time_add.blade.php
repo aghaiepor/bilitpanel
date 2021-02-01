@@ -34,6 +34,7 @@
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
+    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 {{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
 
 
@@ -71,7 +72,7 @@
                                 </div>
                                 <div class="col-sm">
 {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
-{{--                                    <a data-toggle="modal" data-target="#sanas"  --}}{{--onclick="history.go(-1);"--}}{{-- class="btn btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>--}}
+                                    <a data-toggle="modal" data-target="#sanas"  {{--onclick="history.go(-1);"--}} class="btn btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>
                                     <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
@@ -604,12 +605,10 @@
 
 @endsection
 @section('AddJs')
-
     <script src="{{asset("")}}assets/js/plugins/bootstrap-selectpicker.js"></script>
-    <script src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
-    <script src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
-{{--
 
+    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
+    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#FromDate').persianDatepicker({
@@ -653,7 +652,12 @@
             });
         });
     </script>
---}}
+
+    <script src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
+    <script src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
+
+
+
 
     <script>
         let GetServiceTimeList = @json($GetServiceTimeList) ;

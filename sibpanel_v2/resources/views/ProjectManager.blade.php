@@ -349,7 +349,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <img class="img-fluid w-100 rounded" id="herf_modal_image" data-project-id="" data-image-id="" src="" alt="">
+                    <img class="img-fluid w-100 bg-light rounded" id="herf_modal_image" data-project-id="" data-image-id="" src="" alt="">
                 </div>
                 <div class="modal-footer">
                     <button id="insertBtn" class="btn btn-success px-3" data-toggle="modal" data-target="#insetImage">
@@ -495,7 +495,7 @@
                 }else{
                     $("#DelBtn").show();
                     $("#insertBtn").hide();
-                    let deleteUrl = "{{Route("imageRemove")}}/" + image_id ;
+                    let deleteUrl = "{{Route("imageRemove")}}/" + image_id + "/project" ;
                     $("#DelBtn").attr('href',deleteUrl);
                 }
 
