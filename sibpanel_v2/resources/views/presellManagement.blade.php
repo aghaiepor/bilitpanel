@@ -1341,7 +1341,7 @@
 
                             let state_html = ' <div class="togglebutton">' + '<label>' ;
 
-                            if (account[i].account_status)
+                            if (account[i].account_presell_activation)
                                 state_html += '<input data-color="'+ account[i].account_state +'"  data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active" checked="">'  ;
                             else
                                 state_html += '<input data-color="'+ account[i].account_state +'"  data-location="' + account[i].account_id + '" type="checkbox" name="location_id_active">'  ;
@@ -1388,10 +1388,10 @@
                                 location_state.colSpan = "2"
                                 let state_html = ' <div class="togglebutton">' + '<label>' ;
 
-                                if (location[x].presell_activation)
-                                    state_html += '<input  data-location="' + location[x].locationaccount_id + '" type="checkbox" name="locationaccount_id" checked="">'  ;
+                                if (location[x].location_presell_activation)
+                                    state_html += '<input  data-location="' + location[x].location_id + '" type="checkbox" name="locationaccount_id" checked="">'  ;
                                 else
-                                    state_html += '<input data-location="' + location[x].locationaccount_id + '" type="checkbox" name="locationaccount_id">'  ;
+                                    state_html += '<input data-location="' + location[x].location_id + '" type="checkbox" name="locationaccount_id">'  ;
 
                                 state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
 

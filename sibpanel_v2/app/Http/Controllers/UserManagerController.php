@@ -244,7 +244,7 @@ class UserManagerController extends Controller
 //        dd(count($GetUserPermission));
 //        return $GetUserPermission['ContentData'];
 //        http://127.0.0.1:8000/setUserPermission/533
-//        return is_null($GetUserPer  ) ;
+//        return is_null($GetUserPer  ) ;LocationAccountActivation
         $GetSwitchWebServiceList = $this->api->GetSwitchWebServiceList();
 //        return $GetSwitchWebServiceList["ContentData"] ;
         $GetInfo = Cache::get('GetInfo');

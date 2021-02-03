@@ -1673,7 +1673,7 @@ class Api
     }
     public function LocationAccountActivation($locationaccount_id  ,$activation){
         $data = [
-            "locationaccount_id" => $locationaccount_id,
+            "location_id" => $locationaccount_id,
             "activation" => $activation
         ];
         $client = new Client();
