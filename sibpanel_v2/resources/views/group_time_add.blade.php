@@ -34,7 +34,7 @@
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
-    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
+{{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
 {{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
 
 
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-sm">
 {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
-                                    <a data-toggle="modal" data-target="#sanas"  {{--onclick="history.go(-1);"--}} class="btn btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>
+                                    <a data-toggle="modal" data-target="#sanas"  {{--onclick="history.go(-1);"--}} class="btn d-none btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>
                                     <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
@@ -1729,6 +1729,27 @@
                             )
                             removeSeance(el);
                         }
+                        else if (data.Header.MessageCode == 13) {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                '  اطلاعات وارد شده نامعتبر مي باشد ',
+                                'error'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 182) {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                '   ',
+                                'error'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 133) {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                '  شما مجاز به انجام اين عمليات مي باشيد. ',
+                                'warning'
+                            )
+                        }
                         else
                         {
                             Swal.fire(
@@ -1932,6 +1953,46 @@
                         Swal.fire(
                             'خطا در انجام عملیات ! ',
                             'ویرایش در این تاریخ انتخابی امکان پذیر نیست ! ',
+                            'warning'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 165  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'سرویس وارد شده نا معتبر می باشد  ',
+                            'error'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 120  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'بليت هاي انتخابي موجود مي باشد   ',
+                            'error'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 19  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'موردي يافت نشد   ',
+                            'error'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 32  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'لطفا بليتي را انتخاب نماييد  ',
+                            'warning'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 133  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'شما محاز به انجام اين عمليات نيستيد !  ',
                             'warning'
                         )
                     }
