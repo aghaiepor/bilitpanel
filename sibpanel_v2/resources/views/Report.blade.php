@@ -74,6 +74,7 @@
                                             <option @if(request('key') == "city") selected @endif value="city">شهر</option>
                                             <option @if(request('key') == "sale_type") selected @endif value="sale_type">نوع پرداخت</option>
                                             <option @if(request('key') == "voucher_type") selected @endif value="voucher_type">نوع بلیت</option>
+                                            <option @if(request('key') == "sell_model") selected @endif value="sell_model">نوع فروش</option>
                                             <option @if(request('key') == "operator") selected @endif value="operator">اپراتور</option>
                                             <option @if(request('key') == "location") selected @endif value="location">مکان</option>
                                             <option @if(request('key') == "service") selected @endif value="service">موزه</option>
