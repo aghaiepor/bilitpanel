@@ -1258,9 +1258,15 @@ class Api
         return $response;
     }
 
-    public function GetServiceListFromServicetime($ajax=null)
+    public function GetServiceListFromServicetime($show_based_on_province=false , $ajax=null)
     {
-        $data = null ;
+        if(is_null($show_based_on_province))
+            $show_based_on_province = false ;
+
+        $data =[
+            "show_based_on_province" => $show_based_on_province
+        ];
+
         $client = new Client();
         $result = $client->post($this->url . 'GetServiceListFromServicetime' ,[
                 'headers'=>$this->getHeader(),

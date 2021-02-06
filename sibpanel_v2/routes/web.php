@@ -145,7 +145,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/EditCity/{id}'  , 'provinceController@EditCity' )->name('EditCity');
 
         // Sans Route
-        Route::get('/group_times' , 'SeanceController@group_times')->name('group_times');
+        Route::get('/group_times/{show?}' , 'SeanceController@group_times')->name('group_times');
         Route::post('/apply_edit_group_time' , 'SeanceController@edit_time_group')->name('apply_edit_group_time');
         Route::get('/add_group_time/{service_id}/{location_id}' , 'SeanceController@add_group_time_index')->name('add_group_time_index');
         Route::post('/add_group_time' , 'SeanceController@add_group_time')->name('add_group_time');
