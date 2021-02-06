@@ -670,7 +670,6 @@
             let m = dt[1] - 1;
             let d = dt[2];
             item['day'] = new persianDate(new Date(y, m, d)).toLocale('en').format('YYYY-M-D');
-
         }
         // console.log("GetServiceTimeList : " , GetServiceTimeList)
 
@@ -1872,6 +1871,7 @@
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 if($(this).attr("class") == "seance_start" ){
                     day = $(this).attr("day-value");
+                    console.log("dat")
                     day = new persianDate(day).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD')
                     start = $(this).attr("value");
                 }
