@@ -25,7 +25,7 @@ class LoadingController extends Controller
 
         Cache::forget('LocationList');
         Cache::rememberForever('LocationList', function(){
-            $Locations  = $this->api->LocationList(null , "ajax");
+            $Locations  = $this->api->LocationList(1 , "ajax");
             return $Locations['ContentData'];
         });
         return $this->response_ok;
