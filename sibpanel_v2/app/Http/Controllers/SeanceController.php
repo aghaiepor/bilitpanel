@@ -17,11 +17,12 @@ class seanceController extends Controller
         $this->api = new Api();
     }
 
-    public function group_times(){
+    public function group_times($show=null){
 //        $GetTimeGroup = $this->api->GetTimeGroup();
 //        $AllLocationServices = $this->api->AllLocationServiceList();
 //        return view('group_times' , ['locations'=>$AllLocationServices,'result_data' => $GetTimeGroup['ContentData']] );
-        $GetServiceListFromServicetime = $this->api->GetServiceListFromServicetime();
+        $GetServiceListFromServicetime = $this->api->GetServiceListFromServicetime($show);
+//        return $GetServiceListFromServicetime ;
         return view('group_times' , ["GetServiceListFromServicetime" => $GetServiceListFromServicetime["ContentData"]] ) ;
     }
 
@@ -86,6 +87,18 @@ class seanceController extends Controller
                     if($test["Header"]["MessageCode"] == 158) {
                         return redirect()->back()->with('error' , " خطا : تاریخ انتخاب شده نامعتبر است . ");
                      }
+                    else if ($test["Header"]["MessageCode"] == 133) {
+                        return redirect()->back()->with('error' , " منع دسترسی : شما مجاز به انجام این عملیات نیستید ! . ");
+                    }
+                    else if ($test["Header"]["MessageCode"] == 120) {
+                        return redirect()->back()->with('error' , " خطا : بلیت ایجاد شده قبلا ساخته شده است  . ");
+                    }
+                    else if ($test["Header"]["MessageCode"] == 32) {
+                        return redirect()->back()->with('error' , " خطا : بلیتی جهت ایجاد وارد نشده است ");
+                    }
+                    else if ($test["Header"]["MessageCode"] == 32) {
+                        return redirect()->back()->with('error' , " خطا : سرویسی جهت ایجاد وارد نشده است ");
+                    }
                 }
 
                 return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");
@@ -194,6 +207,22 @@ class seanceController extends Controller
 
         $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end) ;
         return $ImportExportServiceTimes["ContentData"] ;
+        if($ImportExportServiceTimes["Header"]["MessageCode"] == 0 )
+        {
+            return redirect()->back()->with("success" , "عمليات با موفقيت انجام گرديد ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 75) {
+            return redirect()->back()->with("error" , " سرويس نامعتبر است !  ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 158) {
+            return redirect()->back()->with("error" , "خظا : تاريخ وارد شده نامعتبر است !   ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 133) {
+            return redirect()->back()->with("error" , "خظا : شما مجاز به انحام اين عمليات نمي باشيد  !   ") ;
+        }
+        else {
+            return redirect()->back()->with("error" , "خطا در انجام عمليات ! ") ;
+        }
     }
 
 

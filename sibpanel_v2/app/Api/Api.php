@@ -69,18 +69,16 @@ class Api
         return $response;
     }
     public function LocationList($id = 1 , $type=null){
-
         $data = ['project_id'=>$id];
         $client = new Client();
         $result = $client->post($this->url . 'LocationList' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
-        ) ;
-
+        );
         $response = json_decode($result->getBody(),true);
-
         $this->checkError($response , $type);
+        Log::info("LocationList : " , $data);
         return $response;
     }
     public function ServiceList($id = null , $type = null){
@@ -1364,7 +1362,7 @@ class Api
     public function GetServiceTimes($service_time_ids , $ajax=null)
     {
         $data = [
-            "service_time_ids" => $service_time_ids ,
+            "service_time_id" => $service_time_ids ,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'GetServiceTimes' ,[

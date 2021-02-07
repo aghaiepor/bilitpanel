@@ -990,8 +990,9 @@
                     }
                 },
                 success : function (data) {
-
+                    console.log("dataVoucherInfo : " , data);
                     let dataVoucherInfo = data[0].voucher_infos ;
+
                     console.log(" dataVoucherInfo => " , dataVoucherInfo)
                     let voucher = [] ;
                     for (let j = 0 ; j < dataVoucherInfo.length  ; j++)
@@ -1204,7 +1205,7 @@
             {
                 Swal.fire(
                     ' خطا ',
-                    ' سانسی اضافه نشده است! ',
+                    ' بليتي براي اين سانس اضافه نشده است! ',
                     'error'
                 )
                 return ;
@@ -1816,7 +1817,10 @@
                 });
 
             });
-
+            if(vouchers.length == 0 )
+            {
+                return times ;
+            }
             $('#seances').children().each(function () {
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 let start = $(this).find('.seance_start').attr("value");
@@ -1865,19 +1869,34 @@
                 });
 
             });
+            if(vouchers.length == 0 )
+            {
+                Swal.fire(
+                    'خطا ! ',
+                    ' لطغا بليتي را جهت ثبت انتخاب يا ايجاد نماييد .',
+                    'error'
+                )
+                return ;
+            }
+
             let start , end  , gender , gender_value , day;
             $('#seances tr[SansId='+ sansId +'] td').each(function () {
                 console.log( "this seances : " , $(this).attr("value") );
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 if($(this).attr("class") == "seance_start" ){
                     day = $(this).attr("day-value");
-                    console.log("dat")
-                    day = new persianDate(day).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD')
+
+                    let dt = day.split('-').map(Number);
+                    let y = dt[0];
+                    let m = dt[1];
+                    let d = dt[2];
+                    day = new persianDate([eval(y) , eval(m),eval(d)]).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD') ;
                     start = $(this).attr("value");
                 }
 
                 else if($(this).attr("class") == "seance_end" )
                     end = $(this).attr("value");
+
                 else if($(this).attr("class") == "seance_gender" )
                 {
                     gender = $(this).attr("gender_name");
@@ -1996,6 +2015,14 @@
                             'warning'
                         )
                     }
+                    else if (data.Header.MessageCode == 166  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'بلیت های انتخابی با بلیت های موجود در سیستم هم پوشانی دارند !  ',
+                            'warning'
+                        )
+                    }
                     else
                     {
                         Swal.fire(
@@ -2025,7 +2052,7 @@
 
         function setCurrentTimes() {
 
-            let service_times = JSON.$(".ServiseVocher")parse(document.getElementById("service_times").value.replace(/'/g,'"'));
+            let service_times = JSON.$(".ServiseVocher").parse(document.getElementById("service_times").value.replace(/'/g,'"'));
             console.log(service_times);
             service_times.forEach(element => {
                 let day = element.day;

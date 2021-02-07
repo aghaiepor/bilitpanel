@@ -164,7 +164,7 @@
                                                         {{$GetServices[$array_keys[$i]]['capacity']}}
                                                     @endif
                                                 </td>
-                                                {{--<td>
+                                               {{-- <td>
                                                     <a href="{{Route("add_group_time_index" , ["service_id"  => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id']  ])}}" class="btn off_btn btn-dribbble btn-simple">
                                                       مدیریت سانس
                                                     </a>

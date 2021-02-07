@@ -112,9 +112,9 @@
                                         <th >
                                             نام مکان
                                         </th>
-                                        <th >
+                                      {{--  <th >
                                             آدرس
-                                        </th>
+                                        </th>--}}
                                         <th >
                                             تخفیف
                                         </th>
@@ -154,9 +154,9 @@
                                                 <td>
                                                     {{$location['location_name']}}
                                                 </td>
-                                                <td>
+                                                {{--<td>
                                                     {{$location['location_address']}}
-                                                </td>
+                                                </td>--}}
                                                 <td>
                                                     <button data-url="{{Route("AddLocationOff" , [$location['id']])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
                                                         <i class="material-icons">local_offer</i>
