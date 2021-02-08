@@ -1362,8 +1362,9 @@ class Api
     public function GetServiceTimes($service_time_ids , $ajax=null)
     {
         $data = [
-            "service_time_id" => $service_time_ids ,
+            "service_time_ids" => $service_time_ids ,
         ];
+        Log::info("GetServiceTimes => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GetServiceTimes' ,[
                 'headers'=>$this->getHeader(),
@@ -1371,7 +1372,6 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-        Log::info("GetServiceTimes => " , $data);
         $this->checkError($response , $ajax) ;
         return $response;
     }
