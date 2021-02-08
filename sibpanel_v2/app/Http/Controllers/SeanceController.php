@@ -154,7 +154,7 @@ class seanceController extends Controller
     }
 
     public function GetServiceTimes(Request $request) {
-        $service_id = [$request->get("service_id")] ;
+        $service_id = [(int)$request->get("service_id")] ;
         $service_info = $this->api->GetServiceTimes($service_id);
         return $service_info["ContentData"] ;
     }

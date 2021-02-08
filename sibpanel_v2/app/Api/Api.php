@@ -1371,7 +1371,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
+        Log::info("GetServiceTimes => " , $data);
         $this->checkError($response , $ajax) ;
         return $response;
     }
