@@ -1375,6 +1375,23 @@ class Api
         $this->checkError($response , $ajax) ;
         return $response;
     }
+    public function ServiceTimeActivation($service_time_id , $activation , $ajax=null)
+    {
+        $data = [
+            "service_time_id" => (int)$service_time_id ,
+            "activation" => $activation ,
+        ];
+        Log::info("ServiceTimeActivation => " , $data);
+        $client = new Client();
+        $result = $client->post($this->url . 'ServiceTimeActivation' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $ajax) ;
+        return $response;
+    }
 
 
     // ******************* Alerts *******************

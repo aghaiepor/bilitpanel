@@ -77,7 +77,7 @@ class seanceController extends Controller
                             "total_capacity" => (int)$voucher_info["capacity"],
                             "amount" => (int)$voucher_info["seance_amount"],
                             "voucher_type_id" => (int)$voucher_info["vouchersInfo"],
-                            "max_discount_percentage" => (int)$voucher_info["seance_percent"]
+                            "max_discount_percentage" => "" /*$voucher_info["seance_percent"]*/
                         ];
                         array_push( $voucher_infos_data ,  $voucher) ;
                     }
@@ -92,6 +92,9 @@ class seanceController extends Controller
                     }
                     else if ($test["Header"]["MessageCode"] == 120) {
                         return redirect()->back()->with('error' , " خطا : بلیت ایجاد شده قبلا ساخته شده است  . ");
+                    }
+                    else if ($test["Header"]["MessageCode"] == 166) {
+                        return redirect()->back()->with('error' , " خطا : سانس دیگری در این زمان وجود دارد  . ");
                     }
                     else if ($test["Header"]["MessageCode"] == 32) {
                         return redirect()->back()->with('error' , " خطا : بلیتی جهت ایجاد وارد نشده است ");
@@ -127,14 +130,25 @@ class seanceController extends Controller
             $end =  $service_times["end"] ;
             $sex =  $service_times["sex"] ;
             $vouchers = $service_times["voucher_infos"];
+
             $voucher_infos_data = [] ;
             foreach ($vouchers as $voucher_info ) {
                 $voucher = [
                     "total_capacity" => (int)$voucher_info["capacity"],
                     "amount" => (int)$voucher_info["seance_amount"],
                     "voucher_type_id" => (int)$voucher_info["vouchersInfo"],
-                    "max_discount_percentage" => (int)$voucher_info["seance_percent"]
+                    "max_discount_percentage" => (is_null($voucher_info["seance_percent"])) ? "" :  $voucher_info["seance_percent"] ,
                 ];
+                if(array_key_exists("deleted",$voucher_info))
+                {
+                    $del_value = ($voucher_info["deleted"] == "true" ) ? true : false ;
+                    if($del_value)
+                    {
+                        $deleted = ["deleted" => $del_value]  ;
+                        $voucher = array_merge( $voucher ,  $deleted ) ;
+                    }
+                }
+                Log::info("voucher : " , $voucher);
                 array_push( $voucher_infos_data ,  $voucher) ;
     //                    return $voucher_infos_data ;
     //                    $test = $this->api->EditServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
@@ -225,9 +239,18 @@ class seanceController extends Controller
         }
     }
 
+    public function ServiceTimeActivation(Request $request){
+        $service_time_id = $request->get("service_time_id") ;
+        $activation = ( $request->get("activation") == "true" ) ? true : false  ;
+        $ServiceTimeActivation = $this->api->ServiceTimeActivation($service_time_id , $activation , "ajax") ;
+        return $ServiceTimeActivation ;
+    }
 
     private function fa2en($number){
         return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
     }
+
+
+
 
 }

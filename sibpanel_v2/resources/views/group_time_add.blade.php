@@ -31,6 +31,15 @@
         .sanseBtn:hover{
             background: #FFC107 !important;
         }
+        .ticketRow{
+            opacity: 0;
+            transform: scale(0.6, 0.6);
+            transition: opacity .2s ease-out, transform .2s ease-out;
+        }
+        .visible {
+            opacity: 1;
+            transform: scale(1, 1);
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
@@ -257,6 +266,9 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div id="loader1" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                            <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                        </div>
                         <div class="row mt-3">
                            {{-- <div id="formSans" class="col-lg  pull-right" style="margin-top: 20px">
                                 <div class="form-row text-right">
@@ -355,7 +367,7 @@
                             </div>
                             <div class="col-12 text-right">
                                 <button type="button" onclick="addSeance()" class="btn btn-sm btn-success mt-3 ">اضافه کردن سانس<div class="ripple-container"></div></button>
-                                <button type="button" onclick="removeAllSeance()" class="btn btn-sm btn-danger float-left mt-3">حذف همه سانس ها</button>
+                                <button type="button" onclick="removeAllSeance()" class="btn btn-sm btn-danger d-none float-left mt-3">حذف همه سانس ها</button>
                             </div>
                         </div>
                         <hr class="my-1">
@@ -376,6 +388,9 @@
                                                 جنسیت
                                             </th>
                                             <th>
+                                                فعالسازی
+                                            </th>
+                                            <th>
                                                 مدیریت بلیت
                                             </th>
                                             <th>
@@ -392,7 +407,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer mt-4">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-primary ml-auto" data-dismiss="modal">بستن </button>
 {{--                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> ثبت سانس </button>--}}
                     </div>
@@ -433,9 +448,9 @@
                                         <th>
                                             مقدار
                                         </th>
-                                        <th>
+                                       {{-- <th>
                                             حداکثر تخفیف
-                                        </th>
+                                        </th>--}}
                                     </tr>
                                     </thead>
                                     <tbody id="">
@@ -464,7 +479,7 @@
                                             </td>
 
                                             <td value="{{$VoucherInfo["amount"]}}" class="seance_amount">{{$VoucherInfo["amount"]}}</td>
-                                            <td value="{{$VoucherInfo["max_discount_percentage"]}}" class="seance_percent">{{$VoucherInfo["max_discount_percentage"]}}</td>
+{{--                                            <td value="{{$VoucherInfo["max_discount_percentage"]}}" class="seance_percent">{{$VoucherInfo["max_discount_percentage"]}}</td>--}}
                                         </tr>
                                     @endforeach
 
@@ -498,21 +513,24 @@
                                          <label class="w-100" for=""> مقدار</label>
                                          <input type="text" id="amount" name="amount" class="form-control" placeholder="مقدار">
                                      </div>
-                                     <div class="col">
+                                    {{-- <div class="col">
                                          <label class="w-100" for=""> حداکثر تخفيف</label>
                                          <input type="text" id="max_persent" name="max_persent" class="form-control" placeholder="حداکثر تخفيف">
-                                     </div>
+                                     </div>--}}
                                  </div>
                              </div>
                             <div class="col-12 text-right">
                                 <button type="button" onclick="addTicket()" class="btn btn-sm btn-success mt-3 ">اضافه کردن بلیت<div class="ripple-container"></div></button>
-                                <button type="button" onclick="removeAllTicket()" class="btn btn-sm btn-danger float-left mt-3">حذف همه بلیت ها</button>
+                                <button type="button" onclick="removeAllTicket()" class="btn btn-sm btn-danger d-none float-left mt-3">حذف همه بلیت ها</button>
                             </div>
                         </div>
                         <hr class="my-1">
                         <div class="row">
                             <div class="col-md">
                                 <div  class="col-lg-12 px-0">
+                                    <div id="loader3" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                                        <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                                    </div>
                                     <table class="table table-striped text-center" id="TicketTable">
                                         <thead class="text-primary">
                                         <tr>
@@ -526,9 +544,9 @@
                                             <th>
                                                 مقدار
                                             </th>
-                                            <th>
+                                           {{-- <th>
                                                 حداکثر تخفیف
-                                            </th>
+                                            </th>--}}
                                             <th>
                                                 حذف
                                             </th>
@@ -543,7 +561,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer mt-4">
+                    <div class="modal-footer ">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
                         <button data-tag="" id="saveVoucher" type="button" onclick="setTime(this)" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
                     </div>
@@ -565,6 +583,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+
                         <div class="form-row text-right">
                             <div class="col-md">
                                 <label for=""> مکان </label>
@@ -593,7 +612,7 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer mt-4">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
                         <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
                     </div>
@@ -801,14 +820,29 @@
 
                         return ;
                     }
+                    // when voucher lenght was zero
+                    $(".no-voucher").hide();
 
+                    // copy voucher information and add to tabel
                     $(this).parents("tr").clone().appendTo("#seances_voucherInfo");
                     $("#seances_voucherInfo tr[add_id="+ add_id +"] td[data-cheack-value=1]").remove();
-                    let html ='<td><button add-id="'+ add_id +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button> </td>' ;
+                    let tr = $("#seances_voucherInfo tr[add_id="+ add_id +"] ");
+                    tr.addClass("ticketRow");
+                    let html ='<td><button data-state="notSave" add-id="'+ add_id +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button> </td>' ;
                     $("#seances_voucherInfo tr[add_id="+ add_id +"]").append(html);
+                    setTimeout(function() {
+                        tr.addClass("visible");
+                    }, 10)
                 }
                 else
-                    $("#seances_voucherInfo td[add_id="+ add_id +"]").parents("tr").remove();
+                    {
+                        $("#seances_voucherInfo td[add_id="+ add_id +"]").parents("tr").remove();
+                        // when voucher not exist
+                        let child = $("#seances_voucherInfo tr ") ;
+                        if(child.length == 0 )
+                            $(".no-voucher").fadeIn();
+                    }
+
             });
 
         });
@@ -929,15 +963,14 @@
             $("#saveVoucher").text(" ثبت بلیت ");
             $("#saveVoucher").attr("data-tag" , "create");
             $("#saveVoucher").attr("onclick" , "setTime()");
+            $(".ServiseVocher").prop('checked', false);
         })
 
         $(document).on("click" , ".setting" , function () {
-            console.log("setting clicked! ")
             $("#saveVoucher").text(" ثبت تغییرات ");
             $("#saveVoucher").attr("data-tag" , "edit");
-
-
-
+            $(".ServiseVocher").prop('checked', false);
+            $("#seances_voucherInfo").html("");
             // $("#saveVoucher").attr("data-id" , "edit");
             let sansId = $(this).attr("data-date").replace(/,/g, '-');
             let start = $(this).attr("data-start");
@@ -945,7 +978,7 @@
             let service_id = $(this).attr("data-service-id")
             $("#saveVoucher").attr("onclick" , "getSansForUpdate("+service_id+")");
             console.log("service_id => " , service_id);
-
+            $("#loader3").css("display", "flex");
             $.ajax({
                 type:'POST',
                 url:"{{Route('GetServiceTimes')}}" ,
@@ -990,16 +1023,24 @@
                     }
                 },
                 success : function (data) {
-                    console.log("dataVoucherInfo : " , data);
+                    // console.log("dataVoucherInfo : " , data);
                     let dataVoucherInfo = data[0].voucher_infos ;
-
-                    console.log(" dataVoucherInfo => " , dataVoucherInfo)
-                    let voucher = [] ;
-                    for (let j = 0 ; j < dataVoucherInfo.length  ; j++)
+                    // console.log(" dataVoucherInfo  1 => " , dataVoucherInfo)
+                    if(dataVoucherInfo.length == 0 )
                     {
-                        voucher.push(dataVoucherInfo[j]) ;
+                        let h = "<td class='bg-light no-voucher ' colspan='4'> <h6 class='py-5 text-center'> بلیتی وجود ندارد </h6> </td>";
+                        $("#seances_voucherInfo").html(h);
+                    }else
+                    {
+                        let voucher = [] ;
+                        for (let j = 0 ; j < dataVoucherInfo.length  ; j++)
+                        {
+                            voucher.push(dataVoucherInfo[j]) ;
+                        }
+                        showVoucher(voucher , service_id);
                     }
-                    showVoucher(voucher , service_id);
+
+                    $("#loader3").hide();
                 }
             })
 
@@ -1044,7 +1085,7 @@
             // let vouchertyppe_Sanse ;
             let sex ;
             // let amount_Sanse ;
-            // let percent ;
+            let activation ;
             let remove  ;
             let setting  ;
 
@@ -1062,7 +1103,7 @@
                     // vouchertyppe_Sanse = row.insertCell();
                     sex = row.insertCell();
                     // amount_Sanse = row.insertCell();
-                    // percent = row.insertCell();
+                    activation = row.insertCell();
                     setting = row.insertCell();
                     remove = row.insertCell();
 
@@ -1109,11 +1150,23 @@
                     // amount_Sanse.setAttribute("value", data[j].seance_amount) ;
                     // amount_Sanse.setAttribute("class", "seance_amount") ;
 
-                    // percent.innerHTML = data[j].seance_percent ;
-                    // percent.setAttribute("value", data[j].seance_percent) ;
-                    // percent.setAttribute("class", "seance_percent") ;
+                    let active_shans = data[j].active ;
+
+                    let state_html = ' <div class="togglebutton">' + '<label>' ;
+
+                    if (active_shans)
+                        state_html += '<input sans-id="'+ data[j].service_time_id +'"  type="checkbox" name="sanse_id_active" checked="">'  ;
+                    else
+                        state_html += '<input sans-id="'+ data[j].service_time_id +'"  type="checkbox" name="sanse_id_active">'  ;
+
+                    state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
+
+                    activation.innerHTML = state_html ;
+                    activation.setAttribute("value", active_shans) ;
+                    activation.setAttribute("class", "seance_activation") ;
+
                     setting.innerHTML = '<button data-tag="load" data-service-id="'+ data[j].service_time_id +'" data-date='+ date +' data-start="'+ data[j].start +'" data-end="'+ data[j].end +'"   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-                    remove.innerHTML = '<button add-id="'+ data[j].service_time_id +'" type="button" class="btn px-2 btn-sm btn-rose removeSans text-center" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+                    remove.innerHTML = '<button data-deleted="false" add-id="'+ data[j].service_time_id +'" type="button" class="btn px-2 btn-sm btn-rose removeSans text-center" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
                 }
                 // console.log("sanas =>" ,
 
@@ -1123,7 +1176,8 @@
 
         function showVoucher(voucher , serviceID) {
 
-            $("#seances_voucherInfo").html(" ");
+            $("#seances_voucherInfo").html("");
+
             let table = document.getElementById("TicketTable").getElementsByTagName('tbody')[0];
             // let start_Sanse ;
             // let end_Sanse ;
@@ -1134,14 +1188,13 @@
             let percent ;
             let remove  ;
             // let setting  ;
-
-
             let voucherInfos = voucher ;
             console.log("sanas" ,  voucher) ;
             for (let j = 0; j < voucherInfos.length; j++) {
                         console.log("voucher[j] : ", voucherInfos[j]);
                         // console.log("voucher inner  =>  " , voucher[j]) ;
                         let row = table.insertRow();
+                        row.setAttribute("class", "ticketRow") ;
                         // seance_date = row.insertCell();
                         // start_Sanse = row.insertCell();
                         // end_Sanse = row.insertCell();
@@ -1149,7 +1202,7 @@
                         vouchertyppe_Sanse = row.insertCell();
                         // sex = row.insertCell();
                         amount_Sanse = row.insertCell();
-                        percent = row.insertCell();
+                        // percent = row.insertCell();
                         // setting = row.insertCell();
                         remove = row.insertCell();
 
@@ -1184,15 +1237,19 @@
                         amount_Sanse.innerHTML = voucherInfos[j].amount_without_discount;
                         amount_Sanse.setAttribute("value", voucherInfos[j].amount_without_discount);
                         amount_Sanse.setAttribute("class", "seance_amount");
-                        let off = voucherInfos[j].amount_without_discount - voucherInfos[j].amount ;
+                        /*let off = voucherInfos[j].amount_without_discount - voucherInfos[j].amount ;
                         off = off / voucherInfos[j].amount_without_discount ;
                         off =  Math.round(off * 100) ;
-                        percent.innerHTML = off ;
+                        */
+                        // let off = " - " ;
+                       /* percent.innerHTML = off ;
                         percent.setAttribute("value", off);
-                        percent.setAttribute("class", "seance_percent");
+                        percent.setAttribute("class", "seance_percent");*/
                         // setting.innerHTML = '<button data-date='+ date +' type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-                        remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
-
+                        remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeVoucher(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+                        setTimeout(function() {
+                            row.classList.add('visible');
+                        }, 10)
                     }
 
             }
@@ -1263,7 +1320,7 @@
                 )
                 return ;
             }
-            $('.modal').modal('hide')
+            // $('.modal').modal('hide')
 
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
@@ -1454,7 +1511,7 @@
             // let vouchertyppe_Sanse ;
             let sex ;
             // let amount_Sanse ;
-            // let percent ;
+            let activation ;
             let remove  ;
             let setting  ;
 
@@ -1467,7 +1524,7 @@
             // vouchertyppe_Sanse = row.insertCell();
             sex = row.insertCell();
             // amount_Sanse = row.insertCell();
-            // percent = row.insertCell();
+            activation = row.insertCell();
             setting = row.insertCell();
             remove = row.insertCell();
 
@@ -1497,22 +1554,136 @@
             sex.setAttribute("value", gender_val) ;
             sex.setAttribute("class", "seance_gender") ;
 
-           /* amount_Sanse.innerHTML = amount ;
+           /*
+           amount_Sanse.innerHTML = amount ;
             amount_Sanse.setAttribute("value", amount) ;
             amount_Sanse.setAttribute("class", "seance_amount") ;
-
-            percent.innerHTML = max_persent ;
-            percent.setAttribute("value", max_persent) ;
-            percent.setAttribute("class", "seance_percent") ;
             */
+
+            let state_html = ' <div class="togglebutton">' + '<label style="filter: grayscale(1);opacity: 0.4;" >' ;
+            state_html += '<input  disabled type="checkbox" name="sanse_id_active" checked="">'  ;
+            state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
+            activation.innerHTML = state_html ;
 
             setting.innerHTML = '<button data-tag="create" type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
             remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
 
 
         }
-        function addTicket() {
+        $(document).ready(function () {
+            $(document).on("click" , "input[name=sanse_id_active]" , function () {
+                let value = $(this).is(':checked');
+                let service_time_id = $(this).attr("sans-id") ;
 
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    $('#loader1').css('display' , 'flex');
+                    if (result.value) {
+                        $.ajax({
+                            type:'POST',
+                            url:"{{Route('ServiceTimeActivation')}}",
+                            dataType:'json',
+                            data:{
+                                '_token ': '<?php echo csrf_token() ?>',
+                                'service_time_id' : service_time_id ,
+                                'activation' : value ,
+                            },
+                            statusCode: {
+                                500: function() {
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+
+                                }
+                            },
+                            success:function(data) {
+                                $('#loader1').hide();
+                                if(data.Header.MessageCode == 0)
+                                {
+                                    Swal.fire(
+                                        'تغییرات با موفقیت اعمال گردید .',
+                                        "" ,
+                                        'success' ,
+                                    )
+                                }
+                                else if (data.Header.MessageCode == 133)
+                                {
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
+                                    Swal.fire(
+                                        'شما مجاز به انجام چنین عملیاتی نیستید .',
+                                        "" ,
+                                        'warning' ,
+                                    )
+                                }
+                                else {
+
+                                    if(value)
+                                        $(this).prop( "checked", false );
+                                    else
+                                        $(this).prop( "checked", true );
+
+                                    Swal.fire(
+                                        'خطا در اعمال تفییرات .',
+                                        "" ,
+                                        'error' ,
+                                    )
+                                }
+
+                            }
+                        });
+                    }
+                    else
+                        {
+                            if(value)
+                                $(this).prop( "checked", false );
+                            else
+                                $(this).prop( "checked", true );
+                            $('#loader1').hide();
+                        }
+
+                })
+            })
+        });
+
+        function addTicket() {
 
             let NotValid = false;
             $("#formSans input , #formSans select ").each(function() {
@@ -1567,6 +1738,8 @@
             if(NotValid)
                 return;
 
+            // when voucher lenght was zero
+            $(".no-voucher").hide();
 
             // let start = $('#start_hour').val() + ":" + $('#start_minute').val();
             // let end = $('#end_hour').val() + ":" + $('#end_minute').val();
@@ -1574,7 +1747,7 @@
             let voucherType = $("#vouchers").val();
             let capacity = $("#capacity").val();
             let amount = $("#amount").val();
-            let max_persent = $("#max_persent").val();
+            // let max_persent = $("#max_persent").val();
 
 
             let filteredArray = [];
@@ -1587,11 +1760,12 @@
             let vouchertyppe_Sanse ;
             // let sex ;
             let amount_Sanse ;
-            let percent ;
+            // let percent ;
             let remove  ;
             // let setting  ;
 
             let row = table.insertRow();
+            row.setAttribute("class", "ticketRow") ;
 
             // seance_date = row.insertCell();
             // start_Sanse = row.insertCell();
@@ -1600,7 +1774,7 @@
             vouchertyppe_Sanse = row.insertCell();
             // sex = row.insertCell();
             amount_Sanse = row.insertCell();
-            percent = row.insertCell();
+            // percent = row.insertCell();
             // setting = row.insertCell();
             remove = row.insertCell();
 
@@ -1635,13 +1809,15 @@
              amount_Sanse.setAttribute("value", amount) ;
              amount_Sanse.setAttribute("class", "seance_amount") ;
 
-             percent.innerHTML = max_persent ;
-             percent.setAttribute("value", max_persent) ;
-             percent.setAttribute("class", "seance_percent") ;
+             // percent.innerHTML = max_persent ;
+             // percent.setAttribute("value", max_persent) ;
+             // percent.setAttribute("class", "seance_percent") ;
             // setting.innerHTML = '<button type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-            remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+            remove.innerHTML = '<button data-state="notSave" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
 
-
+            setTimeout(function() {
+                row.classList.add('visible');
+            }, 10)
         }
         function resetTime() {
             $('#start_hour').val("8");
@@ -1650,20 +1826,61 @@
             $('#end_minute').val("0");
             $('#capacity').val("");
             $('#amount').val("");
-            $('#max_persent').val("");
+            // $('#max_persent').val("");
             $('#seance_gender').find("option").attr("selected" , false);
             $('#seance_gender').selectpicker('refresh');
         }
 
         function removeSeance(element) {
+
             let el = $(element).parent().parent();
             let add_id =  $(element).attr("add-id") ;
             $(".ServiseVocher[add_id="+ add_id +"]").prop('checked', false);
-            el.animate({opacity: '0'}, 150, function () {
-                el.animate({width: '0'}, 150, function () {
+            el.animate({opacity: '0'}, 10, function () {
+                el.animate({width: '0'}, 10, function () {
                     el.remove();
                 });
             });
+
+            // when voucher not exist
+            let child = $("#seances_voucherInfo tr ") ;
+            if(child.length == 1 )
+                $(".no-voucher").fadeIn(500);
+
+        }
+
+        function removeVoucher(element) {
+            let el = $(element).parent().parent();
+
+            let add_id =  $(element).attr("add-id") ;
+            $(".ServiseVocher[add_id="+ add_id +"]").prop('checked', false);
+            let  deleted = $(element).attr("data-deleted") ;
+            console.log("deleted : " , deleted)
+            if(deleted  == "true")
+            {
+                $(element).attr("data-deleted" , false) ;
+                el.css({
+                    "filter": "grayscale(0)" ,
+                    "opacity": "1" ,
+                })
+            }
+            else
+            {
+                $(element).attr("data-deleted" , true) ;
+                el.css({
+                    "filter": "grayscale(1)" ,
+                    "opacity": "0.5" ,
+                })
+            }
+
+
+
+            /*el.animate({opacity: '0'}, 150, function () {
+                el.animate({width: '0'}, 150, function () {
+                    el.remove();
+                });
+            });*/
+
         }
 
         $(document).ready(function () {
@@ -1801,12 +2018,15 @@
             let times = [];
             let vouchers = [];
             $('#seances_voucherInfo').children().each(function () {
+
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 let capacity = $(this).find('.seance_capacity').attr("value");
                 let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
                 let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
                 let seance_amount = $(this).find('.seance_amount').attr("value");
-                let seance_percent = $(this).find('.seance_percent').attr("value");
+                // let seance_percent = $(this).find('.seance_percent').attr("value");
+                let seance_percent = "";
+
                 vouchers.push({
                     'capacity': capacity,
                     'vouchersInfo': vouchertyppe_Sanse,
@@ -1816,12 +2036,15 @@
                     'seance_percent': seance_percent,
                 });
 
+
+
             });
             if(vouchers.length == 0 )
             {
                 return times ;
             }
-            $('#seances').children().each(function () {
+            $('#seances tr:not([sansid])').each(function () {
+
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 let start = $(this).find('.seance_start').attr("value");
                 let end = $(this).find('.seance_end').attr("value");
@@ -1858,17 +2081,22 @@
                 let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
                 let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
                 let seance_amount = $(this).find('.seance_amount').attr("value");
-                let seance_percent = $(this).find('.seance_percent').attr("value");
+                let deleted = $(this).find('.btn-remove-voucher').attr("data-deleted");
+                console.log("deleted : " , deleted)
+                let seance_percent = "";
                 vouchers.push({
                     'capacity': capacity,
                     'vouchersInfo': vouchertyppe_Sanse,
                     'vouchersInfo_name': vouchersInfo_id,
                     'remain':capacity,
                     'seance_amount': seance_amount,
+                    'deleted': deleted,
                     'seance_percent': seance_percent,
                 });
 
+
             });
+            console.log("vouchers list :  " , vouchers)
             if(vouchers.length == 0 )
             {
                 Swal.fire(
@@ -1912,6 +2140,7 @@
                 'gender':gender ,
                 "voucher_infos" : vouchers ,
             });
+            $("#loader3").css("display" , "flex");
             console.log("times : " , times);
             $.ajax({
                 type:'POST',
@@ -1957,10 +2186,20 @@
                     }
                 },
                 success : function (data) {
-                    $("#loader").hide();
+                    $("#loader3").hide();
                     console.log("data : " , data)
+
                     if(data.Header.MessageCode == 0  )
                     {
+                        // for remove items that must be deleted
+                        let elm = $('#seances_voucherInfo button[data-deleted=true]') ;
+                        elm.parent().parent().remove() ;
+                        elm = $('#seances_voucherInfo button[data-state="notSave"]') ;
+                        elm.attr("onclick" , "removeVoucher(this)");
+                        elm.attr("data-deleted" , "false");
+                        elm.addClass("btn-remove-voucher");
+                        $(".ServiseVocher").prop('checked', false);
+
                         Swal.fire(
                             'عملیات با موفقیت انجام گردید . ',
                             '',
