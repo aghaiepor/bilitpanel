@@ -1278,7 +1278,8 @@
             return;
             */
 
-            $('#test').modal('hide')
+            // $('#test').modal('hide')
+            $("#loader3").css("display", "flex") ;
             serviceTimes = [] ;
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
@@ -1291,7 +1292,7 @@
             showAddButten(sizeSelected)
             setSelected();
             removeAllSeance();
-            removeAllTicket();
+            // removeAllTicket();
             resetTime();
             submit() ;
         }
@@ -1570,6 +1571,8 @@
 
 
         }
+
+        // for sans time Activiton
         $(document).ready(function () {
             $(document).on("click" , "input[name=sanse_id_active]" , function () {
                 let value = $(this).is(':checked');
@@ -1682,6 +1685,7 @@
                 })
             })
         });
+        // ----------------------------
 
         function addTicket() {
 
@@ -1855,7 +1859,8 @@
             let add_id =  $(element).attr("add-id") ;
             $(".ServiseVocher[add_id="+ add_id +"]").prop('checked', false);
             let  deleted = $(element).attr("data-deleted") ;
-            console.log("deleted : " , deleted)
+
+            // console.log("deleted : " , deleted)
             if(deleted  == "true")
             {
                 $(element).attr("data-deleted" , false) ;
@@ -1866,20 +1871,27 @@
             }
             else
             {
-                $(element).attr("data-deleted" , true) ;
-                el.css({
-                    "filter": "grayscale(1)" ,
-                    "opacity": "0.5" ,
-                })
+                let deleteSize = $("#seances_voucherInfo button[data-deleted=false] , #seances_voucherInfo button[data-state=notSave] ") ;
+                console.log("delete size : ", deleteSize.length )
+                if(deleteSize.length > 1)
+                {
+                    $(element).attr("data-deleted" , true) ;
+                    el.css({
+                        "filter": "grayscale(1)" ,
+                        "opacity": "0.5" ,
+                    })
+                }
+                else
+                {
+                    Swal.fire(
+                        ' خطا ',
+                        " امکان حذف تمامی بلیت های موجود ندارد !  ",
+                        'error'
+                    )
+                }
+
+
             }
-
-
-
-            /*el.animate({opacity: '0'}, 150, function () {
-                el.animate({width: '0'}, 150, function () {
-                    el.remove();
-                });
-            });*/
 
         }
 
@@ -1945,6 +1957,7 @@
                                 'success'
                             )
                             removeSeance(el);
+                            location.reload();
                         }
                         else if (data.Header.MessageCode == 13) {
                             Swal.fire(
@@ -2072,6 +2085,16 @@
         }
 
         function getSansForUpdate(sansId) {
+
+            let checkSansExist = $("#seances_voucherInfo button[data-deleted=false] , #seances_voucherInfo button[data-state=notSave] ") ;
+            if (checkSansExist.length <= 0) {
+                Swal.fire(
+                    ' خطا ',
+                    " امکان حذف تمامی بلیت های موجود ندارد !  ",
+                    'error'
+                )
+                return ;
+            }
 
             let times = [];
             let vouchers = [];
