@@ -1242,7 +1242,6 @@
             let province_id = id ;
             global_provive_id = id ;
             $("#loader").css("display" , "flex");
-
             $.ajax({
                 type:'POST',
                 url:"{{Route('GetAccountProvince')}}" ,

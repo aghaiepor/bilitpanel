@@ -51,6 +51,9 @@
 
 @section('content')
     <div class="content">
+        <div id="loader" style="position: fixed;z-index: 35;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+            <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+        </div>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -408,7 +411,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary ml-auto" data-dismiss="modal">بستن </button>
+                        <button id="dismis_sanse" type="button" class="btn btn-primary ml-auto" data-dismiss="modal">بستن </button>
 {{--                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> ثبت سانس </button>--}}
                     </div>
                 </div>
@@ -625,7 +628,6 @@
 @endsection
 @section('AddJs')
     <script src="{{asset("")}}assets/js/plugins/bootstrap-selectpicker.js"></script>
-
     <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
@@ -675,15 +677,12 @@
     <script src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
     <script src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
 
-
-
-
     <script>
         let GetServiceTimeList = @json($GetServiceTimeList) ;
         for (let i = 0; i < GetServiceTimeList.length; i++) {
             let item = GetServiceTimeList[i];
             let day = item['day'];
-            console.log("day" , day);
+            // console.log("day" , day);
             let dt = day.split('-').map(Number);
             let y = dt[0];
             let m = dt[1] - 1;
@@ -693,20 +692,106 @@
         // console.log("GetServiceTimeList : " , GetServiceTimeList)
 
         let selectedDays = [];
-        console.log("selectedDays" , selectedDays);
+        // console.log("selectedDays" , selectedDays);
         let serviceID = "{{$id}}";
         let locationID = "{{$location_id}}";
-        console.log("serviceID : "  + serviceID + " , locationID :  " + locationID);
+        // console.log("serviceID : "  + serviceID + " , locationID :  " + locationID);
 
-        let serviceTimes = [];
+        var serviceTimes = [];
         if(GetServiceTimeList.length != 0 )
             serviceTimes = GetServiceTimeList;
-        /*$(document).on('click', ".table-days tr td" ,  function (e) {
-            console.log("clicked !! " , $(this).attr("data-date"))
-            $('#test').modal('show')
+
+        /*$("#dismis_sanse").click(function () {
+            refreshTimes(function(output){
+                serviceTimes = output ;
+            });
         });*/
 
+        function refreshTimes(SanseData) {
+            let service_id = "{{$id}}" ;
+            $("#loader").css("display" , "flex");
+            return $.ajax({
+                type:'POST',
+                url:"{{Route('GetServiceTimeList')}}" ,
+                dataType:'json',
+                data:{
+                    '_token ': '<?php echo csrf_token() ?>',
+                    'service_id' : service_id ,
+                },
+                statusCode: {
+                    500: function() {
+                        $("#loader").hide();
+                        Swal.fire(
+                            'خطا در دريافت اطلاعات ! ',
+                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                            'error'
+                        )
+                    } ,
+                    400: function() {
+                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                        let x = 1 ;
+                        let dots = "";
+                        setInterval(function () {
+                            dots += ".";
+                            x++  ;
+                            // console.log(x)
+                            if(x >= 8 ){
+                                x = 1 ;
+                                dots = ".";
+                            }
+                            $("#dots").html(dots)
+                        } , 300)
+                        $("#loader").hide();
+                        Swal.fire(
+                            'نشست  شما پایان یافته است ! ',
+                            html,
+                            'warning' ,
+                        )
+                        setTimeout(function () {
+                            window.location.href = "{{Route("logout")}}";
+                        } , 1500)
 
+                    }
+                },
+                success : function (data) {
+                    // console.clear();
+                    if(data.Header.MessageCode == 0  )
+                    {
+                        // console.log("Before change ServiceTime  : " , serviceTimes )
+
+                        service_times = data.ContentData ;
+                        // console.log("After change ServiceTime  : " , service_times)
+                        for (let i = 0; i < service_times.length; i++) {
+                            let item = service_times[i];
+                            let day = item['day'];
+                            // console.log("day" , day);
+                            let dt = day.split('-').map(Number);
+                            let y = dt[0];
+                            let m = dt[1] - 1;
+                            let d = dt[2];
+                            item['day'] = new persianDate(new Date(y, m, d)).toLocale('en').format('YYYY-M-D');
+                        }
+                        SanseData(service_times);
+                        $("#loader").hide();
+
+                    }
+                    else
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            ' دوباره سعی نمایید.',
+                            'error'
+                        )
+                        location.reload();
+                    }
+                    $("#loader").hide();
+
+                }
+            })
+
+            // console.log("sanse : " , sanse);
+            // return sanse ;
+        }
 
         $("#expire_date").hide();
         $("#exprieMode").change(function () {
@@ -790,11 +875,8 @@
             }
         });
         $(document).ready(function () {
-            /*$(".optgroup-2 .opt").click(function () {
-                console.log(" clicked ! ")
-            });*/
+
             setSelected() ;
-            // serviceTimes = [];add_id
 
             $(".ServiseVocher").click(function () {
                 let value = $(this).is(":checked");
@@ -930,16 +1012,12 @@
                     $(this).attr('class', 'dt-deselected');
                     $(this).removeAttr('id');
                 }
-
                 let timesLength = getTimesLength(id);
                 if (timesLength !=-1){
                     let html = '<a data-toggle="modal" data-target="#test" class="px-2 rounded sanseBtn" style="background: #FFEB3B"> سانس ها :  '+ timesLength+'</a>';
                     $(this).find('.seance').html(html);
                 }
-
             });
-
-
         }
 
         $(document).on("click" , ".sanseBtn" , function () {
@@ -947,6 +1025,9 @@
             console.log("id ==> " , sansId)
             console.log("serviceTimes ==> " , serviceTimes)
             let sanas = [] ;
+            // refreshTimes();
+            // serviceTimes =
+            console.log("serviceTimes : " , serviceTimes)
             let day ;
             for(let i = 0 ; i < serviceTimes.length ; i++){
                 if( serviceTimes[i]["day"]== sansId ) {
@@ -1267,16 +1348,6 @@
                 )
                 return ;
             }
-           /*
-           let tag = e.getAttribute("data-tag");
-            if(tag == "edit")
-            {
-
-            }
-            else
-                console.log("Create")
-            return;
-            */
 
             // $('#test').modal('hide')
             $("#loader3").css("display", "flex") ;
@@ -1642,6 +1713,10 @@
                                         "" ,
                                         'success' ,
                                     )
+                                    refreshTimes(function(output){
+                                        serviceTimes = output ;
+                                    });
+                                    // refreshTimes();
                                 }
                                 else if (data.Header.MessageCode == 133)
                                 {
@@ -1957,7 +2032,7 @@
                                 'success'
                             )
                             removeSeance(el);
-                            location.reload();
+                            // refreshTimes();
                         }
                         else if (data.Header.MessageCode == 13) {
                             Swal.fire(
@@ -2000,13 +2075,11 @@
                 $(this).remove();
             });
         }
-
         function removeAllTicket() {
             $('#seances_voucherInfo').children().each(function () {
                 $(this).remove();
             });
         }
-
         function removeDayIfExists(day){
 
             for(let i=0;i<serviceTimes.length;i++){
@@ -2015,7 +2088,6 @@
                     serviceTimes.splice(i, 1);
             }
         }
-
         function getTimesLength(day){
 
             for(let i=0;i<serviceTimes.length;i++){
@@ -2025,7 +2097,6 @@
             }
             return -1;
         }
-
         function getAllSeances() {
 
             let times = [];
@@ -2083,7 +2154,6 @@
             // console.log(times);
             return times;
         }
-
         function getSansForUpdate(sansId) {
 
             let checkSansExist = $("#seances_voucherInfo button[data-deleted=false] , #seances_voucherInfo button[data-state=notSave] ") ;
@@ -2311,6 +2381,8 @@
     </script>
 
     <script>
+
+
 
         function setCurrentTimes() {
 

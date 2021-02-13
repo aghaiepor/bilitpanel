@@ -51,6 +51,13 @@ class seanceController extends Controller
         return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] ]);
     }
 
+    public function GetServiceTimeList(Request $request)
+    {
+        $service_id = $request->get("service_id");
+        $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
+        return $GetServiceTimeList ;
+    }
+
     public function add_group_time(Request $request){
 //        return json_encode($request->all());
         $service_id = (int)$request->get("serviceId");
