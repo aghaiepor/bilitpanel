@@ -241,6 +241,7 @@ class LocationController extends Controller
         $GetServices = array_filter($GetServices, function ($event) use ($locationID) {
             return $event['location_id'] == $locationID;
         });
+//        return $GetServices ;
         $array_keys = array_keys($GetServices) ;
         $service_pics = [];
         $service_id_image = [];
@@ -277,6 +278,9 @@ class LocationController extends Controller
             $service_name = $request->get("service_name");
             $service_english_name = $request->get("service_english_name");
             $model_id = $request->get("model_id");
+            $TypeOfServiceSale = $request->get("TypeOfServiceSale");
+            if(is_null($TypeOfServiceSale))
+                $TypeOfServiceSale = "";
             $description = $request->get("description");
             if (is_null($description))
                 $description = "" ;
@@ -284,7 +288,7 @@ class LocationController extends Controller
             if ($capacity == 0 )
                 $capacity = "";
             $normal_sale = ($request->get("normal_sale") == 'on') ? 1 : 0 ;
-            $AddService  = $this->api->AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id);
+            $AddService  = $this->api->AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id , $TypeOfServiceSale);
 //            return $AddService;
             if ($AddService['Header']['Status'] == 0){
                 Cache::forget('ServiceList');
@@ -312,6 +316,9 @@ class LocationController extends Controller
             $service_name = $request->get("service_name");
             $service_english_name = $request->get("service_english_name");
             $model_id = $request->get("model_id");
+            $TypeOfServiceSale = $request->get("TypeOfServiceSale");
+            if(is_null($TypeOfServiceSale))
+                $TypeOfServiceSale = "";
             $description = $request->get("description");
             if(is_null($description))
                 $description = "";
@@ -320,7 +327,7 @@ class LocationController extends Controller
                 $capacity = "" ;
             $normal_sale = ($request->get("normal_sale") == 'on') ? 1 : 0 ;
 
-            $EditService  = $this->api->EditService($service_name, $capacity, $service_english_name, $model_id,$service_id, $description, $location_id, $normal_sale);
+            $EditService  = $this->api->EditService($service_name, $capacity, $service_english_name, $model_id,$service_id, $description, $location_id, $normal_sale , $TypeOfServiceSale);
 //            return $EditService;
                 if ($EditService['Header']['Status'] == 0){
                     Cache::forget('ServiceList');

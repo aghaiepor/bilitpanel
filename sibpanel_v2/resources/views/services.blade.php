@@ -255,13 +255,23 @@
                                                                             <textarea style="height: 64px !important;" class="form-control" name="description" cols="30" rows="3"> {{$GetServices[$array_keys[$i]]['description']}}</textarea>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-row mt-4">
+                                                                    <div class="form-row mt-3">
                                                                         <div class="col-sm text-right">
+                                                                            <label for=""> نوع سرویس </label>
                                                                             <select name="model_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
                                                                                 <option disabled> نوع سرویس </option>
                                                                                 <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Entrance') selected @endif value="1">ورودی مکان</option>
                                                                                 <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Event') selected @endif value="3">رویداد</option>
                                                                                 <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Service') selected @endif value="2"> جاذبه مکان</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-sm text-right">
+                                                                            <label for=""> نوع  فروش سرویس </label>
+                                                                            <select name="TypeOfServiceSale" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
+                                                                                <option disabled selected> نوع  فروش سرویس </option>
+                                                                                <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'NormalAndSans') selected @endif value="NormalAndSans"> هر دو</option>
+                                                                                <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Normal') selected @endif value="Sans">عادی</option>
+                                                                                <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Sans') selected @endif value="Normal">سانس</option>
                                                                             </select>
                                                                         </div>
                                                                        {{-- <div class="col-sm text-right">
@@ -393,11 +403,21 @@
                     </div>
                     <div class="form-row mt-4">
                         <div class="col-sm text-right">
+                            <label for=""> نوع سرویس </label>
                             <select name="model_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
                                 <option disabled selected> نوع سرویس </option>
                                 <option value="1">ورودی مکان</option>
                                 <option value="3">رویداد</option>
                                 <option value="2"> جاذبه مکان</option>
+                            </select>
+                        </div>
+                        <div class="col-sm text-right">
+                            <label for=""> نوع  فروش سرویس </label>
+                            <select name="TypeOfServiceSale" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع  فروش سرویس">
+                                <option disabled selected> نوع  فروش سرویس </option>
+                                <option value="NormalAndSans"> هر دو</option>
+                                <option value="Sans">عادی</option>
+                                <option value="Normal">سانس</option>
                             </select>
                         </div>
                        {{-- <div class="col-sm text-right">

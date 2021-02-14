@@ -318,7 +318,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id){
+    public function AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id , $TypeOfServiceSale){
         $data = [
             "service_name"=> $service_name,
             "service_english_name" => $service_english_name,
@@ -326,6 +326,7 @@ class Api
             "description"=> $description,
             "location_id" => $location_id,
             "capacity" => $capacity,
+            "TypeOfServiceSale" => $TypeOfServiceSale,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddService' ,[
@@ -339,7 +340,7 @@ class Api
         return $response;
 
     }
-    public function EditService($service_name, $capacity, $service_english_name, $model_id,$service_id, $description, $location_id, $normal_sale){
+    public function EditService($service_name, $capacity, $service_english_name, $model_id,$service_id, $description, $location_id, $normal_sale , $TypeOfServiceSale){
         $data = [
             "service_name"=> $service_name,
             "service_english_name" => $service_english_name,
@@ -348,8 +349,10 @@ class Api
             "description"=> $description,
             "location_id" => $location_id,
             "capacity" => $capacity,
-            "normal_sale" => $normal_sale
+            "normal_sale" => $normal_sale ,
+            "TypeOfServiceSale" => $TypeOfServiceSale,
         ];
+        Log::info("EditService : " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditService' ,[
                 'headers'=>$this->getHeader(),

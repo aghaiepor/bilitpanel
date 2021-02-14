@@ -2045,9 +2045,6 @@
                                 serviceTimes = output ;
                             });
                             let seancesSize = $("#seances tr").first();
-
-                            console.log("seancesSize : " , seancesSize);
-                            console.log("seancesSize.length" , seancesSize.length )
                             if(seancesSize.length == 1 )
                             {
                                 let day = "" ;
@@ -2056,17 +2053,9 @@
                                         day = $(this).attr("day-value");
                                     }
                                 });
-                                console.log("day : " , day )
-                                // removeDayIfExists(day);
-                                // setSelected();
                                 reSetSelected(day)
                             }
-                            // removeDayIfExists
                             removeSeance(el);
-
-
-
-                            // refreshTimes();
                         }
                         else if (data.Header.MessageCode == 13) {
                             Swal.fire(
