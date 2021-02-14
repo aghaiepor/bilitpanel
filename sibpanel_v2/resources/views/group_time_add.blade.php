@@ -1019,7 +1019,17 @@
                 }
             });
         }
-
+        function reSetSelected(day , num=""){
+            let string = "#"+day ;
+            if(num == "" )
+            {
+                $(string).find(".seance").html("");
+            }
+            else
+            {
+                $(string).find(".seance a ").html(" سانس ها :  " + num);
+            }
+        }
         $(document).on("click" , ".sanseBtn" , function () {
             let sansId = $(this).parent().parent().parent().attr("data-date").replace(/,/g, '-');
             console.log("id ==> " , sansId)
@@ -1983,7 +1993,7 @@
                     url:"{{Route('DeleteServiceTime')}}" ,
                     dataType:'json',
                     data:{
-                        '_token ': '<?php echo csrf_token() ?>',
+                        '_token' : '<?php echo csrf_token() ?>',
                         'service_time_id' : service_time_id ,
                     },
                     statusCode: {
@@ -2031,7 +2041,31 @@
                                 '',
                                 'success'
                             )
+                            refreshTimes(function(output){
+                                serviceTimes = output ;
+                            });
+                            let seancesSize = $("#seances tr").first();
+
+                            console.log("seancesSize : " , seancesSize);
+                            console.log("seancesSize.length" , seancesSize.length )
+                            if(seancesSize.length == 1 )
+                            {
+                                let day = "" ;
+                                $('#seances tr td').each(function () {
+                                    if($(this).attr("class") == "seance_start" ){
+                                        day = $(this).attr("day-value");
+                                    }
+                                });
+                                console.log("day : " , day )
+                                // removeDayIfExists(day);
+                                // setSelected();
+                                reSetSelected(day)
+                            }
+                            // removeDayIfExists
                             removeSeance(el);
+
+
+
                             // refreshTimes();
                         }
                         else if (data.Header.MessageCode == 13) {
