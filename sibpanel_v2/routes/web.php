@@ -45,9 +45,15 @@ Route::middleware(['CheckLogin'])->group(function () {
         // home Dashboard
         Route::get('/', function () {
             if(session('UserInfo')['account_type_id'] == 1 )
-                return view('dashboard');
+            {
+                if(session('UserInfo')['projects'][0]["name"] == "IranFun")
+                    return view('dashboard2');
+                else
+                    return view('dashboard');
+            }
             else
                 return  view('dashboard2') ;
+
         })->name('dashboard');
 
         Route::get('loading' , 'LoadingController@index')->name('loading');
@@ -155,6 +161,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/DeleteServiceTime' , 'SeanceController@DeleteServiceTime')->name('DeleteServiceTime');
         Route::post('/EditServiceTime' , 'SeanceController@EditServiceTime')->name('EditServiceTime');
         Route::post('/ImportExportServiceTimes/{service_id}' , 'SeanceController@ImportExportServiceTimes')->name('ImportExportServiceTimes');
+        Route::post('/ExtendtServiceTimes/{service_id}' , 'SeanceController@ExtendtServiceTimes')->name('ExtendtServiceTimes');
         Route::post('/ServiceTimeActivation' , 'SeanceController@ServiceTimeActivation')->name('ServiceTimeActivation');
         Route::post('/GetServiceTimeList' , 'SeanceController@GetServiceTimeList')->name('GetServiceTimeList');
 

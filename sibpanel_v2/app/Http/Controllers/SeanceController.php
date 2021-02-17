@@ -44,11 +44,12 @@ class seanceController extends Controller
     // new group time
     public function add_group_time_index($service_id , $location_id){
         $VoucherTypeList = Cache::get('VoucherTypeList');
-//        return $VoucherTypeList ;
+        $LocationList = Cache::get("LocationList") ;
+//        return $LocationList ;
         $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
 //        return $GetServiceTimeList["ContentData"] ;
-        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] ]);
+        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] , "LocationList" => $LocationList ]);
     }
 
     public function GetServiceTimeList(Request $request)
@@ -226,8 +227,43 @@ class seanceController extends Controller
         $end = Verta::parse($end)->timestamp;
         $end = Carbon::createFromTimestamp($end)->format('Y-m-d h:i');
 
-        $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end) ;
-        return $ImportExportServiceTimes["ContentData"] ;
+        $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , "") ;
+//        return $ImportExportServiceTimes ;
+        if($ImportExportServiceTimes["Header"]["MessageCode"] == 0 )
+        {
+            return redirect()->back()->with("success" , "عمليات با موفقيت انجام گرديد ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 75) {
+            return redirect()->back()->with("error" , " سرويس نامعتبر است !  ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 158) {
+            return redirect()->back()->with("error" , "خظا : تاريخ وارد شده نامعتبر است !   ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 133) {
+            return redirect()->back()->with("error" , "خظا : شما مجاز به انحام اين عمليات نمي باشيد  !   ") ;
+        }
+        else {
+            return redirect()->back()->with("error" , "خطا در انجام عمليات ! ") ;
+        }
+    }
+    public function ExtendtServiceTimes(Request $request , $service_id){
+        $import_service_id = $service_id;
+        $export_service_id = $service_id;
+
+        $start = $request->get("start");
+        $start = $this->fa2en($start);
+        $start = Verta::parse($start)->timestamp;
+        $start = Carbon::createFromTimestamp($start)->format('Y-m-d h:i');
+
+        $end = $request->get("end");
+        $end = $this->fa2en($end);
+        $end = Verta::parse($end)->timestamp;
+        $end = Carbon::createFromTimestamp($end)->format('Y-m-d h:i');
+
+        $days_extend = $request->get("days_extend");
+
+        $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , $days_extend) ;
+//        return $ImportExportServiceTimes ;
         if($ImportExportServiceTimes["Header"]["MessageCode"] == 0 )
         {
             return redirect()->back()->with("success" , "عمليات با موفقيت انجام گرديد ") ;

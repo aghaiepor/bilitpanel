@@ -1279,14 +1279,15 @@ class Api
         return $response;
     }
 
-    public function ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , $ajax=null)
+    public function ImportExportServiceTimes($import_to_service_id , $export_from_service_id ,$start_export , $end_export , $days_extend ,  $ajax=null)
     {
         $data = [
-        "import_service_id" => $import_service_id,
-        "export_service_id" => $export_service_id,
-        "start" => $start,
-        "end" => $end
-        ] ;
+        "export_from_service_id" => $export_from_service_id,
+        "start_export" => $start_export ,
+        "end_export" => $end_export,
+        "import_to_service_id" => $import_to_service_id,
+        "days_extend" =>  $days_extend
+        ];
         $client = new Client();
         $result = $client->post($this->url . 'ImportExportServiceTimes' ,[
                 'headers'=>$this->getHeader(),

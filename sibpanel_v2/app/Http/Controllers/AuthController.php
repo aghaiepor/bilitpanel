@@ -83,7 +83,6 @@ class AuthController extends Controller
                 else
                     $logo_id = min($project_ids) ;
 
-
                 $address = $this->api->GetPicturesInfo(0,0,$logo_id,0) ;
                 $ImageInfo = $address["ContentData"]["project_pics"];
 

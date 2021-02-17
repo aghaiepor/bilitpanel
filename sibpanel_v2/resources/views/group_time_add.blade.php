@@ -8,6 +8,9 @@
         .bootstrap-select{
             width: 100% !important;
         }
+        .bootstrap-select .dropdown-menu {
+            min-width: 100% !important;
+        }
         #plotId{
             font-family: iransans !important;
             box-shadow: 0px 2px 6px -1px #ccc !important;
@@ -40,10 +43,18 @@
             opacity: 1;
             transform: scale(1, 1);
         }
+        .calender_Area{
+            transition: opacity .2s ease-out, transform .2s ease-out;
+            /*transition : filter 1s ease-out ;*/
+        }
+        #FromDate , #ToDate , #FromDate2 , #ToDate2 {
+            direction: ltr;
+        }
     </style>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
-{{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
+
+    <link id="s1" rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
+    <link id="s2" rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
+    {{--  for orginal calender  --}}
 {{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
 
 
@@ -84,13 +95,14 @@
                                 </div>
                                 <div class="col-sm">
 {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
-                                    <a data-toggle="modal" data-target="#sanas"  {{--onclick="history.go(-1);"--}} class="btn d-none btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>
+
+                                    <a id="exportSans" data-toggle="modal" data-target="#sanas"  {{--onclick="history.go(-1);"--}} class="btn btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>
                                     <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <!-- Modal -->
                         </div>
-                        <div class="card-body">
+                        <div  class="card-body">
 
                             {{--   capecity and ...   --}}
                             <div class="row">
@@ -98,11 +110,12 @@
                                     <div style="padding: 10px;overflow:hidden">
                                         <button class="btn btn-primary float-right btn-sm" onclick="selectAll()">انتخاب همه</button>
                                         <button class="btn btn-danger float-right mr-2 btn-sm" onclick="deselctAll()">لغو انتخاب ها</button>
-                                        <button id="addSans" class="btn btn-success mr-atuo btn-sm" data-toggle="modal" data-target="#test"> افزودن سانس </button>
+                                        <button id="addSans" class="btn btn-success mr-atuo btn-sm" data-toggle="modal" data-target="#test"> افزودن سانس ها </button>
+                                        <button id="sanasDayButton" data-toggle="modal" data-target="#sanasDay" class="btn btn-sm btn-primary mt-2"> تمديد سانس ها </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" id="div_seance" style="display: none">
+                            <div class="row calender_Area" id="div_seance" style="display: none">
                                 <div class="col-lg panel panel-default">
                                     <div class="panel-body" style="font-family: iransans !important;">
                                         <div class="form-group">
@@ -575,7 +588,7 @@
     </div>
 
     <div class="modal fade" id="sanas" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div id="sansaref" class="modal-dialog" role="document">
             <form method="post" action="{{Route("ImportExportServiceTimes" , ["service_id" => $id ])}}">
                 @csrf
                 <div class="modal-content">
@@ -590,13 +603,15 @@
                         <div class="form-row text-right">
                             <div class="col-md">
                                 <label for=""> مکان </label>
-                                <select name="locationList" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                    <option selected value="dont_care">  همه </option>
+                                <select id="locationList" data-live-search="true" name="locationList" class="selectpicker" data-style="btn btn-primary border-dark" title="انتخاب نماييد ...">
+                                    @foreach($LocationList as $Location)
+                                        <option  value="{{$Location["id"]}}"> {{$Location["location_name"]}} </option>
+                                    @endforeach
                                 </select>
                             </div>
                              <div class="col-md">
                                  <label for=""> سرویس </label>
-                                 <select name="serviceList" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                 <select id="ServiceList" data-live-search="true" name="serviceList" class="selectpicker" data-style="btn btn-primary border-dark" title="انتخاب نماييد ..">
                                      <option selected value="dont_care">  همه </option>
                                  </select>
                              </div>
@@ -604,20 +619,60 @@
                         <div class="form-row text-right mt-3">
                             <div class="col-md">
                                 <label for=""> تاریخ شروع </label>
-                                <input id="FromDate" name="start" type="text" class="form-control" placeholder="تاریخ شروع">
+                                <input id="FromDate" name="start" type="text" class="form-control text-center " placeholder="تاریخ شروع">
 
 
                             </div>
                             <div class="col-md">
                                 <label for=""> تاریخ پایان </label>
-                                <input id="ToDate" name="end" type="text" class="form-control" placeholder="تاریخ پايان">
+                                <input id="ToDate" name="end" type="text" class="form-control text-center" placeholder="تاریخ پايان">
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
-                        <button type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
+                        <button id="exportSanasButton" type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="sanasDay" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div id="sansaref" class="modal-dialog" role="document">
+            <form method="post" action="{{Route("ExtendtServiceTimes" , ["service_id" => $id ])}}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="testLabel"> تمدید سانس  </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row text-right">
+                            <div class="col-md-12">
+                                <label for=""> تعداد روز تمدید </label>
+                                <input id="days_extend" name="days_extend" type="text" class="form-control" placeholder="مثلا 7 روز دیگر">
+                            </div>
+                        </div>
+                        <div class="form-row text-right mt-3">
+                            <div class="col-md">
+                                <label for=""> تاریخ شروع </label>
+                                <input id="FromDate2" name="start" type="text" class="form-control text-center" placeholder="تاریخ شروع">
+                            </div>
+                            <div class="col-md">
+                                <label for=""> تاریخ پایان </label>
+                                <input id="ToDate2" name="end" type="text" class="form-control text-center" placeholder="تاریخ پايان">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                        <button id="extendButton" type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
                     </div>
                 </div>
             </form>
@@ -627,55 +682,226 @@
 
 @endsection
 @section('AddJs')
+
     <script src="{{asset("")}}assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
     <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
+    <div id="scripts">
+
+    </div>
+    {{--  for Big calender  --}}
+    <script id="sc1" src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
+    <script id="sc2" src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
+
     <script>
-        $(document).ready(function() {
-            $('#FromDate').persianDatepicker({
-                initialValue: true,
-                autoClose : true ,
-                format: 'YYYY-MM-DD H:mm:ss',
-                calendar:{
-                    persian:{
-                        locale: 'fa'
+        test();
+        function test() {
+            $(document).ready(function() {
+
+                $('#FromDate , #FromDate2 ').persianDatepicker({
+                    initialValue: true,
+                    autoClose : true ,
+                    format: 'YYYY-MM-DD H:mm:ss',
+                    calendar:{
+                        persian:{
+                            locale: 'fa'
+                        }
+                    },navigator:{
+                        scroll:{
+                            enabled:false
+                        }
+                    },navigator:{
+                        text:{
+                            btnNextText:'بعدی',
+                            btnPrevText:'قبلی'
+                        }
                     }
-                },navigator:{
-                    scroll:{
-                        enabled:false
+                });
+                $('#ToDate , #ToDate2 ').persianDatepicker({
+                    initialValue: true,
+                    autoClose : true ,
+                    format: 'YYYY-MM-DD H:mm:ss',
+                    calendar:{
+                        persian:{
+                            locale: 'fa'
+                        }
+                    },navigator:{
+                        scroll:{
+                            enabled:false
+                        }
+                    },navigator:{
+                        text:{
+                            btnNextText:'بعدی',
+                            btnPrevText:'قبلی'
+                        }
                     }
-                },navigator:{
-                    text:{
-                        btnNextText:'بعدی',
-                        btnPrevText:'قبلی'
-                    }
-                }
+
+                });
             });
-            $('#ToDate').persianDatepicker({
-                initialValue: true,
-                autoClose : true ,
-                format: 'YYYY-MM-DD H:mm:ss',
-                calendar:{
-                    persian:{
-                        locale: 'fa'
-                    }
-                },navigator:{
-                    scroll:{
-                        enabled:false
-                    }
-                },navigator:{
-                    text:{
-                        btnNextText:'بعدی',
-                        btnPrevText:'قبلی'
-                    }
-                }
+        }
+
+        $(function() {
+            var active = true ;
+            var linkEl ;
+            var linkEl1 = $("#s1") ;
+            var linkEl2 = $("#s2");
+            var linkElsc1 = $("#sc1");
+            var linkElsc2 = $("#sc2");
+            var heightSans ;
+            $("#exportSans , #sanasDayButton").click(function() {
+                    heightSans = $("#div_seance").height();
+                    // $("#calender_Area").css("filter" , "blur(5px)");
+                    // $("#calender_Area").css("opacity" , "0");
+                    $("#div_seance").css("filter" , "blur(5px)");
+                    // $("#div_seance").css("opacity" , "0.3");
+                    $("#div_seance").animate({opacity: "0.3"} , 300);
+                    let localAddress = "{{asset('')}}" + "assets/js/persian-datepicker.min.css" ;
+                    linkEl = $("<link id='style1' rel='stylesheet' href='" + localAddress +"'>")
+                        .appendTo('head')[0];
+
+                setTimeout(function () {
+                    $(".seance").hide();
+                    $("#s1").remove();
+                    $("#s2").remove();
+                    $("#sc1").remove();
+                    $("#sc2").remove();
+                    // $("#div_seance").animate({opacity: "0.3"} , 300);
+                    $("#div_seance").height(heightSans);
+
+                } , 500)
+
 
             });
+            $('#sanas , #sanasDay').on('hide.bs.modal', function (e) {
+                sizeSelected= 0 ;
+                showAddButten(sizeSelected)
+                deselctAll() ;
+                /*
+                $("#calender_Area").removeAttr('style')
+                $("#calender_Area").animate({ filter: "0" }, {
+                    duration: 1000,
+                    complete: function() { $("#calender_Area").removeAttr('style') }
+                });*/
+
+                $("#style1").remove();
+                $(".seance").show();
+                linkEl1.appendTo('head')[0];
+                linkEl2.appendTo('head')[0];
+                linkElsc1.appendTo('#scripts')[0];
+                linkElsc2.appendTo('#scripts')[0];
+                active = true;
+                $("#div_seance").css("opacity" , "0");
+                setTimeout(function () {
+                    $("#div_seance").removeAttr('style')
+                    $("#div_seance").animate({opacity: "1"} , 300);
+                    $("#div_seance").animate({ filter: "0" }, {
+                        duration: 1000,
+                        complete: function() { $("#div_seance").removeAttr('style') }
+                    });
+                } , 300)
+
+            })
+
         });
+
     </script>
 
-    <script src="{{ asset('assets/js/select_time/persian-date.min.js')}}"></script>
-    <script src="{{ asset('assets/js/select_time/persian-datepicker.js')}}"></script>
+    <script>
+        // export area JS
+        $(document).ready(function () {
+            $('#locationList').change(function () {
+                var locationID = $('#locationList').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('ServiceListReport')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'locationID' : locationID ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if(session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false;
+                            }
+
+
+                        }
+                    },
+                    success:function(data) {
+                        $("#ServiceList").html('');
+                        $("#ServiceList").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i< data.array_keys.length ; i++){
+                            $("#ServiceList").append(new Option( data.data[[data.array_keys[i]]].service_name , data.data[[data.array_keys[i]]].service_id));
+                        }
+
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+
+            $("#exportSanasButton").click(function (e) {
+                let locationList = $("#locationList").val();
+                let ServiceList = $("#ServiceList").val();
+                // console.log(" locationList  : " , locationList == "")
+                // console.log(" ServiceList  : " , ServiceList == "")
+                if(locationList == "" || ServiceList == "" )
+                {
+                    e.preventDefault();
+                    Swal.fire(
+                        'خطا ! ',
+                        'لطفا مکان یا سرویس مورد نظر خود را انتخاب نمایید .',
+                        'error'
+                    )
+                }
+            })
+
+            $("#extendButton").click(function (e) {
+                let days_extend = $("#days_extend").val();
+                console.log(" days_extend  : " , days_extend)
+                // console.log(" ServiceList  : " , ServiceList == "")
+                if(days_extend == "")
+                {
+                    e.preventDefault();
+                    Swal.fire(
+                        'خطا ! ',
+                        'لطفا تعداد روز تمديد را وارد نماييد .',
+                        'error'
+                    )
+                }
+            })
+
+        });
+    </script>
 
     <script>
         let GetServiceTimeList = @json($GetServiceTimeList) ;
