@@ -654,8 +654,13 @@
                     <div class="modal-body">
                         <div class="form-row text-right">
                             <div class="col-md-12">
-                                <label for=""> تعداد روز تمدید </label>
-                                <input id="days_extend" name="days_extend" type="text" class="form-control" placeholder="مثلا 7 روز دیگر">
+                                <label for=""> مدت تمديد </label>
+                                <select id="days_extend" name="locationList" class="selectpicker" data-style="btn btn-primary border-dark" title="انتخاب نماييد ...">
+                                        <option selected  value="7"> یک هفته </option>
+                                        <option  value="30"> يک ماه </option>
+
+                                </select>
+{{--                                <input id="days_extend" name="days_extend" type="text" class="form-control" placeholder="مثلا 7 روز دیگر">--}}
                             </div>
                         </div>
                         <div class="form-row text-right mt-3">
