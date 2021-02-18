@@ -269,7 +269,7 @@
                                                                             <label for=""> نوع  فروش سرویس </label>
                                                                             <select name="TypeOfServiceSale" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
                                                                                 <option disabled selected> نوع  فروش سرویس </option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'NormalAndSans') selected @endif value="NormalAndSans"> هر دو</option>
+                                                                                {{-- <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'NormalAndSans') selected @endif value="NormalAndSans"> هر دو</option>--}}
                                                                                 <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Normal') selected @endif value="Sans">عادی</option>
                                                                                 <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Sans') selected @endif value="Normal">سانس</option>
                                                                             </select>
@@ -414,10 +414,10 @@
                         <div class="col-sm text-right">
                             <label for=""> نوع  فروش سرویس </label>
                             <select name="TypeOfServiceSale" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع  فروش سرویس">
-                                <option disabled selected> نوع  فروش سرویس </option>
-                                <option value="NormalAndSans"> هر دو</option>
-                                <option value="Sans">عادی</option>
-                                <option value="Normal">سانس</option>
+{{--                                <option value="NormalAndSans"> هر دو</option>--}}
+                                <option selected value="Normal"> عادی</option>
+                                <option value="Sans"> سانس </option>
+
                             </select>
                         </div>
                        {{-- <div class="col-sm text-right">

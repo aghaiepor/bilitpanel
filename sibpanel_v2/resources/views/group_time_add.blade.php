@@ -50,12 +50,17 @@
         #FromDate , #ToDate , #FromDate2 , #ToDate2 {
             direction: ltr;
         }
+        .dt-deselected span:first-child
+        {
+            font-weight: 400;
+            font-size: 11pt;
+        }
     </style>
 
     <link id="s1" rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
     <link id="s2" rel="stylesheet" type="text/css" href="{{ asset('assets/css/service_time.css') }}">
     {{--  for orginal calender  --}}
-{{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
+    {{--    <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">--}}
 
 
 @endsection
@@ -771,7 +776,9 @@
                     $("#sc1").remove();
                     $("#sc2").remove();
                     // $("#div_seance").animate({opacity: "0.3"} , 300);
-                    $("#div_seance").height(heightSans);
+                    // $("#div_seance").height(heightSans);
+                    // $(".table-days").height(heightSans);
+                    $("#plotId").height(heightSans);
 
                 } , 500)
 
@@ -798,6 +805,7 @@
                 $("#div_seance").css("opacity" , "0");
                 setTimeout(function () {
                     $("#div_seance").removeAttr('style')
+                    $(".table-days").removeAttr('style')
                     $("#div_seance").animate({opacity: "1"} , 300);
                     $("#div_seance").animate({ filter: "0" }, {
                         duration: 1000,
