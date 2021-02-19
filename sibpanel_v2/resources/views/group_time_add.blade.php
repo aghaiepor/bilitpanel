@@ -751,19 +751,26 @@
         }
 
         $(function() {
-            var active = true ;
+            var active = false ;
             var linkEl ;
             var linkEl1 = $("#s1") ;
             var linkEl2 = $("#s2");
             var linkElsc1 = $("#sc1");
             var linkElsc2 = $("#sc2");
             var heightSans ;
+            $(document).on( "click" , ".pwt-btn-next , .pwt-btn-prev"  , function () {
+                if(active)
+                {
+                    $(".seance").hide();
+                }
+            })
+
             $("#exportSans , #sanasDayButton").click(function() {
+                    active = true ;
                     heightSans = $("#div_seance").height();
-                    // $("#calender_Area").css("filter" , "blur(5px)");
-                    // $("#calender_Area").css("opacity" , "0");
+                    if(active)
+
                     $("#div_seance").css("filter" , "blur(5px)");
-                    // $("#div_seance").css("opacity" , "0.3");
                     $("#div_seance").animate({opacity: "0.3"} , 300);
                     let localAddress = "{{asset('')}}" + "assets/js/persian-datepicker.min.css" ;
                     linkEl = $("<link id='style1' rel='stylesheet' href='" + localAddress +"'>")
@@ -775,11 +782,7 @@
                     $("#s2").remove();
                     $("#sc1").remove();
                     $("#sc2").remove();
-                    // $("#div_seance").animate({opacity: "0.3"} , 300);
-                    // $("#div_seance").height(heightSans);
-                    // $(".table-days").height(heightSans);
                     $("#plotId").height(heightSans);
-
                 } , 500)
 
 
@@ -788,12 +791,6 @@
                 sizeSelected= 0 ;
                 showAddButten(sizeSelected)
                 deselctAll() ;
-                /*
-                $("#calender_Area").removeAttr('style')
-                $("#calender_Area").animate({ filter: "0" }, {
-                    duration: 1000,
-                    complete: function() { $("#calender_Area").removeAttr('style') }
-                });*/
 
                 $("#style1").remove();
                 $(".seance").show();
@@ -812,8 +809,9 @@
                         complete: function() { $("#div_seance").removeAttr('style') }
                     });
                 } , 300)
-
+                active = false ;
             })
+
 
         });
 
