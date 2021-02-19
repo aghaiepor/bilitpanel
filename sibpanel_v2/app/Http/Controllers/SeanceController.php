@@ -247,6 +247,7 @@ class seanceController extends Controller
         }
     }
     public function ExtendtServiceTimes(Request $request , $service_id){
+//        return json_encode($request->all());
         $import_service_id = $service_id;
         $export_service_id = $service_id;
 
@@ -276,6 +277,9 @@ class seanceController extends Controller
         }
         else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 133) {
             return redirect()->back()->with("error" , "خظا : شما مجاز به انحام اين عمليات نمي باشيد  !   ") ;
+        }
+        else if ($ImportExportServiceTimes["Header"]["MessageCode"] == 166) {
+            return redirect()->back()->with('error' , " خطا : سانس دیگری در این زمان وجود دارد  . ");
         }
         else {
             return redirect()->back()->with("error" , "خطا در انجام عمليات ! ") ;
