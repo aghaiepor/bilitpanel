@@ -89,6 +89,9 @@
                                            مدیریت تخفیف
                                         </th>
                                         <th >
+                                            تنظیمات
+                                        </th>
+                                        <th >
                                             ویرایش
                                         </th>
                                     </tr>
@@ -155,6 +158,12 @@
 
                                                 </td>
                                                 <td >
+                                                    <button data-project-id="{{$Project["project_id"]}}" type="button" data-target="#project_setting" data-toggle="modal" rel="tooltip" class="btn setting_btn btn-info btn-simple">
+                                                        <i class="fa fa-cog"></i>
+                                                        تنظیمات
+                                                    </button>
+                                                </td>
+                                                <td>
                                                     <button data-id="{{$Project["project_id"]}}"  data-toggle="modal" data-target="#edit" class="btn btn-success edit_btn">
                                                         ويرايش
                                                     </button>
@@ -172,7 +181,41 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="project_setting" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="setting_form" method="post" action="">
+                @csrf
+                <div class="modal-content">
+                    <div id="loader3" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                        <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                    </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="edit1Label">  تنظیمات پروژه </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
+                        <div class="form-row mt-3">
+                            <div class="col-sm text-right">
+                                <label for=""> نوع  فروش سرویس </label>
+                                <select id="TypeOfServiceSale" name="TypeOfServiceSale" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع  فروش سرویس">
+                                    <option value="NormalAndSans"> هر دو</option>
+                                    <option selected value="Normal"> عادی</option>
+                                    <option value="Sans"> سانس </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button data-id="" id="SettingBtn" type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
     <div class="modal fade" id="add_off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form id="add_off_form" method="postس" action="">
@@ -458,6 +501,151 @@
                     }
                 });
 
+            });
+
+            // for setting modal
+            $(".setting_btn").click(function () {
+                let project_id = $(this).attr("data-project-id") ;
+                let address =  "{{Route("EditProjectSetting")}}/" + project_id ;
+                $("#setting_form").attr("action" , address)
+                $("#SettingBtn").attr("data-id" , project_id);
+                $("#loader3").css("display" , "flex");
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('GetProjectSetting')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'project_id' : project_id ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
+                        }
+                    },
+                    success:function(data)
+                    {
+                        if(data.Header.MessageCode == 0)
+                        {
+                            let type_of_service_sale = data.ContentData.type_of_service_sale ;
+                            $('#TypeOfServiceSale').find("option").attr('selected' , false);
+                            $('#TypeOfServiceSale').find("option[value="+ type_of_service_sale + "]").attr('selected' , true);
+                            $('.selectpicker').selectpicker('refresh');
+
+                        }
+                        else {
+                            Swal.fire(
+                                'خطا در اعمال تفییرات .',
+                                "" ,
+                                'error' ,
+                            )
+                        }
+                        $("#loader3").hide();
+                    }
+                });
+            });
+            // for setting modal
+            $("#SettingBtn").click(function (e) {
+                e.preventDefault();
+                let project_id = $(this).attr("data-id") ;
+                let TypeOfServiceSale = $("#TypeOfServiceSale").val() ;
+                $("#loader3").css("display" , "flex");
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('EditProjectSetting')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'project_id' : project_id ,
+                        'TypeOfServiceSale' : TypeOfServiceSale ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
+                        }
+                    },
+                    success:function(data)
+                    {
+                        $("#loader3").hide();
+                        if(data.Header.MessageCode == 0)
+                        {
+                            Swal.fire(
+                                'عمليات با موفقيت انجام شد .',
+                                "" ,
+                                'success' ,
+                            )
+
+                        }
+                        else {
+                            Swal.fire(
+                                'خطا در اعمال تفییرات .',
+                                "" ,
+                                'error' ,
+                            )
+                        }
+
+                    }
+                });
             });
 
             $('#activation_date_off , #expiration_date_off').persianDatepicker({

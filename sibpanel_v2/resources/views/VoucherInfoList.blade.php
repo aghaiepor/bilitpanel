@@ -626,7 +626,7 @@
                 $('#edit_voucher_type').find("option[value="+ edit_voucher_type_value + "]").attr('selected' , true);
                 $("#edit_validity_period").val(validity_period);
                 $("#Edit_expiration_date").val(expiration_date);
-                $('.selectpicker').selectpicker('refresh');
+
             });
             $("#Edit_exprieMode").change(function () {
                 let value = $(this).val() ;

@@ -191,6 +191,38 @@ class projectManagerController extends Controller
 
     }
 
+    public function AddProjectSetting(Request $request , $id=null)
+    {
+        if (is_null($id))
+            return redirect()->back();
+
+        $type_of_service_sale = $request->get("TypeOfServiceSale");
+        $project_id = $id;
+        $AddProjectSetting = $this->api->AddProjectSetting($project_id  , $type_of_service_sale) ;
+
+        if($AddProjectSetting["Header"]["MessageCode"] == 0 )
+            return redirect()->back()->with("success" , " تنظیمات با موفقیت اعمال گردید . ");
+        else if ($AddProjectSetting["Header"]["MessageCode"] == 133)
+            return redirect()->back()->with('error' , " منع دسترسی : شما مجاز به انجام این عملیات نیستید ! ");
+        else
+            return redirect()->back()->with('error' , " خطا در اعمال تفییرات !");
+
+    }
+
+    public function GetProjectSetting(Request $request)
+    {
+        $project_id = $request->get("project_id");
+        $GetProjectSetting = $this->api->GetProjectSetting($project_id );
+        return $GetProjectSetting;
+    }
+    public function EditProjectSetting(Request $request )
+    {
+        $type_of_service_sale = $request->get("TypeOfServiceSale");
+        $project_id = $request->get("project_id");
+        $EditProjectSetting = $this->api->EditProjectSetting($project_id  , $type_of_service_sale) ;
+        return $EditProjectSetting ;
+    }
+
     private function fa2en($number){
         return strtr($number, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
     }

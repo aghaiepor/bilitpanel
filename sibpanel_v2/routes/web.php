@@ -198,6 +198,9 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/ProjectOff/{id}' , 'projectManagerController@ProjectOff')->name('ProjectOff');
         Route::post('/AddProjectOff/{id}' , 'projectManagerController@AddProjectOff')->name('AddProjectOff');
         Route::post('/AddUserOff' , 'projectManagerController@AddUserOff')->name('AddUserOff');
+        Route::post('/AddProjectSetting/{id?}' , 'projectManagerController@AddProjectSetting')->name('AddProjectSetting');
+        Route::post('/GetProjectSetting' , 'projectManagerController@GetProjectSetting')->name('GetProjectSetting');
+        Route::post('/EditProjectSetting' , 'projectManagerController@EditProjectSetting')->name('EditProjectSetting');
 
         // Off Managers
         Route::get('/Off' , 'OffController@index')->name('Off');

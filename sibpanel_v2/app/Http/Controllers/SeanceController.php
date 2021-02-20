@@ -227,8 +227,8 @@ class seanceController extends Controller
         $end = Verta::parse($end)->timestamp;
         $end = Carbon::createFromTimestamp($end)->format('Y-m-d h:i');
 
-        $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , "") ;
-//        return $ImportExportServiceTimes ;
+        $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , "");
+        // return $ImportExportServiceTimes ;
         if($ImportExportServiceTimes["Header"]["MessageCode"] == 0 )
         {
             return redirect()->back()->with("success" , "عمليات با موفقيت انجام گرديد ") ;
