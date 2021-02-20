@@ -2,7 +2,7 @@
 
 @section('title')
     <title>
-        مدیریت سانس ها
+        سانس های فعال
     </title>
     <style>
         .bootstrap-select{
@@ -69,7 +69,7 @@
                                 <div class="card-icon float-right ml-3 mr-0">
                                     <i class="material-icons"> watch_later </i>
                                 </div>
-                                <h4 class="card-title text-right font-weight-bold ">     مدیریت سانس ها </h4>
+                                <h4 class="card-title text-right font-weight-bold ">     سانس های فعال </h4>
                             </div>
                             <div class="col-sm">
 {{--                                <a href="{{ route('add_group_time_index') }}"  class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </a>--}}

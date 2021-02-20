@@ -127,9 +127,9 @@
                                         <th >
                                             چاپ QR
                                         </th>
-                                        <th >
+                                     {{--   <th >
                                             چاپ پوز
-                                        </th>
+                                        </th>--}}
                                         <th >
                                             فعالسازی
                                         </th>
@@ -183,7 +183,7 @@
                                                         </label>
                                                     </div>
                                                 </td>
-                                                <td>
+                                                {{--<td>
                                                     <div class="togglebutton">
                                                         <label>
                                                             <input data-location="{{$location['id']}}" name="PosPrintActivation" @if($location['print_pos']) checked="" @endif type="checkbox" >
@@ -191,7 +191,7 @@
                                                         </label>
                                                     </div>
 
-                                                </td>
+                                                </td>--}}
                                                 <td>
                                                     <div class="togglebutton">
                                                         <label>

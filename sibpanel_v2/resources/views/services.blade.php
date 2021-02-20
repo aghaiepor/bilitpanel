@@ -102,7 +102,7 @@
                                             نام انگلیسی
                                         </th>
                                         <th >
-                                            توضیحات
+                                          نوع فروش
                                         </th>
                                         <th >
                                             ظرفیت
@@ -154,8 +154,18 @@
                                                 <td>
                                                     {{$GetServices[$array_keys[$i]]['english_name']}}
                                                 </td>
-                                                <td>
+                                                {{--<td>
                                                     {{$GetServices[$array_keys[$i]]['description']}}
+                                                </td>--}}
+                                                <td>
+{{--                                                    {{$GetServices[$array_keys[$i]]['type_of_service_sale']}}--}}
+                                                    @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Sans')
+                                                        سانس
+                                                    @elseif($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Normal')
+                                                        عادی
+                                                    @elseif($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'NormalAndSans')
+                                                        هردو
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     @if($GetServices[$array_keys[$i]]['capacity'] == "")

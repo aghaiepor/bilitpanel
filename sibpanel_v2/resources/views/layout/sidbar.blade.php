@@ -216,7 +216,7 @@
                         <li class="nav-item {{--d-none--}}  @if(Route::current()->getName() === 'group_times' )  active  @endif">
                             <a class="nav-link" href="{{Route('group_times')}}">
                                 <span class="sidebar-mini"> <i class="material-icons"> watch_later </i>  </span>
-                                <span class="sidebar-normal"> مدیریت سانس ها </span>
+                                <span class="sidebar-normal"> سانس های فعال </span>
                             </a>
                         </li>
                             {{--  Alarm manager  --}}
