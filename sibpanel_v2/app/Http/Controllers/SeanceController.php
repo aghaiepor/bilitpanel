@@ -214,8 +214,8 @@ class seanceController extends Controller
     }
 
     public function ImportExportServiceTimes(Request $request , $service_id){
-        $import_service_id = $service_id;
-        $export_service_id = $request->get("serviceList");
+        $import_service_id = $request->get("serviceList");
+        $export_service_id = $service_id;
 
         $start = $request->get("start");
         $start = $this->fa2en($start);

@@ -1576,6 +1576,56 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
+    public function AddProjectSetting($project_id  , $type_of_service_sale , $type=null)
+    {
+        $data = [
+            "project_id" => $project_id,
+            "type_of_service_sale" => $type_of_service_sale
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'AddProjectSetting' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $type);
+        return $response;
+    }
+
+    public function EditProjectSetting($project_id  , $type_of_service_sale , $type=null)
+    {
+        $data = [
+            "project_id" => $project_id,
+            "type_of_service_sale" => $type_of_service_sale
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'EditProjectSetting' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
+    public function GetProjectSetting($project_id  , $type=null)
+    {
+        $data = [
+            "project_id" => $project_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetProjectSetting' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , $type);
+        return $response;
+    }
 
     // ******************** Discount Manager ****************
     public function AddDiscountPolicy($project_id ,$location_id ,$service_id , $voucher_info_id ,$sib_user_id ,$description ,$percentage ,$activation_date=null , $expiration_date=null ,$type=null)
