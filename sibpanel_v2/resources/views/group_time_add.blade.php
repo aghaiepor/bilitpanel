@@ -223,8 +223,8 @@
                                                 <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
                                             </div>
                                             <div class="col">
-                                                <label class="w-100" for=""> مقدار</label>
-                                                <input type="text" name="cap" class="form-control" placeholder="مقدار">
+                                                <label class="w-100" for=""> قیمت</label>
+                                                <input type="text" name="cap" class="form-control" placeholder="قیمت">
                                             </div>
                                             <div class="col">
                                                 <label class="w-100" for=""> حداکثر تخفيف</label>
@@ -318,8 +318,8 @@
                                         <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
                                     </div>
                                     <div class="col">
-                                        <label class="w-100" for=""> مقدار</label>
-                                        <input type="text" id="amount" name="amount" class="form-control" placeholder="مقدار">
+                                        <label class="w-100" for=""> قیمت</label>
+                                        <input type="text" id="amount" name="amount" class="form-control" placeholder="قیمت">
                                     </div>
                                     <div class="col">
                                         <label class="w-100" for=""> حداکثر تخفيف</label>
@@ -467,7 +467,7 @@
                                             نوع بلیت
                                         </th>
                                         <th>
-                                            مقدار
+                                            قیمت
                                         </th>
                                        {{-- <th>
                                             حداکثر تخفیف
@@ -517,7 +517,7 @@
                                          </label>
                                          <select id="vouchers" name="vouchers" class="selectpicker" data-style="btn btn-primary border-dark" title="بلیت">
                                              @foreach($VoucherInfoList as $VoucherType)
-                                                 <option value="{{$VoucherType["voucher_type_id"] .  "-" . $VoucherType["voucher_type_name"] }}">
+                                                 <option value="{{$VoucherType["voucher_type_id"] . "-" . $VoucherType["voucher_type_name"] . "-" . $VoucherType["amount"] . "-" . $VoucherType["total_capacity"] }}">
                                                      {{$VoucherType["voucher_type_name"]}}
                                                  </option>
                                              @endforeach
@@ -531,8 +531,8 @@
                                          <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
                                      </div>
                                      <div class="col">
-                                         <label class="w-100" for=""> مقدار</label>
-                                         <input type="text" id="amount" name="amount" class="form-control" placeholder="مقدار">
+                                         <label class="w-100" for=""> قیمت</label>
+                                         <input type="text" id="amount" name="amount" class="form-control" placeholder="قیمت">
                                      </div>
                                     {{-- <div class="col">
                                          <label class="w-100" for=""> حداکثر تخفيف</label>
@@ -563,7 +563,7 @@
                                                نوع بلیت
                                             </th>
                                             <th>
-                                                مقدار
+                                                قیمت
                                             </th>
                                            {{-- <th>
                                                 حداکثر تخفیف
@@ -1197,7 +1197,17 @@
             }
         });
 
+        // for select voucher type
+        $(document).on("change" , "#vouchers" , function () {
+            let voucherInfo = $("#vouchers").val();
+            voucherInfo = voucherInfo.split("-");
+            let amount = voucherInfo[2];
+            let capacity = voucherInfo[3];
 
+            $("#amount").val(amount);
+            $("#capacity").val(capacity);
+
+        });
 
         $('#test').on('hidden.bs.modal', function () {
             deselctAll()
