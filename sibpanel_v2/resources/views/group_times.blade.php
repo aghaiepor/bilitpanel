@@ -16,6 +16,26 @@
         .card-category {
             font-weight: 400;
         }
+        .nav-pills > li{
+            margin-top : 10px;
+        }
+        .nav-link {
+            font-weight: 400 !important;
+        }
+        .nav-pills .nav-item .nav-link{
+            border-radius: 0 !important;
+        }
+        .subTable{
+            width: 98%;
+            margin-right: 3%;
+        }
+        .subRow{
+            display: none;
+            position: relative;
+        }
+        .text-yellow {
+            color : #ffcf3f !important;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/seance.css') }}">
 
@@ -62,6 +82,61 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-icon card-header-rose">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="card-icon float-right ml-3 mr-0">
+                                        <i class="material-icons">format_size</i>
+                                    </div>
+                                    <h4 class="card-title text-right font-weight-bold "> سانس هاي فعال </h4>
+                                </div>
+                                <div class="col-sm">
+                                    {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> جدید </span>--}}
+                                    <a href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div style="overflow: auto ; height: 60vh ;" class="col-md-3 border-left">
+                                    <ul id="tablist" class="nav nav-pills nav-pills-rose flex-column" role="tablist">
+                                        @php
+                                            $i = 0  ;
+                                        @endphp
+                                        @foreach($GetServiceListFromServicetime as $Province)
+                                            <li class="nav-item border rounded ml-0">
+                                                <a province_id="{{$Province["province_id"]}}" class="nav-link province @if($i == 0) active show @endif" data-toggle="tab" href="#link4" role="tablist"> {{$Province['province_name']}}</a>
+                                            </li>
+                                            @php
+                                                $i++ ;
+                                            @endphp
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <div style="overflow: auto ; height: 60vh ;" class="col-md-9">
+                                    <div class="tab-content text-right">
+                                        <div class="tab-pane active show" style="overflow: auto ; overflow-x: hidden" id="link4">
+                                         <div class="row" id="sansArea">
+
+                                         </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{{--
+        <div class="container-fluid">
+            <div class="row">
                 <div class="card">
                     <div class="card-header card-header-icon card-header-rose titleStyle">
                         <div class="row">
@@ -72,7 +147,7 @@
                                 <h4 class="card-title text-right font-weight-bold ">     سانس های فعال </h4>
                             </div>
                             <div class="col-sm">
-{{--                                <a href="{{ route('add_group_time_index') }}"  class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </a>--}}
+                                <a href="{{ route('add_group_time_index') }}"  class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </a>
                                 <a href="{{Route("dashboard")}}" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                             </div>
                         </div>
@@ -86,7 +161,7 @@
                                     </div>
                                     <h3 style="" class="sanasCard card-title "> {{$ServiceList["service_name"]}} </h3>
                                     <h6 style=" color: #898585 !important;" class="card-category"> {{$ServiceList["location_name"]}} </h6>
-                                    <a {{--data-toggle="modal" data-target="#showSanas"--}} href="{{Route("add_group_time_index" , ["service_id" => $ServiceList["service_id"] , "location_id" => $ServiceList["location_id"] ,  ] )}}" class="btn btn-info btn-round "> مشاهده</a>
+                                    <a data-toggle="modal" data-target="#showSanas" href="{{Route("add_group_time_index" , ["service_id" => $ServiceList["service_id"] , "location_id" => $ServiceList["location_id"] ,  ] )}}" class="btn btn-info btn-round "> مشاهده</a>
                                 </div>
                             </div>
                         </div>
@@ -94,8 +169,8 @@
                     </div>
                 </div>
             </div>
-        {{--      old      --}}
-            {{--<div class="row">
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header card-header-icon card-header-rose titleStyle">
@@ -168,8 +243,8 @@
                         </div>
                     </div>
                 </div>
-            </div>--}}
-        </div>
+            </div>
+        </div>--}}
     </div>
             <div class="modal fade" id="showSanas" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
@@ -317,7 +392,53 @@
             </div>
 @endsection
 @section('AddJs')
- {{--   <script>
+        <script>
+            let sans = @json($GetServiceListFromServicetime);
+            let activeProvince = $("#tablist").find("a").first();
+            let wasActive = activeProvince.attr("province_id")
+            GetSansProvince(wasActive);
+
+            $(".province").click(function () {
+                let province_id = $(this).attr("province_id") ;
+                GetSansProvince(province_id);
+            });
+
+            function GetSansProvince(id){
+                let province_id = id ;
+                global_provive_id = id ;
+                $("#sansArea").html("");
+                $("#loader").css("display" , "flex");
+                let result ;
+                result= sans.filter(d => d.province_id == province_id ) ;
+                let html ;
+                let url = "";
+                for(let j = 0 ; j < result.length ; j++ )
+                {
+                    let services = result[j].services ;
+                    for(let i = 0 ; i < services.length ; i++ )
+                    {
+                    url = "{{Route("add_group_time_index")}}/" + services[i].service_id +"/" + services[i].location_id ;
+                    html = '<div class="col-md-4">\n' +
+                        '                    <div class="card card-pricing bg-light"><div class="card-body ">\n' +
+                        '                    <div class="card-icon">\n' +
+                        '                    <i class="material-icons">event_note</i>\n' +
+                        '                    </div>\n' +
+                        '                    <h3 style="" class="sanasCard card-title "> ' + services[i].service_name + ' </h3>\n' +
+                        '                    <h6 style=" color: #898585 !important;" class="card-category"> ' + services[i].location_name + '  </h6>\n' +
+                        '                    <a href="'+ url +'" class="btn btn-info btn-round "> مشاهده</a>\n' +
+                        '                    </div>\n' +
+                        '                    </div>\n' +
+                        '                    </div>' ;
+                    $("#sansArea").append(html);
+                    }
+                }
+                $("#loader").hide();
+
+
+            }
+
+        </script>
+{{--    <script>
 
         let tagsToReplace = {
             '&': '&amp;',
@@ -334,7 +455,7 @@
         }
 
 
-        --}}{{--let locations = JSON.parse('@json($locations)');--}}{{--
+        let locations = JSON.parse('@json($locations)');
         for (let i =0 ; i<locations.length;i++){
             let obj = locations[i];
             let id = obj['id'];
@@ -662,3 +783,4 @@
 
     </script>--}}
 @endsection
+

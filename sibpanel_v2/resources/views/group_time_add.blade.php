@@ -510,7 +510,7 @@
                         </div>
                         <hr class="my-1">
                         <div class="row">
-                             <div id="formSans" class="col-lg  pull-right">
+                             <div id="formSans" class="col-lg pull-right">
                                  <div class="form-row text-right">
                                      <div class="col">
                                          <label class="w-100" for=""> نوع بليت
@@ -661,8 +661,11 @@
                             <div class="col-md-12">
                                 <label for=""> مدت تمديد </label>
                                 <select id="days_extend" name="days_extend" class="selectpicker" data-style="btn btn-primary border-dark" title="انتخاب نماييد ...">
-                                        <option selected  value="7"> یک هفته </option>
-                                        <option  value="30"> يک ماه </option>
+                                        <option selected  value="1"> يک روز </option>
+                                        <option   value="7"> یک هفته </option>
+                                        <option  value="29"> يک ماه - 29 روز </option>
+                                        <option  value="30"> يک ماه - 30 روز </option>
+                                        <option  value="31"> يک ماه - 31 روز </option>
 
                                 </select>
 {{--                                <input id="days_extend" name="days_extend" type="text" class="form-control" placeholder="مثلا 7 روز دیگر">--}}

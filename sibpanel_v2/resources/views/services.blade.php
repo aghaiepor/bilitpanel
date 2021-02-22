@@ -108,13 +108,13 @@
                                             ظرفیت
                                         </th>
                                         <th >
+                                            مدیریت بلیت ها
+                                        </th>
+                                        <th >
                                             سانس
                                         </th>
                                         <th >
                                             تخفیف
-                                        </th>
-                                        <th >
-                                            مدیریت بلیت ها
                                         </th>
                                         <th >
                                          تصویر سرویس
@@ -175,6 +175,12 @@
                                                     @endif
                                                 </td>
                                                 <td>
+                                                    <a href="{{ Route('VoucherInfoList' , ['service_id' => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id'] ])}}" rel="tooltip" class="btn  btn-info btn-simple">
+                                                        <i class="material-icons">location_city</i>
+                                                        مدیریت بلیت ها
+                                                    </a>
+                                                </td>
+                                                <td>
                                                     <a href="{{Route("add_group_time_index" , ["service_id"  => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id']  ])}}" class="btn off_btn btn-dribbble btn-simple">
                                                       مدیریت سانس
                                                     </a>
@@ -185,12 +191,7 @@
                                                         تخفیف
                                                     </button>
                                                 </td>
-                                                <td>
-                                                    <a href="{{ Route('VoucherInfoList' , ['service_id' => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id'] ])}}" rel="tooltip" class="btn  btn-info btn-simple">
-                                                        <i class="material-icons">location_city</i>
-                                                        مدیریت بلیت ها
-                                                    </a>
-                                                </td>
+
                                                 <td >
                                                     @php
                                                         $voucher_image = null  ;

@@ -21,10 +21,12 @@ class seanceController extends Controller
 //        $GetTimeGroup = $this->api->GetTimeGroup();
 //        $AllLocationServices = $this->api->AllLocationServiceList();
 //        return view('group_times' , ['locations'=>$AllLocationServices,'result_data' => $GetTimeGroup['ContentData']] );
+        $show = true ;
         $GetServiceListFromServicetime = $this->api->GetServiceListFromServicetime($show);
 //        return $GetServiceListFromServicetime ;
         return view('group_times' , ["GetServiceListFromServicetime" => $GetServiceListFromServicetime["ContentData"]] ) ;
     }
+
 
     public function edit_time_group(Request $request){
         $data = $request->input('service_times');
@@ -42,7 +44,7 @@ class seanceController extends Controller
 
 
     // new group time
-    public function add_group_time_index($service_id , $location_id){
+    public function add_group_time_index($service_id=null , $location_id=null){
         $VoucherTypeList = Cache::get('VoucherTypeList');
         $LocationList = Cache::get("LocationList") ;
 //        return $LocationList ;
