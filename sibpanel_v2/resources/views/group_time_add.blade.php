@@ -430,7 +430,7 @@
                     </div>
                     <div class="modal-footer">
                         <button id="dismis_sanse" type="button" class="btn btn-primary ml-auto" data-dismiss="modal">بستن </button>
-{{--                        <button type="button" onclick="setTime()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> ثبت سانس </button>--}}
+                        <button type="button" id="finalSetTimesBtn" onclick="finalSetTimes()" class="btn btn ml-0 mr-auto btn-info" style="margin-top: 10px"> ثبت نهایی تغییرات </button>
                     </div>
                 </div>
             </form>
@@ -584,7 +584,7 @@
                     </div>
                     <div class="modal-footer ">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
-                        <button data-tag="" id="saveVoucher" type="button" onclick="setTime(this)" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
+                        <button data-new="" data-tag="" id="saveVoucher" type="button" onclick="setTime(this)" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
                     </div>
                 </div>
             </form>
@@ -938,14 +938,20 @@
         // console.log("serviceID : "  + serviceID + " , locationID :  " + locationID);
 
         var serviceTimes = [];
+        var serviceTimes_new = [];
         if(GetServiceTimeList.length != 0 )
             serviceTimes = GetServiceTimeList;
 
         /*$("#dismis_sanse").click(function () {
-            refreshTimes(function(output){
+           /!* refreshTimes(function(output){
                 serviceTimes = output ;
-            });
+            });*!/
+            $("#finalSetTimesBtn").hide();
         });*/
+        $('#test').on('hidden.bs.modal', function (e) {
+            serviceTimes_new = [];
+            $("#finalSetTimesBtn").hide();
+        })
 
         function refreshTimes(SanseData) {
             let service_id = "{{$id}}" ;
@@ -1180,6 +1186,16 @@
                 $("#addSans").show();
         }
 
+       /* $(document).on("click" , "#addSans" , function () {
+            // $("#no-sanse").hide();
+            let h = '<td id="no-sanse" class="bg-light" colspan="6"> <h6 class="py-5 text-center"> سانسی وجود ندارد </h6> </td>';
+            let child = $("#seances tr ") ;
+            if(child.length == 1 ) {
+                $("#no-sanse").fadeIn(500);
+                $("#seances").html(h);
+            }
+        })*/
+
         $(document).on('click', '.dt-deselected', function () {
 
             $(this).attr('class', 'dt-selected');
@@ -1282,12 +1298,12 @@
         }
         $(document).on("click" , ".sanseBtn" , function () {
             let sansId = $(this).parent().parent().parent().attr("data-date").replace(/,/g, '-');
-            console.log("id ==> " , sansId)
-            console.log("serviceTimes ==> " , serviceTimes)
+            // console.log("id ==> " , sansId)
+            // console.log("serviceTimes ==> " , serviceTimes)
             let sanas = [] ;
             // refreshTimes();
             // serviceTimes =
-            console.log("serviceTimes : " , serviceTimes)
+            // console.log("serviceTimes : " , serviceTimes)
             let day ;
             for(let i = 0 ; i < serviceTimes.length ; i++){
                 if( serviceTimes[i]["day"]== sansId ) {
@@ -1301,15 +1317,49 @@
 
         $(document).on("click" , ".settingNew" , function () {
             $("#seances_voucherInfo").html(" ");
+            let data_new = $(this).attr("data-new") ;
             $("#saveVoucher").text(" ثبت بلیت ");
             $("#saveVoucher").attr("data-tag" , "create");
-            $("#saveVoucher").attr("onclick" , "setTime()");
+            $("#saveVoucher").attr("data-new" , data_new);
+            $("#saveVoucher").attr("onclick" , "setTime(this)");
             $(".ServiseVocher").prop('checked', false);
+
+            let dataVoucherInfo = serviceTimes_new ;
+
+            if(dataVoucherInfo.length == 0 )
+            {
+                let h = "<td data-no='1' class='bg-light no-voucher ' colspan='4'> <h6 class='py-5 text-center'> بلیتی وجود ندارد </h6> </td>";
+                $("#seances_voucherInfo").html(h);
+            }
+            else
+            {
+
+                let voucher = [] ;
+                for (let j = 0 ; j < dataVoucherInfo.length  ; j++)
+                {
+                    if(dataVoucherInfo[j].new == data_new )
+                    {
+                        let voucher_infos = dataVoucherInfo[j].voucher_infos;
+                        console.log(" dataVoucherInfo  => " , voucher_infos)
+                        voucher.push(voucher_infos) ;
+                    }
+                }
+                if(voucher.length != 0 )
+                    showVoucher(voucher[0] , "");
+                else
+                {
+                    let h = "<td data-no='1' class='bg-light no-voucher ' colspan='4'> <h6 class='py-5 text-center'> بلیتی وجود ندارد </h6> </td>";
+                    $("#seances_voucherInfo").html(h);
+                }
+
+            }
+
         })
 
         $(document).on("click" , ".setting" , function () {
             $("#saveVoucher").text(" ثبت تغییرات ");
             $("#saveVoucher").attr("data-tag" , "edit");
+            $("#saveVoucher").attr("data-new" , "");
             $(".ServiseVocher").prop('checked', false);
             $("#seances_voucherInfo").html("");
             // $("#saveVoucher").attr("data-id" , "edit");
@@ -1559,24 +1609,27 @@
                         // end_Sanse.setAttribute("value", data[j].end) ;
                         // end_Sanse.setAttribute("class", "seance_end");
 
-                        capacity_Sanse.innerHTML = voucherInfos[j].voucher_capacity;
-                        capacity_Sanse.setAttribute("value", voucherInfos[j].voucher_capacity);
+                        let voucher_capacity = (serviceID == "") ? voucherInfos[j].capacity : voucherInfos[j].voucher_capacity ;
+                        capacity_Sanse.innerHTML = voucher_capacity;
+                        capacity_Sanse.setAttribute("value", voucher_capacity);
                         capacity_Sanse.setAttribute("class", "seance_capacity");
                         //
-                        vouchertyppe_Sanse.innerHTML = voucherInfos[j].voucher_type;
-                        vouchertyppe_Sanse.setAttribute("value", voucherInfos[j].voucher_type_id);
-                        vouchertyppe_Sanse.setAttribute("data-value", voucherInfos[j].voucher_type_id);
+                        let voucher_type = (serviceID == "") ? voucherInfos[j].vouchersInfo_name : voucherInfos[j].voucher_type ;
+                        let voucher_type_id = (serviceID == "") ? voucherInfos[j].vouchersInfo : voucherInfos[j].voucher_type_id ;
+                        vouchertyppe_Sanse.innerHTML = voucher_type;
+                        vouchertyppe_Sanse.setAttribute("value", voucher_type_id);
+                        vouchertyppe_Sanse.setAttribute("data-value", voucher_type_id);
                         vouchertyppe_Sanse.setAttribute("data-service", serviceID);
-                        vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherInfos[j].voucher_type);
+                        vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucher_type);
                         vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse");
                         //
                         // sex.innerHTML = data[j].gender ;
                         // sex.setAttribute("gender_name", data[j].gender) ;
                         // sex.setAttribute("value", data[j].gender_value) ;
                         // sex.setAttribute("class", "seance_gender") ;
-
-                        amount_Sanse.innerHTML = voucherInfos[j].amount_without_discount;
-                        amount_Sanse.setAttribute("value", voucherInfos[j].amount_without_discount);
+                        let amount_without_discount = (serviceID == "") ? voucherInfos[j].seance_amount : voucherInfos[j].amount_without_discount ;
+                        amount_Sanse.innerHTML = amount_without_discount;
+                        amount_Sanse.setAttribute("value", amount_without_discount);
                         amount_Sanse.setAttribute("class", "seance_amount");
                         /*let off = voucherInfos[j].amount_without_discount - voucherInfos[j].amount ;
                         off = off / voucherInfos[j].amount_without_discount ;
@@ -1587,7 +1640,11 @@
                         percent.setAttribute("value", off);
                         percent.setAttribute("class", "seance_percent");*/
                         // setting.innerHTML = '<button data-date='+ date +' type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-                        remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeVoucher(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+                        if((serviceID == ""))
+                            remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+                        else
+                            remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeVoucher(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+
                         setTimeout(function() {
                             row.classList.add('visible');
                         }, 10)
@@ -1597,8 +1654,13 @@
 
         function setTime(e) {
 
-            let seances = getAllSeances();
-            console.log("sanse => " , seances);
+            // return ;
+
+
+            let newNumber = $(e).attr("data-new")
+            let seances = getThisSeances(newNumber);
+            // let seances = getAllSeances();
+            // console.log("sanse => " , seances);
             if(seances.length == 0 )
             {
                 Swal.fire(
@@ -1608,26 +1670,77 @@
                 )
                 return ;
             }
-
+            removeSanseIfExists(newNumber)
+            serviceTimes_new.push(seances[0]);
+            // console.log("serviceTimes_new => " , serviceTimes_new)
             // $('#test').modal('hide')
             $("#loader3").css("display", "flex") ;
-            serviceTimes = [] ;
+            setTimeout(function () {
+                $("#loader3").hide();
+            }, 500)
+        }
+
+        function finalSetTimes() {
+            let newSans = $("#seances tr[new]") ;
+            if(serviceTimes_new.length == 0 )
+            {
+                Swal.fire(
+                    ' خطا ',
+                    " سانس های جدید ایجاد شده فاقد بلیت می باشند !  ",
+                    'error'
+                )
+                return;
+            }
+            else {
+                let news_id = [];
+                let serviceTimes_new_id = [];
+                $("#seances tr[new]").each(function(){
+                    news_id.push($(this).attr("new"))
+                });
+                news_id = news_id.sort(function(a, b){return a - b});
+                console.log("news_id : " , news_id)
+                for(let i = 0 ; i < serviceTimes_new.length ; i++)
+                {
+                    serviceTimes_new_id.push(serviceTimes_new[i].new)
+                }
+                serviceTimes_new_id = serviceTimes_new_id.sort(function(a, b){return a - b});
+                console.log("serviceTimes_new_id : " , serviceTimes_new_id)
+
+                if(JSON.stringify(news_id) !=JSON.stringify(serviceTimes_new_id))
+                {
+                    Swal.fire(
+                        ' خطا ',
+                        " سانس های جدید ایجاد شده فاقد بلیت می باشند !  ",
+                        'error'
+                    )
+                    return;
+                }
+
+
+            }
+            serviceTimes = [];
+            seances = serviceTimes_new
+
             for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
                 removeDayIfExists(day);
                 serviceTimes.push({'day':day,'times':seances})
             }
-            console.log("selectedDays => " , selectedDays)
+
+            // serviceTimes_new.push(serviceTimes)
+
+            $("#loader1").css("display", "flex") ;
+            // console.log("serviceTimes => " , serviceTimes)
+
             selectedDays = [];
             sizeSelected = 0 ;
             showAddButten(sizeSelected)
             setSelected();
-            removeAllSeance();
+            // removeAllSeance();
             // removeAllTicket();
             resetTime();
             submit() ;
         }
-
 
         function setTimeFirst() {
 
@@ -1755,6 +1868,8 @@
         }
 
         {{--let VoucherList = @json($VoucherList) ;--}}
+        let x = 1 ;
+        $("#finalSetTimesBtn").hide();
         function addSeance() {
 
             /*if($("#vouchers").val() == ""){
@@ -1763,26 +1878,6 @@
             }*/
 
             let NotValid = false;
-            /*
-            $("#formSans input , #formSans select ").each(function() {
-                var element = $(this);
-
-                if (element.val() == "" && element.attr("id") != "max_persent") {
-
-                    Swal.fire(
-                        ' خطا ',
-                        '  لطفا فيلد هاي مشخص شده را پر نماييد ! ',
-                        'error'
-                    )
-                    element.parent().prev().css("color", "red");
-                    element.addClass("border-danger");
-                    NotValid = true;
-                } else {
-                    element.parent().prev().css("color", "");
-                    element.removeClass("border-danger");
-                }
-            });
-            */
             let FistTime = eval($("#start_hour").val()) * 100 + eval($("#start_minute").val());
             let EndTime = eval($("#end_hour").val())  * 100 + eval( $("#end_minute").val());
             // console.log("EndTime => " , EndTime )
@@ -1799,7 +1894,7 @@
             if(NotValid)
                 return;
 
-
+            $("#finalSetTimesBtn").fadeIn();
             let start = $('#start_hour').val() + ":" + $('#start_minute').val();
             let end = $('#end_hour').val() + ":" + $('#end_minute').val();
             let gender_val = $("select[name='seance_gender']").val();
@@ -1848,7 +1943,7 @@
             let setting  ;
 
             let row = table.insertRow();
-
+            row.setAttribute("new", x ) ;
             // seance_date = row.insertCell();
             start_Sanse = row.insertCell();
             end_Sanse = row.insertCell();
@@ -1897,9 +1992,9 @@
             state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
             activation.innerHTML = state_html ;
 
-            setting.innerHTML = '<button data-tag="create" type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-            remove.innerHTML = '<button type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
-
+            setting.innerHTML = '<button data-new="'+ x +'"  data-tag="create" type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
+            remove.innerHTML = '<button data-new="'+ x +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+            x++
 
         }
 
@@ -2174,6 +2269,9 @@
 
             let el = $(element).parent().parent();
             let add_id =  $(element).attr("add-id") ;
+            let newValue =  $(element).attr("data-new") ;
+            removeSanseIfExists(newValue)
+
             $(".ServiseVocher[add_id="+ add_id +"]").prop('checked', false);
             el.animate({opacity: '0'}, 10, function () {
                 el.animate({width: '0'}, 10, function () {
@@ -2181,7 +2279,15 @@
                 });
             });
 
-            // when voucher not exist
+            let newLength = $("#seances tr[new]") ;
+            newLength = newLength.length ;
+            if(newLength == 1)
+            {
+                $("#finalSetTimesBtn").fadeOut();
+            }
+
+
+                // when voucher not exist
             let child = $("#seances_voucherInfo tr ") ;
             if(child.length == 1 )
                 $(".no-voucher").fadeIn(500);
@@ -2361,6 +2467,15 @@
                     serviceTimes.splice(i, 1);
             }
         }
+        function removeSanseIfExists(num){
+            console.log("removeSanseIfExists : " , serviceTimes_new.length)
+            for(let i=0;i<serviceTimes_new.length;i++){
+                let obj = serviceTimes_new[i];
+
+                if (obj.new == num)
+                    serviceTimes_new.splice(i, 1);
+            }
+        }
         function getTimesLength(day){
 
             for(let i=0;i<serviceTimes.length;i++){
@@ -2393,8 +2508,6 @@
                     'seance_percent': seance_percent,
                 });
 
-
-
             });
             if(vouchers.length == 0 )
             {
@@ -2411,19 +2524,76 @@
 
                 let gender = $(this).find('.seance_gender').attr("gender_name");
                 let gender_value = $(this).find('.seance_gender').attr("value");
-
                 // let seance_amount = $(this).find('.seance_amount').attr("value");
                 // let seance_percent = $(this).find('.seance_percent').attr("value");
 
                 times.push({'start': start,
                     'end': end,
                     'sex':gender_value ,
-                    'gender':gender ,
+                    'gender': gender ,
                     "voucher_infos" : vouchers ,
                 });
 
             });
+            // console.log(times);
+            return times;
+        }
+        function getThisSeances(num) {
 
+            let times = [];
+            let vouchers = [];
+            $('#seances_voucherInfo tr').each(function () {
+
+                // let Date =  $(this).find('.seance_date').attr("value") ;
+                let capacity = $(this).find('.seance_capacity').attr("value");
+                let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
+                let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
+                let seance_amount = $(this).find('.seance_amount').attr("value");
+                // let seance_percent = $(this).find('.seance_percent').attr("value");
+                let seance_percent = "";
+
+                vouchers.push({
+                    'capacity': capacity,
+                    'vouchersInfo': vouchertyppe_Sanse,
+                    'vouchersInfo_name': vouchersInfo_id,
+                    'remain':capacity,
+                    'seance_amount': seance_amount,
+                    'seance_percent': seance_percent,
+                });
+
+            });
+            if(vouchers.length == 0 )
+            {
+                return times ;
+            }
+            $('#seances tr:not([sansid])').each(function () {
+
+                if($(this).attr("new") == num)
+                {
+
+                // let Date =  $(this).find('.seance_date').attr("value") ;
+                let start = $(this).find('.seance_start').attr("value");
+                let end = $(this).find('.seance_end').attr("value");
+                // let capacity = $(this).find('.seance_capacity').attr("value");
+                // let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
+                // let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
+
+                let gender = $(this).find('.seance_gender').attr("gender_name");
+                let gender_value = $(this).find('.seance_gender').attr("value");
+                // let seance_amount = $(this).find('.seance_amount').attr("value");
+                // let seance_percent = $(this).find('.seance_percent').attr("value");
+
+                times.push({'start': start,
+                    'new': num,
+                    'end': end,
+                    'sex':gender_value ,
+                    'gender': gender ,
+                    "voucher_infos" : vouchers ,
+                });
+
+                }
+
+            });
             // console.log(times);
             return times;
         }
@@ -2646,7 +2816,7 @@
         function submit() {
 
             var x = document.getElementById("service_times").value = JSON.stringify(getTimes());
-            console.log(x);
+            // console.log(x);
             document.getElementById("form").submit();
 
         }
