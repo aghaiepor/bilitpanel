@@ -326,7 +326,7 @@ class Api
             "description"=> $description,
             "location_id" => $location_id,
             "capacity" => $capacity,
-            "TypeOfServiceSale" => $TypeOfServiceSale,
+            "type_of_service_sale" => $TypeOfServiceSale,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddService' ,[
@@ -350,7 +350,7 @@ class Api
             "location_id" => $location_id,
             "capacity" => $capacity,
             "normal_sale" => $normal_sale ,
-            "TypeOfServiceSale" => $TypeOfServiceSale,
+            "type_of_service_sale" => $TypeOfServiceSale,
         ];
         Log::info("EditService : " , $data);
         $client = new Client();

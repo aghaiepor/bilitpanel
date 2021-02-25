@@ -92,7 +92,7 @@ class seanceController extends Controller
                         array_push( $voucher_infos_data ,  $voucher) ;
                     }
 //                    return $voucher_infos_data ;
-                    $test = $this->api->AddServiceTime($service_id , $start , $end,$sex ,$voucher_infos_data  ) ;
+                    $test = $this->api->AddServiceTime($service_id , $start , $end , $sex ,$voucher_infos_data  ) ;
 //                    return $test ;
                     if($test["Header"]["MessageCode"] == 158) {
                         return redirect()->back()->with('error' , " خطا : تاریخ انتخاب شده نامعتبر است . ");
@@ -113,9 +113,8 @@ class seanceController extends Controller
                         return redirect()->back()->with('error' , " خطا : سرویسی جهت ایجاد وارد نشده است ");
                     }
                 }
-
-                return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");
             }
+            return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");
         }catch (\Exception $e) {
 //            return redirect()->back()->with('error' , " خطا در ایجاد سانس ");
             return redirect()->back()->with('error' , $e->getMessage());

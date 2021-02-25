@@ -102,7 +102,13 @@
 {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}
 
                                     <a id="exportSans" data-toggle="modal" data-target="#sanas"  {{--onclick="history.go(-1);"--}} class="btn btn-success mt-2"> افزودن سانس به سرویس های دیگر </a>
-                                    <a onclick="history.go(-1);" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    @php
+                                        if (url()->current() != url()->previous()) {
+                                            session(['back' => url()->previous()]);
+                                            $url = url()->previous() ;
+                                        }
+                                    @endphp
+                                    <a {{--onclick="history.go(-1);"--}} href="{{session('back')}}" class="btn btn-dark mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <!-- Modal -->
@@ -1679,7 +1685,12 @@
                 $("#loader3").hide();
             }, 500)
         }
-
+        /*$(document).on("click" , "#addSans" , function () {
+            for(let i=0; i<selectedDays.length; i++){
+                let day = selectedDays[i];
+                    console.log("day Selected : " , day )
+            }
+        });*/
         function finalSetTimes() {
             let newSans = $("#seances tr[new]") ;
             if(serviceTimes_new.length == 0 )
@@ -1728,9 +1739,10 @@
             }
 
             // serviceTimes_new.push(serviceTimes)
-
-            $("#loader1").css("display", "flex") ;
             // console.log("serviceTimes => " , serviceTimes)
+            // return;
+            $("#loader1").css("display", "flex") ;
+
 
             selectedDays = [];
             sizeSelected = 0 ;
@@ -1868,7 +1880,7 @@
         }
 
         {{--let VoucherList = @json($VoucherList) ;--}}
-        let x = 1 ;
+        var x = 1 ;
         $("#finalSetTimesBtn").hide();
         function addSeance() {
 
