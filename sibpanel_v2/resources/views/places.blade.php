@@ -233,7 +233,7 @@
                                                                         <div class="col-md">
                                                                             <div class="togglebutton text-right">
                                                                                 <label dir="ltr">
-                                                                                    <input name="mandatory_entrance" type="checkbox" @if('mandatory_entrance') checked="" @endif>
+                                                                                    <input name="mandatory_entrance" type="checkbox" @if($location['mandatory_entrance']) checked="" @endif>
                                                                                     <span class="toggle"></span>
                                                                                     ورودی اجباری
                                                                                 </label>
