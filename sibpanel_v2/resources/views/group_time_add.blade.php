@@ -1215,7 +1215,7 @@
             if(!otherMonth)
                 selectedDays.push(id);
             else{
-                // wait for next month to generate
+                // wait for next month to generateGetVoucherText
                 setTimeout(function(){
                     setSelected();
                 }, 50);

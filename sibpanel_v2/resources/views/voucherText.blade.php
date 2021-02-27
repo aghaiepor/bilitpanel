@@ -138,7 +138,7 @@
                                                 </div>
                                                 <a href="{{Route("DeleteVoucherText" , ['id' => $voucherText['id'] ])}}" class="btn TableEditBtn btn-danger btn-simple">
                                                     <i class="material-icons">close</i>
-                                                    حدف
+                                                    حذف
                                                 </a>
                                             </td>
 
