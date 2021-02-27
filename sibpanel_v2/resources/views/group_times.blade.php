@@ -100,35 +100,52 @@
                             </div>
                             <!-- Modal -->
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div style="overflow: auto ; height: 60vh ;" class="col-md-3 border-left">
-                                    <ul id="tablist" class="nav nav-pills nav-pills-rose flex-column" role="tablist">
-                                        @php
-                                            $i = 0  ;
-                                        @endphp
-                                        @foreach($GetServiceListFromServicetime as $Province)
-                                            <li class="nav-item border rounded ml-0">
-                                                <a province_id="{{$Province["province_id"]}}" class="nav-link province @if($i == 0) active show @endif" data-toggle="tab" href="#link4" role="tablist"> {{$Province['province_name']}}</a>
-                                            </li>
-                                            @php
-                                                $i++ ;
-                                            @endphp
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <div style="overflow: auto ; height: 60vh ;" class="col-md-9">
-                                    <div class="tab-content text-right">
-                                        <div class="tab-pane active show" style="overflow: auto ; overflow-x: hidden" id="link4">
-                                         <div class="row" id="sansArea">
+                        @if(count($GetServiceListFromServicetime) == 0 )
+                            <div class="card-body">
+                                <div class="row">
 
-                                         </div>
-                                        </div>
-                                    </div>
+                                    <div style="overflow: auto;height: 40vh;color: #999;" class="col-md-12 d-flex justify-content-center align-items-center bg-light">
+                                        <h6 class="text-center ">
+                                            <i style="font-size: 76pt;color: #ccc;" class="fad mb-3 fa-info-circle"></i>
+                                            <br>
+                                            سانس فعالی یافت نشد !
+                                        </h6>
                                     </div>
                                 </div>
 
                             </div>
+                            @else
+                            <div class="card-body">
+                                <div class="row">
+                                    <div style="overflow: auto ; height: 60vh ;" class="col-md-3 border-left">
+                                        <ul id="tablist" class="nav nav-pills nav-pills-rose flex-column" role="tablist">
+                                            @php
+                                                $i = 0  ;
+                                            @endphp
+                                            @foreach($GetServiceListFromServicetime as $Province)
+                                                <li class="nav-item border rounded ml-0">
+                                                    <a province_id="{{$Province["province_id"]}}" class="nav-link province @if($i == 0) active show @endif" data-toggle="tab" href="#link4" role="tablist"> {{$Province['province_name']}}</a>
+                                                </li>
+                                                @php
+                                                    $i++ ;
+                                                @endphp
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div style="overflow: auto ; height: 60vh ;" class="col-md-9">
+                                        <div class="tab-content text-right">
+                                            <div class="tab-pane active show" style="overflow: auto ; overflow-x: hidden" id="link4">
+                                                <div class="row" id="sansArea">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        @endif
+
                         </div>
                     </div>
                 </div>
