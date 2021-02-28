@@ -211,6 +211,8 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/GetDiscountPolicy' , 'OffController@GetDiscountPolicy')->name('GetDiscountPolicy');
         Route::post('/DiscountPolicyActivation' , 'OffController@DiscountPolicyActivation')->name('DiscountPolicyActivation');
 
+        //  Seat
+        Route::get('/Seat' , 'SeatController@index')->name('Seat');
 
 //    });
 

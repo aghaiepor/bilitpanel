@@ -610,7 +610,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="form-row text-right">
+                            <div class="col-md">
+                                <label for=""> استان </label>
+                                <select name="province_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
+                                    <option value="" selected> همه </option>
+                                    @foreach($ProvinceList as $Province)
+                                        @if(request('province_id') == $Province['id'])
+                                            <option selected value="{{$Province['id']}}"> {{$Province['province_name']}} </option>
+                                        @else
+                                            <option value="{{$Province['id']}}"> {{$Province['province_name']}} </option>
+                                        @endif
 
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md">
+                                <label for=""> شهر </label>
+                                <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
+                                    <option value=""> همه </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-row text-right">
                             <div class="col-md">
                                 <label for=""> مکان </label>
@@ -720,7 +741,7 @@
                 $('#FromDate , #FromDate2 ').persianDatepicker({
                     initialValue: true,
                     autoClose : true ,
-                    format: 'YYYY-MM-DD H:mm:ss',
+                    format: 'YYYY-MM-DD',
                     calendar:{
                         persian:{
                             locale: 'fa'
@@ -739,7 +760,7 @@
                 $('#ToDate , #ToDate2 ').persianDatepicker({
                     initialValue: true,
                     autoClose : true ,
-                    format: 'YYYY-MM-DD H:mm:ss',
+                    format: 'YYYY-MM-DD',
                     calendar:{
                         persian:{
                             locale: 'fa'
@@ -829,6 +850,243 @@
     <script>
         // export area JS
         $(document).ready(function () {
+
+            $('#province').change(function () {
+                var province_id = $('#province').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('CityList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+                            session_fall = false ;
+
+                        }
+                    },
+                    success:function(data) {
+                        $("#cityList").html('');
+                        $("#cityList").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+            $('#cityList , #province').change(function () {
+                var province_id = $('#province').val();
+                var city_id = $('#cityList').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('location_list')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'province_id' : province_id ,
+                        'city_id' : city_id ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if (session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false ;
+                            }
+
+
+                        }
+                    },
+                    success:function(data) {
+                        $("#locationList").html('');
+                        $("#locationList").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i< data.data.length ; i++){
+                            if(city_id == data.data[i].id )
+                                $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id , true));
+                            else
+                                $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+            $('#cityList , #province , #locationList').change(function () {
+                var locationID = $('#locationList').val();
+                // console.log("in the terminal location id is :  " + locationID)
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('ServiceListReport')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'locationID' : locationID ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if(session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false ;
+                            }
+
+
+                        }
+                    },
+                    success:function(data) {
+                        $("#ServiceList").html('');
+                        $("#ServiceList").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i< data.array_keys.length ; i++){
+                            $("#ServiceList").append(new Option( data.data[[data.array_keys[i]]].service_name , data.data[[data.array_keys[i]]].service_id));
+                        }
+
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('ReportTerminalLocationList')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'locationID' : locationID ,
+                    },statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            if (session_fall){
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+                                session_fall = false ;
+                            }
+
+
+                        }
+                    },
+                    success:function(data) {
+                        console.log(data.data)
+                        $("#terminal_id").html('');
+                        $("#terminal_id").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i< data.data.length ; i++){
+                            $("#terminal_id").append(new Option( data.data[i].service_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+
+/*
             $('#locationList').change(function () {
                 var locationID = $('#locationList').val();
                 $.ajax({
@@ -887,7 +1145,7 @@
                         $('.selectpicker').selectpicker('refresh');
                     }
                 });
-            });
+            });*/
 
             $("#exportSanasButton").click(function (e) {
                 let locationList = $("#locationList").val();

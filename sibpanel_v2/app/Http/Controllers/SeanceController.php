@@ -50,8 +50,9 @@ class seanceController extends Controller
 //        return $LocationList ;
         $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
+        $ProvinceList = Cache::get('ProvinceList');
 //        return $GetServiceTimeList["ContentData"] ;
-        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] , "LocationList" => $LocationList ]);
+        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] , "LocationList" => $LocationList , "ProvinceList" => $ProvinceList ]);
     }
 
     public function GetServiceTimeList(Request $request)
@@ -219,14 +220,14 @@ class seanceController extends Controller
         $export_service_id = $service_id;
 
         $start = $request->get("start");
-        $start = $this->fa2en($start);
+        $start = $this->fa2en($start . " 00:00:00");
         $start = Verta::parse($start)->timestamp;
-        $start = Carbon::createFromTimestamp($start)->format('Y-m-d h:i');
+        $start = Carbon::createFromTimestamp($start)->format('Y-m-d H:i');
 
         $end = $request->get("end");
-        $end = $this->fa2en($end);
+        $end = $this->fa2en($end . " 23:59:59");
         $end = Verta::parse($end)->timestamp;
-        $end = Carbon::createFromTimestamp($end)->format('Y-m-d h:i');
+        $end = Carbon::createFromTimestamp($end)->format('Y-m-d H:i');
 
         $ImportExportServiceTimes = $this->api->ImportExportServiceTimes($import_service_id,$export_service_id ,$start , $end , "");
         // return $ImportExportServiceTimes ;
@@ -253,14 +254,15 @@ class seanceController extends Controller
         $export_service_id = $service_id;
 
         $start = $request->get("start");
-        $start = $this->fa2en($start);
+        $start = $this->fa2en($start . " 00:00:00");
         $start = Verta::parse($start)->timestamp;
-        $start = Carbon::createFromTimestamp($start)->format('Y-m-d h:i');
+        $start = Carbon::createFromTimestamp($start)->format('Y-m-d H:i');
 
         $end = $request->get("end");
-        $end = $this->fa2en($end);
+        $end = $this->fa2en($end . " 23:59:59");
         $end = Verta::parse($end)->timestamp;
-        $end = Carbon::createFromTimestamp($end)->format('Y-m-d h:i');
+        $end = Carbon::createFromTimestamp($end)->format('Y-m-d H:i');
+//        return $end ;
 
         $days_extend = $request->get("days_extend");
 
