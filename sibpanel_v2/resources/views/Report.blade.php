@@ -80,6 +80,23 @@
                                             <option @if(request('key') == "service") selected @endif value="service">موزه</option>
                                         </select>
                                     </div>
+                                    {{--  Project --}}
+                                    @if(count($ProjectList) > 1)
+                                        <div class="col-md-3 text-right">
+                                            <label for="">  پروژه </label>
+                                            <select id="project" name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
+                                                @foreach($ProjectList as $Project)
+                                                    @if(is_null(request('project_id')) &&  $Project['project_id'] == 1 )
+                                                        <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                    @elseif(request('project_id') == $Project['project_id'])
+                                                        <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                    @else
+                                                        <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
                                     {{--  province --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> انتخاب استان  </label>
@@ -227,22 +244,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    {{--  Project --}}
-                                    @if(count($ProjectList) > 1)
-                                        <div class="col-md-3 text-right">
-                                            <label for="">  پروژه </label>
-                                            <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
-                                                <option value="" selected> همه  </option>
-                                                @foreach($ProjectList as $Project)
-                                                    @if(request('project_id') == $Project['project_id'])
-                                                        <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
-                                                    @else
-                                                        <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    @endif
+
                                     @php
 
 
@@ -515,8 +517,63 @@
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
 
+            $('#project').change(function () {
+                var project_id = $('#project').val();
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('ProvinceListReport')}}",
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'project_id' : project_id ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+                            session_fall = false ;
 
-            $('#province').change(function () {
+                        }
+                    },
+                    success:function(data) {
+                        $("#province").html('');
+                        $("#province").append(new Option( 'همه' , '',true));
+                        for(var i = 0 ; i < data.data.length ; i++){
+                            $("#province").append(new Option( data.data[i].province_name , data.data[i].id));
+                        }
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            });
+            $('#project , #province').change(function () {
                 var province_id = $('#province').val();
                 $.ajax({
                     type:'POST',
@@ -571,7 +628,7 @@
                     }
                 });
             });
-            $('#cityList , #province').change(function () {
+            $('#project , #cityList , #province').change(function () {
                 var province_id = $('#province').val();
                 var city_id = $('#cityList').val();
                 $.ajax({
@@ -634,7 +691,7 @@
                     }
                 });
             });
-            $('#cityList , #province , #locationList').change(function () {
+            $('#project , #cityList , #province , #locationList').change(function () {
                 var locationID = $('#locationList').val();
                 // console.log("in the terminal location id is :  " + locationID)
                 $.ajax({
