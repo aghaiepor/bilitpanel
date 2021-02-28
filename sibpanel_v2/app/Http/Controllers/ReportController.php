@@ -38,6 +38,16 @@ class ReportController extends Controller
 //        return $SellerUsersList ;
         return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>null , 'SaleTypeList' => $SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
     }
+    public function ProvinceListReport(Request $request){
+        $id = (int)$request->get('project_id');
+        $ProvinceList = $this->api->ProvinceList( "ajax" , $id );
+//        return $ProvinceList
+        $content = [
+            'data' => $ProvinceList['ContentData'],
+        ];
+        return $content ;
+    }
+
     public function CityList(Request $request){
         $id = (int)$request->get('province_id');
         $CityList = $this->api->CityList($id , "ajax");

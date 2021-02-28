@@ -130,6 +130,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         //Report Route
         Route::get('/Report' , 'ReportController@index')->name('Report');
         Route::post('/CityList'  , 'ReportController@CityList' )->name('CityList');
+        Route::post('/ProvinceListReport'  , 'ReportController@ProvinceListReport' )->name('ProvinceListReport');
         Route::post('/location_list'  , 'ReportController@location_list' )->name('location_list');
         Route::post('/ServiceListReport'  , 'ReportController@ServiceList' )->name('ServiceListReport');
         Route::post('/ReportTerminalLocationList'  , 'ReportController@TerminalLocationList' )->name('ReportTerminalLocationList');

@@ -880,8 +880,15 @@ class Api
     }
 
     // ******************* Get Report Lists *******************
-    public function ProvinceList($type=null){
-        $data=null;
+    public function ProvinceList($type=null , $project_id=null){
+        if(is_null($project_id))
+            $data=null;
+        else
+        {
+            $data= [
+                'project_id' => $project_id
+            ];
+        }
         $client = new Client();
         $result = $client->post($this->url . 'ProvinceList' ,[
                 'headers'=>$this->getHeader(),
