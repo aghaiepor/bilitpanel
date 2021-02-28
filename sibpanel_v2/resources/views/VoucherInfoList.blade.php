@@ -274,13 +274,9 @@
                         <div class="col-sm text-right">
                             <label class="mb-0" for=""> نوع بلیت </label>
                             <select name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">
-                                <option disabled> نوع بلیت </option>
-                                <option value="2">نیم بها</option>
-                                <option value="3">ایرانی</option>
-                                <option value="1">رایگان</option>
-                                <option value="5">ایرانی گروهی</option>
-                                <option value="4">خارجی</option>
-                                <option value="6">خارجی گروهی</option>
+                                @foreach($VoucherTypeList as $VoucherType)
+                                    <option value="{{$VoucherType["voucher_type_id"]}}">{{$VoucherType["voucher_type"]}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

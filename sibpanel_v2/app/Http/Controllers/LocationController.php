@@ -460,6 +460,7 @@ class LocationController extends Controller
         $array_keys = array_keys($GetServices) ;
         $GetServices = $GetServices[$array_keys[0]] ;
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
+        $VoucherTypeList = $this->api->VoucherTypeList();
 //        return $VoucherInfoList ;
 //        return $VoucherInfoList['ContentData'][0]['id']; // 985 for 147 service_id
         $voucher_id_image = [];
@@ -482,9 +483,14 @@ class LocationController extends Controller
         }
 //        return $voucher_id_image;
 //        return $VoucherInfoList;
-        return view('VoucherInfoList' , ['VoucherInfo'=> $VoucherInfoList['ContentData'] ,
-            'GetServices' =>$GetServices , 'service_id'=> $service_id , 'location_id' =>$location_id ,
-            'voucher_id_image'=> $voucher_id_image ,  'projectList' => $projectList['ContentData'] ]);
+        return view('VoucherInfoList' , [
+            'VoucherInfo'=> $VoucherInfoList['ContentData'] ,
+            'GetServices' =>$GetServices ,
+            'service_id'=> $service_id ,
+            'location_id' =>$location_id ,
+            'voucher_id_image'=> $voucher_id_image ,  'projectList' => $projectList['ContentData'] ,
+            'VoucherTypeList' =>$VoucherTypeList["ContentData"]
+        ]);
 //        return $VoucherInfoList ;
 
     }
