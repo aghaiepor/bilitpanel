@@ -481,6 +481,11 @@
                                     </tr>
                                     </thead>
                                     <tbody id="">
+                                    <div class="col-12">
+                                        <h6 class="text-right pb-2 border-bottom">
+                                            - انتخاب بليت هاي موجود
+                                        </h6>
+                                    </div>
                                     @foreach($VoucherInfoList as $VoucherInfo)
                                         <tr add_id="{{$VoucherInfo["id"]}}">
                                             <td data-cheack-value="1" class="">
@@ -514,10 +519,16 @@
                                 </table>
                             </div>
                         </div>
-                        <hr class="my-1">
+{{--                        <hr class="my-1">--}}
                         <div class="row">
                              <div id="formSans" class="col-lg pull-right">
                                  <div class="form-row text-right">
+
+                                     <div class="col-12">
+                                         <h6 class="text-right pb-2 border-bottom">
+                                              - افزودن بليت جديد
+                                         </h6>
+                                     </div>
                                      <div class="col">
                                          <label class="w-100" for=""> نوع بليت
                                          </label>

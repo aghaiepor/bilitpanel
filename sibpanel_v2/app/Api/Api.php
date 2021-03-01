@@ -880,6 +880,18 @@ class Api
     }
 
     // ******************* Get Report Lists *******************
+    public function SellModelList($type=null){
+        $data=null;
+        $client = new Client();
+        $result = $client->post($this->url . 'SellModelList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response , $type);
+        return $response;
+    }
     public function ProvinceList($type=null , $project_id=null){
         if(is_null($project_id))
             $data=null;

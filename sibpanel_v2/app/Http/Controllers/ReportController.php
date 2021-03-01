@@ -34,9 +34,20 @@ class ReportController extends Controller
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList = Cache::get('SellerUserList');
         $Project_list = $this->api->ProjectList();
+        $SellModelList = $this->api->SellModelList();
+//        return $SellModelList ;
 //        return $Project_list ;
 //        return $SellerUsersList ;
-        return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>null , 'SaleTypeList' => $SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
+        return view('Report' , [
+            'ProvinceList'=>$ProvinceList ,
+            'tikcetType'=>$tikcetType  ,
+            'SellerUsersList'=> $SellerUsersList,
+            'report_type'=>$report_type ,
+            'data'=>null ,
+            'SaleTypeList' => $SaleTypeList ,
+            "ProjectList" => $Project_list['ContentData'] ,
+            "SellModelList" => $SellModelList['ContentData'] ,
+        ]);
     }
     public function ProvinceListReport(Request $request){
         $id = (int)$request->get('project_id');
@@ -184,8 +195,18 @@ class ReportController extends Controller
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList = Cache::get('SellerUserList');
         $Project_list = $this->api->ProjectList();
+        $SellModelList = $this->api->SellModelList();
 //        return $SellerUsersList ;
-        return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList , 'report_type'=>$report_type , 'data'=> null , 'SaleTypeList'=>$SaleTypeList , 'ProjectList' =>$Project_list['ContentData'] ]);
+        return view('transaction' , [
+            'ProvinceList'=>$ProvinceList ,
+            'tikcetType'=>$tikcetType  ,
+            'SellerUsersList'=> $SellerUsersList ,
+            'report_type'=>$report_type ,
+            'data'=> null ,
+            'SaleTypeList'=> $SaleTypeList ,
+            'ProjectList' => $Project_list['ContentData'] ,
+            "SellModelList" => $SellModelList['ContentData']
+        ]);
     }
 
 

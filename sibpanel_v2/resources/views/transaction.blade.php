@@ -225,8 +225,13 @@
                                         <label for="">  نوع فروش  </label>
                                         <select name="pre_sale" class="selectpicker" data-style="btn btn-primary border-dark" title="ییش فروش">
                                             <option value="" selected> همه  </option>
-                                            <option @if(request('pre_sale') == "2") selected @endif value="2"> عادی </option>
-                                            <option @if(request('pre_sale') == "1") selected @endif value="1"> پیش فروش </option>
+                                            @foreach($SellModelList as $SellModel)
+                                                @if(request('pre_sale') == $SellModel["sell_model_id"])
+                                                    <option value="{{$SellModel["sell_model_id"]}}"> {{$SellModel["sell_model"]}} </option>
+                                                @else
+                                                    <option value="{{$SellModel["sell_model_id"]}}"> {{$SellModel["sell_model"]}} </option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                 @else
