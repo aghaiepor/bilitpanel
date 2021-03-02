@@ -89,11 +89,13 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <div class="form-row mt-4">
-                                                                            <div class="col-sm-6">
+                                                                        <div class="form-row ">
+                                                                            <div class="col-sm-6 text-right">
+                                                                                <label for=""> نام شهر </label>
                                                                                 <input name="city" value="{{$city['city_name']}}" autocomplete="off" type="text" class="form-control" id="nameStateFa" placeholder="نام  شهر">
                                                                             </div>
-                                                                            <div class="col-sm-6">
+                                                                            <div class="col-sm-6 text-right">
+                                                                                <label for=""> نام شهر به انگليسي </label>
                                                                                 <input name="city_english_name" value="{{$city['city_english_name']}}" autocomplete="off" type="text" class="form-control" id="nameStateEn" placeholder=" نام  شهر به انگلیسی">
                                                                             </div>
                                                                         </div>
@@ -137,7 +139,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-row mt-4">
+                    <div class="form-row ">
                         <div class="col-sm text-right">
                             <label for=""> نام شهر </label>
                             <input name="city" autocomplete="off" type="text" class="form-control" id="nameStateFa" placeholder="نام  شهر">

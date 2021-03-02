@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Api\Api;
 use App\Rules\Captcha;
 use Carbon\Carbon;
+use Dotenv\Dotenv;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -174,7 +175,15 @@ class AuthController extends Controller
         return $GenerateOtp ;
     }
     public function test(){
-
+        return redirect()->back();
+//        $_ENV["MYENV"]="new_variable";
+//        $new_variable_var = $_ENV["MYENV"];
+        $env = getenv("PROJECT_NAME" );
+        dd($env);
+        $donEnv = Dotenv::create(base_path() ,"./env3" );
+        $donEnv = $donEnv->load();
+        dd($donEnv);
+        return $env ;
 
     }
 
