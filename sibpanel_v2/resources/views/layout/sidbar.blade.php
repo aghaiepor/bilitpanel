@@ -249,6 +249,12 @@
                                     <p> تخفیف </p>
                                 </a>
                             </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="{{Route('Account')}}">
+                                        <i class="material-icons">switch_account</i>
+                                        <p> مدیریت حساب </p>
+                                    </a>
+                                </li>
                             @endif
                     </ul>
                 </div>

@@ -215,6 +215,9 @@ Route::middleware(['CheckLogin'])->group(function () {
         //  Seat
         Route::get('/Seat' , 'SeatController@index')->name('Seat');
 
+        //  Seat
+        Route::get('/Account' , 'AccountController@index')->name('Account');
+
 //    });
 
 });

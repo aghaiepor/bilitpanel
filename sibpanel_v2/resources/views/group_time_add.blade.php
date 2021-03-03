@@ -96,7 +96,7 @@
                                     <div class="card-icon float-right ml-3 mr-0">
                                         <i class="material-icons"> watch_later </i>
                                     </div>
-                                    <h4 class="card-title text-right font-weight-bold ">  مدیریت سانس ها </h4>
+                                    <h4 class="card-title text-right font-weight-bold ">  مدیریت سانس های {{$Info["location_name"]}}  - {{ $Info["service_name"] }}</h4>
                                 </div>
                                 <div class="col-sm">
 {{-- <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success mt-2 pr-1"><i class="material-icons"> add_circle_outline </i> سانس جدید </span>--}}

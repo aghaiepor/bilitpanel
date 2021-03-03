@@ -47,12 +47,29 @@ class seanceController extends Controller
     public function add_group_time_index($service_id=null , $location_id=null){
         $VoucherTypeList = Cache::get('VoucherTypeList');
         $LocationList = Cache::get("LocationList") ;
-//        return $LocationList ;
+        $GetServices = Cache::get('ServiceList');
+        $GetServices = array_filter($GetServices, function ($event) use ($location_id , $service_id) {
+            return $event['location_id'] == $location_id && $event['service_id'] == $service_id ;
+        });
+        $array_keys = array_keys($GetServices) ;
+        $Info = $GetServices[$array_keys[0]] ;
+//        return $Info ;
+
         $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
         $ProvinceList = Cache::get('ProvinceList');
+//        return $ProvinceList ;
 //        return $GetServiceTimeList["ContentData"] ;
-        return view('group_time_add' , ["VoucherTypeList" => $VoucherTypeList , "id" => $service_id , "location_id"=> $location_id  , "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] , "VoucherInfoList" => $VoucherInfoList["ContentData"] , "LocationList" => $LocationList , "ProvinceList" => $ProvinceList ]);
+        return view('group_time_add' , [
+            "VoucherTypeList" => $VoucherTypeList ,
+            "id" => $service_id ,
+            "location_id"=> $location_id  ,
+            "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] ,
+            "VoucherInfoList" => $VoucherInfoList["ContentData"] ,
+            "LocationList" => $LocationList ,
+            "ProvinceList" => $ProvinceList ,
+            "Info" => $Info ,
+        ]);
     }
 
     public function GetServiceTimeList(Request $request)
