@@ -176,11 +176,12 @@ class ReportController extends Controller
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList =  Cache::get('SellerUserList');
         $Project_list = $this->api->ProjectList();
+        $SellModelList = $this->api->SellModelList();
 //        return $GetStat ;
         if ($GetStat['Header']['Status'] == 0){
-            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'], 'SaleTypeList'=>$SaleTypeList  , "ProjectList" => $Project_list['ContentData'] ] ) ;
+            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'], 'SaleTypeList'=>$SaleTypeList  , "ProjectList" => $Project_list['ContentData'] ,   "SellModelList" => $SellModelList['ContentData']] ) ;
         }else{
-            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!', 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
+            return view('Report' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!', 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData'] ,   "SellModelList" => $SellModelList['ContentData']]);
         }
 
     }
@@ -293,11 +294,12 @@ class ReportController extends Controller
         $ProvinceList = Cache::get('ProvinceList');
         $SellerUsersList = Cache::get('SellerUserList');
         $Project_list = $this->api->ProjectList();
+        $SellModelList = $this->api->SellModelList();
         if ($GetStat['Header']['Status'] == 0){
 //            return $GetStat ;
-            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'] , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
+            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type , 'data'=>$GetStat['ContentData'] , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData'] ,   "SellModelList" => $SellModelList['ContentData'] ]);
         }else{
-            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!' , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData']]);
+            return view('transaction' , ['ProvinceList'=>$ProvinceList , 'tikcetType'=>$tikcetType  ,'SellerUsersList'=> $SellerUsersList,'report_type'=>$report_type ,'data'=>null , 'error'=>'خطا در دریافت گزارش!' , 'SaleTypeList'=>$SaleTypeList , "ProjectList" => $Project_list['ContentData'] ,   "SellModelList" => $SellModelList['ContentData']]);
         }
 
     }
