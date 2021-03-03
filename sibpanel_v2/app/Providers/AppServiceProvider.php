@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Log::info(base_path());
         /*if (DB::connection() instanceof \Illuminate\Database\SQLiteConnection) {
             DB::statement(DB::raw('PRAGMA foreign_keys=1'));
         }*/

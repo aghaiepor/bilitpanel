@@ -1764,12 +1764,14 @@ class Api
         $this->checkError($response , "ajax");
         return $response;
     }
-    public function LocationAccountActivation($locationaccount_id  ,$activation){
+    public function LocationAccountActivation($locationaccount_id , $account_id  ,$activation){
         $data = [
             "location_id" => $locationaccount_id,
+            "account_id" => $account_id,
             "activation" => $activation
         ];
         $client = new Client();
+        Log::info("location account actiavion : " , $data);
         $result = $client->post($this->url . 'LocationAccountActivation' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data

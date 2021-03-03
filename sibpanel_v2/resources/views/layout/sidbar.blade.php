@@ -26,7 +26,8 @@
 
         </a>
         <a id="project_name" style="font-weight: 200;" href="/" class="simple-text logo-normal text-center mt-3">
-            {{ config('app.PROJECT_NAME') }}
+{{--            {{getenv("PROJECT_NAME") }}--}}
+            {{session('UserInfo')['projects'][0]["name"]}}
         </a>
     </div>
     <div class="sidebar-wrapper">

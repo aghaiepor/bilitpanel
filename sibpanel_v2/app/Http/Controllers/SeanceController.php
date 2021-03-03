@@ -44,7 +44,9 @@ class seanceController extends Controller
 
 
     // new group time
-    public function add_group_time_index($service_id=null , $location_id=null){
+    public function add_group_time_index($service_id=null , $location_id=null)
+    {
+
         $VoucherTypeList = Cache::get('VoucherTypeList');
         $LocationList = Cache::get("LocationList") ;
         $GetServices = Cache::get('ServiceList');
