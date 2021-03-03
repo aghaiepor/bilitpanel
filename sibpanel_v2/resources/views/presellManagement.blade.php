@@ -610,6 +610,7 @@
             $(document).on("change",'input[name=locationaccount_id]' ,function () {
 
                 let locationaccount_id = $(this).attr('data-location');
+                let account_id = $(this).attr('data-account');
                 let activation = $(this).is(':checked');
                 let thisElement =  $(this) ;
                 let failed = true ;
@@ -754,6 +755,7 @@
                                         data:{
                                             '_token ': '<?php echo csrf_token() ?>',
                                             'id' : locationaccount_id ,
+                                            'account_id' : account_id ,
                                             'activation' : activation ,
                                         },
                                         statusCode: {
@@ -1388,9 +1390,9 @@
                                 let state_html = ' <div class="togglebutton">' + '<label>' ;
 
                                 if (location[x].location_presell_activation)
-                                    state_html += '<input  data-location="' + location[x].location_id + '" type="checkbox" name="locationaccount_id" checked="">'  ;
+                                    state_html += '<input data-account="' + account[i].account_id + '"  data-location="' + location[x].location_id + '" type="checkbox" name="locationaccount_id" checked="">'  ;
                                 else
-                                    state_html += '<input data-location="' + location[x].location_id + '" type="checkbox" name="locationaccount_id">'  ;
+                                    state_html += '<input data-account="' + account[i].account_id + '" data-location="' + location[x].location_id + '" type="checkbox" name="locationaccount_id">'  ;
 
                                 state_html +=   '<span class="toggle"></span>' + '</label>' + '</div>';
 

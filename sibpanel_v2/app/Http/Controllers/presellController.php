@@ -289,8 +289,9 @@ class presellController extends Controller
     public function LocationAccountActivation(Request $request )
     {
         $locationaccount_id = $request->get("id") ;
+        $account_id = $request->get("account_id") ;
         $activation = ($request->get("activation") == 'true') ? True : False;
-        $LocationAccountActivation = $this->Api->LocationAccountActivation($locationaccount_id  ,$activation);
+        $LocationAccountActivation = $this->Api->LocationAccountActivation($locationaccount_id ,$account_id ,$activation);
         return $LocationAccountActivation;
     }
     public function AccountActivation(Request $request )
