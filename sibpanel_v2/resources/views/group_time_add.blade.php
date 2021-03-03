@@ -1952,6 +1952,11 @@
             $("#loader3").css("display", "flex") ;
             setTimeout(function () {
                 $("#loader3").hide();
+                Swal.fire(
+                    ' ثبت موقت ',
+                    ' تغییرات ثبت گردید ',
+                    'success'
+                )
             }, 500)
         }
         /*$(document).on("click" , "#addSans" , function () {
