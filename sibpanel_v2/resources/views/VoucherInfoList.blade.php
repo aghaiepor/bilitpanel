@@ -350,13 +350,9 @@
                         <div class="col-sm text-right">
                             <label class="mb-0" for=""> نوع بلیت </label>
                             <select id="edit_voucher_type" name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بلیت">
-                                <option disabled> نوع بلیت </option>
-                                <option value="2">نیم بها</option>
-                                <option value="3">ایرانی</option>
-                                <option value="1">رایگان</option>
-                                <option value="5">ایرانی گروهی</option>
-                                <option value="4">خارجی</option>
-                                <option value="6">خارجی گروهی</option>
+                                @foreach($VoucherTypeList as $VoucherType)
+                                    <option value="{{$VoucherType["voucher_type_id"]}}">{{$VoucherType["voucher_type"]}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -619,9 +615,11 @@
                     return $(this).text() === edit_voucher_type;
                 }).val();
                 // console.log("edit_voucher_type_value => " , edit_voucher_type_value)
+
                 $('#edit_voucher_type').find("option[value="+ edit_voucher_type_value + "]").attr('selected' , true);
                 $("#edit_validity_period").val(validity_period);
                 $("#Edit_expiration_date").val(expiration_date);
+
 
             });
             $("#Edit_exprieMode").change(function () {
