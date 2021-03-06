@@ -1940,6 +1940,28 @@ class Api
 //        return $response;
     }
 
+    // ******************** Accounts ****************
+    public function AddAccount($account_name ,$shaba ,$payment_id , $project_id , $account_id , $pan , $pin_block , $type=null){
+        $data = [
+            "account_name" => "esi_test",
+            "shaba" => "123456789123456798",
+            "payment_id" => "987654321987654321",
+            "project_id" => 1,
+            "account_id" => 0,
+            "pan" => "",
+            "pin_block" => ""
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetAccountProvince' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response , "ajax");
+        return $response;
+    }
     // ******************* Charts *******************
     public function statsChart(){
         $client = new Client();

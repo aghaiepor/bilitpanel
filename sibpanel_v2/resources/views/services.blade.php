@@ -3,7 +3,7 @@
 @section('title')
     <title>
          مدیریت جاذبه های
-        {{(empty($array_keys) == 0) ? $GetServices[$array_keys[0]]['location_name'] : ''}}
+        {{$info['location_name']}}
     </title>
     <style>
         .bootstrap-select{
@@ -77,7 +77,7 @@
                                     <div class="card-icon float-right ml-3 mr-0">
                                         <i class="material-icons">location_city</i>
                                     </div>
-                                    <h4 class="card-title text-right font-weight-bold "> مدیریت جاذبه های    {{(empty($array_keys) == 0) ? $GetServices[$array_keys[0]]['location_name'] : ''}} </h4>
+                                    <h4 class="card-title text-right font-weight-bold "> مدیریت جاذبه های    {{$info['location_name']}} </h4>
                                 </div>
                                 <div class="col-sm">
                                     <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i>  افزودن جاذبه جدید </span>
