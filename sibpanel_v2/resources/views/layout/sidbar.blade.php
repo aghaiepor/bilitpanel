@@ -27,7 +27,7 @@
         </a>
         <a id="project_name" style="font-weight: 200;" href="/" class="simple-text logo-normal text-center mt-3">
 {{--            {{getenv("PROJECT_NAME") }}--}}
-            {{session('UserInfo')['projects'][0]["name"]}}
+            {{session('UserInfo')['projects'][0]["description"]}}
         </a>
     </div>
     <div class="sidebar-wrapper">
