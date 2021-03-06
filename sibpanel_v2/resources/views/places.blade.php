@@ -226,10 +226,12 @@
                                                                             <label for=""> نام  انگلیسی مکان </label>
                                                                             <input value="{{$location['location_english_name']}}" name="location_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                                                                         </div>
+                                                                        @if(env("HAS_OFFICE_NO"))
                                                                         <div class="col-md text-right">
                                                                             <label for=""> شناسه مکان </label>
                                                                             <input {{--value="{{$location['location_english_name']}}"--}} type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                                                                         </div>
+                                                                        @endif
                                                                         <div class="col-md">
                                                                             <div class="togglebutton text-right">
                                                                                 <label dir="ltr">
@@ -469,7 +471,7 @@
                         <label for=""> انتخاب شهر </label>
                         <select id="cityList" name="city_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                             <option disabled selected> انتخاب شهر </option>
-                            <option value="1">شیراز</option>
+                            <option value="">همه</option>
                         </select>
                     </div>
 
