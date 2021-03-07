@@ -121,8 +121,14 @@
                                         <ul id="tablist" class="nav nav-pills nav-pills-rose flex-column" role="tablist">
                                             @php
                                                 $i = 0  ;
+                                                $activeProvince = null ;
                                             @endphp
                                             @foreach($GetServiceListFromServicetime as $Province)
+                                                @php
+                                                if($i==0){
+                                                    $activeProvince = $Province["province_id"] ;
+                                                }
+                                                @endphp
                                                 <li class="nav-item border rounded ml-0">
                                                     <a province_id="{{$Province["province_id"]}}" class="nav-link province @if($i == 0) active show @endif" data-toggle="tab" href="#link4" role="tablist"> {{$Province['province_name']}}</a>
                                                 </li>
@@ -413,7 +419,13 @@
         <script>
             let sans = @json($GetServiceListFromServicetime);
             let activeProvince = $("#tablist").find("a").first();
-            let wasActive = activeProvince.attr("province_id")
+            let province_id_active = activeProvince.attr("province_id")
+            let wasActive = "{{ ( is_null(request("province"))) ?  $activeProvince  : request("province")}}"
+            $(".province").removeClass("active");
+            $(".province[province_id=" + wasActive + "]").addClass("active");
+            $('#pro_list').animate({
+                scrollTop: $(".province[province_id=" + wasActive + "]").offset().top - 250 ,
+            }, 1000);
             GetSansProvince(wasActive);
 
             $(".province").click(function () {

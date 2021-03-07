@@ -44,7 +44,7 @@ class seanceController extends Controller
 
 
     // new group time
-    public function add_group_time_index($service_id=null , $location_id=null)
+    public function add_group_time_index($service_id=null , $location_id=null , $province_id=null)
     {
 
         $VoucherTypeList = Cache::get('VoucherTypeList');
@@ -55,8 +55,7 @@ class seanceController extends Controller
         });
         $array_keys = array_keys($GetServices) ;
         $Info = $GetServices[$array_keys[0]] ;
-//        return $Info ;
-
+//        return $LocationList ;
         $GetServiceTimeList = $this->api->GetServiceTimeList($service_id);
         $VoucherInfoList = $this->api->VoucherInfoList($service_id);
         $ProvinceList = Cache::get('ProvinceList');
@@ -66,6 +65,7 @@ class seanceController extends Controller
             "VoucherTypeList" => $VoucherTypeList ,
             "id" => $service_id ,
             "location_id"=> $location_id  ,
+            "province_id"=> $province_id  ,
             "GetServiceTimeList"=> $GetServiceTimeList["ContentData"] ,
             "VoucherInfoList" => $VoucherInfoList["ContentData"] ,
             "LocationList" => $LocationList ,
