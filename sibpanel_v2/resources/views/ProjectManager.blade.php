@@ -218,7 +218,7 @@
     </div>
     <div class="modal fade" id="add_off" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form id="add_off_form" method="postس" action="">
+            <form id="add_off_form" method="post" action="">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -351,7 +351,7 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title " id="testLabel"> اضافه کردن پروژه </h5>
+                        <h5 class="modal-title " id="testLabel"> ویرایش پروژه </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -375,7 +375,7 @@
                     </div>
                     <div class="modal-footer mt-4">
                         {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
-                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> افزودن </button>
+                        <button type="submit" class="btn btn-success px-5 ml-0 mr-auto"> ویرایش </button>
                     </div>
                 </div>
             </form>

@@ -74,7 +74,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div style="overflow: auto ; height: 60vh ;" class="col-md-3 border-left">
+                                <div id="pro_list" style="overflow: auto ; height: 60vh ;" class="col-md-3 border-left">
                                     <ul class="nav nav-pills nav-pills-rose flex-column" role="tablist">
                                         @php
                                           $i = 0  ;
@@ -578,6 +578,8 @@
                 // console.log("name  : " + global_provive_name );
                 // console.log("id  : " + global_provive_id );
                 let account_id  = $(this).attr("data-id");
+                let province_id = $(this).attr("data-province-id") ;
+                // console.log("province_id : " , province_id)
                 let name = "استان " + global_provive_name + "/";
                 name += $(this).parent().parent().children().eq(0).text()
                     $("#location_name").text(name);
@@ -588,7 +590,7 @@
                 let mojodi = $(this).parent().parent().children().eq(2).text();
                     $("#location_mojodi").find("span").text(mojodi);
 
-                    let url = "{{Route("ChargeAccount")}}/" + account_id ;
+                    let url = "{{Route("ChargeAccount")}}/" + account_id + "/" + province_id ;
                     $("#chargeForm").attr("action" , url);
             });
 
@@ -599,7 +601,8 @@
                 let red_percentage = $(this).attr("red_percentage");
                 let yellow_percentage = $(this).attr("yellow_percentage");
                 let average_balance_use = $(this).attr("average_balance_use");
-                let url = "{{Route("SetAccountSetting")}}/" + $(this).attr("id") ;
+                let province_id = $(this).attr("data-province-id");
+                let url = "{{Route("SetAccountSetting")}}/" + $(this).attr("id")  + "/"+province_id;
                 $("#form_setting").attr("action" , url );
                 $("#average_balance_use").val(average_balance_use);
                 $("#green_percentage").val(green_percentage);
@@ -1195,8 +1198,15 @@
                 )
             });
 
-            let FirstProvince = "{{$ProvinceList[0]["id"]}}";
+            // Begin for show current province ***************
+            let FirstProvince = "{{ ( is_null(request("province"))) ? $ProvinceList[0]["id"]  : request("province")}}";
+            $(".province").removeClass("active");
+            $(".province[province_id=" + FirstProvince + "]").addClass("active");
+            $('#pro_list').animate({
+                scrollTop: $(".province[province_id=" + FirstProvince + "]").offset().top - 250 ,
+            }, 1000);
             GetAccountProvince(FirstProvince);
+            // End for show current province ***************
 
             $(".province").click(function () {
                 let province_id = $(this).attr("province_id") ;
@@ -1359,7 +1369,7 @@
 
                             place.innerHTML = "<button class='btn btn-primary btn-sm location_button'> مکان ها </button>" ;
 
-                            let service_html = '<button data-id= ' + account[i].account_id  + '  type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1 chargeBtn" data-toggle="modal" data-target="#charge" data-original-title="" title="">\n' +
+                            let service_html = '<button data-province-id=' + province_id + ' data-id= ' + account[i].account_id  + '  type="button" rel="tooltip" class="btn btn-sm px-2 btn-info mr-1 chargeBtn" data-toggle="modal" data-target="#charge" data-original-title="" title="">\n' +
                                 '<i class="material-icons">flash_on</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
                                 '</button>\n' +
@@ -1367,7 +1377,7 @@
                                 '<i class="material-icons">list</i>\n' +
                                 '<div class="ripple-container"></div>\n' +
                                 '</a>\n' +
-                                '<button type="button" class="btn setting_btn btn-sm px-2 btn-danger mr-1" data-toggle="modal" data-target="#setting" data-original-title="" id="'+ account[i].account_id +'" average_balance_use="' + account[i].average_balance_use + '"' +
+                                '<button data-province-id=' + province_id + ' type="button" class="btn setting_btn btn-sm px-2 btn-danger mr-1" data-toggle="modal" data-target="#setting" data-original-title="" id="'+ account[i].account_id +'" average_balance_use="' + account[i].average_balance_use + '"' +
                                 ' green_percentage="'+ account[i].green_percentage +'" orange_percentage="'+ account[i].orange_percentage + '" red_percentage="'+ account[i].red_percentage +'" yellow_percentage="'+ account[i].yellow_percentage+'" title="">\n' +
                                 '<i class="material-icons">settings</i>\n' +
                                 '<div class="ripple-container"></div><div class="ripple-container"></div>\n' +

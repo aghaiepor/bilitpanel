@@ -65,7 +65,14 @@ class presellController extends Controller
 //        dd($this->Api->GetChargeDocument(8));
 //        return count($GetChargeTransaction["log"]);
 //        return $GetChargeTransaction;
-        return view("presell_transaciton"  , ["transactions" => $GetChargeTransaction  , "Account" =>$Account , "province_name" => $province_name , "total_amount" =>$total_amount , "total_buy"=>$total_buy]);
+        return view("presell_transaciton"  , [
+            "transactions" => $GetChargeTransaction  ,
+            "Account" =>$Account ,
+            "province_name" => $province_name ,
+            "total_amount" =>$total_amount ,
+            "total_buy"=>$total_buy ,
+            "province_id"=>$province_id ,
+        ]);
 
     }
     public function GetDechargeTransaction(Request $request){
@@ -206,8 +213,8 @@ class presellController extends Controller
         return $data;
 
     }
-    public function ChargeAccount(Request $request , $id){
-        if(is_null($id))
+    public function ChargeAccount(Request $request , $id=null , $province_id=null){
+        if(is_null($id) || is_null($province_id))
             return  redirect()->back()->with("error" , "خطا در شارژ حساب ! ");
 
 
@@ -251,11 +258,11 @@ class presellController extends Controller
             return  redirect()->back()->with("error" , "مستندات واریزی بارگزاری نشده است ! ");
 
         $ChargeAccount = $this->Api->ChargeAccount($charge_amount ,$account_id, $project_name , $reference_number , $source_bank , $payment_datetime , $pic_str,$description , $tag);
-//        return $ChargeAccount ;
+        $url = Route("presellManger") . "?province=" . $province_id  ;
         if($ChargeAccount["Header"]["Status"] == 0 ) {
-            return  redirect()->back()->with("success" , "شارژ با موفقیت انجام گردید  .");
+            return  redirect($url)->with("success" , "شارژ با موفقیت انجام گردید  .");
         }else
-            return  redirect()->back()->with("error" , "خطا در شارژ حساب ! ");
+            return  redirect($url)->with("error" , "خطا در شارژ حساب ! ");
 
     }
     public function GetAccountProvince(Request $request)
@@ -264,9 +271,9 @@ class presellController extends Controller
         $AccountList = $this->Api->GetAccountProvince($province_id);
         return $AccountList ;
     }
-    public function SetAccountSetting(Request $request , $id=null)
+    public function SetAccountSetting(Request $request , $id=null , $province_id=null)
     {
-        if($id == null)
+        if($id == null || is_null($province_id))
             return redirect()->back()->with("error" , "خطا در ويرايش تنظيمات .");
 
         $account_id = $id ;
@@ -276,14 +283,15 @@ class presellController extends Controller
         $orange_percentage = $request->get("orange_percentage") ;
         $yellow_percentage  = $request->get("yellow_percentage");
         $AccountList = $this->Api->SetAccountSetting($account_id ,$average_balance_use , $red_percentage ,$orange_percentage , $yellow_percentage , $green_percentage);
+        $url = Route("presellManger") . "?province=" . $province_id  ;
         if($AccountList["Header"]["Status"] == 0 ){
-            return redirect()->back()->with("success" , " ويرايش تنظيمات انجام گرديد . ");
+            return redirect($url)->with("success" , " ويرايش تنظيمات انجام گرديد . ");
         }
         else if ($AccountList['Header']['MessageCode'] == 133){
-            return redirect()->back()->with('error' , ' شما مجاز به انجام این عملیات نیستید . ');
+            return redirect($url)->with('error' , ' شما مجاز به انجام این عملیات نیستید . ');
         }
         else {
-            return redirect()->back()->with("error" , "خطا در ويرايش تنظيمات .");
+            return redirect($url)->with("error" , "خطا در ويرايش تنظيمات .");
         }
     }
     public function LocationAccountActivation(Request $request )

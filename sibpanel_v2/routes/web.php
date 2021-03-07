@@ -179,12 +179,12 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/presellManger' , 'presellController@indexPage')->name('presellManger');
         Route::get('/get_document_picture' , 'presellController@get_document_picture')->name('get_document_picture');
         Route::post('/GetTransactionFilter' , 'presellController@GetTransactionFilter')->name('GetTransactionFilter');
-        Route::post('/ChargeAccount/{id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
+        Route::post('/ChargeAccount/{id?}/{province_id?}' , 'presellController@ChargeAccount')->name('ChargeAccount');
         Route::post('/GetDechargeTransaction' , 'presellController@GetDechargeTransaction')->name('GetDechargeTransaction');
         Route::post('/GetChargeTransaction' , 'presellController@GetChargeTransaction')->name('GetChargeTransaction');
         Route::post('/GetTransactionFactor' , 'presellController@GetTransaction')->name('GetTransactionFactor');
         Route::post('/GetAccountProvince' , 'presellController@GetAccountProvince')->name('GetAccountProvince');
-        Route::post('/SetAccountSetting/{id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
+        Route::post('/SetAccountSetting/{id?}/{province_id?}' , 'presellController@SetAccountSetting')->name('SetAccountSetting');
         Route::post('/LocationAccountActivation' , 'presellController@LocationAccountActivation')->name('LocationAccountActivation');
         Route::post('/AccountActivation' , 'presellController@AccountActivation')->name('AccountActivation');
         Route::post('/OtpNew' , 'presellController@OtpNew')->name('OtpNew');

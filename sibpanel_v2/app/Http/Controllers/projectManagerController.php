@@ -70,7 +70,7 @@ class projectManagerController extends Controller
             return redirect()->back()->with("success" , " ویرایش با موفقیت اعمال شد .  ");
         }
 
-        else if ($EditProject["Header"]["Message"] == "Permission Denied"){
+        else if ($EditProject['Header']['MessageCode'] == 133){
             return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
         }
         else

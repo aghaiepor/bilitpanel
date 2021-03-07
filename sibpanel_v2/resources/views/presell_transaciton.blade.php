@@ -42,7 +42,7 @@
                                     <h4 class="card-title text-right font-weight-bold "> ریز تراکنش های استان {{$province_name}} / {{$Account["name"]}} </h4>
                                 </div>
                                 <div class="col-sm">
-                                    <a href="{{Route("presellManger")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a href="{{Route("presellManger")}}?province={{$province_id}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
                                 </div>
                             </div>
                             <div class="row">
