@@ -1289,8 +1289,14 @@
                 },
                 success : function (data) {
                     console.log("data : " , data["ContentData"]);
+                    let dataLength = data["ContentData"].length ;
                     let account  = data["ContentData"]["location_accounts"] ;
                     let total_inv = data["ContentData"]["total_inventory"] ;
+                    if(dataLength == 0 )
+                    {
+                        account = [] ;
+                    }
+
                     $("#total_inventory").text(number_format(total_inv , 0, "." , ","));
                     let table = document.getElementById("AccountTable").getElementsByTagName('tbody')[0];
                     if(account.length == 0 ){
