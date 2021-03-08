@@ -333,8 +333,11 @@
                                     </div>
                                 </div>
                             </div>--}}
-                            <div class="col-lg id mx-auto row">
-                                <div class="col text-center pull-right"
+                            <div class="col-lg id mx-auto">
+                                <div class="form-row">
+
+
+                                <div class="col-6 text-center pull-right"
                                      style="padding: 20px;border-radius: 8px;box-shadow: 0px 2px 6px -1px #ccc;">
                                     <div class="row justify-content-center">
                                         <span style="font-size: 16px">ساعت شروع</span>
@@ -382,14 +385,20 @@
                                     </div>
 
                                 </div>
-                                <div class="col-md-12 px-0 my-3 text-right">
-                                    <label for=""> جنسیت </label>
-                                    <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                        <option selected value="dont_care">  همه </option>
-                                        <option value="male" > مردانه </option>
-                                        <option value="female" > زنانه </option>
-                                        <option value="single_sex">  تک جنسیتی </option>
-                                    </select>
+
+                                    <div class="col-md-6 px-0 my-3 text-right">
+                                        <label for=""> جنسیت </label>
+                                        <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                            <option selected value="dont_care">  همه </option>
+                                            <option value="male" > مردانه </option>
+                                            <option value="female" > زنانه </option>
+                                            <option value="single_sex">  تک جنسیتی </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md mr-3 px-0 my-3 text-right">
+                                        <label for=""> ظرفیت </label>
+                                        <input id="total_capacity" type="text" class="form-control" name="total_capacity" placeholder="ظرفیت سانس">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 text-right">
@@ -413,6 +422,9 @@
                                             </th>
                                             <th>
                                                 جنسیت
+                                            </th>
+                                            <th>
+                                                ظرفيت
                                             </th>
                                             <th>
                                                 فعالسازی
@@ -457,7 +469,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
+                       {{-- <div class="row">
                             <div class="col-md">
                                 <table class="table table-striped text-center" id="">
                                     <thead class="text-primary">
@@ -475,9 +487,9 @@
                                         <th>
                                             قیمت
                                         </th>
-                                       {{-- <th>
+                                       --}}{{-- <th>
                                             حداکثر تخفیف
-                                        </th>--}}
+                                        </th>--}}{{--
                                     </tr>
                                     </thead>
                                     <tbody id="">
@@ -511,14 +523,14 @@
                                             </td>
 
                                             <td value="{{$VoucherInfo["amount"]}}" class="seance_amount">{{$VoucherInfo["amount"]}}</td>
-{{--                                            <td value="{{$VoucherInfo["max_discount_percentage"]}}" class="seance_percent">{{$VoucherInfo["max_discount_percentage"]}}</td>--}}
+--}}{{--                                            <td value="{{$VoucherInfo["max_discount_percentage"]}}" class="seance_percent">{{$VoucherInfo["max_discount_percentage"]}}</td>--}}{{--
                                         </tr>
                                     @endforeach
 
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div>--}}
 {{--                        <hr class="my-1">--}}
                         <div class="row">
                              <div id="formSans" class="col-lg pull-right">
@@ -545,7 +557,7 @@
                                  <div class="form-row text-right mt-2">
                                      <div class="col text-right">
                                          <label class="w-100" for=""> ظرفيت</label>
-                                         <input type="text" id="capacity" name="capacity" class="form-control" placeholder="ظرفيت">
+                                         <input type="text" id="capacity" name="capacity" class="form-control" placeholder="خالی یعنی بدون محدودیت">
                                      </div>
                                      <div class="col">
                                          <label class="w-100" for=""> قیمت</label>
@@ -1499,7 +1511,7 @@
             let capacity = voucherInfo[3];
 
             $("#amount").val(amount);
-            $("#capacity").val(capacity);
+            $("#capacity").val();
 
         });
 
@@ -1754,7 +1766,7 @@
             let activation ;
             let remove  ;
             let setting  ;
-
+            // console.log(" sanas: " , sanas)
             for(let i = 0 ; i < sanas.length ; i++ ){
                 let data = sanas[i].times ;
                 let date = sanas[i].day ;
@@ -1765,9 +1777,10 @@
                     // seance_date = row.insertCell();
                     start_Sanse = row.insertCell();
                     end_Sanse = row.insertCell();
-                    // capacity_Sanse = row.insertCell();
+
                     // vouchertyppe_Sanse = row.insertCell();
                     sex = row.insertCell();
+                    capacity_Sanse = row.insertCell();
                     // amount_Sanse = row.insertCell();
                     activation = row.insertCell();
                     setting = row.insertCell();
@@ -1786,9 +1799,7 @@
                     end_Sanse.setAttribute("value", data[j].end) ;
                     end_Sanse.setAttribute("class", "seance_end");
 
-                    // capacity_Sanse.innerHTML = data[j].capacity ;
-                    // capacity_Sanse.setAttribute("value", data[j].capacity) ;
-                    // capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
                     //
                     // vouchertyppe_Sanse.innerHTML =  data[j].vouchersInfo_name;
                     // vouchertyppe_Sanse.setAttribute("value",data[j].vouchersInfo ) ;
@@ -1812,6 +1823,9 @@
                     sex.setAttribute("value", data[j].sex) ;
                     sex.setAttribute("class", "seance_gender") ;
 
+                    capacity_Sanse.innerHTML = data[j].total_capacity ;
+                    capacity_Sanse.setAttribute("value", data[j].total_capacity) ;
+                    capacity_Sanse.setAttribute("class", "seance_capacity") ;
                     // amount_Sanse.innerHTML = data[j].seance_amount ;
                     // amount_Sanse.setAttribute("value", data[j].seance_amount) ;
                     // amount_Sanse.setAttribute("class", "seance_amount") ;
@@ -1957,6 +1971,7 @@
                     ' تغییرات ثبت گردید ',
                     'success'
                 )
+                $("#finalSetTimesBtn").show();
             }, 500)
         }
         /*$(document).on("click" , "#addSans" , function () {
@@ -2158,10 +2173,14 @@
         $("#finalSetTimesBtn").hide();
         function addSeance() {
 
-            /*if($("#vouchers").val() == ""){
-                console.log("OK !!")
+            if($("#total_capacity").val() == ""){
+                Swal.fire(
+                    ' خطا ',
+                    'ظرفیت سانس را وارد نمایید  . ',
+                    'error'
+                )
                 return ;
-            }*/
+            }
 
             let NotValid = false;
             let FistTime = eval($("#start_hour").val()) * 100 + eval($("#start_minute").val());
@@ -2184,6 +2203,7 @@
             let start = $('#start_hour').val() + ":" + $('#start_minute').val();
             let end = $('#end_hour').val() + ":" + $('#end_minute').val();
             let gender_val = $("select[name='seance_gender']").val();
+            let total_capacity = $("#total_capacity").val();
             // let voucherType = $("#vouchers").val();
             // let capacity = $("#capacity").val();
             // let amount = $("#amount").val();
@@ -2220,9 +2240,10 @@
 
             let start_Sanse ;
             let end_Sanse ;
-            // let capacity_Sanse ;
+
             // let vouchertyppe_Sanse ;
             let sex ;
+            let capacity_Sanse ;
             // let amount_Sanse ;
             let activation ;
             let remove  ;
@@ -2233,9 +2254,11 @@
             // seance_date = row.insertCell();
             start_Sanse = row.insertCell();
             end_Sanse = row.insertCell();
-            // capacity_Sanse = row.insertCell();
+
             // vouchertyppe_Sanse = row.insertCell();
             sex = row.insertCell();
+
+            capacity_Sanse = row.insertCell();
             // amount_Sanse = row.insertCell();
             activation = row.insertCell();
             setting = row.insertCell();
@@ -2253,9 +2276,7 @@
             end_Sanse.setAttribute("value", end) ;
             end_Sanse.setAttribute("class", "seance_end");
 
-            /*capacity_Sanse.innerHTML = capacity ;
-            capacity_Sanse.setAttribute("value", capacity) ;
-            capacity_Sanse.setAttribute("class", "seance_capacity") ;
+            /*
 
             vouchertyppe_Sanse.innerHTML = voucherType_val[1] ;
             vouchertyppe_Sanse.setAttribute("value", voucherType_val[0]) ;
@@ -2267,6 +2288,9 @@
             sex.setAttribute("value", gender_val) ;
             sex.setAttribute("class", "seance_gender") ;
 
+            capacity_Sanse.innerHTML = total_capacity ;
+            capacity_Sanse.setAttribute("value", total_capacity) ;
+            capacity_Sanse.setAttribute("class", "seance_capacity") ;
            /*
            amount_Sanse.innerHTML = amount ;
             amount_Sanse.setAttribute("value", amount) ;
@@ -2409,7 +2433,7 @@
             $("#formSans input , #formSans select ").each(function() {
                 var element = $(this);
 
-                if (element.val() == "" && element.attr("id") != "max_persent") {
+                if (element.val() == "" && element.attr("id") != "max_persent" && element.attr("id") != "capacity" ) {
 
                     Swal.fire(
                         ' خطا ',
@@ -2804,7 +2828,7 @@
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 let start = $(this).find('.seance_start').attr("value");
                 let end = $(this).find('.seance_end').attr("value");
-                // let capacity = $(this).find('.seance_capacity').attr("value");
+                let capacity = $(this).find('.seance_capacity').attr("value");
                 // let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
                 // let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
 
@@ -2817,6 +2841,7 @@
                     'end': end,
                     'sex':gender_value ,
                     'gender': gender ,
+                    'total_capacity': capacity ,
                     "voucher_infos" : vouchers ,
                 });
 
@@ -2860,7 +2885,7 @@
                 // let Date =  $(this).find('.seance_date').attr("value") ;
                 let start = $(this).find('.seance_start').attr("value");
                 let end = $(this).find('.seance_end').attr("value");
-                // let capacity = $(this).find('.seance_capacity').attr("value");
+                let capacity = $(this).find('.seance_capacity').attr("value");
                 // let vouchertyppe_Sanse = $(this).find('.vouchertyppe_Sanse').attr("value");
                 // let vouchersInfo_id = $(this).find('.vouchertyppe_Sanse').attr("vouchersInfo_name");
 
@@ -2874,6 +2899,7 @@
                     'end': end,
                     'sex':gender_value ,
                     'gender': gender ,
+                    'total_capacity': capacity ,
                     "voucher_infos" : vouchers ,
                 });
 
@@ -2929,7 +2955,7 @@
                 return ;
             }
 
-            let start , end  , gender , gender_value , day;
+            let start , end  , gender , gender_value , day , capacity;
             $('#seances tr[SansId='+ sansId +'] td').each(function () {
                 console.log( "this seances : " , $(this).attr("value") );
                 // let Date =  $(this).find('.seance_date').attr("value") ;
@@ -2952,6 +2978,11 @@
                     gender = $(this).attr("gender_name");
                     gender_value = $(this).attr("value");
                 }
+                else if($(this).attr("class") == "seance_capacity" )
+                {
+                    capacity = $(this).attr("value");
+                }
+
             });
 
             times.push({
@@ -2960,6 +2991,7 @@
                 'end':  day + " " + end,
                 'sex':gender_value ,
                 'gender':gender ,
+                'total_capacity':capacity ,
                 "voucher_infos" : vouchers ,
             });
             $("#loader3").css("display" , "flex");

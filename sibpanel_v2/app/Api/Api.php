@@ -98,12 +98,13 @@ class Api
         $this->checkError($response , $type);
         return $response;
     }
-    public function AddServiceTime($service_id , $start , $end , $sex  , $voucher_infos ,  $type = null){
+    public function AddServiceTime($service_id , $start , $end , $sex , $total_capacity  , $voucher_infos ,  $type = null){
         $data= [
             "service_id" => $service_id,
             "start" => $start,
             "end" => $end,
             "sex" => $sex,
+            "total_capacity" => $total_capacity,
             "voucher_infos" => $voucher_infos
         ];
         Log::info("AddServiceTime => " , $data);
@@ -1251,7 +1252,7 @@ class Api
         return $response;
     }
 
-    public function EditServiceTime($service_times_id , $start , $end , $sex , $voucher_infos, $ajax=null)
+    public function EditServiceTime($service_times_id , $start , $end , $sex , $total_capacity , $voucher_infos, $ajax=null)
     {
             /*
             "total_capacity":100,
@@ -1264,6 +1265,7 @@ class Api
             "start" => $start,
             "end" => $end,
             "sex" => $sex,
+            "total_capacity" => $total_capacity,
 	        "voucher_infos" => $voucher_infos
         ];
         $client = new Client();

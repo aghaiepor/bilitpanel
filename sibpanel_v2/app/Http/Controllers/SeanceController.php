@@ -100,6 +100,7 @@ class seanceController extends Controller
                     $start = $day . " " . $time["start"] ;
                     $end = $day . " " . $time["end"] ;
                     $sex = $time["sex"] ;
+                    $total_capacity = $time["total_capacity"] ;
                     $voucher_infos = $time["voucher_infos"] ;
                     $voucher_infos_data = [] ;
                     foreach ($voucher_infos as $voucher_info ) {
@@ -112,7 +113,7 @@ class seanceController extends Controller
                         array_push( $voucher_infos_data ,  $voucher) ;
                     }
 //                    return $voucher_infos_data ;
-                    $test = $this->api->AddServiceTime($service_id , $start , $end , $sex ,$voucher_infos_data  ) ;
+                    $test = $this->api->AddServiceTime($service_id , $start , $end , $sex ,$total_capacity ,$voucher_infos_data  ) ;
 //                    return $test ;
                     if($test["Header"]["MessageCode"] == 158) {
                         return redirect()->back()->with('error' , " خطا : تاریخ انتخاب شده نامعتبر است . ");
@@ -158,12 +159,13 @@ class seanceController extends Controller
             $start =  $service_times["start"] ;
             $end =  $service_times["end"] ;
             $sex =  $service_times["sex"] ;
+            $total_capacity = $service_times["total_capacity"] ;
             $vouchers = $service_times["voucher_infos"];
 
             $voucher_infos_data = [] ;
             foreach ($vouchers as $voucher_info ) {
                 $voucher = [
-                    "total_capacity" => (int)$voucher_info["capacity"],
+                    "total_capacity" => ($voucher_info["capacity"] == "") ? -1 : (int)$voucher_info["capacity"] ,
                     "amount" => (int)$voucher_info["seance_amount"],
                     "voucher_type_id" => (int)$voucher_info["vouchersInfo"],
                     "max_discount_percentage" => (is_null($voucher_info["seance_percent"])) ? "" :  $voucher_info["seance_percent"] ,
@@ -187,7 +189,7 @@ class seanceController extends Controller
                     return redirect()->back()->with('error' , " خطا : تاریخ انتخاب شده نامعتبر است . ");
                 }*/
             }
-            $test = $this->api->EditServiceTime($service_time_id , $start , $end , $sex , $voucher_infos_data, "ajax") ;
+            $test = $this->api->EditServiceTime($service_time_id , $start , $end , $sex , $total_capacity , $voucher_infos_data, "ajax") ;
             return $test ;
     //                return redirect()->back()->with('success' , " سانس با موفقیت ویرایش شد .");
 
