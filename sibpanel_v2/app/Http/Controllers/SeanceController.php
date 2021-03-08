@@ -105,7 +105,7 @@ class seanceController extends Controller
                     $voucher_infos_data = [] ;
                     foreach ($voucher_infos as $voucher_info ) {
                         $voucher = [
-                            "total_capacity" => (int)$voucher_info["capacity"],
+                            "total_capacity" => ($voucher_info["capacity"] == "") ? -1 : (int)$voucher_info["capacity"],
                             "amount" => (int)$voucher_info["seance_amount"],
                             "voucher_type_id" => (int)$voucher_info["vouchersInfo"],
                             "max_discount_percentage" => "" /*$voucher_info["seance_percent"]*/

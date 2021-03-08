@@ -282,7 +282,7 @@
         </div>
 
     <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div style="max-width: 520px" class="modal-dialog" role="document">
             <form method="post" action="">
                 @csrf
                 <div class="modal-content">
@@ -1899,7 +1899,7 @@
                         // end_Sanse.setAttribute("class", "seance_end");
 
                         let voucher_capacity = (serviceID == "") ? voucherInfos[j].capacity : voucherInfos[j].voucher_capacity ;
-                        capacity_Sanse.innerHTML = voucher_capacity;
+                            capacity_Sanse.innerHTML = (voucher_capacity == "-1") ? "بدون محدودیت"  : voucher_capacity;
                         capacity_Sanse.setAttribute("value", voucher_capacity);
                         capacity_Sanse.setAttribute("class", "seance_capacity");
                         //
@@ -2534,7 +2534,7 @@
             // end_Sanse.setAttribute("value", end) ;
             // end_Sanse.setAttribute("class", "seance_end");
             //
-            capacity_Sanse.innerHTML = capacity ;
+            capacity_Sanse.innerHTML = (capacity == "") ? "بدون محدویت"  : capacity;
             capacity_Sanse.setAttribute("value", capacity) ;
             capacity_Sanse.setAttribute("class", "seance_capacity") ;
 
