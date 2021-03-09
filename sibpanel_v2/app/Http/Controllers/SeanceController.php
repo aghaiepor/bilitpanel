@@ -133,6 +133,9 @@ class seanceController extends Controller
                     else if ($test["Header"]["MessageCode"] == 32) {
                         return redirect()->back()->with('error' , " خطا : سرویسی جهت ایجاد وارد نشده است ");
                     }
+                    else if ($test["Header"]["MessageCode"] == 168) {
+                        return redirect()->back()->with('error' , " خطا : طرفیت بلیت های وارد شده از ظرفیت سانس بیشتر . ");
+                    }
                 }
             }
             return redirect()->back()->with('success' , " سانس با موفقیت ایجاد شد .");

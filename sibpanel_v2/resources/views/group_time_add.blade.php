@@ -1947,6 +1947,27 @@
 
 
             let newNumber = $(e).attr("data-new")
+            // console.log("newNumber :" , newNumber )
+            let val ;
+            $("#seances tr[new=" + newNumber +"]").each(function () {
+                val = $(this).find("td[class=seance_capacity]").attr("value");
+            });
+            let sum = 0;
+            $("#seances_voucherInfo tr").each(function () {
+                sum += eval($(this).find("td[class=seance_capacity]").attr("value"));
+            })
+            console.log("sum : " , sum)
+
+            if(sum > val )
+            {
+                Swal.fire(
+                    ' خطا ',
+                    ' ظرفیت بلیت های وارد شد از ظرفیت سانس بیشتر است ',
+                    'warning'
+                )
+                return ;
+            }
+
             let seances = getThisSeances(newNumber);
             // let seances = getAllSeances();
             // console.log("sanse => " , seances);
@@ -2433,8 +2454,8 @@
             $("#formSans input , #formSans select ").each(function() {
                 var element = $(this);
 
-                if (element.val() == "" && element.attr("id") != "max_persent" && element.attr("id") != "capacity" ) {
-
+                if (element.val() == "" && element.attr("id") != "max_persent" && element.attr("id") != "capacity" )
+                {
                     Swal.fire(
                         ' خطا ',
                         '  لطفا فيلد هاي مشخص شده را پر نماييد ! ',
@@ -3113,6 +3134,14 @@
                         Swal.fire(
                             'خطا در انجام عملیات ! ',
                             'بلیت های انتخابی با بلیت های موجود در سیستم هم پوشانی دارند !  ',
+                            'warning'
+                        )
+                    }
+                    else if (data.Header.MessageCode == 168  )
+                    {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            'طرفیت بلیت های وارد شده از ظرفیت سانس بیشتر .  ',
                             'warning'
                         )
                     }
