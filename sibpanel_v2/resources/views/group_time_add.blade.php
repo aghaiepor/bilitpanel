@@ -55,6 +55,9 @@
             font-weight: 400;
             font-size: 11pt;
         }
+        .table-striped > tbody > tr{
+            transition : all 0.3s ;
+        }
     </style>
 
     <link id="s1" rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
@@ -282,7 +285,7 @@
         </div>
 
     <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div style="max-width: 520px" class="modal-dialog" role="document">
+        <div style="max-width: 600px" class="modal-dialog" role="document">
             <form method="post" action="">
                 @csrf
                 <div class="modal-content">
@@ -296,7 +299,10 @@
                         <div id="loader1" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
                             <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
                         </div>
-                        <div class="row mt-3">
+                        <div style="position: relative ;" class="row mt-3">
+                            <div id="loader21" style="position: absolute;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                                <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                            </div>
                            {{-- <div id="formSans" class="col-lg  pull-right" style="margin-top: 20px">
                                 <div class="form-row text-right">
                                     <div class="col">
@@ -388,7 +394,7 @@
 
                                     <div class="col-md-6 px-0 my-3 text-right">
                                         <label for=""> جنسیت </label>
-                                        <select name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
+                                        <select id="seance_gender" name="seance_gender" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                             <option selected value="dont_care">  همه </option>
                                             <option value="male" > مردانه </option>
                                             <option value="female" > زنانه </option>
@@ -402,8 +408,10 @@
                                 </div>
                             </div>
                             <div class="col-12 text-right">
-                                <button type="button" onclick="addSeance()" class="btn btn-sm btn-success mt-3 ">اضافه کردن سانس<div class="ripple-container"></div></button>
+                                <button id="createSans" type="button" onclick="addSeance()" class="btn btn-sm btn-success mt-3 ">اضافه کردن سانس<div class="ripple-container"></div></button>
+                                <button data-id="" style="display: none"  id="editSansBtn" type="button" class="btn btn-sm btn-info mt-3 ">اعمال تغيرات<div class="ripple-container"></div></button>
                                 <button type="button" onclick="removeAllSeance()" class="btn btn-sm btn-danger d-none float-left mt-3">حذف همه سانس ها</button>
+                                <button type="button" style="display: none" id="editSansCancelBtn" class="btn btn-sm btn-danger float-left mt-3">انصراف</button>
                             </div>
                         </div>
                         <hr class="my-1">
@@ -431,6 +439,9 @@
                                             </th>
                                             <th>
                                                 مدیریت بلیت
+                                            </th>
+                                            <th>
+                                                ويرايش
                                             </th>
                                             <th>
                                                حذف
@@ -1443,7 +1454,7 @@
                     $("#seances_voucherInfo tr[add_id="+ add_id +"] td[data-cheack-value=1]").remove();
                     let tr = $("#seances_voucherInfo tr[add_id="+ add_id +"] ");
                     tr.addClass("ticketRow");
-                    let html ='<td><button data-state="notSave" add-id="'+ add_id +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button> </td>' ;
+                    let html ='<td><button data-state="notSave" add-id="'+ add_id +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash-alt"></i> </button> </td>' ;
                     $("#seances_voucherInfo tr[add_id="+ add_id +"]").append(html);
                     setTimeout(function() {
                         tr.addClass("visible");
@@ -1764,6 +1775,7 @@
             let sex ;
             // let amount_Sanse ;
             let activation ;
+            let edit  ;
             let remove  ;
             let setting  ;
             // console.log(" sanas: " , sanas)
@@ -1784,6 +1796,7 @@
                     // amount_Sanse = row.insertCell();
                     activation = row.insertCell();
                     setting = row.insertCell();
+                    edit = row.insertCell();
                     remove = row.insertCell();
 
                     // seance_date.innerHTML = "2020-12-12" ;
@@ -1846,7 +1859,8 @@
                     activation.setAttribute("class", "seance_activation") ;
 
                     setting.innerHTML = '<button data-tag="load" data-service-id="'+ data[j].service_time_id +'" data-date='+ date +' data-start="'+ data[j].start +'" data-end="'+ data[j].end +'"   type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center setting" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-                    remove.innerHTML = '<button data-deleted="false" add-id="'+ data[j].service_time_id +'" type="button" class="btn px-2 btn-sm btn-rose removeSans text-center" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+                    edit.innerHTML = '<button data-edit="false" add-id="'+ data[j].service_time_id +'" type="button" class="btn px-2 editSanse btn-sm btn-success text-center" > <i style="left: 0" class="fa fa-pencil-alt"></i> </button>' ;
+                    remove.innerHTML = '<button data-deleted="false" add-id="'+ data[j].service_time_id +'" type="button" class="btn px-2 btn-sm btn-rose removeSans text-center" > <i style="left: 0" class="fa fa-trash-alt"></i> </button>' ;
                 }
                 // console.log("sanas =>" ,
 
@@ -1930,9 +1944,9 @@
                         percent.setAttribute("class", "seance_percent");*/
                         // setting.innerHTML = '<button data-date='+ date +' type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
                         if((serviceID == ""))
-                            remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+                            remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash-alt"></i> </button>';
                         else
-                            remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeVoucher(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>';
+                            remove.innerHTML = '<button data-deleted="false" type="button" class="btn btn-remove-voucher px-2 btn-sm btn-rose text-center" onclick="removeVoucher(this)" > <i style="left: 0" class="fa fa-trash-alt"></i> </button>';
 
                         setTimeout(function() {
                             row.classList.add('visible');
@@ -2267,6 +2281,7 @@
             let capacity_Sanse ;
             // let amount_Sanse ;
             let activation ;
+            let edit  ;
             let remove  ;
             let setting  ;
 
@@ -2283,6 +2298,7 @@
             // amount_Sanse = row.insertCell();
             activation = row.insertCell();
             setting = row.insertCell();
+            edit = row.insertCell();
             remove = row.insertCell();
 
             // seance_date.innerHTML = "2020-12-12" ;
@@ -2324,7 +2340,8 @@
             activation.innerHTML = state_html ;
 
             setting.innerHTML = '<button data-new="'+ x +'"  data-tag="create" type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center settingNew" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-            remove.innerHTML = '<button data-new="'+ x +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+            edit.innerHTML = '<button disabled data-edit="'+ x +'" type="button" class="btn px-2 btn-sm btn-success text-center" > <i style="left: 0" class="fa fa-pencil-alt"></i> </button>' ;
+            remove.innerHTML = '<button data-new="'+ x +'" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash-alt"></i> </button>' ;
             x++
 
         }
@@ -2447,6 +2464,280 @@
             })
         });
         // ----------------------------
+
+        // for sans edit
+        $(document).ready(function () {
+            $(document).on("click" ,".editSanse"  , function () {
+                $("#loader21").css("display" , "flex");
+                $("#seances tr").removeAttr("style") ;
+
+                let seance_start = $(this).parents("tr").find("td[class=seance_start]").attr("value");
+                seance_start = seance_start.split(":");
+                $("#start_hour").val(eval(seance_start[0]))
+                $("#start_minute").val(seance_start[1])
+
+                let seance_end = $(this).parents("tr").find("td[class=seance_end]").attr("value");
+                seance_end = seance_end.split(":");
+                $("#end_hour").val(eval(seance_end[0]))
+                $("#end_minute").val(seance_end[1])
+
+                let seance_gender = $(this).parents("tr").find("td[class=seance_gender]").attr("value");
+                seance_gender_val = seance_gender ;
+                $("#seance_gender").find("option").prop("selected" , false)
+                $("#seance_gender").find("option[value=" + seance_gender_val +"]").prop("selected" , true);
+                $("#seance_gender").selectpicker('refresh') ;
+
+                let seance_capacity = $(this).parents("tr").find("td[class=seance_capacity]").attr("value");
+                $("#total_capacity").val(seance_capacity);
+
+                let sansid = $(this).attr("add-id");
+                // console.log("sansid : " , sansid)
+                $("#seances tr:not([sansid=" + sansid +"])").css("filter" , "blur(3px)") ;
+                $("#seances tr[sansid=" + sansid +"]").css(
+                    {
+
+                        "boxShadow" : "0px 0px 26px 10px #ccc" ,
+                        "transform": "scale(1.05)"
+                    });
+
+
+                $("#editSansBtn").attr("sansid" , sansid );
+                $("#editSansBtn").fadeIn();
+                $("#editSansCancelBtn").fadeIn();
+                $("#createSans").hide();
+
+                setTimeout(function () {
+                    $("#loader21").hide();
+                } , 300)
+
+            })
+
+            $(document).on("click" ,"#editSansBtn"  , function () {
+                $("#loader1").css("display" , "flex");
+                if( !$("#total_capacity").val())
+                {
+                    Swal.fire(
+                        ' خطا ',
+                        'ظرفیت سانس را وارد نمایید  . ',
+                        'error'
+                    )
+                    return;
+                }
+
+                let NotValid = false;
+                let FistTime = eval($("#start_hour").val()) * 100 + eval($("#start_minute").val());
+                let EndTime = eval($("#end_hour").val())  * 100 + eval( $("#end_minute").val());
+                // console.log("EndTime => " , EndTime )
+                // console.log("FistTime => " , FistTime )
+                if (FistTime > EndTime){
+                    NotValid = true;
+                    Swal.fire(
+                        ' خطا ',
+                        'زمان پایان باید بیشتر از زمان شروع باشد . ',
+                        'error'
+                    )
+                }
+
+                if(NotValid)
+                    return;
+                let sanse_id = $(this).attr("sansid");
+                // console.log("sanse_id : " , sanse_id)
+                let start = $('#start_hour').val() + ":" + $('#start_minute').val();
+                let end = $('#end_hour').val() + ":" + $('#end_minute').val();
+                let gender_val = $("select[name='seance_gender']").val();
+                let total_capacity = $("#total_capacity").val();
+
+                let gender="";
+                if(gender_val === 'male')
+                    gender='مردانه';
+                if(gender_val === 'female')
+                    gender='زنانه';
+                if(gender_val === 'dont_care')
+                    gender='همه';
+                if(gender_val === 'single_sex')
+                    gender='تک جنسیتی';
+
+                let day = "";
+                $("#seances tr[sansid=" + sanse_id +"]").each(function () {
+                    // convert date
+                    day = $(this).find("td[class=seance_start]").attr("day-value")
+                    let dt = day.split('-').map(Number);
+                    let y = dt[0];
+                    let m = dt[1];
+                    let d = dt[2];
+                    day = new persianDate([eval(y) , eval(m),eval(d)]).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD') ;
+                });
+                $.ajax({
+                    type:'POST',
+                    url:"{{Route('EditSans')}}" ,
+                    dataType:'json',
+                    data:{
+                        '_token ': '<?php echo csrf_token() ?>',
+                        'service_time_id' : sanse_id ,
+                        'sex' : gender_val ,
+                        'start' : day + " " +  start ,
+                        'end' : day + " " +  end ,
+                        'total_capacity' : total_capacity ,
+                    },
+                    statusCode: {
+                        500: function() {
+                            $("#loader").hide();
+                            Swal.fire(
+                                'خطا در دريافت اطلاعات ! ',
+                                'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                'error'
+                            )
+                        } ,
+                        400: function() {
+                            let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                            let x = 1 ;
+                            let dots = "";
+                            setInterval(function () {
+                                dots += ".";
+                                x++  ;
+                                // console.log(x)
+                                if(x >= 8 ){
+                                    x = 1 ;
+                                    dots = ".";
+                                }
+                                $("#dots").html(dots)
+                            } , 300)
+                            $("#loader").hide();
+                            Swal.fire(
+                                'نشست  شما پایان یافته است ! ',
+                                html,
+                                'warning' ,
+                            )
+                            setTimeout(function () {
+                                window.location.href = "{{Route("logout")}}";
+                            } , 1500)
+
+                        }
+                    },
+                    success : function (data) {
+                        $("#loader1").hide();
+                        console.log("data : " , data)
+
+                        if(data.Header.MessageCode == 0  )
+                        {
+                            $("#seances tr[sansid=" + sanse_id +"]").each(function () {
+                                start = $('#start_hour').val() + ":" + ( ( ($('#start_minute').val()).length < 2 ) ? "0"+$('#start_minute').val() : $('#start_minute').val()  )
+                                $(this).find("td[class=seance_start]").text(start)
+                                $(this).find("td[class=seance_start]").attr("value" ,start )
+
+                                end = $('#end_hour').val() + ":" + (( ($('#end_minute').val()).length < 2 ) ? "0"+$('#end_minute').val() : $('#start_minute').val())
+                                $(this).find("td[class=seance_end]").text(end)
+                                $(this).find("td[class=seance_end]").attr("value" ,end )
+
+                                $(this).find("td[class=seance_gender]").text(gender)
+                                $(this).find("td[class=seance_gender]").attr("gender_name" , gender)
+                                $(this).find("td[class=seance_gender]").attr("value" ,gender_val )
+
+                                $(this).find("td[class=seance_capacity]").text(total_capacity)
+                                $(this).find("td[class=seance_capacity]").attr("value" ,total_capacity )
+
+                            });
+                            resetTime();
+                            $("#seances tr").removeAttr("style") ;
+                            $("#loader1").css("display" , "flex");
+                            $("#editSansBtn").hide();
+                            $("#editSansCancelBtn").hide();
+                            $("#createSans").fadeIn();
+                            $("#loader1").hide();
+                            Swal.fire(
+                                'عملیات با موفقیت انجام گردید . ',
+                                '',
+                                'success'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 158  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'ویرایش در این تاریخ انتخابی امکان پذیر نیست ! ',
+                                'warning'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 165  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'سرویس وارد شده نا معتبر می باشد  ',
+                                'error'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 120  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'بليت هاي انتخابي موجود مي باشد   ',
+                                'error'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 19  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'موردي يافت نشد   ',
+                                'error'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 32  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'لطفا بليتي را انتخاب نماييد  ',
+                                'warning'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 133  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'شما محاز به انجام اين عمليات نيستيد !  ',
+                                'warning'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 166  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'بلیت های انتخابی با بلیت های موجود در سیستم هم پوشانی دارند !  ',
+                                'warning'
+                            )
+                        }
+                        else if (data.Header.MessageCode == 168  )
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                'طرفیت بلیت های وارد شده از ظرفیت سانس بیشتر .  ',
+                                'warning'
+                            )
+                        }
+                        else
+                        {
+                            Swal.fire(
+                                'خطا در انجام عملیات ! ',
+                                ' دوباره سعی نمایید.',
+                                'error'
+                            )
+                        }
+
+                    }
+                })
+
+            })
+
+            $(document).on("click" ,"#editSansCancelBtn"  , function () {
+                resetTime();
+                $("#seances tr").removeAttr("style") ;
+                $("#editSansBtn").hide();
+                $("#editSansCancelBtn").hide();
+                $("#createSans").fadeIn();
+            })
+
+
+        });
 
         function addTicket() {
 
@@ -2578,7 +2869,7 @@
              // percent.setAttribute("value", max_persent) ;
              // percent.setAttribute("class", "seance_percent") ;
             // setting.innerHTML = '<button type="button" data-toggle="modal" data-target="#show_tickes" class="btn px-2 btn-sm btn-info text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-cog"></i> </button>' ;
-            remove.innerHTML = '<button data-state="notSave" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash"></i> </button>' ;
+            remove.innerHTML = '<button data-state="notSave" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash-alt"></i> </button>' ;
 
             setTimeout(function() {
                 row.classList.add('visible');
@@ -2586,10 +2877,10 @@
         }
         function resetTime() {
             $('#start_hour').val("8");
-            $('#start_minute').val("0");
+            $('#start_minute').val("00");
             $('#end_hour').val("9");
-            $('#end_minute').val("0");
-            $('#capacity').val("");
+            $('#end_minute').val("00");
+            $('#total_capacity').val("");
             $('#amount').val("");
             // $('#max_persent').val("");
             $('#seance_gender').find("option").attr("selected" , false);
@@ -2670,6 +2961,7 @@
         $(document).ready(function () {
 
             $(document).on('click', ".removeSans" ,  function (e) {
+                $("#seances tr").removeAttr("style") ;
                 let el = $(this) ;
                 $("#loader").css("display" , "flex")
                 $("#loader").css("zIndex" , "90000000")

@@ -200,6 +200,17 @@ class seanceController extends Controller
 
 
     }
+    public function EditSans(Request $request){
+
+            $service_time_id = (int)$request->get("service_time_id") ;
+            $start =  $request->get("start") ;
+            $end =  $request->get("end") ;
+            $sex =  $request->get("sex") ;
+            $total_capacity = (int)$request->get("total_capacity") ;
+            $voucher_infos_data = [];
+            $test = $this->api->EditServiceTime($service_time_id , $start , $end , $sex , $total_capacity , $voucher_infos_data, "ajax") ;
+            return $test ;
+    }
 
     public function GetServiceTimes(Request $request) {
         $service_id = [(int)$request->get("service_id")] ;
