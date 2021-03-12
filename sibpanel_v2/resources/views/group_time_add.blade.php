@@ -3437,6 +3437,13 @@
                             'warning'
                         )
                     }
+                    else if (data.Header.MessageCode == 182) {
+                        Swal.fire(
+                            'خطا در انجام عملیات ! ',
+                            '  این بلیت خریداری شده و قابل حذف یا ویرایش نیست ',
+                            'error'
+                        )
+                    }
                     else
                     {
                         Swal.fire(
