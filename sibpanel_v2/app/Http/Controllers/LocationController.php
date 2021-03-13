@@ -238,10 +238,14 @@ class LocationController extends Controller
         $projectList = $this->api->ProjectList();
         $GetServices = Cache::get('ServiceList');
         $LocationList = Cache::get('LocationList');
+
         $LocationList = array_filter($LocationList, function ($event) use ($locationID) {
             return $event['id'] == $locationID;
         });
         $array_keys_location = array_keys($LocationList) ;
+        if(count($array_keys_location) == 0)
+            return abort("404");
+
         $info = $LocationList[$array_keys_location[0]] ;
 
         $GetServices = array_filter($GetServices, function ($event) use ($locationID) {
@@ -249,6 +253,8 @@ class LocationController extends Controller
         });
 //        return $GetServices ;
         $array_keys = array_keys($GetServices) ;
+        if(count($array_keys) == 0)
+            return abort("404");
         $service_pics = [];
         $service_id_image = [];
         for($i = 0 ; $i < count($array_keys) ; $i++){
