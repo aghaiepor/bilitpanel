@@ -100,6 +100,9 @@
                             </div>
                             <!-- Modal -->
                         </div>
+                        @php
+                            $activeProvince = null ;
+                        @endphp
                         @if(count($GetServiceListFromServicetime) == 0 )
                             <div class="card-body">
                                 <div class="row">
@@ -121,7 +124,6 @@
                                         <ul id="tablist" class="nav nav-pills nav-pills-rose flex-column" role="tablist">
                                             @php
                                                 $i = 0  ;
-                                                $activeProvince = null ;
                                             @endphp
                                             @foreach($GetServiceListFromServicetime as $Province)
                                                 @php
