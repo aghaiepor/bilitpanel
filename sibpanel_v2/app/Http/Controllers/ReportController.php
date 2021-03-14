@@ -102,6 +102,8 @@ class ReportController extends Controller
     }
     public function GetStat(Request $request){
 
+//        return json_encode($request->all()) ;
+
         $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
         if (!session('UserInfo')['presell'] )
             $report_type = 0;
@@ -334,6 +336,7 @@ class ReportController extends Controller
             $status_codeArray = ["1","10","5","11"];
         }
         $key = $request->get('key' , 'province');
+
         $service_id = (int)$request->get('service_id','');
         if($service_id == 0)
             $service_id = '';

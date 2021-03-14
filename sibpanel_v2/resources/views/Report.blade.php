@@ -72,6 +72,7 @@
                                         <select name="key" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                             <option @if(request('key') == "province" || is_null(request('key')) ) selected @endif value="province">استان</option>
                                             <option @if(request('key') == "city") selected @endif value="city">شهر</option>
+                                            <option @if(request('key') == "service_time_id") selected @endif value="service_time_id">سانس</option>
                                             <option @if(request('key') == "sale_type") selected @endif value="sale_type">نوع پرداخت</option>
                                             <option @if(request('key') == "voucher_type") selected @endif value="voucher_type">نوع بلیت</option>
                                             <option @if(request('key') == "sell_model") selected @endif value="sell_model">نوع فروش</option>
@@ -356,12 +357,39 @@
                                     @else
                                         @foreach($data['result'] as $result)
                                             @php
-                                                array_push($City, $result[request('key').'_name']);
+                                                $name = " - ";
+                                                if(request('key') == "service_time_id")
+                                                {
+                                                    $serviceTimeId = $result[request('key')];
+
+                                                    //dd($result[request('key')]);
+                                                    if(!is_null($serviceTimeId))
+                                                        {
+                                                            $ServiceTimes = $api->GetServiceTimes([(int)$serviceTimeId]);
+                                                            $ServiceTimes = $ServiceTimes["ContentData"][0];
+                                                            if(count($ServiceTimes) > 0)
+                                                                {
+                                                                    $start = new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($ServiceTimes["start"])->format("Y-n-j H:i") )  ;
+                                                                    $end = new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($ServiceTimes["end"])->format("Y-n-j H:i"))  ;
+
+                                                                $name = $start . " - " .  $end ;
+                                                                array_push($City, $name);
+                                                                }
+
+                                                        }
+                                                    else
+                                                        array_push($City, $serviceTimeId);
+                                                }
+                                                else
+                                                    array_push($City, $result[request('key').'_name']);
+
+
                                                 array_push($count, $result['count']);
                                             @endphp
                                             <tr>
                                                 <td>
-                                                    {{$result[request('key').'_name']}}
+                                                    {{ (request('key') == "service_time_id" ) ?  ($name)  : ($result[request('key').'_name']) }}
+
                                                 </td>
                                                 <td>
 
