@@ -81,10 +81,10 @@ class Api
         Log::info("LocationList : " , $data);
         return $response;
     }
-    public function ServiceList($id = null , $type = null){
-        $data=null;
+    public function ServiceList($id = null , $type = null , $include_service_times = false){
+        $data=[ 'include_service_times' => $include_service_times ];
         if ( $id != null )
-            $data = ['location_id'=>$id];
+            $data = ['location_id'=>$id, 'include_service_times' => $include_service_times];
 
         $client = new Client();
 //        $result = $client->post($this->url . 'ServiceListNew' ,[
