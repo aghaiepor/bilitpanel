@@ -29,10 +29,10 @@ class ReportController extends Controller
         $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
         if (!session('UserInfo')['presell'] )
             $report_type = 0;
-        $SaleTypeList = Cache::get('SaleTypeList');
-        $tikcetType = Cache::get('VoucherTypeList');
-        $ProvinceList = Cache::get('ProvinceList');
-        $SellerUsersList = Cache::get('SellerUserList');
+        $SaleTypeList = Cache::get('SaleTypeList' . session('UserInfo')['user_id']);
+        $tikcetType = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
+        $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
+        $SellerUsersList = Cache::get('SellerUserList' . session('UserInfo')['user_id']);
         $Project_list = $this->api->ProjectList();
         $SellModelList = $this->api->SellModelList();
 //        return $SellModelList ;
@@ -78,7 +78,7 @@ class ReportController extends Controller
         return $content ;
     }
     public function ServiceList(Request $request){
-        $GetServices = Cache::get('ServiceList');
+        $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
         $locationID = (int)$request->get('locationID');
         $GetServices = array_filter($GetServices, function ($event) use ($locationID ) {
             return $event['location_id'] == $locationID ;
@@ -172,11 +172,11 @@ class ReportController extends Controller
         $GetStat = $this->api->GetStat($location_id, $key, $values, $status_codeArray, $service_id, $operator_id,  $sell_type_id , $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
-        $SaleTypeList = Cache::get('SaleTypeList');
+        $SaleTypeList = Cache::get('SaleTypeList' . session('UserInfo')['user_id']);
 
-        $tikcetType = Cache::get('VoucherTypeList');
-        $ProvinceList = Cache::get('ProvinceList');
-        $SellerUsersList =  Cache::get('SellerUserList');
+        $tikcetType = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
+        $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
+        $SellerUsersList =  Cache::get('SellerUserList' . session('UserInfo')['user_id']);
         $Project_list = $this->api->ProjectList();
         $SellModelList = $this->api->SellModelList();
 //        return $GetStat ;
@@ -193,10 +193,10 @@ class ReportController extends Controller
         $report_type = $request->get('reportType',0); // 0 normal ---- // 1 pre sale only
         if (!session('UserInfo')['presell'] )
             $report_type = 0;
-        $SaleTypeList = Cache::get('SaleTypeList');
-        $tikcetType = Cache::get('VoucherTypeList');
-        $ProvinceList = Cache::get('ProvinceList');
-        $SellerUsersList = Cache::get('SellerUserList');
+        $SaleTypeList = Cache::get('SaleTypeList' . session('UserInfo')['user_id']);
+        $tikcetType = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
+        $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
+        $SellerUsersList = Cache::get('SellerUserList' . session('UserInfo')['user_id']);
         $Project_list = $this->api->ProjectList();
         $SellModelList = $this->api->SellModelList();
 //        return $SellerUsersList ;
@@ -291,10 +291,10 @@ class ReportController extends Controller
         $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id ,$rrn , $voucher_number);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
-        $SaleTypeList = Cache::get('SaleTypeList');
-        $tikcetType = Cache::get('VoucherTypeList');
-        $ProvinceList = Cache::get('ProvinceList');
-        $SellerUsersList = Cache::get('SellerUserList');
+        $SaleTypeList = Cache::get('SaleTypeList' . session('UserInfo')['user_id'] );
+        $tikcetType = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
+        $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
+        $SellerUsersList = Cache::get('SellerUserList' . session('UserInfo')['user_id']);
         $Project_list = $this->api->ProjectList();
         $SellModelList = $this->api->SellModelList();
         if ($GetStat['Header']['Status'] == 0){
@@ -385,7 +385,7 @@ class ReportController extends Controller
         if ($project_id != '')
             $search_headers['پروژه'] = $Project_list[array_search($project_id, array_column($Project_list, 'project_id'))]['project_name'];
 
-        $ProvinceList = Cache::get('ProvinceList');
+        $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
         if ($province_id == '')
             $search_headers['استان'] = 'همه';
         else
@@ -397,7 +397,7 @@ class ReportController extends Controller
         else
             $search_headers['شهر'] = $CityList[array_search($city_id, array_column($CityList, 'id'))]['city_name'];
 
-        $ServiceList = Cache::get('ServiceList');
+        $ServiceList = Cache::get('ServiceList' . session('UserInfo')['user_id']);
         if ($location_id == '')
             $search_headers['مکان'] = 'همه';
         else
@@ -409,14 +409,14 @@ class ReportController extends Controller
         else
             $search_headers['موزه'] = $ServiceList[array_search($service_id, array_column($ServiceList, 'service_id'))]['service_name'];
 
-        $VoucherTypes = Cache::get('VoucherTypeList');
+        $VoucherTypes = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
         if ($voucher_type_id == '')
             $search_headers['نوع بلیت'] = 'همه';
         else
             $search_headers['نوع بلیت'] = $VoucherTypes[array_search($voucher_type_id, array_column($VoucherTypes, 'voucher_type_id'))]['voucher_type'];
 
 
-        $SaleTypeList = Cache::get('SaleTypeList');
+        $SaleTypeList = Cache::get('SaleTypeList' . session('UserInfo')['user_id']);
         if ($sell_type_id == '')
             $search_headers['نوع پرداخت'] = 'همه';
         else
@@ -431,7 +431,7 @@ class ReportController extends Controller
         else if ($status_code == 3)
             $search_headers['وضعیت بلیت'] = 'حذف شده';
 
-        $Operators = Cache::get('SellerUserList');
+        $Operators = Cache::get('SellerUserList' . session('UserInfo')['user_id']);
         if ($operator_id == '')
             $search_headers['اپراتور'] = 'همه';
         else{

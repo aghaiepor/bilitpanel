@@ -18,8 +18,8 @@ class projectManagerController extends Controller
 
     public function index(){
 
-        $GetProjectList = Cache::get('ProjectList');
-        $SellerUserList = Cache::get('SellerUserList');
+        $GetProjectList = Cache::get('ProjectList' . session('UserInfo')['user_id']);
+        $SellerUserList = Cache::get('SellerUserList' . session('UserInfo')['user_id']);
         $SellerUserList = array_filter($SellerUserList, function ($event) {
             return $event['type'] == "b2b user";
         });
@@ -36,8 +36,8 @@ class projectManagerController extends Controller
         $AddProject = $this->api->AddProject($project_name , $description);
 //        return $AddProject;
         if($AddProject["Header"]["Status"] == 0 ){
-            Cache::forget('ProjectList');
-            Cache::rememberForever('ProjectList', function(){
+            Cache::forget('ProjectList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('ProjectList' . session('UserInfo')['user_id'], function(){
                 $ProvinceList  = $this->api->ProjectList();
                 return $ProvinceList['ContentData'];
             });
@@ -62,8 +62,8 @@ class projectManagerController extends Controller
         $EditProject = $this->api->EditProject($project_id ,$project_name , $description);
 //        return $EditProject;
         if($EditProject["Header"]["Status"] == 0 ){
-            Cache::forget('ProjectList');
-            Cache::rememberForever('ProjectList', function(){
+            Cache::forget('ProjectList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('ProjectList' . session('UserInfo')['user_id'], function(){
                 $ProvinceList  = $this->api->ProjectList();
                 return $ProvinceList['ContentData'];
             });

@@ -21,7 +21,7 @@ class presellController extends Controller
     }
 
     public function indexPage(){
-        $ProvinceList =  Cache::get('ProvinceList');
+        $ProvinceList =  Cache::get('ProvinceList' . session('UserInfo')['user_id']);
 //        return $ProvinceList;
         return view("presellManagement" , ['ProvinceList' => $ProvinceList]) ;
     }

@@ -15,8 +15,8 @@ class terminalController extends Controller
     }
 
     public function index(){
-        $location = Cache::get('LocationList');
-        $province = Cache::get('ProvinceList');
+        $location = Cache::get('LocationList' . session('UserInfo')['user_id']);
+        $province = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
 
         return view('terminals' , ['locations' => $location , 'provinces' => $province]) ;
     }

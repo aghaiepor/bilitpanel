@@ -121,10 +121,23 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
+
+
+//        Cache::flush();
+        Cache::forget('LocationList' . session('UserInfo')['user_id'] );
+        Cache::forget('ServiceList' . session('UserInfo')['user_id']);
+        Cache::forget('ProvinceList' . session('UserInfo')['user_id']);
+        Cache::forget('SellerUserList' . session('UserInfo')['user_id']);
+        Cache::forget('SaleTypeList' . session('UserInfo')['user_id']);
+        Cache::forget('VoucherTypeList' . session('UserInfo')['user_id']);
+        Cache::forget('GetInfo' . session('UserInfo')['user_id']);
+        Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
+        Cache::forget('ProjectList'. session('UserInfo')['user_id']);
+
+
         if(session()->has("UserInfo"))
             session(["Per_UserId" => session('UserInfo')['user_id']]);
 
-        Cache::flush();
         session()->forget('SessionId');
         session()->forget('logoAddress');
         session()->forget('UserInfo');

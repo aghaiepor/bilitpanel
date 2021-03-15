@@ -17,12 +17,12 @@ class OffController extends Controller
     }
 
     public function index(){
-        $Project_list = Cache::get('ProjectList');
-        $locations = Cache::get('LocationList') ;
-        $ServiceList = Cache::get('ServiceList') ;
+        $Project_list = Cache::get('ProjectList' . session('UserInfo')['user_id']);
+        $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+        $ServiceList = Cache::get('ServiceList' . session('UserInfo')['user_id']) ;
 //        $VoucherTypeList = Cache::get('VoucherTypeList');
 //        $VoucherTypeList = $this->api->VoucherInfoList();
-        $SellerUserList = Cache::get('SellerUserList');
+        $SellerUserList = Cache::get('SellerUserList' . session('UserInfo')['user_id']);
 //        return $GetSibUser ;
 //        return $SellerUserList ;
         $SellerUserList = array_filter($SellerUserList, function ($event) {

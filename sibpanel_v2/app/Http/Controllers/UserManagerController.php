@@ -21,13 +21,13 @@ class UserManagerController extends Controller
 
     public function index(){
 //        $SellerUserList = $this->api->GetSubUserList(); // GetSubUserList
-        if(!Cache::has('GetSubUserList')){
-            $SellerUserList = Cache::rememberForever('GetSubUserList' , function (){
+        if(!Cache::has('GetSubUserList' . session('UserInfo')['user_id'])){
+            $SellerUserList = Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
                 $data = $this->api->GetSubUserList() ;
                 return $data['ContentData'];
             });
         }else
-            $SellerUserList = Cache::get('GetSubUserList');
+            $SellerUserList = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
 
 
 //        return $SellerUserList;
@@ -68,7 +68,7 @@ class UserManagerController extends Controller
 
         if(is_null($filter) && is_null($alphabet_index))
         {
-            $SellerUserList = Cache::get('GetSubUserList');
+            $SellerUserList = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
             $array_keys = -1;
         }else
         {
@@ -78,7 +78,7 @@ class UserManagerController extends Controller
                 $alphabet_index =  null ;
                 $num =  [1,2,3,4,5,6,7,8,9,0];
             }
-            $SellerUserList = Cache::get('GetSubUserList');
+            $SellerUserList = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
             $SellerUserList = array_filter($SellerUserList, function ($event) use ($filter , $alphabet_index , $num) {
                 return  ((is_null($filter)) ? true : str_replace("\n" , ''  , $event['account_type']) == $filter ) && ((is_null($alphabet_index)) ? true : strpos($event['first_name'], $alphabet_index) === 0) &&  ( (count($num) == 0) ? true : (is_numeric(substr($event['first_name'], 0, 1))) );
             });
@@ -107,7 +107,7 @@ class UserManagerController extends Controller
 
         if(is_null($filter) && is_null($user_filter_value) )
         {
-            $SellerUserList = Cache::get('GetSubUserList');
+            $SellerUserList = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
             $array_keys = -1;
         }else
         {
@@ -118,7 +118,7 @@ class UserManagerController extends Controller
                 $num =  [1,2,3,4,5,6,7,8,9,0];
             }
 //            return  ; //in_array(substr("کیوسک کاخ گلستان", 0, 1) , $num);
-            $SellerUserList = Cache::get('GetSubUserList');
+            $SellerUserList = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
             usort($SellerUserList, function($a, $b) {
 //            echo '<script> console.log(' . preg_match($pattern, $a["first_name"]) . ' )</script>';
                 if ($a["first_name"] == "" && $b["first_name"] != "" )
@@ -158,8 +158,8 @@ class UserManagerController extends Controller
         Log::info( "controller activation =>" . $activation);
         $user_activation = $this->api->UserActivation($sib_user_id , $activation);
         if ($user_activation['Header']['Status'] == 0 ){
-            Cache::forget('GetSubUserList');
-            Cache::rememberForever('GetSubUserList' , function (){
+            Cache::forget('GetSubUserList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
                 $data = $this->api->GetSubUserList() ;
                 return $data['ContentData'];
             });
@@ -208,8 +208,8 @@ class UserManagerController extends Controller
             $error_message = "شماره تلفن  قبلا ثبت شده است  .";
 
         if($SellerUserList['Header']['Status'] == 0 ){
-                Cache::forget('GetSubUserList');
-                $SellerUserList = Cache::rememberForever('GetSubUserList' , function (){
+                Cache::forget('GetSubUserList' . session('UserInfo')['user_id']);
+                $SellerUserList = Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
                     $data = $this->api->GetSubUserList() ;
                     return $data['ContentData'];
                 });
@@ -247,10 +247,10 @@ class UserManagerController extends Controller
 //        return is_null($GetUserPer  ) ;LocationAccountActivation
         $GetSwitchWebServiceList = $this->api->GetSwitchWebServiceList();
 //        return $GetSwitchWebServiceList["ContentData"] ;
-        $GetInfo = Cache::get('GetInfo');
+        $GetInfo = Cache::get('GetInfo' . session('UserInfo')['user_id']);
 //        return $GetInfo ;
-        $VoucherTypeList = Cache::get('VoucherTypeList');
-        $LocationList = Cache::get('ServiceList');
+        $VoucherTypeList = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
+        $LocationList = Cache::get('ServiceList' . session('UserInfo')['user_id']);
         return view('setUserPermission' , ['projectList'=> $projectList['ContentData'] , 'TerminalTypeList' => $TerminalTypeList['ContentData'] , "GetUserPermissionHeader" => $GetUserPermission["Header"]["MessageCode"] ,
             'VoucherTypeList'=> $VoucherTypeList , 'SaleTypeList'=>$SaleTypeList['ContentData'] , 'GetSwitchWebServiceList'=>$GetSwitchWebServiceList["ContentData"] ,
             'LocationList'=>$LocationList , 'GetInfo'=>$GetInfo ,'GetUserPermission' => $GetUserPermission['ContentData'] , 'userId'=>$id , 'presell' => $User_info['ContentData']["presell"] ]  ) ;
@@ -284,13 +284,13 @@ class UserManagerController extends Controller
         $AssignPermission = $this->api->AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id, $switch_web_service_ids);
         if($AssignPermission["Header"]["Status"] == 0 )
         {
-            Cache::forget("GetSubUserList");
-            Cache::rememberForever('GetSubUserList' , function (){
+            Cache::forget("GetSubUserList" . session('UserInfo')['user_id']);
+            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
                 $data = $this->api->GetSubUserList("ajax") ;
                 return $data['ContentData'];
             });
-            Cache::forget("GetInfo");
-            Cache::rememberForever('GetInfo' , function (){
+            Cache::forget("GetInfo" . session('UserInfo')['user_id']);
+            Cache::rememberForever('GetInfo' . session('UserInfo')['user_id'] , function (){
                 $GetInfo  = $this->api->GetInfo("ajax");
                 return $GetInfo['ContentData'];
             });

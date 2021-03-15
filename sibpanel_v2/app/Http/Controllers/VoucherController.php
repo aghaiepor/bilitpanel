@@ -84,7 +84,7 @@ class VoucherController extends Controller
 
     public function GetVoucherText()
     {
-        $GetVoucherText = Cache::get("GetVoucherText");
+        $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
         return view('voucherText' , ['voucherTexts' => $GetVoucherText]);
 //        return $GetVoucherText ;
     }
@@ -99,8 +99,8 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($AddVoucherText['Header']['Status'] == 0)
         {
-            Cache::forget('GetVoucherText');
-            $value = Cache::rememberForever('GetVoucherText', function(){
+            Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
+            $value = Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function(){
                 $GetInfo  = $this->api->GetVoucherText();
                 return $GetInfo['ContentData'];
             });
@@ -119,8 +119,8 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($EditVoucherText['Header']['Status'] == 0)
         {
-            Cache::forget('GetVoucherText');
-            $value = Cache::rememberForever('GetVoucherText', function(){
+            Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
+            $value = Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function(){
                 $GetInfo  = $this->api->GetVoucherText();
                 return $GetInfo['ContentData'];
             });
@@ -136,8 +136,8 @@ class VoucherController extends Controller
 //        return  $DelVoucherText ;
         if ($DelVoucherText['Header']['Status'] == 0)
         {
-            Cache::forget('GetVoucherText');
-            $value = Cache::rememberForever('GetVoucherText', function(){
+            Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
+            $value = Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function(){
                 $GetInfo  = $this->api->GetVoucherText();
                 return $GetInfo['ContentData'];
             });

@@ -20,7 +20,7 @@ class AlertController extends Controller
     public function index()
     {
 
-        $loctionLidt = Cache::get('LocationList');
+        $loctionLidt = Cache::get('LocationList' . session('UserInfo')['user_id']);
         return view('alerts' , ['Locations'=>$loctionLidt]);
     }
 
