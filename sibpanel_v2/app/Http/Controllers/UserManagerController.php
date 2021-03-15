@@ -34,19 +34,19 @@ class UserManagerController extends Controller
 //        $data = $this->api->GetSubUserList() ;
 //        return $data['ContentData'];
         $userList = $SellerUserList ;
-        usort($SellerUserList, function($a, $b) {
-//            echo '<script> console.log(' . preg_match($pattern, $a["first_name"]) . ' )</script>';
-            if ($a["first_name"] == "" && $b["first_name"] != "" )
-               return 1;
-            elseif ( $a["first_name"] == "" && is_numeric($b["first_name"]))
-                return 1 ;
-            else if(is_numeric($a["first_name"]) && !is_numeric($b["first_name"]))
-                return 1;
-            else if(!is_numeric($a["first_name"]) && is_numeric($b["first_name"]))
-                return -1;
-            else
-                return ($a["first_name"] < $b["first_name"]) ? -1 : 1;
-       });
+//        usort($SellerUserList, function($a, $b) {
+////            echo '<script> console.log(' . preg_match($pattern, $a["first_name"]) . ' )</script>';
+//            if ($a["first_name"] == "" && $b["first_name"] != "" )
+//               return 1;
+//            elseif ( $a["first_name"] == "" && is_numeric($b["first_name"]))
+//                return 1 ;
+//            else if(is_numeric($a["first_name"]) && !is_numeric($b["first_name"]))
+//                return 1;
+//            else if(!is_numeric($a["first_name"]) && is_numeric($b["first_name"]))
+//                return -1;
+//            else
+//                return ($a["first_name"] < $b["first_name"]) ? -1 : 1;
+//       });
         // **************** Pagination ****************
         /*
          $SellerUserList = $this->paginate($SellerUserList);
