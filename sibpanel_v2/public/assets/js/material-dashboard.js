@@ -505,12 +505,12 @@ md = {
     $('#minimizeSidebar').click(function() {
       var $btn = $(this);
 
-      if (md.misc.sidebar_mini_active == true) {
-        $('body').removeClass('sidebar-mini');
-        md.misc.sidebar_mini_active = false;
+      if ($("#body").hasClass("sidebar-mini") == true) {
+            $('body').removeClass('sidebar-mini');
+            md.misc.sidebar_mini_active = false;
       } else {
         $('body').addClass('sidebar-mini');
-        md.misc.sidebar_mini_active = true;
+            md.misc.sidebar_mini_active = true;
       }
 
       // we simulate the window Resize so the charts will get updated in realtime.

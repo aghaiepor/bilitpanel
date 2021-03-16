@@ -436,12 +436,24 @@
 </div>
 <script src="{{asset('')}}assets/js/core/jquery.min.js"></script>
 <script>
+    let min_sideBar = $("body").hasClass("sidebar-mini") ;
+    if(min_sideBar)
+    {
+        $("#logo_image").css({
+            'width' : "50%" ,
+            'margin'  :  "45px auto 0px" ,
+        });
+        $("#project_name").hide();
+    }
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+
+
         $("#sidebar").mouseover(function () {
             let min_sideBar = $("body").hasClass("sidebar-mini") ;
             if(min_sideBar) {

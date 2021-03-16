@@ -139,9 +139,11 @@ class AuthController extends Controller
             session(["Per_UserId" => session('UserInfo')['user_id']]);
 
         session()->forget('SessionId');
+        session()->forget('sidebarState') ;
         session()->forget('logoAddress');
         session()->forget('UserInfo');
         session()->forget('otpAccept');
+        session()->forget("expire_otp_time");
         session()->forget("expire_otp_time");
         if(!session()->has('SessionId')){
             return redirect('login');
@@ -200,5 +202,13 @@ class AuthController extends Controller
 
     }
 
-
+    public function savestate(Request $request){
+//        $mini = ($request->get("min") == "true") ? true : false ;
+        if (session()->has('sidebarState')) {
+            session()->forget('sidebarState') ;
+        }
+        else {
+            session(["sidebarState" => "sidebar-mini" ]) ;
+        }
+    }
 }
