@@ -15,4 +15,27 @@
     <link href="{{asset('')}}assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
 {{--    <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />--}}
+    <style>
+        /* width */
+        .sidebar-wrapper::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        .sidebar-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+
+        /* Handle */
+        .sidebar-wrapper::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        /* Handle on hover */
+        .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>

@@ -64,7 +64,9 @@
                                         <select name="project_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                             <option disabled > انتخاب پروژه </option>
                                             @foreach($GetProjectList as $GetProject)
-                                                @if($GetProject['project_id'] == 1 || $GetProject["project_id"] == request("project_id") )
+                                                @if($GetProject['project_id'] == 1 && request("project_id") == "" )
+                                                    <option selected value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
+                                                @elseif(request("project_id") != "" && $GetProject["project_id"] == (int)request("project_id") )
                                                     <option selected value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
                                                 @else
                                                     <option value="{{$GetProject['project_id']}}"> {{$GetProject['project_name']}}</option>
@@ -150,6 +152,7 @@
                                         </tr>
                                     @else
                                         @foreach($locations as $location)
+
                                             <tr>
                                                 <td>
                                                     {{$location['location_name']}}

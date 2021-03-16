@@ -24,12 +24,16 @@ class LocationController extends Controller
     {
         $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
 //        $locations = $this->api->location_list( "" , "" , null ,s1);
-//        return $locations;
+        $locations = array_filter($locations, function ($event) {
+            return $event['project_id'] == 1;
+        });
+        $locations = array_values($locations) ;
+
         $province = Cache::get('ProvinceList' . session('UserInfo')['user_id']) ;
         $GetProjectList = Cache::get('ProjectList' . session('UserInfo')['user_id']);
         $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
         $city_id_list = null ;
-        return view('places' , ['locations' => $locations, 'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList , "city_id_list"=>$city_id_list ]);
+        return view('places' , ['locations' => $locations,  'province' => $province , 'GetVoucherText' => $GetVoucherText , "GetProjectList"=> $GetProjectList , "city_id_list"=>$city_id_list ]);
     }
     public function AddLocation(Request $request){
 //        return json_encode($request->all());

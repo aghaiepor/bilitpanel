@@ -3,10 +3,6 @@
 <!-- head tags -->
 @include('layout.head')
 
-@php
-    session("")
-@endphp
-
 <body id="body" class="rtl {{ session()->get('sidebarState') }} ">
 <div class="wrapper ">
     <!-- Left sidbar here -->

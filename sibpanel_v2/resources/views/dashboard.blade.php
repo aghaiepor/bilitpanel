@@ -5,28 +5,6 @@
         پنل گردشگری
     </title>
     <style>
-        /* width */
-        .sidebar-wrapper::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        /* Track */
-        .sidebar-wrapper::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 5px;
-        }
-
-        /* Handle */
-        .sidebar-wrapper::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 5px;
-        }
-
-        /* Handle on hover */
-        .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
 
 
         .chartWrapper {
