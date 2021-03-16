@@ -36,6 +36,15 @@
         .text-yellow {
             color : #ffcf3f !important;
         }
+        .card-pricing .card-icon i {
+            font-size: 38px !important;
+            border: 1px solid #E5E5E5;
+            border-radius: 50%;
+            width: 80px !important;
+            line-height: 80px !important;
+            height: 80px !important;
+            color: #3C4858;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/seance.css') }}">
 
@@ -450,14 +459,14 @@
                     for(let i = 0 ; i < services.length ; i++ )
                     {
                     url = "{{Route("add_group_time_index")}}/" + services[i].service_id +"/" + services[i].location_id ;
-                    html = '<div class="col-md-4">\n' +
-                        '                    <div class="card card-pricing bg-light"><div class="card-body ">\n' +
+                    html = '<div class="col-md-3">\n' +
+                        '                    <div class="card mt-1 card-pricing bg-light"><div class="card-body ">\n' +
                         '                    <div class="card-icon">\n' +
                         '                    <i class="material-icons">event_note</i>\n' +
                         '                    </div>\n' +
                         '                    <h3 style="" class="sanasCard card-title "> ' + services[i].service_name + ' </h3>\n' +
                         '                    <h6 style=" color: #898585 !important;" class="card-category"> ' + services[i].location_name + '  </h6>\n' +
-                        '                    <a href="'+ url +'" class="btn btn-info btn-round "> مشاهده</a>\n' +
+                        '                    <a href="'+ url +'" class="btn btn-info btn-sm btn-round "> مشاهده</a>\n' +
                         '                    </div>\n' +
                         '                    </div>\n' +
                         '                    </div>' ;
