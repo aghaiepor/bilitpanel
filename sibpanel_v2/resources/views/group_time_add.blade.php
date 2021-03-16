@@ -58,6 +58,7 @@
         .table-striped > tbody > tr{
             transition : all 0.3s ;
         }
+        .modal { overflow: auto !important; }
     </style>
 
     <link id="s1" rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
@@ -623,7 +624,7 @@
                         </div>
                     </div>
                     <div class="modal-footer ">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                        <button type="button" data-number="1" class="btn btn-primary" {{--data-dismiss="modal"--}}>بستن </button>
                         <button data-new="" data-tag="" id="saveVoucher" type="button" onclick="setTime(this)" class="btn btn ml-0 mr-auto btn-success" style="margin-top: 10px"> ثبت بليت </button>
                     </div>
                 </div>
@@ -697,7 +698,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>
+                        <button type="button" data-number="2" class="btn btn-primary" {{--data-dismiss="modal"--}}>بستن </button>
                         <button id="exportSanasButton" type="submit" class="btn px-5 btn-success ml-0 mr-auto"> اعمال </button>
                     </div>
                 </div>
@@ -1216,6 +1217,15 @@
     </script>
 
     <script>
+
+        $("button[data-number=1]").click(function(){
+            $('#show_tickes').modal('hide');
+        });
+
+        $("button[data-number=2]").click(function(){
+            $('#sanas').modal('hide');
+        });
+
         let GetServiceTimeList = @json($GetServiceTimeList) ;
         for (let i = 0; i < GetServiceTimeList.length; i++) {
             let item = GetServiceTimeList[i];
@@ -2883,7 +2893,7 @@
             $('#total_capacity').val("");
             $('#amount').val("");
             // $('#max_persent').val("");
-            $('#seance_gender').find("option").attr("selected" , false);
+            $('#seance_gender').find("option").prop("selected" , false);
             $('#seance_gender').selectpicker('refresh');
         }
 
