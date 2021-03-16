@@ -2626,16 +2626,16 @@
                     },
                     success : function (data) {
                         $("#loader1").hide();
-                        console.log("data : " , data)
+                        // console.log("data : " , data)
 
                         if(data.Header.MessageCode == 0  )
                         {
                             $("#seances tr[sansid=" + sanse_id +"]").each(function () {
-                                start = $('#start_hour').val() + ":" + ( ( ($('#start_minute').val()).length < 2 ) ? "0"+$('#start_minute').val() : $('#start_minute').val()  )
+                                start = $('#start_hour').val() + ":" + ( ( ($('#start_minute').val()).length < 2 ) ? ("0" + $('#start_minute').val()) : $('#start_minute').val()  )
                                 $(this).find("td[class=seance_start]").text(start)
                                 $(this).find("td[class=seance_start]").attr("value" ,start )
 
-                                end = $('#end_hour').val() + ":" + (( ($('#end_minute').val()).length < 2 ) ? "0"+$('#end_minute').val() : $('#start_minute').val())
+                                end = $('#end_hour').val() + ":" + (( ($('#end_minute').val()).length < 2 ) ? ("0"+ $('#end_minute').val()) : $('#end_minute').val())
                                 $(this).find("td[class=seance_end]").text(end)
                                 $(this).find("td[class=seance_end]").attr("value" ,end )
 
@@ -2648,6 +2648,9 @@
 
                             });
                             resetTime();
+                            refreshTimes(function(output){
+                                serviceTimes = output ;
+                            });
                             $("#seances tr").removeAttr("style") ;
                             $("#loader1").css("display" , "flex");
                             $("#editSansBtn").hide();

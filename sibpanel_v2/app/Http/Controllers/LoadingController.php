@@ -23,12 +23,12 @@ class LoadingController extends Controller
     }
     public function locationCache(){
 
-        // temp 
+        // temp
         Cache::forget("GetSubUserList" . session('UserInfo')['user_id']);
 
         Cache::forget('LocationList' . session('UserInfo')['user_id'] );
         Cache::rememberForever('LocationList' . session('UserInfo')['user_id'] , function(){
-            $Locations  = $this->api->LocationList(1 , "ajax");
+            $Locations  = $this->api->LocationList(""    , "ajax");
             return $Locations['ContentData'];
         });
         return $this->response_ok;

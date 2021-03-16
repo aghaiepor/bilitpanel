@@ -68,8 +68,12 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function LocationList($id = 1 , $type=null){
-        $data = ['project_id'=>$id];
+    public function LocationList($id , $type=null){
+        if(is_null($id))
+            $data = [] ;
+        else
+            $data = ['project_id'=>$id];
+
         $client = new Client();
         $result = $client->post($this->url . 'LocationList' ,[
                 'headers'=>$this->getHeader(),

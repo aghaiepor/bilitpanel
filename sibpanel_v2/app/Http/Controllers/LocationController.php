@@ -23,6 +23,8 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+//        $locations = $this->api->location_list( "" , "" , null ,s1);
+//        return $locations;
         $province = Cache::get('ProvinceList' . session('UserInfo')['user_id']) ;
         $GetProjectList = Cache::get('ProjectList' . session('UserInfo')['user_id']);
         $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
