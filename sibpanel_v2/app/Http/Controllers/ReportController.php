@@ -157,6 +157,9 @@ class ReportController extends Controller
         $start_date = $request->get('startDate','');
         $end_date = $request->get('endDate','');
 
+        if (is_null($start_date) ||is_null($end_date) )
+            return redirect()->back()->with("error" , " لطفا تاریخ شروع و پایان را وارد نمایید !  ") ;
+
         if ($start_date !='')
         $start_date = Verta::parse($this->fa2en($start_date).' 00:00:00')->timestamp;
         if ($end_date !='')
@@ -263,12 +266,16 @@ class ReportController extends Controller
         $start_date = $request->get('startDate','');
         $end_date = $request->get('endtDate','');
 
+        if (is_null($start_date) ||is_null($end_date) )
+            return redirect()->back()->with("error" , " لطفا تاریخ شروع و پایان را وارد نمایید !  ") ;
+
         if ($start_date !='')
             $start_date = Verta::parse($this->fa2en($start_date).' 00:00:00')->timestamp;
         if ($end_date !='')
             $end_date = Verta::parse($this->fa2en($end_date).' 23:59:59')->timestamp;
 
         $date = [$start_date,$end_date];
+//        return $date ;
         $province_id = (int)$request->get('province_id' , '');
         if($province_id == 0)
             $province_id = '';
