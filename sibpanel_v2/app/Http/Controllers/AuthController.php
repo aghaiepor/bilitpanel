@@ -79,13 +79,18 @@ class AuthController extends Controller
 
                 // Get project logo
                 $project_ids = $response['ContentData']['project_ids'] ;
+//                return $project_ids ;
                 if($project_ids[0] == "*" )
                     $logo_id = 1 ;
                 else
                     $logo_id = min($project_ids) ;
 
                 $address = $this->api->GetPicturesInfo(0,0,$logo_id,0) ;
-                $ImageInfo = $address["ContentData"]["project_pics"];
+//                return $address ;
+                if($address["Header"]["Status"] == 0 )
+                    $ImageInfo = $address["ContentData"]["project_pics"];
+                else
+                    $ImageInfo = [] ;
 
             if(count($ImageInfo) != 0 )
                 {
