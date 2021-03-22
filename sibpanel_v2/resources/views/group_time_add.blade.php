@@ -2897,6 +2897,7 @@
             $('#amount').val("");
             // $('#max_persent').val("");
             $('#seance_gender').find("option").prop("selected" , false);
+            $('#seance_gender').find("option[value=dont_care]").prop("selected" , true);
             $('#seance_gender').selectpicker('refresh');
         }
 
