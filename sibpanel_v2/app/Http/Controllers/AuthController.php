@@ -124,6 +124,8 @@ class AuthController extends Controller
 
 
 //        Cache::flush();
+        if(session()->has("UserInfo"))
+        {
         Cache::forget('LocationList' . session('UserInfo')['user_id'] );
         Cache::forget('ServiceList' . session('UserInfo')['user_id']);
         Cache::forget('ProvinceList' . session('UserInfo')['user_id']);
@@ -134,9 +136,10 @@ class AuthController extends Controller
         Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
         Cache::forget('ProjectList'. session('UserInfo')['user_id']);
 
+        session(["Per_UserId" => session('UserInfo')['user_id']]);
+        }
 
-        if(session()->has("UserInfo"))
-            session(["Per_UserId" => session('UserInfo')['user_id']]);
+
 
         session()->forget('SessionId');
         session()->forget('sidebarState') ;
@@ -190,15 +193,54 @@ class AuthController extends Controller
         return $GenerateOtp ;
     }
     public function test(){
-        return redirect()->back();
+//        return redirect()->back();
 //        $_ENV["MYENV"]="new_variable";
 //        $new_variable_var = $_ENV["MYENV"];
-        $env = getenv("PROJECT_NAME" );
-        dd($env);
-        $donEnv = Dotenv::create(base_path() ,"./env3" );
-        $donEnv = $donEnv->load();
-        dd($donEnv);
-        return $env ;
+//        $env = getenv("PROJECT_NAME" );
+//        dd($env);
+//        $donEnv = Dotenv::create(base_path() ,"./env3" );
+//        $donEnv = $donEnv->load();
+//        dd($donEnv);
+//        return $env ;
+//        $test = [
+//            [
+//            "name" => "amirhossein" ,
+//            "age" =>  20 ,
+//            "car" => [
+//                "model" => "206" ,
+//                "model" => "pride" ,
+//            ]
+//            ] ,
+//            [
+//                "name" => "ali" ,
+//                "age" =>  18 ,
+//                "car" => [
+//                    "model" => "bmw" ,
+//                    "model" => "benz" ,
+//                ]
+//            ]
+//        ];
+
+//        return $test;
+//        Cache::forget("test" . session('UserInfo')['user_id'] );
+//        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($test) {
+//            return $test;
+//        });
+//        $funList = Cache::get("test" . session('UserInfo')['user_id'] ) ;
+//        $List = array_filter($funList, function ($event)  {
+//            return $event['name'] == "ali" ;
+//        });
+//        $array_keys = array_keys($List) ;
+//        $funList[$array_keys[0]]["name"] = "reza" ;
+
+//        return $funList[$array_keys[0]]["name"];
+//        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($funList) {
+//            return $funList;
+//        }) ;
+//        return  $array_keys ;
+//        $funList = $List ;
+//        return  $funList;
+
 
     }
 
