@@ -32,9 +32,17 @@
 <div class="content">
     <div class="content">
         <div class="container-fluid">
-            @if(session("success"))
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show text-right" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            @elseif(session('error'))
+
                 <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
-                    {{ session("success") }}
+                    {{ session('error') }}
                     <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
