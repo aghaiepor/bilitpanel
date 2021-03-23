@@ -958,8 +958,8 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                                         // console.log(url);
                                                                                                                         if(url == "" )
                                                                                                                             url = "{{Route('dashboard')}}";
-                                                                                                                        else if (url.includes("Report"))
-                                                                                                                            url = "{{Route('dashboard')}}";
+                                                                                                                        else if (url.includes("GetStat"))
+                                                                                                                            url = "{{Route('Report')}}";
                                                                                                                         else if (url.includes("GetTransaction"))
                                                                                                                             url = "{{Route('transaction')}}";
 
