@@ -956,8 +956,13 @@ The above copyright notice and this permission notice shall be included in all c
                                                                                                                         $('#LoadingText').text(' در حال ورود ');
                                                                                                                         let url = "{{session()->get('previous_url')}}";
                                                                                                                         // console.log(url);
-                                                                                                                        if(url == "")
+                                                                                                                        if(url == "" )
                                                                                                                             url = "{{Route('dashboard')}}";
+                                                                                                                        else if (url.includes("Report"))
+                                                                                                                            url = "{{Route('dashboard')}}";
+                                                                                                                        else if (url.includes("GetTransaction"))
+                                                                                                                            url = "{{Route('transaction')}}";
+
                                                                                                                         setTimeout(function(){
                                                                                                                             window.location.href = url ;
                                                                                                                         }, 600);
