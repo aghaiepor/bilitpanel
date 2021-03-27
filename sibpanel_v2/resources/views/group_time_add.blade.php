@@ -1940,7 +1940,7 @@
                         // end_Sanse.setAttribute("class", "seance_end");
 
                         let voucher_capacity = (serviceID == "") ? voucherInfos[j].capacity : voucherInfos[j].voucher_capacity ;
-                            capacity_Sanse.innerHTML = (voucher_capacity == "-1") ? "بدون محدودیت"  : voucher_capacity;
+                        capacity_Sanse.innerHTML = (voucher_capacity == "-1" ||  voucher_capacity == "") ? "بدون محدودیت"  : voucher_capacity;
                         capacity_Sanse.setAttribute("value", voucher_capacity);
                         capacity_Sanse.setAttribute("class", "seance_capacity");
                         //
