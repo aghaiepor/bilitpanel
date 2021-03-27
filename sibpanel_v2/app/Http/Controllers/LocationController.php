@@ -27,7 +27,7 @@ class LocationController extends Controller
             return $event['project_id'] == 1;
         });
         $locations = array_values($locations) ;
-        return $locations ;
+//        return $locations ;
         $province = Cache::get('ProvinceList' . session('UserInfo')['user_id']) ;
         $GetProjectList = Cache::get('ProjectList' . session('UserInfo')['user_id']);
         $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
