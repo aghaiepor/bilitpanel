@@ -319,6 +319,9 @@ class LocationController extends Controller
             return $event['id'] == $locationID;
         });
         $array_keys_location = array_keys($LocationList) ;
+//        if(count($array_keys_location) == 0)
+//            return abort("404");
+
         if(count($array_keys_location) == 0)
             return abort("404");
 
@@ -329,8 +332,8 @@ class LocationController extends Controller
         });
 //        return $GetServices ;
         $array_keys = array_keys($GetServices) ;
-        if(count($array_keys) == 0)
-            return abort("404");
+//        if(count($array_keys) == 0)
+//            return abort("404");
         $service_pics = [];
         $service_id_image = [];
         for($i = 0 ; $i < count($array_keys) ; $i++){
