@@ -82,10 +82,13 @@
                                 <div class="col-sm">
                                     <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i>  افزودن جاذبه جدید </span>
                                     @php
-                                        if (url()->current() != url()->previous()) {
+
+                                        if (url()->current() != url()->previous() && url()->previous() != Route("loading")) {
                                             session(['backPlace' => url()->previous()]);
                                             $url = url()->previous() ;
                                         }
+                                        else
+                                           session(['backPlace' => Route("places")]);
                                     @endphp
                                     <a href="{{session('backPlace')}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
 
@@ -134,7 +137,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if(count($array_keys) == 0)
+                                    @if(count($GetServices) == 0)
                                         <tr>
                                             <td colspan="11" >
                                                 <h6 class="py-5">
@@ -143,56 +146,56 @@
                                             </td>
                                         </tr>
                                     @else
-                                        @for($i = 0 ; $i < count($array_keys) ; $i++)
+                                        @foreach($GetServices as $key => $GetService)
                                             <tr>
                                                 <td>
-                                                    @if($GetServices[$array_keys[$i]]['model_name'] == 'Entrance')
+                                                    @if($GetService['model_id'] == '1')
                                                         ورودی
-                                                        @elseif($GetServices[$array_keys[$i]]['model_name'] == 'Event')
+                                                        @elseif($GetService['model_id'] == '3')
                                                         رویداد
-                                                        @elseif($GetServices[$array_keys[$i]]['model_name'] == 'Service')
+                                                        @elseif($GetService['model_id'] == '2')
                                                         جاذبه
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ $GetServices[$array_keys[$i]]['service_name'] }}
+                                                    {{ $GetService['service_name'] }}
                                                 </td>
                                                 <td>
-                                                    {{$GetServices[$array_keys[$i]]['english_name']}}
+                                                    {{$GetService['english_name']}}
                                                 </td>
                                                 {{--<td>
-                                                    {{$GetServices[$array_keys[$i]]['description']}}
+                                                    {{$GetService['description']}}
                                                 </td>--}}
                                                 <td>
-{{--                                                    {{$GetServices[$array_keys[$i]]['type_of_service_sale']}}--}}
-                                                    @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Sans')
+{{--                                                    {{$GetService['type_of_service_sale']}}--}}
+                                                    @if($GetService['type_of_service_sale'] == 'Sans')
                                                         سانس
-                                                    @elseif($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Normal')
+                                                    @elseif($GetService['type_of_service_sale'] == 'Normal')
                                                         عادی
-                                                    @elseif($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'NormalAndSans')
+                                                    @elseif($GetService['type_of_service_sale'] == 'NormalAndSans')
                                                         هردو
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($GetServices[$array_keys[$i]]['capacity'] == "")
+                                                    @if($GetService['capacity'] == "")
                                                         نامحدود
                                                     @else
-                                                        {{$GetServices[$array_keys[$i]]['capacity']}}
+                                                        {{$GetService['capacity']}}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ Route('VoucherInfoList' , ['service_id' => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id'] ])}}" rel="tooltip" class="btn  btn-info btn-simple">
+                                                    <a href="{{ Route('VoucherInfoList' , ['service_id' => $GetService['service_id'] , 'location_id' => $GetService['location_id'] ])}}" rel="tooltip" class="btn  btn-info btn-simple">
                                                         <i class="material-icons">location_city</i>
                                                         مدیریت بلیت ها
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{Route("add_group_time_index" , ["service_id"  => $GetServices[$array_keys[$i]]['service_id'] , 'location_id' => $GetServices[$array_keys[$i]]['location_id']  ])}}" class="btn off_btn btn-dribbble btn-simple">
+                                                    <a href="{{Route("add_group_time_index" , ["service_id"  => $GetService['service_id'] , 'location_id' => $GetService['location_id']  ])}}" class="btn off_btn btn-dribbble btn-simple">
                                                       مدیریت سانس
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <button data-url="{{Route("AddServiceOff" , [ $GetServices[$array_keys[$i]]['service_id'] ])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
+                                                    <button data-url="{{Route("AddServiceOff" , [ $GetService['service_id'] ])}}" type="button" data-target="#add_off" data-toggle="modal" rel="tooltip" class="btn off_btn btn-primary btn-simple">
                                                         <i class="material-icons">local_offer</i>
                                                         تخفیف
                                                     </button>
@@ -204,19 +207,19 @@
                                                         $api = new \App\Api\Api();
                                                     @endphp
                                                     @if(count($service_pics) == 0 )
-                                                        <img service_id="{{ $GetServices[$array_keys[$i]]['service_id'] }}" image_id="0" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                        <img service_id="{{ $GetService['service_id'] }}" image_id="0" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
                                                     @else
                                                         @foreach($service_pics as $pic)
-                                                            @if($pic['service_id'] == $GetServices[$array_keys[$i]]['service_id'])
+                                                            @if($pic['service_id'] == $GetService['service_id'])
                                                                 @php
                                                                     $voucher_image = $pic['picture_id'];
                                                                      $main_image_address = $api->GetImageAddress($voucher_image)
                                                                 @endphp
-                                                                <img service_id="{{ $GetServices[$array_keys[$i]]['service_id'] }}" image_id="{{$pic['picture_id']}}" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{$main_image_address}}" rel="main_image">
+                                                                <img service_id="{{ $GetService['service_id'] }}" image_id="{{$pic['picture_id']}}" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{$main_image_address}}" rel="main_image">
                                                             @endif
                                                         @endforeach
                                                         @if($voucher_image == null)
-                                                            <img service_id="{{ $GetServices[$array_keys[$i]]['service_id'] }}" data-toggle="modal" image_id="0" data-target="#image_modal" class="citzen_main_img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
+                                                            <img service_id="{{ $GetService['service_id'] }}" data-toggle="modal" image_id="0" data-target="#image_modal" class="citzen_main_img" src="../assets/img/image_placeholder2.jpg" rel="placeholder">
                                                         @endif
                                                     @endif
 {{--                                                    <img data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{asset("")}}assets/img/card-1.jpg" alt="">--}}
@@ -224,23 +227,23 @@
                                                 <td>
                                                     <div class="togglebutton text-center">
                                                         <label dir="ltr">
-                                                            <input name="activation" data-service="{{$GetServices[$array_keys[$i]]['service_id']}}" type="checkbox" @if($GetServices[$array_keys[$i]]['activation']) checked @endif>
+                                                            <input name="activation" data-service="{{$GetService['service_id']}}" type="checkbox" @if($GetService['activation']) checked @endif>
                                                             <span class="toggle"></span>
                                                         </label>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <button data-toggle="modal" data-target="#edit1{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn btn-success btn-simple">
+                                                    <button data-toggle="modal" data-target="#edit1{{$key}}" type="button" rel="tooltip" class="btn TableEditBtn btn-success btn-simple">
                                                         <i class="material-icons">edit</i>
                                                         ویرایش
                                                     </button>
-                                                    <div class="modal fade" id="edit1{{$i}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
+                                                    <div class="modal fade" id="edit1{{$key}}" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
-                                                            <form method="post" action="{{Route('EditService' , [ 'service_id'=> $GetServices[$array_keys[$i]]['service_id'] ,'location_id'=> $GetServices[$array_keys[$i]]['location_id']   ])}}">
+                                                            <form method="post" action="{{Route('EditService' , [ 'service_id'=> $GetService['service_id'] ,'location_id'=> $GetService['location_id']   ])}}">
                                                                 @csrf
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title " id=edit{{$i}}Label">  ویرایش جاذبه </h5>
+                                                                    <h5 class="modal-title " id=edit{{$key}}Label">  ویرایش جاذبه </h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
@@ -249,17 +252,17 @@
                                                                     <div class="form-row mt-3">
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  نام جاذبه </label>
-                                                                            <input value="{{ $GetServices[$array_keys[$i]]['service_name'] }}" name="service_name" type="text" class="form-control"  placeholder="نام جاذبه">
+                                                                            <input value="{{ $GetService['service_name'] }}" name="service_name" type="text" class="form-control"  placeholder="نام جاذبه">
                                                                         </div>
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  نام انگلیسی جاذبه </label>
-                                                                            <input value="{{$GetServices[$array_keys[$i]]['english_name']}}" name="service_english_name" type="text" class="form-control"  placeholder="نام انگلیسی جاذبه">
+                                                                            <input value="{{$GetService['english_name']}}" name="service_english_name" type="text" class="form-control"  placeholder="نام انگلیسی جاذبه">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-4">
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  ظرفیت جاذبه </label>
-                                                                            <input value="{{$GetServices[$array_keys[$i]]['capacity']}}" name="capacity" type="text" class="form-control"  placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
+                                                                            <input value="{{$GetService['capacity']}}" name="capacity" type="text" class="form-control"  placeholder=" ظرفیت جاذبه (نامحدود = خالی) ">
                                                                         </div>
                                                                         <div class="col-sm text-right">
                                                                             <label for="">  عکس جاذبه </label>
@@ -269,7 +272,7 @@
                                                                     <div class="form-row mt-4">
                                                                         <div class="col-sm text-right">
                                                                             <label for=""> توضیحات </label>
-                                                                            <textarea style="height: 64px !important;" class="form-control" name="description" cols="30" rows="3"> {{$GetServices[$array_keys[$i]]['description']}}</textarea>
+                                                                            <textarea style="height: 64px !important;" class="form-control" name="description" cols="30" rows="3"> {{$GetService['description']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-3">
@@ -277,24 +280,24 @@
                                                                             <label for=""> نوع سرویس </label>
                                                                             <select name="model_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
                                                                                 <option disabled> نوع سرویس </option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Entrance') selected @endif value="1">ورودی مکان</option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Event') selected @endif value="3">رویداد</option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['model_name'] == 'Service') selected @endif value="2"> جاذبه مکان</option>
+                                                                                <option @if($GetService['model_id'] == '1') selected @endif value="1">ورودی مکان</option>
+                                                                                <option @if($GetService['model_id'] == '3') selected @endif value="3">رویداد</option>
+                                                                                <option @if($GetService['model_id'] == '2') selected @endif value="2"> جاذبه مکان</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="col-sm text-right">
                                                                             <label for=""> نوع  فروش سرویس </label>
                                                                             <select name="TypeOfServiceSale" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس">
                                                                                 <option disabled selected> نوع  فروش سرویس </option>
-                                                                                {{-- <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'NormalAndSans') selected @endif value="NormalAndSans"> هر دو</option>--}}
-                                                                                <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Normal') selected @endif value="Normal">عادی</option>
-                                                                                <option @if($GetServices[$array_keys[$i]]['type_of_service_sale'] == 'Sans') selected @endif value="Sans">سانس</option>
+                                                                                {{-- <option @if($GetService['type_of_service_sale'] == 'NormalAndSans') selected @endif value="NormalAndSans"> هر دو</option>--}}
+                                                                                <option @if($GetService['type_of_service_sale'] == 'Normal') selected @endif value="Normal">عادی</option>
+                                                                                <option @if($GetService['type_of_service_sale'] == 'Sans') selected @endif value="Sans">سانس</option>
                                                                             </select>
                                                                         </div>
                                                                        {{-- <div class="col-sm text-right">
                                                                             <div class="togglebutton text-center">
                                                                                 <label dir="ltr">
-                                                                                    <input name="normal_sale" type="checkbox" @if($GetServices[$array_keys[$i]]['normal_sale']) checked @endif>
+                                                                                    <input name="normal_sale" type="checkbox" @if($GetService['normal_sale']) checked @endif>
                                                                                     <span class="toggle"></span>
                                                                                     شامل سانس
                                                                                 </label>
@@ -311,7 +314,7 @@
                                                         </div>
 
                                                     </div>
-                                                    <form action="{{Route('DeleteService' , ['service_id' => $GetServices[$array_keys[$i]]['service_id']])}}" method="post">
+                                                    <form action="{{Route('DeleteService' , ['service_id' => $GetService['service_id']])}}" method="post">
                                                         @csrf
                                                         <button type="submit" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple ServiceDeleteBtn">
                                                             <i class="material-icons">close</i>
@@ -321,10 +324,8 @@
 
                                                 </td>
                                             </tr>
-                                        @endfor
+                                        @endforeach
                                     @endif
-
-
                                     </tbody>
                                 </table>
                             </div>

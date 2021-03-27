@@ -134,6 +134,7 @@ class LocationController extends Controller
             $locations[$locationIndex[0]]["location_english_address"] = $location_english_address ;
             $locations[$locationIndex[0]]["mandatory_entrance"] = $mandatory_entrance ;
             $locations[$locationIndex[0]]["latitude"] = $latitude ;
+            $locations[$locationIndex[0]]["longitude"] = $longitude ;
             $locations[$locationIndex[0]]["introduction"] = $introduction ;
             $locations[$locationIndex[0]]["description"] = $description ;
             $locations[$locationIndex[0]]["text"] = [
@@ -313,38 +314,35 @@ class LocationController extends Controller
         $locationID = $id ;
         $projectList = $this->api->ProjectList();
         $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
-        $LocationList = Cache::get('LocationList' . session('UserInfo')['user_id']);
 
+        $LocationList = Cache::get('LocationList' . session('UserInfo')['user_id']);
         $LocationList = array_filter($LocationList, function ($event) use ($locationID) {
             return $event['id'] == $locationID;
         });
-        $array_keys_location = array_keys($LocationList) ;
-//        if(count($array_keys_location) == 0)
-//            return abort("404");
-
-        if(count($array_keys_location) == 0)
+        $LocationList = array_values($LocationList) ;
+        if(count($LocationList) == 0)
             return abort("404");
 
-        $info = $LocationList[$array_keys_location[0]] ;
+        $info = $LocationList[0] ;
+//        return $info ;
 
         $GetServices = array_filter($GetServices, function ($event) use ($locationID) {
             return $event['location_id'] == $locationID;
         });
-//        return $GetServices ;
-        $array_keys = array_keys($GetServices) ;
-//        if(count($array_keys) == 0)
-//            return abort("404");
+        $GetServices = array_values($GetServices) ;
+
         $service_pics = [];
         $service_id_image = [];
-        for($i = 0 ; $i < count($array_keys) ; $i++){
-            $GetPicturesInfo = $this->api->GetPicturesInfo(null,$GetServices[$array_keys[$i]]['service_id'],null,null);
+
+        foreach($GetServices as $Service){
+            $GetPicturesInfo = $this->api->GetPicturesInfo(null,$Service['service_id'],null,null);
             if(array_key_exists("service_pics" , $GetPicturesInfo['ContentData'])){
                 $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
                 foreach ($service_pics as $pic){
                     if($pic['tag'] == 'main')
                     {
                         $image = [
-                            'service_id' => $GetServices[$array_keys[$i]]['service_id'] ,
+                            'service_id' => $Service['service_id'] ,
                             'picture_id' =>$pic['picture_id']
                         ];
                         array_push($service_id_image,$image);
@@ -353,18 +351,8 @@ class LocationController extends Controller
                 }
             }
         }
-//        $image = $this->api->GetImageAddress($service_id_image[0]['picture_id']);
-//        return $image;
-//        return $GetServices ;
-//        $GetPicturesInfo = $this->api->GetPicturesInfo($id,null,null,null);
-//        $GetPicturesInfo = $this->api->GetPicturesInfo($id,263,null,null);
-//        return $GetPicturesInfo;
-//        if(array_key_exists("service_pics" , $GetPicturesInfo['ContentData'])){
-//            $service_pics = $GetPicturesInfo['ContentData']['service_pics'];
-//        }
         return view('services' , [
             'GetServices'=> $GetServices ,
-            'array_keys' => $array_keys ,
             'service_pics'=>$service_id_image ,
             'location_id' => $locationID ,
             'projectList' => $projectList['ContentData'] ,
@@ -389,11 +377,27 @@ class LocationController extends Controller
             $AddService  = $this->api->AddService($service_name, $capacity, $service_english_name, $model_id, $description, $location_id , $TypeOfServiceSale);
 //            return $AddService;
             if ($AddService['Header']['Status'] == 0){
+
+                $data = [
+                    "service_id"=> $AddService["ContentData"]["service_id"],
+                    "type_of_service_sale" => $TypeOfServiceSale,
+                    "location_id" => $location_id,
+                    "service_name"=> $service_name,
+                    "english_name" => $service_english_name,
+                    "description"=> $description,
+                    "activation" => false,
+                    "capacity" => $capacity,
+                    "model_id" => $model_id,
+                    "normal_sale"=> ($request->get("normal_sale") == 'on') ? true : false,
+                ];
+
+                $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
+                array_push($GetServices , $data);
                 Cache::forget('ServiceList' . session('UserInfo')['user_id']);
-                Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function(){
-                    $Locations  = $this->api->ServiceList();
-                    return $Locations['ContentData'];
+                Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function() use ($GetServices){
+                    return $GetServices;
                 });
+
                 return redirect()->back()->with('success' , 'جاذبه مورد نظر ایحاد گردید');
             }
             else if ($AddService['Header']['MessageCode'] == 133){
@@ -410,7 +414,7 @@ class LocationController extends Controller
 
     }
     public function EditService(Request $request ,$service_id,$location_id ){
-
+//            return $request->all();
             $service_name = $request->get("service_name");
             $service_english_name = $request->get("service_english_name");
             $model_id = $request->get("model_id");
@@ -428,10 +432,21 @@ class LocationController extends Controller
             $EditService  = $this->api->EditService($service_name, $capacity, $service_english_name, $model_id,$service_id, $description, $location_id, $normal_sale , $TypeOfServiceSale);
 //            return $EditService;
                 if ($EditService['Header']['Status'] == 0){
+                    $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
+                    $Service = array_filter($GetServices, function ($event) use ($location_id , $service_id) {
+                        return $event['location_id'] == $location_id && $event['service_id'] == $service_id ;
+                    });
+                    $Service = array_keys($Service) ;
+                    $GetServices[$Service[0]]["service_name"] = $service_name ;
+                    $GetServices[$Service[0]]["english_name"] = $service_english_name ;
+                    $GetServices[$Service[0]]["capacity"] = $capacity ;
+                    $GetServices[$Service[0]]["description"] =$description ;
+                    $GetServices[$Service[0]]["type_of_service_sale"] =$TypeOfServiceSale ;
+                    $GetServices[$Service[0]]["normal_sale"] =($request->get("normal_sale") == 'on') ? true : false ;
+
                     Cache::forget('ServiceList' . session('UserInfo')['user_id']);
-                    Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function(){
-                        $Locations  = $this->api->ServiceList();
-                        return $Locations['ContentData'];
+                    Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function() use ($GetServices){
+                        return $GetServices;
                     });
 
                     return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
@@ -451,10 +466,16 @@ class LocationController extends Controller
 
             $EditService  = $this->api->DeleteService($service_id);
                 if ($EditService['Header']['Status'] == 0){
+
+                    $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
+                    $Service = array_filter($GetServices, function ($event) use ($service_id) {
+                        return $event['service_id'] == $service_id ;
+                    });
+                    $Service = array_keys($Service) ;
+                    unset($GetServices[$Service[0]]);
                     Cache::forget('ServiceList' . session('UserInfo')['user_id']);
-                    Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function(){
-                        $Locations  = $this->api->ServiceList();
-                        return $Locations['ContentData'];
+                    Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function() use ($GetServices){
+                        return $GetServices;
                     });
 
                     return redirect()->back()->with('success' , 'تغییرات اعمال گردید');
@@ -467,14 +488,22 @@ class LocationController extends Controller
     public function ServiceActivation(Request $request){
             $data = [ 'data' => false ];
             $service_id = $request->get('service');
-            $service_activation = $request->get('value');
+            $service_activation = ($request->get('value') == 'true') ? True : False;
             $ServiceActivation  = $this->api->ServiceActivation($service_id , $service_activation);
                 if ($ServiceActivation['Header']['Status'] == 0){
-                    Cache::forget('ServiceList' . session('UserInfo')['user_id']);
-                    Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function(){
-                        $Locations  = $this->api->ServiceList();
-                        return $Locations['ContentData'];
+
+                    $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
+                    $Service = array_filter($GetServices, function ($event) use ( $service_id) {
+                        return $event['service_id'] == $service_id ;
                     });
+                    $Service = array_keys($Service) ;
+                    $GetServices[$Service[0]]["activation"] = $service_activation ;
+
+                    Cache::forget('ServiceList' . session('UserInfo')['user_id']);
+                    Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function() use ($GetServices){
+                        return $GetServices;
+                    });
+
                     $data = [ 'data' => true ];
                     return $data ;
                 }
@@ -771,6 +800,7 @@ class LocationController extends Controller
 
         try {
             $GetEvent = $this->api->GetEvent($id);
+//            return $GetEvent ;
             $projectList = $this->api->ProjectList();
 //      $GetPicture = $this->api->GetPicture($id);
 //       return $GetEvent;
@@ -796,6 +826,7 @@ class LocationController extends Controller
 //            return $GetEvent['ContentData']['service_id'];
             $service_id_image = [];
             $services = $GetEvent['ContentData'];
+//            return $services ;
             foreach ($services as $service){
 
                 $GetPicturesInfo = $this->api->GetPicturesInfo(null,$service['service_id'],null,null);
@@ -818,8 +849,8 @@ class LocationController extends Controller
                     'GetEvents' => $GetEvent['ContentData'] , 'location_id'=>$id , 'projectList' => $projectList['ContentData'] ] ) ;
 
         } catch (\Exception $e) {
-//            return $e->getMessage();
-            abort(404);
+            return $e->getMessage();
+//            abort(404);
         }
     }
     public function AddLatLong(Request $request , $id){
@@ -844,10 +875,16 @@ class LocationController extends Controller
         $description = $GetLocation['ContentData'][0]['description'];
         $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
         if ($EditLocation['Header']['MessageCode'] == 0){
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            $locationIndex = array_filter($locations, function ($event) use ($id) {
+                return $event['id'] == $id;
+            });
+            $locationIndex = array_keys($locationIndex) ;
+            $locations[$locationIndex[0]]["latitude"] = $latitude ;
+            $locations[$locationIndex[0]]["longitude"] = $longitude ;
             Cache::forget('LocationList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
             });
             return redirect()->back()->with('success' , ' طول و عرض جغرافیایی ویرایش گردید . ');
         }

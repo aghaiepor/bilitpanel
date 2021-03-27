@@ -123,7 +123,7 @@
                                         <th >
                                             مدیریت جاذبه
                                         </th>
-                                        <th >
+                                        <th class="d-none" >
                                            پنل شهروندی
                                         </th>
                                         <th >
@@ -172,7 +172,7 @@
                                                         مدیریت جاذبه
                                                     </a>
                                                 </td>
-                                                <td>
+                                                <td class="d-none">
                                                     <a href="{{Route('citizenPanel' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-warning btn-simple">
                                                         <i class="material-icons">perm_contact_calendar</i>
                                                         پنل شهروندی

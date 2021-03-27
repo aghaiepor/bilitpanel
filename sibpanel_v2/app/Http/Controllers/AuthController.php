@@ -153,6 +153,7 @@ class AuthController extends Controller
         session()->forget('otpAccept');
         session()->forget("expire_otp_time");
         session()->forget("expire_otp_time");
+        session()->forget("backPlace");
         if(!session()->has('SessionId')){
             return redirect('login');
         } else
@@ -198,34 +199,31 @@ class AuthController extends Controller
         return $GenerateOtp ;
     }
     public function test(){
-//        return redirect()->back();
-//        $_ENV["MYENV"]="new_variable";
-//        $new_variable_var = $_ENV["MYENV"];
-//        $env = getenv("PROJECT_NAME" );
-//        dd($env);
-//        $donEnv = Dotenv::create(base_path() ,"./env3" );
-//        $donEnv = $donEnv->load();
-//        dd($donEnv);
-//        return $env ;
-//        $test = [
-//            [
-//            "name" => "amirhossein" ,
-//            "age" =>  20 ,
-//            "car" => [
-//                "model" => "206" ,
-//                "model" => "pride" ,
-//            ]
-//            ] ,
-//            [
-//                "name" => "ali" ,
-//                "age" =>  18 ,
-//                "car" => [
-//                    "model" => "bmw" ,
-//                    "model" => "benz" ,
-//                ]
-//            ]
-//        ];
 
+        $test = [
+            [
+            "id" => 1 ,
+            "name" => "amirhossein" ,
+            "age" =>  20 ,
+            "car" => [
+                "model" => "206" ,
+                "model" => "pride" ,
+            ]
+            ] ,
+            [
+                "id" => 2 ,
+                "name" => "ali" ,
+                "age" =>  18 ,
+                "car" => [
+                    "model" => "bmw" ,
+                    "model" => "benz" ,
+                ]
+            ]
+        ];
+        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($test) {
+            return $test;
+        });
+        return "Cashed !";
 //        return $test;
 //        Cache::forget("test" . session('UserInfo')['user_id'] );
 //        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($test) {
