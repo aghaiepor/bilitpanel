@@ -23,12 +23,11 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
-//        $locations = $this->api->location_list( "" , "" , null ,s1);
         $locations = array_filter($locations, function ($event) {
             return $event['project_id'] == 1;
         });
         $locations = array_values($locations) ;
-
+        return $locations ;
         $province = Cache::get('ProvinceList' . session('UserInfo')['user_id']) ;
         $GetProjectList = Cache::get('ProjectList' . session('UserInfo')['user_id']);
         $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
@@ -52,12 +51,39 @@ class LocationController extends Controller
 //        Log::info( 'mandatory_entrance' . $mandatory_entrance);
         $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude ,$project_id );
 //        return $addLocation;
-
         if ($addLocation['Header']['MessageCode'] == 0){
+            $data = [
+                "id" => $addLocation['ContentData']['location_id'] ,
+                "payment_id" => "",
+                "warehoff" => false,
+                "has_QR"=> false,
+                "bulky_sale"=> false,
+                "print_pos"=> false,
+                "location_name"=> $location_name,
+                "activation"=> true,
+                "location_english_name"=> $location_english_name,
+                "location_address"=> $location_address,
+                "location_english_address"=> $location_english_address,
+                "province_id"=> $province_id,
+                "city_id"=> $city_id,
+                "mandatory_entrance"=> $mandatory_entrance,
+                "presell_activation"=> false,
+                "latitude" => $latitude ,
+                "longitude" => $longitude ,
+                "project_id" => $project_id ,
+                "text" => [
+                "id" => $text_id,
+                "top_text" => $request->get('top_text'),
+                "bottom_text" => $request->get('bottom_text'),
+                "english_top_text" =>  $request->get('english_top_text'),
+                "english_bottom_text" => $request->get('english_bottom_text')
+                ]
+            ];
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            array_push($locations , $data);
             Cache::forget('LocationList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
             });
 
            /* if(env("HAS_OFFICE_NO")) {
@@ -96,11 +122,33 @@ class LocationController extends Controller
         $description =  $getLoction['ContentData'][0]['description'];
         $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
         if ($EditLocation['Header']['MessageCode'] == 0){
-            Cache::forget('LocationList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            $locationIndex = array_filter($locations, function ($event) use ($id) {
+                return $event['id'] == $id;
             });
+            $locationIndex = array_keys($locationIndex) ;
+            $locations[$locationIndex[0]]["location_name"] = $location_name ;
+            $locations[$locationIndex[0]]["location_english_name"] = $location_english_name ;
+            $locations[$locationIndex[0]]["location_address"] = $location_address ;
+            $locations[$locationIndex[0]]["location_english_address"] = $location_english_address ;
+            $locations[$locationIndex[0]]["mandatory_entrance"] = $mandatory_entrance ;
+            $locations[$locationIndex[0]]["latitude"] = $latitude ;
+            $locations[$locationIndex[0]]["introduction"] = $introduction ;
+            $locations[$locationIndex[0]]["description"] = $description ;
+            $locations[$locationIndex[0]]["text"] = [
+                "id" => $text_id,
+                "top_text" => $request->get('top_text'),
+                "bottom_text" => $request->get('bottom_text'),
+                "english_top_text" =>  $request->get('english_top_text'),
+                "english_bottom_text" => $request->get('english_bottom_text')
+            ] ;
+
+            Cache::forget('LocationList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
+            });
+
             return redirect()->back()->with('success' , ' مکان مورد ویرایش گردید . ');
         }
         else
@@ -112,10 +160,15 @@ class LocationController extends Controller
         $DeleteLocation = $this->api->DeleteLocation($id);
 //        return $DeleteLocation ;
         if ($DeleteLocation['Header']['MessageCode'] == 0){
-            Cache::forget('LocationList'. session('UserInfo')['user_id'] );
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            $locationIndex = array_filter($locations, function ($event) use ($id) {
+                return $event['id'] == $id;
+            });
+            $locationIndex = array_keys($locationIndex) ;
+            unset($locations[$locationIndex[0]]);
+            Cache::forget('LocationList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
             });
             return redirect()->back()->with('success' , ' مکان مورد حذف گردید . ');
         }
@@ -133,12 +186,17 @@ class LocationController extends Controller
         $location_id = $request->get('location') ;
         $LocationActivation = $this->api->LocationActivation($location_id , $is_active);
         if ($LocationActivation['Header']['MessageCode'] == 0){
-            Cache::forget('LocationList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            $locationIndex = array_filter($locations, function ($event) use ($location_id) {
+                return $event['id'] == $location_id;
             });
-//            return  $data = [ 'data' => true ];
+            $locationIndex = array_keys($locationIndex) ;
+            $locations[$locationIndex[0]]["activation"] = $is_active ;
+            Cache::forget('LocationList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
+            });
         }
 //        else if ($LocationActivation['Header']['MessageCode'] == 133){
 //            return  $data = [ 'data' => "Permission Denied" ];
@@ -152,11 +210,18 @@ class LocationController extends Controller
         $location_id = $request->get('location') ;
         $PosPrintActivation = $this->api->PosPrintActivation($location_id , $is_active);
         if ($PosPrintActivation['Header']['MessageCode'] == 0){
-            Cache::forget('LocationList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            $locationIndex = array_filter($locations, function ($event) use ($location_id) {
+                return $event['id'] == $location_id;
             });
+            $locationIndex = array_keys($locationIndex) ;
+            $locations[$locationIndex[0]]["print_pos"] = $is_active ;
+            Cache::forget('LocationList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
+            });
+
             return  $data = [ 'data' => true ];
         }
         else
@@ -168,10 +233,15 @@ class LocationController extends Controller
         $location_id = $request->get('location') ;
         $PosPrintActivation = $this->api->QRActivation($location_id , $is_active);
         if ($PosPrintActivation['Header']['MessageCode'] == 0){
+            $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+            $locationIndex = array_filter($locations, function ($event) use ($location_id) {
+                return $event['id'] == $location_id;
+            });
+            $locationIndex = array_keys($locationIndex) ;
+            $locations[$locationIndex[0]]["has_QR"] = $is_active ;
             Cache::forget('LocationList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function(){
-                $Locations  = $this->api->LocationList();
-                return $Locations['ContentData'];
+            Cache::rememberForever('LocationList' . session('UserInfo')['user_id'], function() use ($locations){
+                return $locations;
             });
             return  $data = [ 'data' => true ];
         }

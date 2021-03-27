@@ -310,21 +310,21 @@
                                                                     <div class="form-row mt-2 texts">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_top_text" name="" cols="30" rows="3">{{$location['text']['top_text']}}</textarea>
+                                                                            <textarea readonly style="height: 64px !important;" class="form-control persian_top_text" name="top_text" cols="30" rows="3">{{$location['text']['top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control persian_bottom_text" name="" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
+                                                                            <textarea readonly style="height: 64px !important;" class="form-control persian_bottom_text" name="bottom_text" cols="30" rows="3">{{$location['text']['bottom_text']}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mt-2">
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_top_text" name=""  cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
+                                                                            <textarea readonly style="height: 64px !important;" class="form-control english_top_text" name="english_top_text"  cols="30" rows="3">{{$location['text']['english_top_text']}}</textarea>
                                                                         </div>
                                                                         <div class="col-md text-right">
                                                                             <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                                                                            <textarea disabled style="height: 64px !important;" class="form-control english_bottom_text" name="" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
+                                                                            <textarea readonly style="height: 64px !important;" class="form-control english_bottom_text" name="english_bottom_text" cols="30" rows="3">{{$location['text']['english_bottom_text']}}</textarea>
                                                                         </div>
 
                                                                     </div>
@@ -522,21 +522,21 @@
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن فارسی بالای بلیت </label>
-                        <textarea id="top_text_persian" disabled  style="height: 64px !important;" class="form-control" name=""  cols="30" rows="3"></textarea>
+                        <textarea id="top_text_persian" readonly  style="height: 64px !important;" class="form-control" name="top_text"  cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن فارسی پایین بلیت </label>
-                        <textarea id="bottom_text_persian" disabled style="height: 64px !important;" class="form-control" name="" cols="30" rows="3"></textarea>
+                        <textarea id="bottom_text_persian" readonly style="height: 64px !important;" class="form-control" name="bottom_text" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
                     <div class="col-md text-right">
                         <label for="" class="text-right"> متن انگلیسی بالای بلیت </label>
-                        <textarea id="top_text_english" disabled style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
+                        <textarea name="english_top_text" id="top_text_english" readonly style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
                     </div>
                     <div class="col-md text-right">
                         <label for="" class="text-right">  متن انگلیسی پایین بلیت </label>
-                        <textarea id="bottom_text_english" disabled  style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
+                        <textarea id="bottom_text_english" name="english_bottom_text" readonly  style="height: 64px !important;" class="form-control" cols="30" rows="3"></textarea>
                     </div>
 
                 </div>

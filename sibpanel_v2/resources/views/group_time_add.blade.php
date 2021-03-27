@@ -547,7 +547,24 @@
                         <div class="row">
                              <div id="formSans" class="col-lg pull-right">
                                  <div class="form-row text-right">
+                                     <div class="col-12">
+                                         <h6 class="text-right pb-2 border-bottom">
+                                             - افزودن تمامي بليت ها
+                                         </h6>
+                                         <table class="table table-striped">
+                                             <tr>
+                                                 <td class="border-top-0 small" style="padding: 0px 8px">
+                                                     افزودن تمامي بليت ها
+                                                 </td>
+                                                 <td class="border-top-0 text-left" style="padding: 0px 8px">
+                                                     <button type="button" id="AddAllVoucher" class="btn btn-primary btn-sm">
+                                                         <i class="fas fa-plus-circle"></i>
+                                                     </button>
+                                                 </td>
+                                             </tr>
+                                         </table>
 
+                                     </div>
                                      <div class="col-12">
                                          <h6 class="text-right pb-2 border-bottom">
                                               - افزودن بليت جديد
@@ -1964,6 +1981,72 @@
                     }
 
             }
+
+        function addAllTicket(vouchers) {
+
+            // let NotValid = false;
+            //
+            //
+            // if(NotValid)
+            //     return;
+
+            // when voucher lenght was zero
+            $(".no-voucher").hide();
+            let table = document.getElementById("TicketTable").getElementsByTagName('tbody')[0];
+            for( let i = 0 ; i < vouchers.length ; i++)
+            {
+
+
+                let voucherTypeName = vouchers[i].voucher_type_name;
+                let voucher_type_id = vouchers[i].voucher_type_id;
+                let existVoucher = $("#seances_voucherInfo tr td[data-value="+ voucher_type_id + "]");
+                if(existVoucher.length > 0 )
+                    continue;
+                let capacity = "";
+                let amount = vouchers[i].amount;
+
+                let capacity_Sanse ;
+                let vouchertyppe_Sanse ;
+                let amount_Sanse ;
+                let remove  ;
+
+                let row = table.insertRow();
+                row.setAttribute("class", "ticketRow") ;
+                capacity_Sanse = row.insertCell();
+                vouchertyppe_Sanse = row.insertCell();
+                amount_Sanse = row.insertCell();
+                remove = row.insertCell();
+
+                capacity_Sanse.innerHTML = (capacity == "") ? "بدون محدویت"  : capacity;
+                capacity_Sanse.setAttribute("value", capacity) ;
+                capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
+                vouchertyppe_Sanse.innerHTML = voucherTypeName ;
+                vouchertyppe_Sanse.setAttribute("value", voucher_type_id) ;
+                vouchertyppe_Sanse.setAttribute("data-value", voucher_type_id) ;
+                vouchertyppe_Sanse.setAttribute("vouchersInfo_name", voucherTypeName) ;
+                vouchertyppe_Sanse.setAttribute("class", "vouchertyppe_Sanse") ;
+
+                amount_Sanse.innerHTML = amount ;
+                amount_Sanse.setAttribute("value", amount) ;
+                amount_Sanse.setAttribute("class", "seance_amount") ;
+
+                remove.innerHTML = '<button data-state="notSave" type="button" class="btn px-2 btn-sm btn-rose text-center" onclick="removeSeance(this)" > <i style="left: 0" class="fa fa-trash-alt"></i> </button>' ;
+
+                setTimeout(function() {
+                    row.classList.add('visible');
+                }, 10)
+            }
+        }
+
+        $(document).on("click" , "#AddAllVoucher" , function () {
+            let vouchers = @json($VoucherInfoList);
+            let serviceId  = "{{$id}}" ;
+            // console.log("vouchers : " , vouchers);
+            addAllTicket(vouchers);
+
+
+        })
 
         function setTime(e) {
 
