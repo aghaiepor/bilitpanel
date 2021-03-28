@@ -46,10 +46,10 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::get('/', function () {
             if(session('UserInfo')['account_type_id'] == 1 )
             {
-                if(session('UserInfo')['projects'][0]["name"] == "IranFun")
-                    return view('dashboard2');
-                else
+                if(session('UserInfo')['projects'][0]["name"] == "TourismSystem")
                     return view('dashboard');
+                else
+                    return view('dashboard2');
             }
             else
                 return  view('dashboard2') ;

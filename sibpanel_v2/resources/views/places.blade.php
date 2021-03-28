@@ -169,7 +169,7 @@
                                                 <td>
                                                     <a href="{{Route('GetService' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-info btn-simple">
                                                         <i class="material-icons">domain </i>
-                                                        مدیریت جاذبه
+                       h                                 مدیریت جاذبه
                                                     </a>
                                                 </td>
                                                 <td class="d-none">
