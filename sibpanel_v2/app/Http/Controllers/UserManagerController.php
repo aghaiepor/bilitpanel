@@ -325,11 +325,18 @@ class UserManagerController extends Controller
         $AssignPermission = $this->api->AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id, $switch_web_service_ids);
         if($AssignPermission["Header"]["Status"] == 0 )
         {
-            Cache::forget("GetSubUserList" . session('UserInfo')['user_id']);
-            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
-                $data = $this->api->GetSubUserList("ajax") ;
-                return $data['ContentData'];
+
+            $GetSubUser = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);;
+            $SubUser = array_filter($GetSubUser, function ($event) use ($sib_user_id) {
+                return $event['sib_user_id'] == $sib_user_id;
             });
+            $SubUser = array_keys($SubUser) ;
+            $GetSubUser[$SubUser[0]]["has_permission"] = true  ;
+            Cache::forget('GetSubUserList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'], function() use ($GetSubUser){
+                return $GetSubUser;
+            });
+
             Cache::forget("GetInfo" . session('UserInfo')['user_id']);
             Cache::rememberForever('GetInfo' . session('UserInfo')['user_id'] , function (){
                 $GetInfo  = $this->api->GetInfo("ajax");
