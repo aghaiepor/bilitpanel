@@ -85,8 +85,9 @@ class VoucherController extends Controller
     public function GetVoucherText()
     {
         $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
-        return view('voucherText' , ['voucherTexts' => $GetVoucherText]);
 //        return $GetVoucherText ;
+        return view('voucherText' , ['voucherTexts' => $GetVoucherText]);
+
     }
     public function AddVoucherText(Request $request)
     {
@@ -96,13 +97,22 @@ class VoucherController extends Controller
         $bottom_text = $request->get("bottom_text");
         $english_bottom_text = $request->get("english_bottom_text");
         $AddVoucherText  = $this->api->AddVoucherText($top_text, $english_top_text, $bottom_text, $english_bottom_text);
-//        return  $AddVoucherType ;
+//        return  $AddVoucherText ;
         if ($AddVoucherText['Header']['Status'] == 0)
         {
+            $data = [
+                'id' => $AddVoucherText["ContentData"]["voucher_text_id"] ,
+                'top_text'=> $top_text,
+                'english_top_text'=> $english_top_text,
+                'bottom_text'=> $bottom_text,
+                'english_bottom_text'=> $english_bottom_text,
+                'activation'=> true,
+            ];
+            $GetVoucherText = Cache::get('GetVoucherText' . session('UserInfo')['user_id']);
+            array_push($GetVoucherText , $data);
             Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
-            $value = Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function(){
-                $GetInfo  = $this->api->GetVoucherText();
-                return $GetInfo['ContentData'];
+            Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function() use ($GetVoucherText){
+                return $GetVoucherText;
             });
             return redirect()->back()->with('success' , 'متن بلیت ایجاد گردید.');
         }
@@ -119,6 +129,21 @@ class VoucherController extends Controller
 //        return  $AddVoucherType ;
         if ($EditVoucherText['Header']['Status'] == 0)
         {
+            $GetVoucherText = Cache::get('GetVoucherText' . session('UserInfo')['user_id']);
+            $index = array_filter($GetVoucherText, function ($event) use ($id) {
+                return $event['id'] == $id ;
+            });
+            $index = array_keys($index) ;
+            $GetVoucherText[$index[0]]["id"] = $top_text ;
+            $GetVoucherText[$index[0]]["english_top_text"] = $english_top_text ;
+            $GetVoucherText[$index[0]]["bottom_text"] = $bottom_text ;
+            $GetVoucherText[$index[0]]["english_bottom_text"] = $english_bottom_text ;
+
+            Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
+            Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function() use ($GetVoucherText){
+                return $GetVoucherText;
+            });
+
             Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
             $value = Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function(){
                 $GetInfo  = $this->api->GetVoucherText();
@@ -136,10 +161,17 @@ class VoucherController extends Controller
 //        return  $DelVoucherText ;
         if ($DelVoucherText['Header']['Status'] == 0)
         {
+
+            $GetVoucherText = Cache::get('GetVoucherText' . session('UserInfo')['user_id']) ;
+            $Index = array_filter($GetVoucherText, function ($event) use ($id) {
+                return $event['id'] == $id;
+            });
+            $Index = array_keys($Index) ;
+            unset($GetVoucherText[$Index[0]]);
+
             Cache::forget('GetVoucherText' . session('UserInfo')['user_id']);
-            $value = Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function(){
-                $GetInfo  = $this->api->GetVoucherText();
-                return $GetInfo['ContentData'];
+            Cache::rememberForever('GetVoucherText' . session('UserInfo')['user_id'], function() use ($GetVoucherText){
+                return $GetVoucherText;
             });
             return redirect()->back()->with('success' , 'متن بلیت حذف گردید');
         }
