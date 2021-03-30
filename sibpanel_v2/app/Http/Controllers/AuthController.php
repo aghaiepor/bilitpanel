@@ -112,8 +112,6 @@ class AuthController extends Controller
                 else
                     $address = $main_image_address ;
 
-
-
                 session(["logoAddress" =>  $address]);
                 return redirect()->Route('loading')->with( ['previous_url' => $previous_url] );
 //            }

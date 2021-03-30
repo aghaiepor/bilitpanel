@@ -234,6 +234,7 @@
         <form id="addUserSubmit" action="{{Route('RegisterUser')}}" method="post">
             @csrf
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h5 class="modal-title " id="testLabel"> تعریف کاربر جدید </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -268,7 +269,7 @@
                             <select id="addUser_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option value="" disabled selected>  انتخاب کنید </option>
                                 @foreach($AccountTypeList as $AccountType)
-                                    <option value="{{$AccountType["account_type_id"]}}">{{$AccountType["account_type"]}}</option>
+                                    <option value="{{$AccountType["account_type_id"] . "-" .str_replace(" " , "-" , $AccountType["account_type"])  }}">{{$AccountType["account_type"]}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -332,6 +333,9 @@
                 <form id="form_edit" action="" method="post">
                     @csrf
                     <div class="modal-body">
+                        <div id="loader3" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
+                            <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                        </div>
                         <div class="form-row mt-3">
                             <div class="col-sm-6 text-right">
                                 <label for=""> نام </label>
@@ -342,7 +346,6 @@
                                 <input id="user_last_name" name="last_name" type="text" class="form-control"  placeholder=" نام خانوادگی">
                             </div>
                         </div>
-
                         <div class="form-row mt-3 text-right" >
                             <div class="col-sm-6">
                                 <label for=""> نام کاربری </label>
@@ -358,7 +361,7 @@
                                 <label for=""> نوع اکانت </label>
                                 <select id="user_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                     @foreach($AccountTypeList as $AccountType)
-                                        <option value="{{$AccountType["account_type_id"]}}">{{$AccountType["account_type"]}}</option>
+                                        <option value="{{$AccountType["account_type_id"] . "-" .str_replace(" " , "-" , $AccountType["account_type"])  }}">{{$AccountType["account_type"]}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -767,7 +770,7 @@
                 let UserId = $(this).attr('data-id');
                 if (current_user_id != UserId){
                     current_user_id = UserId ;
-                    $("#loader").css('display' , 'flex');
+                    $("#loader3").css('display' , 'flex');
                     $.ajax({
                         headers: {
                             'Cache-Control': 'max-age=1000'
@@ -815,16 +818,21 @@
                             }
                         },
                         success:function(data) {
-                            console.log("data =>" , data)
+                            // console.log("data =>" , data)
                             $('#form_edit').attr('action' , action_url );
                            $('#user_first_name').val(data.first_name);
                             $('#user_last_name').val(data.last_name);
                             $('#user_username').val(data.username);
                             $('#user_mobile').val(data.mobile);
+
+                            let accountTypeVal = data.account_type_id + "-" + data.account_type ;
+                            accountTypeVal = accountTypeVal.replace(" " , "-");
                             $('#user_account_type_id').find("option").attr('selected' , false);
-                            $('#user_account_type_id').find("option[value="+ data.account_type_id + "]").attr('selected' , true);
+                            $('#user_account_type_id').find("option[value="+ accountTypeVal + "]").attr('selected' , true);
+                            $("#user_account_type_id").selectpicker('refresh') ;
+
                             $('#user_national_id').val(data.national_id);
-                            console.log( "data otp_verify => " , data.otp_verify)
+
                             let otp_verify = 0  ;
                             if(data.otp_verify)
                             {
@@ -834,6 +842,7 @@
 
                             $('#user_otp_verify').find("option").attr('selected' , false);
                             $('#user_otp_verify').find("option[value="+ otp_verify + "]").attr('selected' , true);
+
                             $('#user_email').val(data.email);
                             let pre_sale = (data.presell)  ? '1' : '0' ;
                             $('#user_pre_sell').find("option").attr('selected' , false);
@@ -842,8 +851,8 @@
                             // console.log(data.presell);
                             $('#user_imei').val((data.imei == "None" ) ? "" : data.imei );
                             $('#user_password').val('');
-                            $('#loader').hide();
                             $('.selectpicker').selectpicker('refresh');
+                            $('#loader3').hide();
                         }
                     });
                 }

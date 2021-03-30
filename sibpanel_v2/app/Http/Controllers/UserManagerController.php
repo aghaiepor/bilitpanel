@@ -29,6 +29,7 @@ class UserManagerController extends Controller
         }else
             $SellerUserList = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
 
+//        return $SellerUserList ;
 
 //        return $SellerUserList;
 //        $data = $this->api->GetSubUserList() ;
@@ -154,14 +155,19 @@ class UserManagerController extends Controller
         else
             $activation = false ;
 
-        Log::info( "controller activation =>" . gettype($activation));
-        Log::info( "controller activation =>" . $activation);
+//        Log::info( "controller activation =>" . gettype($activation));
+//        Log::info( "controller activation =>" . $activation);
         $user_activation = $this->api->UserActivation($sib_user_id , $activation);
         if ($user_activation['Header']['Status'] == 0 ){
+            $GetSubUser = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);;
+            $SubUser = array_filter($GetSubUser, function ($event) use ($sib_user_id) {
+                return $event['sib_user_id'] == $sib_user_id;
+            });
+            $SubUser = array_keys($SubUser) ;
+            $GetSubUser[$SubUser[0]]["active"] = $activation ;
             Cache::forget('GetSubUserList' . session('UserInfo')['user_id']);
-            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
-                $data = $this->api->GetSubUserList() ;
-                return $data['ContentData'];
+            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'], function() use ($GetSubUser){
+                return $GetSubUser;
             });
         }
         return $user_activation ;
@@ -188,7 +194,10 @@ class UserManagerController extends Controller
         $email = $request->get('email'); //
         if(is_null($email))
             $email = "";
-        $account_type_id = $request->get('account_type_id'); //
+        $account_type =  explode("-" ,$request->get('account_type_id') ) ; //
+//        return $account_type ;
+        $account_type_id = $account_type[0]; //
+        $account_type_Name = $account_type[1] . " " . $account_type[2] ; //
         $otp_verify = $request->get('otp_verify');
         $subset_users ="";  /*$request->get('subset_users')*/
         $panel_access = false ;  /*$request->get('panel_access');*/
@@ -208,18 +217,50 @@ class UserManagerController extends Controller
             $error_message = "شماره تلفن  قبلا ثبت شده است  .";
 
         if($SellerUserList['Header']['Status'] == 0 ){
-                Cache::forget('GetSubUserList' . session('UserInfo')['user_id']);
-                $SellerUserList = Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'] , function (){
-                    $data = $this->api->GetSubUserList() ;
-                    return $data['ContentData'];
+
+            $GetSubUser = Cache::get('GetSubUserList' . session('UserInfo')['user_id']);
+
+            if($id == "")
+            {
+                $data = [
+                    'sib_user_id'=> $SellerUserList["ContentData"]["sib_user_id"],
+                    'first_name'=> $name,
+                    'last_name'=> $last_name,
+                    'mobile'=> $cellphone,
+                    'national_id'=> $national_id,
+                    'account_type_id'=> $account_type_id,
+                    'account_type'=> $account_type_Name,
+                    'has_permission'=> false,
+                    'is_superuser'=> false,
+                    'active'=> true,
+                ];
+                array_push($GetSubUser , $data);
+            }
+            else
+            {
+                $SubUser = array_filter($GetSubUser, function ($event) use ($id) {
+                    return $event['sib_user_id'] == $id;
                 });
-                return redirect()->back()->with('success' , $success_message);
-        }else if($SellerUserList['Header']['Message']  == "Permission Denied"){
-            return redirect()->back()->with('error' , "شما مجاز به انجام اين عمليات نيستيد .");
+                $SubUser = array_keys($SubUser) ;
+                $GetSubUser[$SubUser[0]]["first_name"] = $name ;
+                $GetSubUser[$SubUser[0]]["last_name"] = $last_name ;
+                $GetSubUser[$SubUser[0]]["mobile"] = $cellphone ;
+                $GetSubUser[$SubUser[0]]["national_id"] = $national_id ;
+                $GetSubUser[$SubUser[0]]["account_type_id"] = $account_type_id ;
+                $GetSubUser[$SubUser[0]]["account_type"] = $account_type_Name ;
+            }
+            Cache::forget('GetSubUserList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('GetSubUserList' . session('UserInfo')['user_id'], function() use ($GetSubUser){
+                return $GetSubUser;
+            });
+
+            return redirect()->back()->with('success' , $success_message);
+        }
+        else if($SellerUserList['Header']['MessageCode']  == 133){
+            return redirect()->back()->with('error' , "خطا : شما مجاز به انجام اين عمليات نيستيد .");
         }
         else
             return redirect()->back()->with('error' , $error_message);
-//            return  $SellerUserList ;
     }
     public function GetUserInfo(Request $request  ){
         $id = $request->get('UserId');
