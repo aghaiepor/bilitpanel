@@ -59,6 +59,9 @@
             transition : all 0.3s ;
         }
         .modal { overflow: auto !important; }
+        .table thead tr th {
+            font-size: 10pt !important;
+        }
     </style>
 
     <link id="s1" rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
@@ -286,7 +289,7 @@
         </div>
 
     <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div style="max-width: 600px" class="modal-dialog" role="document">
+        <div style="max-width: 620px" class="modal-dialog" role="document">
             <form method="post" action="">
                 @csrf
                 <div class="modal-content">
@@ -420,7 +423,7 @@
                             <div class="col-md">
                                 <div  class="col-lg-12 px-0">
                                     <table class="table table-striped text-center" id="SansaTable">
-                                        <thead class="text-primary">
+                                        <thead class="text-primary ">
                                         <tr>
 
                                             <th>
@@ -434,6 +437,9 @@
                                             </th>
                                             <th>
                                                 ظرفيت
+                                            </th>
+                                            <th>
+                                                ظرفيت باقی مانده
                                             </th>
                                             <th>
                                                 فعالسازی
@@ -1797,7 +1803,8 @@
             let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
             let start_Sanse ;
             let end_Sanse ;
-            // let capacity_Sanse ;
+            let capacity_Sanse ;
+            let remain_capacity ;
             // let vouchertyppe_Sanse ;
             let sex ;
             // let amount_Sanse ;
@@ -1805,7 +1812,7 @@
             let edit  ;
             let remove  ;
             let setting  ;
-            // console.log(" sanas: " , sanas)
+            console.log(" sanas: " , sanas)
             for(let i = 0 ; i < sanas.length ; i++ ){
                 let data = sanas[i].times ;
                 let date = sanas[i].day ;
@@ -1820,6 +1827,7 @@
                     // vouchertyppe_Sanse = row.insertCell();
                     sex = row.insertCell();
                     capacity_Sanse = row.insertCell();
+                    remain_capacity = row.insertCell();
                     // amount_Sanse = row.insertCell();
                     activation = row.insertCell();
                     setting = row.insertCell();
@@ -1866,6 +1874,10 @@
                     capacity_Sanse.innerHTML = data[j].total_capacity ;
                     capacity_Sanse.setAttribute("value", data[j].total_capacity) ;
                     capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
+                    remain_capacity.innerHTML = data[j].remain_capacity ;
+                    remain_capacity.setAttribute("value", data[j].remain_capacity) ;
+                    remain_capacity.setAttribute("class", "remain_capacity") ;
                     // amount_Sanse.innerHTML = data[j].seance_amount ;
                     // amount_Sanse.setAttribute("value", data[j].seance_amount) ;
                     // amount_Sanse.setAttribute("class", "seance_amount") ;

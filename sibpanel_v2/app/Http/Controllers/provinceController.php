@@ -17,6 +17,7 @@ class provinceController extends Controller
     public function index()
     {
         $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
+//        return $ProvinceList ;
         $projectList = $this->api->ProjectList();
         return view('stateMg' , ['ProvinceList' => $ProvinceList , 'projectList' => $projectList['ContentData']]);
     }
