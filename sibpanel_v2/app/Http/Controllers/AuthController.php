@@ -92,6 +92,7 @@ class AuthController extends Controller
                 else
                     $ImageInfo = [] ;
 
+            $main_image_address = null ;
             if(count($ImageInfo) != 0 )
                 {
                     foreach ($ImageInfo as $pic ) {
