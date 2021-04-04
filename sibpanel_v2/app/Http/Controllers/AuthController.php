@@ -99,6 +99,7 @@ class AuthController extends Controller
                         {
                             $project_image = $pic['picture_id'];
                             $main_image_address = $this->api->GetImageAddress($project_image) ;
+//                            return $main_image_address;
                         }
                     }
                 }else
@@ -198,30 +199,56 @@ class AuthController extends Controller
     }
     public function test(){
 
-        $test = [
-            [
-            "id" => 1 ,
-            "name" => "amirhossein" ,
-            "age" =>  20 ,
-            "car" => [
-                "model" => "206" ,
-                "model" => "pride" ,
-            ]
-            ] ,
-            [
-                "id" => 2 ,
-                "name" => "ali" ,
-                "age" =>  18 ,
-                "car" => [
-                    "model" => "bmw" ,
-                    "model" => "benz" ,
-                ]
-            ]
-        ];
-        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($test) {
-            return $test;
-        });
-        return "Cashed !";
+        $logo_id = 1;
+        $address = $this->api->GetPicturesInfo(0,0,$logo_id,0) ;
+//                return $address ;
+        if($address["Header"]["Status"] == 0 )
+            $ImageInfo = $address["ContentData"]["project_pics"];
+        else
+            $ImageInfo = [] ;
+
+
+        if(count($ImageInfo) != 0 )
+        {
+            foreach ($ImageInfo as $pic ) {
+                if($pic["tag"] == "logo")
+                {
+                    $project_image = $pic['picture_id'];
+                    $main_image_address = $this->api->GetImageAddress($project_image) ;
+
+                }
+            }
+        }else
+        {
+            $main_image_address = null ;
+        }
+
+        return $main_image_address;
+
+//        $test = [
+//            [
+//            "id" => 1 ,
+//            "name" => "amirhossein" ,
+//            "age" =>  20 ,
+//            "car" => [
+//                "model" => "206" ,
+//                "model" => "pride" ,
+//            ]
+//            ] ,
+//            [
+//                "id" => 2 ,
+//                "name" => "ali" ,
+//                "age" =>  18 ,
+//                "car" => [
+//                    "model" => "bmw" ,
+//                    "model" => "benz" ,
+//                ]
+//            ]
+//        ];
+//        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($test) {
+//            return $test;
+//        });
+//        return "Cashed !";
 //        return $test;
 //        Cache::forget("test" . session('UserInfo')['user_id'] );
 //        Cache::rememberForever('test' . session('UserInfo')['user_id'] , function() use ($test) {

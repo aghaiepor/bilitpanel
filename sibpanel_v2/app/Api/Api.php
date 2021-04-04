@@ -505,7 +505,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-
+        Log::info($response);
         $this->checkError($response);
         return $response;
     }
@@ -723,7 +723,7 @@ class Api
         return $response;
     }
     public function RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password,
-                                 $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei, $user_id=""){
+                                 $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei,$session_verify ,  $user_id=""){
         if (is_null($email) ||  $email == ""){
             $data = [
                 'name'=> $name,
@@ -736,6 +736,7 @@ class Api
                 'otp_verify'=> $otp_verify,
                 'subset_users'=> $subset_users,
                 'presell'=> $pre_sell,
+                'session_verify'=> $session_verify,
                 'imei'=> $imei,
                 'sib_user_id'=> $user_id
             ];
@@ -754,6 +755,7 @@ class Api
                 'subset_users'=> $subset_users,
                 'presell'=> $pre_sell,
                 'imei'=> $imei,
+                'session_verify'=> $session_verify,
                 'sib_user_id'=> $user_id
             ];
         }
@@ -1993,12 +1995,12 @@ class Api
     {
 
         if($this->from != 'job' && $type == "ajax"){
-            if($response['Header']['MessageCode'] == 141){
+            if($response['Header']['MessageCode'] == 141)
+            {
                 \App::abort(400);
             }
             Log::info("requset was ajax ");
         }
-
 
         if ($this->from != 'job' && $response['Header']['MessageCode'] == 141) {
             session()->forget('SessionId');
@@ -2018,10 +2020,12 @@ class Api
     function GetImageAddress($id)
     {
         $GetPicture = $this->GetPicture($id);
+//        Log::info($GetPicture);
         $mime = $GetPicture['type'];
         $content = $GetPicture['content'];
         $base64   = base64_encode($content);
         return ('data:' . $mime . ';base64,' . $base64);
+//        return $GetPicture;
     }
     function GetDocumentAddress($id , $tag)
     {

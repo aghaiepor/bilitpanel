@@ -194,6 +194,11 @@ class UserManagerController extends Controller
         $email = $request->get('email'); //
         if(is_null($email))
             $email = "";
+
+        $session_verify = $request->get('session_verify');
+        if(is_null($session_verify))
+            $session_verify = "";
+
         $account_type =  explode("-" ,$request->get('account_type_id') ) ; //
 //        return $account_type ;
         $account_type_id = $account_type[0]; //
@@ -203,7 +208,7 @@ class UserManagerController extends Controller
         $panel_access = false ;  /*$request->get('panel_access');*/
         $pre_sell = $request->get('pre_sell');
         $imei = $request->get('imei');
-        $SellerUserList = $this->api->RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password, $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei ,$id);
+        $SellerUserList = $this->api->RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password, $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei ,$session_verify , $id);
 //       return $SellerUserList;
 
         $success_message = ($id == "") ?   "کاربر جدید اضافه گردید." : "کاربر مورد نظر ویرایش گردید .  ";

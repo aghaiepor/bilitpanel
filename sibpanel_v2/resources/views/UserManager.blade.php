@@ -309,8 +309,14 @@
                                 <option value="1"> بله</option>
                             </select>
                         </div>
+                        <div class="col-sm-6 text-right">
+                            <label for=""> دسترسی به پنل (session_verify) </label>
+                            <select id="addUser_session_verify" name="session_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="دسترسی به پنل">
+                                <option value="false"> خیر</option>
+                                <option value="true"> بله</option>
+                            </select>
+                        </div>
                     </div>
-
                 </div>
                 <div class="modal-footer mt-4">
                     {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">بستن </button>--}}
@@ -405,6 +411,13 @@
                                 <select id="user_otp_verify" name="otp_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                     <option selected value="0"> خیر</option>
                                     <option value="1"> بله</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <label for=""> دسترسی به پنل (session_verify) </label>
+                                <select id="user_session_verify" name="session_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="دسترسی به پنل">
+                                    <option value="false"> خیر</option>
+                                    <option value="true"> بله</option>
                                 </select>
                             </div>
                         </div>
@@ -818,7 +831,7 @@
                             }
                         },
                         success:function(data) {
-                            // console.log("data =>" , data)
+                            console.log("data =>" , data)
                             $('#form_edit').attr('action' , action_url );
                            $('#user_first_name').val(data.first_name);
                             $('#user_last_name').val(data.last_name);
@@ -830,6 +843,10 @@
                             $('#user_account_type_id').find("option").attr('selected' , false);
                             $('#user_account_type_id').find("option[value="+ accountTypeVal + "]").attr('selected' , true);
                             $("#user_account_type_id").selectpicker('refresh') ;
+
+                            $('#user_session_verify').find("option").attr('selected' , false);
+                            $('#user_session_verify').find("option[value="+ data.session_verify + "]").attr('selected' , true);
+                            $("#user_session_verify").selectpicker('refresh') ;
 
                             $('#user_national_id').val(data.national_id);
 
