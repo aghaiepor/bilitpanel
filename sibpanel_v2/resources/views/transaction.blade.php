@@ -316,6 +316,9 @@
                                         <th>
                                             نام جاذبه
                                         </th>
+                                        <th>
+                                           شماره تلفن کاربر
+                                        </th>
                                         <th >
                                             شماره بلیت
                                         </th>
@@ -362,10 +365,13 @@
                                                     {{$result['service_name']}}
                                                 </td>
                                                 <td>
+                                                    {{ ( $result['user_cellphone'] == "" ) ? " - " :  $result['user_cellphone']}}
+                                                </td>
+                                                <td>
                                                     {{$result['voucher_number']}}
                                                 </td>
                                                 <td>
-                                                    {{$result['RRN']}}
+                                                    {{ ( $result['RRN'] == "" ) ? " - " :  $result['RRN']}}
                                                 </td>
                                                 <td>
                                                     {{$result['voucher_type_name']}}
