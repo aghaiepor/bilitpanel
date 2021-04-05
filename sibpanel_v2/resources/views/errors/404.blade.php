@@ -25,9 +25,9 @@ l<div class="wrapper wrapper-full-page">
                     <h1 class="title">404</h1>
                     <h2 class="font-weight-bold"> صفحه ی مورد نظر پیدا نشد :(</h2>
                     <h4>
-                        <button onclick="history.go(-1);" class="btn btn-primary">
+                        <a href="{{Route("dashboard")}}" class="btn btn-primary">
                             بازگشت
-                        </button>
+                        </a>
                     </h4>
                 </div>
             </div>

@@ -229,6 +229,14 @@
                                                                             <label for=""> نام  انگلیسی مکان </label>
                                                                             <input value="{{$location['location_english_name']}}" name="location_english_name" type="text" class="form-control" id="nameStateFa" placeholder="نام  انگلیسی مکان">
                                                                         </div>
+                                                                        <div class="col-md text-right">
+                                                                            <label for=""> اولویت مکان </label>
+                                                                            <select id="location_priority" name="location_priority" class="selectpicker" data-style="btn btn-primary border-dark" title="اولویت مکان">
+                                                                                @for($x = 1 ; $x <= 10 ; $x++ )
+                                                                                    <option @if($x == $location['location_priority'] ) selected @endif  value="{{$x}}" > {{$x}} </option>
+                                                                                @endfor
+                                                                            </select>
+                                                                        </div>
                                                                         @if(env("HAS_OFFICE_NO"))
                                                                         <div class="col-md text-right">
                                                                             <label for=""> شناسه مکان </label>
@@ -264,11 +272,7 @@
                                                                             <label for=""> انتخاب متن </label>
                                                                             <select name="text_id" class="selectpicker changeText" data-style="btn btn-primary border-dark" title="Single Select">
                                                                                 @foreach($GetVoucherText as $text)
-                                                                                    @if( $location['text']['id'] == $text['id'])
-                                                                                        <option selected value="{{$text['id']}}"> {{$text['top_text']}}</option>
-                                                                                    @else
-                                                                                        <option value="{{$text['id']}}"> {{$text['top_text']}}</option>
-                                                                                    @endif
+                                                                                        <option @if( $location['text']['id'] == $text['id']) selected @endif value="{{$text['id']}}"> {{$text['top_text']}}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
@@ -430,6 +434,14 @@
                         <input name="officeNo" type="text" class="form-control" id="nameStateFa" placeholder="شناسه مکان">
                     </div>
                     @endif
+                    <div class="col-md text-right">
+                        <label for=""> اولویت مکان </label>
+                        <select id="Addlocation_priority" name="location_priority" class="selectpicker" data-style="btn btn-primary border-dark" title="اولویت مکان">
+                            @for($x = 1 ; $x <= 10 ; $x++ )
+                                <option @if($x == 10 ) selected @endif  value="{{$x}}" > {{$x}} </option>
+                            @endfor
+                        </select>
+                    </div>
                     <div class="col-md">
                         <div class="togglebutton text-right">
                             <label dir="ltr">

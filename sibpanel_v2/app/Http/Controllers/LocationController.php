@@ -42,6 +42,7 @@ class LocationController extends Controller
         $location_address = $request->get('location_address') ;
         $location_english_address = $request->get('location_english_address') ;
         $province_id = $request->get('province_id') ;
+        $location_priority = $request->get('location_priority') ;
         $city_id = $request->get('city_id');
         $text_id = $request->get('text_id');
         $longitude= $request->get('longitude');
@@ -49,7 +50,7 @@ class LocationController extends Controller
         $project_id = $request->get('project_id');
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
 //        Log::info( 'mandatory_entrance' . $mandatory_entrance);
-        $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude ,$project_id );
+        $addLocation = $this->api->AddLocation($location_name,$province_id,$text_id,$city_id,$location_english_name,$location_address,$location_english_address,$mandatory_entrance,$longitude, $latitude ,$project_id ,$location_priority );
 //        return $addLocation;
         if ($addLocation['Header']['MessageCode'] == 0){
             $data = [
@@ -71,6 +72,7 @@ class LocationController extends Controller
                 "latitude" => $latitude ,
                 "longitude" => $longitude ,
                 "project_id" => $project_id ,
+                "location_priority" => $location_priority,
                 "text" => [
                 "id" => $text_id,
                 "top_text" => $request->get('top_text'),
@@ -79,6 +81,7 @@ class LocationController extends Controller
                 "english_bottom_text" => $request->get('english_bottom_text')
                 ]
             ];
+            Log::info($data);
             $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
             array_push($locations , $data);
             Cache::forget('LocationList' . session('UserInfo')['user_id']);
@@ -115,12 +118,15 @@ class LocationController extends Controller
         $location_english_address = $request->get('location_english_address') ;
         $location_id = $id ;
         $text_id = $request->get('text_id') ;
+//        return $request->all() ;
         $mandatory_entrance = ($request->input('mandatory_entrance') == "on") ? true : false ;
+        $location_priority = $request->get('location_priority') ;
         $longitude= $request->get('longitude');
         $latitude = $request->get('latitude');
         $introduction = $getLoction['ContentData'][0]['introduction'];
         $description =  $getLoction['ContentData'][0]['description'];
-        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description);
+        $EditLocation = $this->api->EditLocation($location_name,$text_id,$location_english_name,$location_english_address,$location_address,$location_id,$mandatory_entrance,$longitude, $latitude,$introduction,$description , $location_priority);
+//        return $EditLocation;
         if ($EditLocation['Header']['MessageCode'] == 0){
 
             $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
@@ -137,6 +143,7 @@ class LocationController extends Controller
             $locations[$locationIndex[0]]["longitude"] = $longitude ;
             $locations[$locationIndex[0]]["introduction"] = $introduction ;
             $locations[$locationIndex[0]]["description"] = $description ;
+            $locations[$locationIndex[0]]["location_priority"] = $location_priority ;
             $locations[$locationIndex[0]]["text"] = [
                 "id" => $text_id,
                 "top_text" => $request->get('top_text'),

@@ -156,19 +156,20 @@ class Api
 
         return array_values($locations);
     }
-    public function AddLocation($location_name, $province_id, $text_id, $city_id, $location_english_name, $location_address, $location_english_address,$mandatory_entrance ,$longitude , $latitude , $project_id){
+    public function AddLocation($location_name, $province_id, $text_id, $city_id, $location_english_name, $location_address, $location_english_address,$mandatory_entrance ,$longitude , $latitude , $project_id , $location_priority){
         $data = [
-            "location_name"=> $location_name,
+            "location_name"=> $location_name, //
             "location_english_name"=> $location_english_name,
             "location_address"=> $location_address,
             "location_english_address"=> $location_english_address,
-            "province_id"=> $province_id,
-            "city_id"=> $city_id,
+            "province_id"=> $province_id, //
+            "city_id"=> $city_id, //
             "text_id"=> $text_id,
             "mandatory_entrance"=> $mandatory_entrance,
             "latitude" => $latitude ,
             "longitude" => $longitude ,
-            "project_id" => $project_id ,
+            "project_id" => $project_id , //
+            "location_priority"  => $location_priority , //
         ];
         $client = new Client();
         $result = $client->post($this->url . 'AddLocation' ,[
@@ -181,7 +182,7 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function EditLocation($location_name, $text_id, $location_english_name, $location_english_address, $location_address, $location_id,$mandatory_entrance , $longitude , $latitude , $introduction,$description){
+    public function EditLocation($location_name, $text_id, $location_english_name, $location_english_address, $location_address, $location_id,$mandatory_entrance , $longitude , $latitude , $introduction,$description , $location_priority){
         $data = [
             "location_name"=> $location_name,
             "location_english_name"=> $location_english_name,
@@ -194,8 +195,10 @@ class Api
             "latitude"=> $latitude,
             "introduction"=> $introduction,
             "description"=> $description,
+            "location_priority"=> $location_priority,
         ];
         $client = new Client();
+        Log::info($data);
         $result = $client->post($this->url . 'EditLocation' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -483,13 +486,10 @@ class Api
                 'json'=>$data
             ]
         );
-//        $response = json_decode($result->getBody(),true);
-//        $this->checkError($response);
-//        return $result->getBody()->getContents();
-        return $result = [
-            'type' => $result->getHeader("Content-Type")[0] ,
-            'content' => $result->getBody()->getContents() ,
-        ];
+        $response = json_decode($result->getBody(),true);
+//        Log::info($response);
+        $this->checkError($response);
+        return $response;
     }
     public  function GetPicturesInfo($location_id,$service_id,$project_id,$voucher_info_id){
         $data = [
@@ -523,19 +523,58 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag){
+    /*public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag , $file_type="image"){
         $data = [
-            "project_id" => $project_id,
-            "location_id" => $location_id,
-            "service_id" => $service_id,
-            "voucher_info_id" => $voucher_info_id,
-            "pic_str" => $pic_str ,
+            "project" => $project_id,
+            "location" => $location_id,
+            "service" => $service_id,
+            "voucher_info" => $voucher_info_id,
+            "file" => $pic_str ,
             "tag" => $tag ,
+            "file_type" => $file_type ,
         ];
+        Log::info("AddPicture" , $data);
         $client = new Client();
         $result = $client->Post($this->url . 'AddPicture',[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response);
+        return $response;
+    }*/
+    public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag , $file_type="image" , $format="png"){
+        $dataItem =   [
+            "project" => $project_id,
+            "location" => $location_id,
+            "service" => $service_id,
+            "voucher_info" => $voucher_info_id,
+            "tag" => $tag ,
+            "file_type" => $file_type ,
+        ] ;
+        $data =  [
+            [
+                'name' => 'file',
+                'contents' => $pic_str,
+                'filename' => time()."." . $format ,
+            ],
+            [
+            'name' => 'data',
+            'contents' => json_encode($dataItem) ,
+            ]
+        ] ;
+        // for get Session Id form Header
+        $seesion_id = $this->getHeader();
+        $seesion_id = $seesion_id["Session-Id"];
+        // **********
+        $client = new Client();
+        $result = $client->Post($this->url . 'AddPicture',[
+                'multipart' => $data  ,
+                "headers" =>  [
+                    'Authorization'=>$this->AUTHORIZATION,
+                    'Session-Id' => $seesion_id
+                ] ,
             ]
         );
         $response = json_decode($result->getBody(),true);
@@ -2020,12 +2059,13 @@ class Api
     function GetImageAddress($id)
     {
         $GetPicture = $this->GetPicture($id);
-//        Log::info($GetPicture);
-        $mime = $GetPicture['type'];
-        $content = $GetPicture['content'];
-        $base64   = base64_encode($content);
-        return ('data:' . $mime . ';base64,' . $base64);
-//        return $GetPicture;
+        Log::info($GetPicture);
+//        $mime = $GetPicture['type'];
+//        $content = $GetPicture['content'];
+//        $base64   = base64_encode($content);
+//        return ('data:' . $mime . ';base64,' . $base64);
+        $file = $GetPicture["ContentData"]["file"];
+        return $file;
     }
     function GetDocumentAddress($id , $tag)
     {

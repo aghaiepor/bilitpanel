@@ -368,7 +368,7 @@
                                                     {{ ( $result['user_cellphone'] == "" ) ? " - " :  $result['user_cellphone']}}
                                                 </td>
                                                 <td>
-                                                    {{$result['voucher_number']}}
+                                                    {{$result['vouch er_number']}}
                                                 </td>
                                                 <td>
                                                     {{ ( $result['RRN'] == "" ) ? " - " :  $result['RRN']}}
