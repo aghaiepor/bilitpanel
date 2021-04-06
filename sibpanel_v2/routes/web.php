@@ -100,6 +100,13 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/AddServicePicture/{id?}' ,'LocationController@AddServicePicture' )->name('AddServicePicture');
         Route::post('/AddServiceOff/{id}' ,'LocationController@AddServiceOff' )->name('AddServiceOff');
 
+        // Package Route
+        Route::get('/PackageList/{id}' ,'LocationController@PackageList' )->name('PackageList');
+        Route::post('/GetPackage' ,'LocationController@GetPackage' )->name('GetPackage');
+        Route::post('/AddPackage/{location_id}' ,'LocationController@AddPackage' )->name('AddPackage');
+        Route::post('/DeletePackage/{id}' ,'LocationController@DeletePackage' )->name('DeletePackage');
+        Route::post('/EditPackage/{location_id}/{id?}' ,'LocationController@EditPackage' )->name('EditPackage');
+
         // Voucher Route
         Route::post('/AddVoucherInfo/{service_id}/{location_id}' ,'LocationController@AddVoucherInfo' )->name('AddVoucherInfo');
         Route::post('/EditVoucherInfo/{service_id?}/{location_id?}/{id?}' ,'LocationController@EditVoucherInfo' )->name('EditVoucherInfo');

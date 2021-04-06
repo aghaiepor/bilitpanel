@@ -23,11 +23,12 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Cache::get('LocationList' . session('UserInfo')['user_id']) ;
+//        return $locations ;
         $locations = array_filter($locations, function ($event) {
             return $event['project_id'] == 1;
         });
         $locations = array_values($locations) ;
-//        return $locations ;
+
         $province = Cache::get('ProvinceList' . session('UserInfo')['user_id']) ;
         $GetProjectList = Cache::get('ProjectList' . session('UserInfo')['user_id']);
         $GetVoucherText = Cache::get("GetVoucherText" . session('UserInfo')['user_id']);
@@ -582,6 +583,90 @@ class LocationController extends Controller
 
 
     }
+
+    //******* Package
+    public function PackageList($id){
+        $locationID = $id ;
+        $Packages = $this->api->GetPackageList($locationID) ;
+//        return $Packages ;
+        $LocationList = Cache::get('LocationList' . session('UserInfo')['user_id']);
+        $LocationList = array_filter($LocationList, function ($event) use ($locationID) {
+            return $event['id'] == $locationID;
+        });
+        $LocationList = array_values($LocationList) ;
+        if(count($LocationList) == 0)
+            return abort("404");
+
+        $info = $LocationList[0] ;
+        $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
+        $GetServices = array_filter($GetServices, function ($event) use ($locationID) {
+            return $event['location_id'] == $locationID;
+        });
+        $GetServices = array_values($GetServices) ;
+        $VoucherTypes = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
+//        return  $VoucherTypes ;
+//      return $GetServices ;
+        return view('Package' , [
+            'GetServices'=> $GetServices ,
+            'location_id' => $locationID ,
+            'Packages' => $Packages["ContentData"] ,
+            'VoucherTypes' => $VoucherTypes ,
+            'info' => $info ,
+        ]);
+
+    }
+    public function AddPackage(Request $request , $location_id)
+    {
+//      return $request->all();
+        $name = $request->get("name") ;
+        $voucher_type_id = $request->get("voucher_type_id") ;
+        $amount = $request->get("amount") ;
+        $service_ids = $request->get("service_ids") ;
+        $service_ids = array_map('intval', $service_ids);
+        $AddPackage = $this->api->AddPackage($name , $location_id , $service_ids , $amount , $voucher_type_id);
+        if($AddPackage["Header"]["Status"] == 0)
+        {
+            return redirect()->back()->with("success" , " پکیج مورد نظر ايجاد گردید ");
+        }
+        else
+            return redirect()->back()->with("error" , " خطا در ايجاد پيکج ! ");
+
+    }
+    public function EditPackage(Request $request , $location_id , $package_id)
+    {
+//      return $request->all();
+        $name = $request->get("name") ;
+        $voucher_type_id = $request->get("voucher_type_id") ;
+        $amount = $request->get("amount") ;
+        $service_ids = $request->get("service_ids") ;
+        $service_ids = array_map('intval', $service_ids);
+        $AddPackage = $this->api->EditPackage($package_id , $name , $location_id , $service_ids , $amount , $voucher_type_id);
+        if($AddPackage["Header"]["Status"] == 0)
+        {
+            return redirect()->back()->with("success" , "تغييرات با موفقيت اعمال گرديد . ");
+        }
+        else
+            return redirect()->back()->with("error" , " خطا در اعمال تغييرات ! ");
+
+    }
+    public function GetPackage(Request $request)
+    {
+        $id = $request->get("id") ;
+        $GetPackage = $this->api->GetPackage($id);
+        return $GetPackage ;
+    }
+    public function DeletePackage($id)
+    {
+        $DeletePackage = $this->api->DeletePackage($id);
+        if($DeletePackage["Header"]["Status"] == 0)
+        {
+            return redirect()->back()->with("success" , " پکیج مورد نظر حذف گردید ");
+        }
+        else
+            return redirect()->back()->with("error" , " خطا در حذف پيکج ! ");
+
+    }
+
     // ******* Voucher
     public function VoucherInfoList($service_id , $location_id)
     {

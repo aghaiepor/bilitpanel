@@ -32,7 +32,6 @@
                     </button>
                 </div>
             @elseif(session('error'))
-
                 <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
                     {{ session('error') }}
                     <button type="button" class="close mt-2 pt-3" data-dismiss="alert" aria-label="Close">
@@ -123,6 +122,9 @@
                                         <th >
                                             مدیریت جاذبه
                                         </th>
+                                        <th >
+                                            مدیریت پکيج ها
+                                        </th>
                                         <th class="d-none" >
                                            پنل شهروندی
                                         </th>
@@ -170,6 +172,12 @@
                                                     <a href="{{Route('GetService' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-info btn-simple">
                                                         <i class="material-icons">domain </i>
                                                           مدیریت جاذبه
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{Route('PackageList' , ['id' => $location['id']])}}" type="button" rel="tooltip" class="btn  btn-warning btn-simple">
+                                                        <i class="material-icons">domain </i>
+                                                          مدیریت پکيج
                                                     </a>
                                                 </td>
                                                 <td class="d-none">
