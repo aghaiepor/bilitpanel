@@ -62,6 +62,11 @@
         .table thead tr th {
             font-size: 10pt !important;
         }
+        .delSansStyle{
+            cursor: pointer;
+            width: 15px ;
+            height: 15px !important;
+        }
     </style>
 
     <link id="s1" rel="stylesheet" type="text/css" href="{{ asset('assets/css/persian-datepicker_service_time.css') }}">
@@ -289,7 +294,7 @@
         </div>
 
     <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="testLabel" aria-hidden="true">
-        <div style="max-width: 620px" class="modal-dialog" role="document">
+        <div style="max-width: 670px" class="modal-dialog" role="document">
             <form method="post" action="">
                 @csrf
                 <div class="modal-content">
@@ -414,7 +419,8 @@
                             <div class="col-12 text-right">
                                 <button id="createSans" type="button" onclick="addSeance()" class="btn btn-sm btn-success mt-3 ">اضافه کردن سانس<div class="ripple-container"></div></button>
                                 <button data-id="" style="display: none"  id="editSansBtn" type="button" class="btn btn-sm btn-info mt-3 ">اعمال تغيرات<div class="ripple-container"></div></button>
-                                <button type="button" onclick="removeAllSeance()" class="btn btn-sm btn-danger d-none float-left mt-3">حذف همه سانس ها</button>
+{{--                                <button type="button" onclick="removeAllSeance()" class="btn btn-sm btn-danger d-none float-left mt-3">حذف همه سانس ها</button>--}}
+                                <button style="display: none" id="DelCheckSanse" type="button" class="btn btn-sm btn-danger float-left mt-3">حذف  سانس های انتخابی</button>
                                 <button type="button" style="display: none" id="editSansCancelBtn" class="btn btn-sm btn-danger float-left mt-3">انصراف</button>
                             </div>
                         </div>
@@ -426,6 +432,9 @@
                                         <thead class="text-primary ">
                                         <tr>
 
+                                            <th style="cursor: pointer" >
+                                                <input id="allCheck"  style='width: 15px ; height: 15px !important;' type='checkbox' class='form-control delSansStyle'>
+                                            </th>
                                             <th>
                                                 زمان شروع
                                             </th>
@@ -1628,6 +1637,7 @@
             }
         }
         $(document).on("click" , ".sanseBtn" , function () {
+
             let sansId = $(this).parent().parent().parent().attr("data-date").replace(/,/g, '-');
             // console.log("id ==> " , sansId)
             // console.log("serviceTimes ==> " , serviceTimes)
@@ -1643,6 +1653,15 @@
                 }
             }
             showSans(sanas , day);
+            let allBoxElement = $("#allCheck") ;
+            allBoxElement.prop("indeterminate", false)
+            allBoxElement.prop("checked" , false);
+
+            let allCheckBox  = $("input[name=delSans]") ;
+            if(allCheckBox.length == 0)
+                allBoxElement.prop("disabled" , true);
+            else
+                allBoxElement.prop( "disabled", false );
             // console.log("sanas => " , sanas);
         })
 
@@ -1822,7 +1841,7 @@
                     let row = table.insertRow();
                     row.setAttribute("SansId", data[j].service_time_id) ;
                     // seance_date = row.insertCell();
-                    // cheackArea = row.insertCell();
+                    cheackArea = row.insertCell();
                     start_Sanse = row.insertCell();
                     end_Sanse = row.insertCell();
 
@@ -1840,7 +1859,8 @@
                     // seance_date.setAttribute("value", "2020-12-12") ;
                     // seance_date.setAttribute("class", "d-none") ;
 
-                    // cheackArea.innerHTML = "<input type='checkbox' class='form-control'>" ;
+                    cheackArea.innerHTML = "<input value='" +data[j].service_time_id +"' name='delSans' style='width: 15px ; height: 15px !important;' type='checkbox' class='form-control delSansStyle'>" ;
+
                     start_Sanse.innerHTML = data[j].start ;
                     start_Sanse.setAttribute("value", data[j].start) ;
                     start_Sanse.setAttribute("day-value", day) ;
@@ -2117,12 +2137,22 @@
                 $("#finalSetTimesBtn").show();
             }, 500)
         }
-        /*$(document).on("click" , "#addSans" , function () {
-            for(let i=0; i<selectedDays.length; i++){
+        $(document).on("click" , "#addSans" , function () {
+            let allBoxElement = $("#allCheck") ;
+            allBoxElement.prop("indeterminate", false)
+            allBoxElement.prop("checked" , false);
+
+            let allCheckBox  = $("input[name=delSans]") ;
+            if(allCheckBox.length == 0)
+                allBoxElement.prop("disabled" , true);
+            else
+                allBoxElement.prop( "disabled", false );
+
+           /* for(let i=0; i<selectedDays.length; i++){
                 let day = selectedDays[i];
                     console.log("day Selected : " , day )
-            }
-        });*/
+            }*/
+        });
         function finalSetTimes() {
             let newSans = $("#seances tr[new]") ;
             if(serviceTimes_new.length == 0 )
@@ -2380,6 +2410,7 @@
             }*/
             let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
 
+            let chackArea;
             let start_Sanse ;
             let end_Sanse ;
 
@@ -2395,6 +2426,7 @@
             let row = table.insertRow();
             row.setAttribute("new", x ) ;
             // seance_date = row.insertCell();
+            chackArea = row.insertCell();
             start_Sanse = row.insertCell();
             end_Sanse = row.insertCell();
 
@@ -2412,6 +2444,8 @@
             // seance_date.innerHTML = "2020-12-12" ;
             // seance_date.setAttribute("value", "2020-12-12") ;
             // seance_date.setAttribute("class", "d-none") ;
+
+            chackArea.innerHTML = "<input disabled type='checkbox' style='width: 15px ; height: 15px !important;' class='form-control '>" ;
 
             start_Sanse.innerHTML = start ;
             start_Sanse.setAttribute("value", start) ;
@@ -2582,6 +2616,16 @@
             $(document).on("click" ,".editSanse"  , function () {
                 $("#loader21").css("display" , "flex");
                 $("#seances tr").removeAttr("style") ;
+
+                // for uncheack selected
+                $("input[name=delSans]").each(function () {
+                    if($(this).is(":checked"))
+                    {
+                        $(this).prop("checked" , false)
+                    }
+                })
+                $("#DelCheckSanse").fadeOut(300);
+                //**************
 
                 let seance_start = $(this).parents("tr").find("td[class=seance_start]").attr("value");
                 seance_start = seance_start.split(":");
@@ -3024,11 +3068,11 @@
                 $("#finalSetTimesBtn").fadeOut();
             }
 
-
                 // when voucher not exist
             let child = $("#seances_voucherInfo tr ") ;
             if(child.length == 1 )
                 $(".no-voucher").fadeIn(500);
+
 
         }
 
@@ -3081,8 +3125,8 @@
                 let el = $(this) ;
                 $("#loader").css("display" , "flex")
                 $("#loader").css("zIndex" , "90000000")
-                let service_time_id = $(this).attr("add-id") ;
-                console.log("service_time_id : " , service_time_id)
+                let service_time_id = [] ;
+                service_time_id.push($(this).attr("add-id"))
                 $.ajax({
                     type:'POST',
                     url:"{{Route('DeleteServiceTime')}}" ,
@@ -3128,20 +3172,18 @@
                     },
                     success : function (data) {
                         $("#loader").hide();
-                        console.log("data : " , data);
                         if(data.Header.MessageCode == 0  )
                         {
+                            refreshTimes(function(output){
+                                serviceTimes = output ;
+                            });
                             Swal.fire(
                                 'عملیات با موفقیت انجام گردید . ',
                                 '',
                                 'success'
                             )
-                            refreshTimes(function(output){
-                                serviceTimes = output ;
-                            });
                             let seancesSize = $("#seances tr").first();
-                            if(seancesSize.length == 1 )
-                            {
+                            if(seancesSize.length == 1 ) {
                                 let day = "" ;
                                 $('#seances tr td').each(function () {
                                     if($(this).attr("class") == "seance_start" ){
@@ -3151,6 +3193,7 @@
                                 reSetSelected(day)
                             }
                             removeSeance(el);
+
                         }
                         else if (data.Header.MessageCode == 13) {
                             Swal.fire(
@@ -3173,8 +3216,7 @@
                                 'warning'
                             )
                         }
-                        else
-                        {
+                        else {
                             Swal.fire(
                                 'خطا در انجام عملیات ! ',
                                 ' دوباره سعی نمایید.',
@@ -3185,9 +3227,244 @@
                     }
                 })
             });
+            let RemoveDate ;
+            $(document).on("click", "input[name=delSans]" , function () {
+                RemoveDate = []
+                if($(this).is(":checked"))
+                {
+                    $(this).parents("tr").css("background" , "#d5f1ff")
+                }
+                else
+                {
+                    $(this).parents("tr").removeAttr("style") ;
+                }
+                $("input[name=delSans]").each(function () {
+                    if($(this).is(":checked"))
+                        RemoveDate.push($(this).val())
+                })
+                let allCheckBox  = $("input[name=delSans]") ;
+                let allBoxElement = $("#allCheck") ;
+                if(RemoveDate.length == 0 )
+                {
+                    $("#DelCheckSanse").fadeOut(300);
+                    allBoxElement.prop("indeterminate", false)
+                    allBoxElement.prop("checked" , false);
+                }
+                else
+                {
+                    $("#DelCheckSanse").fadeIn(300);
+                    if(RemoveDate.length == allCheckBox.length)
+                    {
+                        allBoxElement.prop("indeterminate", false)
+                        allBoxElement.prop("checked" , true);
+                    }
+                    else
+                    {
+                        allBoxElement.prop("checked" , false);
+                        allBoxElement.prop("indeterminate", true)
+                    }
+                }
+
+
+            })
+            $(document).on("click", "#DelCheckSanse" , function () {
+                $("#loader1").css("display" , "flex");
+                if(RemoveDate.length == 0 )
+                {
+                    Swal.fire(
+                        'خطا !',
+                        ' آیتمی برای حذف انتخاب نشده است . ',
+                        'error'
+                    )
+                    $("#loader1").hide();
+                }
+                else
+                {
+                    service_time_id = RemoveDate ;
+                    $.ajax({
+                        type:'POST',
+                        url:"{{Route('DeleteServiceTime')}}" ,
+                        dataType:'json',
+                        data:{
+                            '_token' : '<?php echo csrf_token() ?>',
+                            'service_time_id' : service_time_id ,
+                        },
+                        statusCode: {
+                            500: function() {
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'خطا در دريافت اطلاعات ! ',
+                                    'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                    'error'
+                                )
+                            } ,
+                            400: function() {
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1 ;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++  ;
+                                    // console.log(x)
+                                    if(x >= 8 ){
+                                        x = 1 ;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                } , 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning' ,
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                } , 1500)
+
+                            }
+                        },
+                        success : function (data) {
+                            $("#loader1").hide();
+                            console.log("data : " , data);
+                            if(data.Header.MessageCode == 0  )
+                            {
+                                Swal.fire(
+                                    'عملیات با موفقیت انجام گردید . ',
+                                    '',
+                                    'success'
+                                )
+                                refreshTimes(function(output){
+                                    serviceTimes = output ;
+                                });
+                                removeSelectSeance(RemoveDate);
+                                let allBoxElement = $("#allCheck") ;
+                                allBoxElement.prop("indeterminate", false)
+                                allBoxElement.prop("checked" , false);
+
+
+                            }
+                            else if (data.Header.MessageCode == 13) {
+                                Swal.fire(
+                                    'خطا در انجام عملیات ! ',
+                                    '  اطلاعات وارد شده نامعتبر مي باشد ',
+                                    'error'
+                                )
+                            }
+                            else if (data.Header.MessageCode == 182) {
+                                Swal.fire(
+                                    'خطا در انجام عملیات ! ',
+                                    '  این بلیت خریداری شده و قابل جذف یا ویرایش نیست ',
+                                    'error'
+                                )
+                            }
+                            else if (data.Header.MessageCode == 133) {
+                                Swal.fire(
+                                    'خطا در انجام عملیات ! ',
+                                    '  شما مجاز به انجام اين عمليات مي باشيد. ',
+                                    'warning'
+                                )
+                            }
+                            else
+                            {
+                                Swal.fire(
+                                    'خطا در انجام عملیات ! ',
+                                    ' دوباره سعی نمایید.',
+                                    'error'
+                                )
+                            }
+
+                        }
+                    })
+
+                }
+            })
+            $(document).on("click" , "#allCheck" , function () {
+                let sizeChecked  = 0 ;
+                RemoveDate = []
+                let allCheckBox  = $("input[name=delSans]") ;
+                if (allCheckBox.length == 0 )
+                {
+                    $("#allCheck").prop("checked" , false);
+                    $("#allCheck").prop("indeterminate", false) ;
+                    return ;
+                }
+
+                $("input[name=delSans]").each(function () {
+                    if($(this).is(":checked"))
+                    {
+                        $(this).prop("checked" , false)
+                        $(this).parents("tr").removeAttr("style") ;
+                    }
+                    else
+                    {
+                        $(this).prop("checked" , true)
+                        RemoveDate.push($(this).val())
+                        $(this).parents("tr").css("background" , "#d5f1ff")
+                        ++sizeChecked ;
+                    }
+                })
+                if(allCheckBox.length == sizeChecked)
+                {
+                    $("#allCheck").prop("indeterminate", false)
+                    $("#allCheck").prop("checked" , true);
+                }
+                else if(sizeChecked == 0 )
+                {
+                    $("#allCheck").prop("checked" , false);
+                    $("#allCheck").prop("indeterminate", false) ;
+                }
+                else
+                {
+                    $("#allCheck").prop("indeterminate", true)
+                }
+
+
+                if(sizeChecked > 0 )
+                    $("#DelCheckSanse").fadeIn(300);
+                else
+                    $("#DelCheckSanse").fadeOut(300);
+
+            })
+            $(document).on("dblclick" , "#allCheck" , function () {
+                RemoveDate = []
+                let allCheckBox  = $("input[name=delSans]") ;
+                if (allCheckBox.length == 0 )
+                {
+                    $("#allCheck").prop("checked" , false);
+                    $("#allCheck").prop("indeterminate", false) ;
+                    return ;
+                }
+                allCheckBox.each(function () {
+                    $(this).prop("checked" , true)
+                    $(this).parents("tr").css("background" , "#d5f1ff")
+                    RemoveDate.push($(this).val())
+                })
+                $("#DelCheckSanse").show();
+                $("#allCheck").prop("indeterminate", false)
+                $("#allCheck").prop("checked" , true);
+
+            })
 
         })
+        function removeSelectSeance(data) {
+            $('#seances tr').each(function () {
+                let sansid = $(this).attr("sansid");
+                let el = $(this) ;
+                if(data.indexOf(sansid) != -1)
+                {
+                    el.remove();
+                }
+                $("#DelCheckSanse").fadeOut(300);
 
+                let allCheckBox  = $("input[name=delSans]") ;
+                let allBoxElement = $("#allCheck") ;
+                if(allCheckBox.length == 0)
+                    allBoxElement.prop("disabled" , true);
+                else
+                    allBoxElement.prop( "disabled", false );
+            });
+        }
         function removeAllSeance() {
             $('#seances').children().each(function () {
                 $(this).remove();
