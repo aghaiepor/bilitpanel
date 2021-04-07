@@ -1177,10 +1177,11 @@ class Api
     }
 
     // ******************* Province and City *******************
-    public function AddProvince($name_fa, $name_en){
+    public function AddProvince($name_fa, $name_en ,$country_id="1"){
         $data = [
             'province'=> $name_fa,
             'province_english_name'=> $name_en,
+            'country_id'=> $country_id,
         ] ;
         $client = new Client();
         $result = $client->post($this->url . 'AddProvince' ,[
