@@ -477,6 +477,97 @@ class Api
         return $response;
     }
 
+    // ******************* PackageList  *******************
+    public function GetPackageList($location_id){
+        $data = [
+            "location_id" => $location_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetPackageList' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+
+    }
+    public function AddPackage($name , $location_id , $service_ids , $amount , $voucher_type_id){
+        $data = [
+            "name" => $name,
+            "location_id"=> $location_id,
+            "service_ids"=> $service_ids,
+            "amount"=> $amount,
+            "voucher_type_id"=> $voucher_type_id
+        ];
+        $client = new Client();
+        Log::info(gettype($service_ids));
+        Log::info("AddPackage : " , $data);
+        $result = $client->post($this->url . 'AddPackage' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+
+    }
+    public function EditPackage($package_id , $name , $location_id , $service_ids , $amount , $voucher_type_id){
+        $data = [
+            "package_id"=> $package_id,
+            "name" => $name,
+            "location_id"=> $location_id,
+            "service_ids"=> $service_ids,
+            "amount"=> $amount,
+            "voucher_type_id"=> $voucher_type_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'EditPackage' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response);
+        return $response;
+    }
+    public function DeletePackage($package_id){
+        $data = [
+            "package_id" => $package_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'DeletePackage' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+
+    }
+    public function GetPackage($package_id){
+        $data = [
+            "package_id" => $package_id
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'GetPackage' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+
+    }
+
     // ******************* citizen panel *******************
     public  function GetPicture($location_id){
         $data = null;

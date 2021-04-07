@@ -21,7 +21,13 @@
         .datepicker-navigator .title{
             margin: 0 !important;
             min-height: 0 !important;
-
+        }
+        .SelectSpinner
+        {
+            width: 30px;
+            height: 30px;
+            color: #fff !important;
+            box-shadow: 0px 0px 15px 3px #999;
         }
     </style>
 @endsection
@@ -138,7 +144,10 @@
                                     else
                                         $citys = [] ;
                                     @endphp
-                                    <div class="col-md-3 text-right">
+                                    <div class="col-md-3 text-right position-relative">
+                                        <div id="loader_cityList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                            <div class="spinner-border SelectSpinner mx-auto d-block mb-3"></div>
+                                        </div>
                                         <label for=""> انتخاب شهر  </label>
                                         <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
                                             <option value=""> همه </option>
@@ -163,6 +172,9 @@
                                         $location_lists = [] ;
                                     @endphp
                                     <div class="col-md-3 text-right">
+                                        <div id="loader_locationList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                            <div class="spinner-border SelectSpinner mx-auto d-block mb-3 " ></div>
+                                        </div>
                                         <label for=""> انتخاب مکان   </label>
                                         <select name="location_id" id="locationList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
                                             <option value=""> همه </option>
@@ -186,6 +198,9 @@
                                         $ServiceLists = [] ;
                                     @endphp
                                     <div class="col-md-3 text-right">
+                                        <div id="loader_ServiceList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                            <div class="spinner-border SelectSpinner mx-auto d-block mb-3"></div>
+                                        </div>
                                         <label for=""> انتخاب موزه </label>
                                         <select name="service_id" id="ServiceList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه ">
                                             <option value=""> همه </option>
@@ -565,7 +580,7 @@
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
 
-            $('#project').change(function () {
+            /*$('#project').change(function () {
                 var project_id = $('#project').val();
                 $.ajax({
                     type:'POST',
@@ -620,9 +635,10 @@
                         $('.selectpicker').selectpicker('refresh');
                     }
                 });
-            });
-            $('#project , #province').change(function () {
+            });*/
+            $('#province').change(function () {
                 var province_id = $('#province').val();
+                $("#loader_cityList").css("display", "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('CityList')}}",
@@ -630,7 +646,8 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
-                    },statusCode: {
+                    },
+                    statusCode: {
                         500: function() {
                             $("#loader").hide();
                             Swal.fire(
@@ -672,13 +689,15 @@
                         for(var i = 0 ; i < data.data.length ; i++){
                             $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
                         }
-                        $('.selectpicker').selectpicker('refresh');
+                        $('.selectpicker').selectpicker('refresh')
+                        $("#loader_cityList").hide();
                     }
                 });
             });
-            $('#project , #cityList , #province').change(function () {
+            $('#cityList , #province').change(function () {
                 var province_id = $('#province').val();
                 var city_id = $('#cityList').val();
+                $("#loader_locationList").css("display", "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('location_list')}}",
@@ -687,7 +706,8 @@
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
                         'city_id' : city_id ,
-                    },statusCode: {
+                    },
+                    statusCode: {
                         500: function() {
                             $("#loader").hide();
                             Swal.fire(
@@ -697,33 +717,31 @@
                             )
                         } ,
                         400: function() {
-                             if (session_fall){
+                             if (session_fall) {
                                  let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                 let x = 1 ;
+                                 let x = 1;
                                  let dots = "";
                                  setInterval(function () {
                                      dots += ".";
-                                     x++  ;
+                                     x++;
                                      // console.log(x)
-                                     if(x >= 8 ){
-                                         x = 1 ;
+                                     if (x >= 8) {
+                                         x = 1;
                                          dots = ".";
                                      }
                                      $("#dots").html(dots)
-                                 } , 300)
+                                 }, 300)
                                  $("#loader").hide();
                                  Swal.fire(
                                      'نشست  شما پایان یافته است ! ',
                                      html,
-                                     'warning' ,
+                                     'warning',
                                  )
                                  setTimeout(function () {
                                      window.location.href = "{{Route("logout")}}";
-                                 } , 1500)
-                                 session_fall = false ;
+                                 }, 1500)
+                                 session_fall = false;
                              }
-
-
                         }
                     },
                     success:function(data) {
@@ -736,12 +754,14 @@
                                 $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh');
+                        $("#loader_locationList").hide();
                     }
                 });
             });
-            $('#project , #cityList , #province , #locationList').change(function () {
+            $('#cityList , #province , #locationList').change(function () {
                 var locationID = $('#locationList').val();
                 // console.log("in the terminal location id is :  " + locationID)
+                $("#loader_ServiceList").css("display", "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('ServiceListReport')}}",
@@ -749,7 +769,8 @@
                     data:{
                         '_token ': '<?php echo csrf_token() ?>',
                         'locationID' : locationID ,
-                    },statusCode: {
+                    },
+                    statusCode: {
                         500: function() {
                             $("#loader").hide();
                             Swal.fire(
@@ -794,10 +815,11 @@
                         for(var i = 0 ; i< data.array_keys.length ; i++){
                             $("#ServiceList").append(new Option( data.data[[data.array_keys[i]]].service_name , data.data[[data.array_keys[i]]].service_id));
                         }
-
                         $('.selectpicker').selectpicker('refresh');
+                        $("#loader_ServiceList").hide();
                     }
                 });
+
                 $.ajax({
                     type:'POST',
                     url:"{{Route('ReportTerminalLocationList')}}",

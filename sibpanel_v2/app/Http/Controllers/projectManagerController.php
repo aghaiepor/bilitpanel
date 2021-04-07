@@ -87,13 +87,15 @@ class projectManagerController extends Controller
             return redirect()->back();
         $project_id = (int)$id;
         if ($request->hasFile('service_image')){
-            $image = base64_encode(file_get_contents($request->file('service_image')->path()));
-//            return $image;
-            $addPicture = $this->api->AddPicture($project_id , 0 , 0 , 0 , $image , "logo");
-//            return $addPicture;
+
+            $image =  $request->file('service_image') ;
+            $format = $image->getClientOriginalExtension();
+            $addPicture = $this->api->AddPicture($project_id , 0 , 0 , 0 , $image , "logo" , "" , $format);
+//            return $addPicture ;
             if($addPicture['Header']['Status'] == 0){
-                $project_image = $addPicture['ContentData']['picture_id'];
+                $project_image = $addPicture['ContentData']['id'];
                 $main_image_address = $this->api->GetImageAddress($project_image) ;
+//                return  $main_image_address ;
                 session(["logoAddress" =>  $main_image_address]);
                 return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
 //                return $addPicture['ContentData']['picture_id'];

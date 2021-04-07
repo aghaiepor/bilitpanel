@@ -23,6 +23,13 @@
             min-height: 0 !important;
 
         }
+        .SelectSpinner
+        {
+            width: 30px;
+            height: 30px;
+            color: #fff !important;
+            box-shadow: 0px 0px 15px 3px #999;
+        }
     </style>
 @endsection
 @php
@@ -79,7 +86,7 @@
                                 @if(count($ProjectList) > 1)
                                     <div class="col-md-3 text-right">
                                         <label for="">  پروژه </label>
-                                        <select id="project" name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
+                                        <select name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
                                             @foreach($ProjectList as $Project)
                                                 @if(is_null(request('project_id')) &&  $Project['project_id'] == 1 )
                                                     <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
@@ -115,7 +122,10 @@
                                 else
                                     $citys = [] ;
                                 @endphp
-                                <div class="col-md-3 text-right">
+                                <div class="col-md-3 text-right position-relative">
+                                    <div id="loader_cityList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                        <div class="spinner-border SelectSpinner mx-auto d-block mb-3"></div>
+                                    </div>
                                     <label for=""> انتخاب شهر  </label>
                                     <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
                                         <option value=""> همه </option>
@@ -141,6 +151,9 @@
                                     $location_lists = [] ;
                                 @endphp
                                 <div class="col-md-3 text-right">
+                                    <div id="loader_locationList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                        <div class="spinner-border SelectSpinner mx-auto d-block mb-3 " ></div>
+                                    </div>
                                     <label for=""> انتخاب مکان   </label>
                                     <select name="location_id" id="locationList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
                                         <option value=""> همه </option>
@@ -165,6 +178,9 @@
                                     $ServiceLists = [] ;
                                 @endphp
                                 <div class="col-md-3 text-right">
+                                    <div id="loader_ServiceList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                        <div class="spinner-border SelectSpinner mx-auto d-block mb-3"></div>
+                                    </div>
                                     <label for=""> انتخاب موزه </label>
                                     <select name="service_id" id="ServiceList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه ">
                                         <option value=""> همه </option>
@@ -542,8 +558,8 @@
             locationList = "{{request('location_id')}}";
             service_id = "{{request('service_id')}}";
             let session_fall = true;
-
-            $('#project').change(function () {
+            /*
+                $('#project').change(function () {
                 var project_id = $('#project').val();
                 $.ajax({
                     type:'POST',
@@ -599,8 +615,10 @@
                     }
                 });
             });
-            $('#project , #province').change(function () {
+            */
+            $('#province').change(function () {
                 var province_id = $('#province').val();
+                $("#loader_cityList").css("display", "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('CityList')}}",
@@ -651,14 +669,14 @@
                             $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh');
+                        $("#loader_cityList").hide();
                     }
                 });
             });
-            $('#project , #cityList , #province').change(function () {
+            $('#cityList , #province').change(function () {
                 var province_id = $('#province').val();
                 var city_id = $('#cityList').val();
-                console.log("province_id : " , province_id)
-                console.log("city_id : " , city_id)
+                $("#loader_locationList").css("display", "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('location_list')}}",
@@ -667,7 +685,8 @@
                         '_token ': '<?php echo csrf_token() ?>',
                         'province_id' : province_id ,
                         'city_id' : city_id ,
-                    },statusCode: {
+                    },
+                    statusCode: {
                         500: function() {
                             $("#loader").hide();
                             Swal.fire(
@@ -716,11 +735,13 @@
                                 $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id));
                         }
                         $('#locationList').selectpicker('refresh');
+                        $("#loader_locationList").hide();
                     }
                 });
             });
-            $('#project , #cityList , #province , #locationList').change(function () {
+            $('#cityList , #province , #locationList').change(function () {
                 var locationID = $('#locationList').val();
+                $("#loader_ServiceList").css("display", "flex");
                 $.ajax({
                     type:'POST',
                     url:"{{Route('ServiceListReport')}}",
@@ -775,6 +796,7 @@
                         }
 
                         $('.selectpicker').selectpicker('refresh');
+                        $("#loader_ServiceList").hide();
                     }
                 });
             });
