@@ -1801,6 +1801,7 @@
         function showSans(sanas, day) {
             $("#seances").html("");
             let table = document.getElementById("SansaTable").getElementsByTagName('tbody')[0];
+            let cheackArea ;
             let start_Sanse ;
             let end_Sanse ;
             let capacity_Sanse ;
@@ -1821,6 +1822,7 @@
                     let row = table.insertRow();
                     row.setAttribute("SansId", data[j].service_time_id) ;
                     // seance_date = row.insertCell();
+                    // cheackArea = row.insertCell();
                     start_Sanse = row.insertCell();
                     end_Sanse = row.insertCell();
 
@@ -1838,6 +1840,7 @@
                     // seance_date.setAttribute("value", "2020-12-12") ;
                     // seance_date.setAttribute("class", "d-none") ;
 
+                    // cheackArea.innerHTML = "<input type='checkbox' class='form-control'>" ;
                     start_Sanse.innerHTML = data[j].start ;
                     start_Sanse.setAttribute("value", data[j].start) ;
                     start_Sanse.setAttribute("day-value", day) ;
@@ -2345,7 +2348,6 @@
             let gender_val = $("select[name='seance_gender']").val();
             let total_capacity = $("#total_capacity").val();
             // let voucherType = $("#vouchers").val();
-            // let capacity = $("#capacity").val();
             // let amount = $("#amount").val();
             // let max_persent = $("#max_persent").val();
 
@@ -2384,7 +2386,7 @@
             // let vouchertyppe_Sanse ;
             let sex ;
             let capacity_Sanse ;
-            // let amount_Sanse ;
+            let Remain_capacity_Sans ;
             let activation ;
             let edit  ;
             let remove  ;
@@ -2400,6 +2402,7 @@
             sex = row.insertCell();
 
             capacity_Sanse = row.insertCell();
+            Remain_capacity_Sans = row.insertCell();
             // amount_Sanse = row.insertCell();
             activation = row.insertCell();
             setting = row.insertCell();
@@ -2433,6 +2436,10 @@
             capacity_Sanse.innerHTML = total_capacity ;
             capacity_Sanse.setAttribute("value", total_capacity) ;
             capacity_Sanse.setAttribute("class", "seance_capacity") ;
+
+            Remain_capacity_Sans.innerHTML = total_capacity ;
+            Remain_capacity_Sans.setAttribute("value", total_capacity) ;
+            Remain_capacity_Sans.setAttribute("class", "seance_capacity") ;
            /*
            amount_Sanse.innerHTML = amount ;
             amount_Sanse.setAttribute("value", amount) ;

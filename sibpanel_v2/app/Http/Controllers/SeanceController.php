@@ -245,8 +245,10 @@ class seanceController extends Controller
     }*/
     public function DeleteServiceTime(Request $request)
     {
+        $service_times_ids = [];
         $service_times_id = (int)$request->get('service_time_id');
-        $response = $this->api->DeleteServiceTime($service_times_id , "ajax");
+        array_push($service_times_ids ,$service_times_id);
+        $response = $this->api->DeleteServiceTime($service_times_ids , "ajax");
         return  $response;
     }
 

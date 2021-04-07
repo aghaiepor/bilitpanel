@@ -1177,11 +1177,10 @@ class Api
     }
 
     // ******************* Province and City *******************
-    public function AddProvince($name_fa, $name_en, $projects){
+    public function AddProvince($name_fa, $name_en){
         $data = [
             'province'=> $name_fa,
             'province_english_name'=> $name_en,
-            'project_id' => $projects,
         ] ;
         $client = new Client();
         $result = $client->post($this->url . 'AddProvince' ,[
@@ -1194,12 +1193,11 @@ class Api
         $this->checkError($response);
         return $response;
     }
-    public function EditProvince($name_fa, $province_id, $name_en, $projects){
+    public function EditProvince($name_fa, $province_id, $name_en){
         $data = [
             'province_id' => $province_id,
             'province'=> $name_fa,
             'province_english_name'=> $name_en,
-            'project_id' => $projects,
         ] ;
         $client = new Client();
         $result = $client->post($this->url . 'EditProvince' ,[
@@ -1373,7 +1371,7 @@ class Api
     public function DeleteServiceTime($service_times_id , $ajax=null)
     {
         $data = [
-           "service_time_id" => $service_times_id ,
+           "service_time_ids" => $service_times_id ,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'DeleteServiceTime' ,[

@@ -97,7 +97,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-row">
-                                                                        <div class="col-sm-12 mb-3 text-right">
+                                                                       {{-- <div class="col-sm-12 mb-3 text-right">
                                                                             <label for=""> انتخاب پروژه </label>
                                                                             <select name="projects" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                                                                 <option disabled selected> انتخاب پروژه </option>
@@ -108,9 +108,8 @@
                                                                                         <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
                                                                                     @endif
                                                                                 @endforeach
-
                                                                             </select>
-                                                                        </div>
+                                                                        </div>--}}
                                                                         <div class="col-sm text-right">
                                                                             <label for=""> نام استان </label>
                                                                             <input name="name_fa" value="{{$Province['province_name']}}" type="text" class="form-control" id="nameStateFa" placeholder="نام  استان">
@@ -162,14 +161,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-row">
-                        <div class="col-sm-12 mb-3 text-right">
+                        {{--<div class="col-sm-12 mb-3 text-right">
                             <label for="">  انتخاب پروژه </label>
                             <select name="projects" class="selectpicker" data-style="btn btn-primary border-dark" title="انتخاب پروژه">
                                 @foreach($projectList as $project)
                                     <option value="{{$project['project_id']}}"> {{$project['project_name']}} </option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div>--}}
                         <div class="col-sm text-right">
                             <label for="">  نام  استان </label>
                             <input name="name_fa" type="text" class="form-control" id="nameStateFa" placeholder="نام  استان">

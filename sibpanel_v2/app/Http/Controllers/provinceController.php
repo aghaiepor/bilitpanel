@@ -19,14 +19,16 @@ class provinceController extends Controller
         $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
 //        return $ProvinceList ;
         $projectList = $this->api->ProjectList();
+//        return $projectList ;
         return view('stateMg' , ['ProvinceList' => $ProvinceList , 'projectList' => $projectList['ContentData']]);
     }
     public function AddProvince(Request $request)
     {
         $name_fa = $request->get('name_fa');
         $name_en = $request->get('name_en');
-        $projects = $request->get('projects');
-        $AddProvince = $this->api->AddProvince($name_fa, $name_en, $projects);
+//        $projects = $request->get('projects');
+        $AddProvince = $this->api->AddProvince($name_fa, $name_en);
+//        return $AddProvince ;
         if ($AddProvince['Header']['Status'] == 0 ){
             Cache::forget('ProvinceList' . session('UserInfo')['user_id']);
             Cache::rememberForever('ProvinceList' . session('UserInfo')['user_id']  , function (){
@@ -42,9 +44,9 @@ class provinceController extends Controller
     {
         $name_fa = $request->get('name_fa');
         $name_en = $request->get('name_en');
-        $projects = $request->get('projects');
 
-        $EditProvince = $this->api->EditProvince($name_fa, $id ,$name_en, $projects);
+        $EditProvince = $this->api->EditProvince($name_fa, $id ,$name_en);
+//        return $EditProvince ;
         if ($EditProvince['Header']['Status'] == 0 ){
             Cache::forget('ProvinceList' . session('UserInfo')['user_id']);
             Cache::rememberForever('ProvinceList'  . session('UserInfo')['user_id'] , function (){
