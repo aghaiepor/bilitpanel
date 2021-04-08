@@ -3337,10 +3337,23 @@
                                 refreshTimes(function(output){
                                     serviceTimes = output ;
                                 });
+                                let day = "" ;
+                                $('#seances tr td').each(function () {
+                                    if($(this).attr("class") == "seance_start" ){
+                                        day = $(this).attr("day-value");
+                                    }
+                                });
                                 removeSelectSeance(RemoveDate);
+                                seancesSize = $("#seances tr").first();
+                                console.log("seancesSize.length " , seancesSize.length) ;
+                                if(seancesSize.length == 0) {
+                                    reSetSelected(day)
+                                }
+
                                 let allBoxElement = $("#allCheck") ;
                                 allBoxElement.prop("indeterminate", false)
                                 allBoxElement.prop("checked" , false);
+
 
 
                             }
