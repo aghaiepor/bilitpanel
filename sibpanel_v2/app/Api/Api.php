@@ -579,7 +579,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
 //        Log::info($response);
-        $this->checkError($response);
+        $this->checkError($response , "");
         return $response;
     }
     public  function GetPicturesInfo($location_id,$service_id,$project_id,$voucher_info_id){
@@ -2154,7 +2154,12 @@ class Api
 //        $content = $GetPicture['content'];
 //        $base64   = base64_encode($content);
 //        return ('data:' . $mime . ';base64,' . $base64);
-        $file = $GetPicture["ContentData"]["file"];
+        $file = null ;
+        if(array_key_exists("project_pics"  ,$GetPicture))
+        {
+            if( array_key_exists("file"  ,$GetPicture["project_pics"]) )
+                $file = $GetPicture["ContentData"]["file"];
+        }
         return $file;
     }
     function GetDocumentAddress($id , $tag)
