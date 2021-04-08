@@ -80,7 +80,7 @@
                                     <h4 class="card-title text-right font-weight-bold "> مدیریت پکیج های    {{$info['location_name']}} </h4>
                                 </div>
                                 <div class="col-sm">
-                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i>  افزودن جاذبه جدید </span>
+                                    <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i>  افزودن پکیج جدید </span>
                                     @php
 
                                         if (url()->current() != url()->previous() && url()->previous() != Route("loading")) {
@@ -137,18 +137,33 @@
                                                     {{ $Package['name'] }}
                                                 </td>
                                                 <td>
-                                                    {{ implode("," , $Package['service_ids']) }}
+                                                    @php
+                                                        $servies = $GetServices ;
+                                                        $PackageServes = $Package['service_ids'] ;
+                                                        $serviesId = array_column($servies, 'service_id')  ;
+                                                         $serviesIndex = array_filter($servies, function ($event) use ($PackageServes) {
+                                                                return in_array( $event['service_id'], $PackageServes);
+                                                        });
+                                                         $serviesIndex = array_values($serviesIndex) ;
+                                                         $serviesIndex = array_column($serviesIndex, 'service_name')  ;
+                                                    @endphp
+                                                    {{ implode(" - " , $serviesIndex) }}
                                                 </td>
                                                 <td>
+
                                                     {{  number_format($Package['amount'] , 0 , "." , ",") }}
                                                 </td>
                                                 <td>
-                                                    {{  $Package["voucher_type"] }}
+                                                    @foreach($VoucherTypes as $VoucherType)
+                                                        @if($VoucherType["voucher_type_id"] ==  $Package["voucher_type"])
+                                                            {{$VoucherType["voucher_type"]}}
+                                                        @endif
+                                                    @endforeach
                                                 </td>
-                                                <td>
+                                                <td >
                                                     <div class="togglebutton text-center">
                                                         <label dir="ltr">
-                                                            <input name="activation" data-package="{{$Package['id']}}" type="checkbox" @if($Package['active']) checked @endif>
+                                                            <input disabled name="activation" data-package="{{$Package['id']}}" type="checkbox" @if($Package['active']) checked @endif>
                                                             <span class="toggle"></span>
                                                         </label>
                                                     </div>
@@ -187,7 +202,7 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title " id="testLabel"> افزودن جاذبه جدید </h5>
+                    <h5 class="modal-title " id="testLabel"> افزودن پکیج جدید </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -210,7 +225,7 @@
                     <div class="form-row mt-4">
                         <div class="col-sm text-right">
                             <label for=""> سرویس ها</label>
-                            <select name="service_ids[]" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس" multiple>
+                            <select name="service_ids[]" class="selectpicker" data-style="btn btn-primary border-dark" title="نام سرویس" multiple>
                                 @foreach($GetServices as $GetService)
                                     <option value="{{$GetService["service_id"]}}"> {{$GetService["service_name"]}} </option>
                                 @endforeach
@@ -242,7 +257,7 @@
                         <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
                     </div>
                     <div class="modal-header">
-                        <h5 class="modal-title " id="testLabel"> افزودن جاذبه جدید </h5>
+                        <h5 class="modal-title " id="testLabel"> ویرایش پکیج </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -265,7 +280,7 @@
                         <div class="form-row mt-4">
                             <div class="col-sm text-right">
                                 <label for=""> سرویس ها</label>
-                                <select id="package_service_ids" name="service_ids[]" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع سرویس" multiple>
+                                <select id="package_service_ids" name="service_ids[]" class="selectpicker" data-style="btn btn-primary border-dark" title="نام سرویس" multiple>
                                     @foreach($GetServices as $GetService)
                                         <option value="{{$GetService["service_id"]}}"> {{$GetService["service_name"]}} </option>
                                     @endforeach
@@ -290,8 +305,6 @@
 @endsection
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
-    <script src="{{asset('')}}assets/js/persian-date.min.js"></script>
-    <script src="{{asset('')}}assets/js/persian-datepicker.min.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -300,25 +313,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            // persianDatepicker
-            $('#activation_date_off , #expiration_date_off').persianDatepicker({
-                initialValue: true,
-                autoClose : true ,
-                altField: '#inlineExampleAlt',
-                format: 'YYYY/MM/DD hh:mm:ss',
-                timePicker : {
-                    enabled : true
-                } ,
-                calendar:{
-                    persian:{
-                        locale: 'fa'
-                    }
-                },navigator:{
-                    scroll:{
-                        enabled:false
-                    }
-                },
-            });
+
 
             // for DeleteBtn Question
             $(document).on("click" , ".ServiceDeleteBtn" , function (e) {
@@ -340,7 +335,7 @@
             })
 
 
-            // for service activation
+            // for Package activation
             $('input[name=activation]').change(function () {
                 var service =$(this).attr('data-service') ;
                 var value = ($(this).is(':checked'));
