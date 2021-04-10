@@ -2772,7 +2772,7 @@
                     },
                     success : function (data) {
                         $("#loader1").hide();
-                        // console.log("data : " , data)
+                        console.log("data : " , data)
 
                         if(data.Header.MessageCode == 0  )
                         {
@@ -2791,6 +2791,9 @@
 
                                 $(this).find("td[class=seance_capacity]").text(total_capacity)
                                 $(this).find("td[class=seance_capacity]").attr("value" ,total_capacity )
+
+                                let remain_capacity = data.ContentData.service_time.remain_capacity
+                                $(this).find("td[class=remain_capacity]").text(remain_capacity)
 
                             });
                             resetTime();
