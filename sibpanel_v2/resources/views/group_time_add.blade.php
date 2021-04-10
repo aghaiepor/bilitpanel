@@ -2772,7 +2772,7 @@
                     },
                     success : function (data) {
                         $("#loader1").hide();
-                        console.log("data : " , data)
+                        // console.log("data : " , data)
 
                         if(data.Header.MessageCode == 0  )
                         {
