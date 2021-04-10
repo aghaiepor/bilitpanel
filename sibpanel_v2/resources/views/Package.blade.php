@@ -9,38 +9,8 @@
         .bootstrap-select{
             width: 100% !important;
         }
-        .citzen_main_img{
-            width: 70px;
-            height: 70px;
-            border-radius: 20%;
-            object-fit: cover;
-            cursor: pointer;
-            transition: 0.3s all;
-        }
-        .citzen_main_img:hover{
-            filter: brightness(1.2);
-            transform: scale(1.1);
-        }
-        .citzen_main_img:active{
-            filter: brightness(1.8);
-            transition: .1s filter;
-        }
-        #herf_modal_image{
-            display: block;
-            margin: 0 auto;
-        }
-        .citzen_img_lib{
-            padding: 8px;
-            border-radius: 5px;
-            border: solid 2px #FF9800;
-            font-size: 29pt !important;
-            color: #FF9800;
-            cursor: pointer;
-            transition: .3s all;
-        }
-        .citzen_img_lib:hover{
-            border: solid 2px #de8400;
-            color: #de8400;
+        .dropdown-menu{
+            min-width: 100% !important;
         }
     </style>
     <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
@@ -222,7 +192,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mt-4">
+                    <div class="form-row mt-4 " id="serviceList">
                         <div class="col-sm text-right">
                             <label for=""> سرویس ها</label>
                             <select name="service_ids[]" class="selectpicker" data-style="btn btn-primary border-dark" title="نام سرویس" multiple>
