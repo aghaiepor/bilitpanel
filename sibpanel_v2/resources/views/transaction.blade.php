@@ -558,6 +558,12 @@
             locationList = "{{request('location_id')}}";
             service_id = "{{request('service_id')}}";
             let session_fall = true;
+
+            $(".dropdown-toggle").click(function () {
+                $("#sidebar").css("z-index" , 2) ;
+
+            })
+
             /*
                 $('#project').change(function () {
                 var project_id = $('#project').val();

@@ -309,13 +309,13 @@
                                 <option value="1"> بله</option>
                             </select>
                         </div>
-                        <div class="col-sm-6 text-right">
+                       {{-- <div class="col-sm-6 text-right">
                             <label for=""> دسترسی به پنل (session_verify) </label>
                             <select id="addUser_session_verify" name="session_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="دسترسی به پنل">
                                 <option value="false"> خیر</option>
                                 <option value="true"> بله</option>
                             </select>
-                        </div>
+                        </div>--}}
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
@@ -413,13 +413,13 @@
                                     <option value="1"> بله</option>
                                 </select>
                             </div>
-                            <div class="col-sm-6 text-right">
+                           {{-- <div class="col-sm-6 text-right">
                                 <label for=""> دسترسی به پنل (session_verify) </label>
                                 <select id="user_session_verify" name="session_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="دسترسی به پنل">
                                     <option value="false"> خیر</option>
                                     <option value="true"> بله</option>
                                 </select>
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
                     <div class="modal-footer mt-4">
@@ -844,9 +844,11 @@
                             $('#user_account_type_id').find("option[value="+ accountTypeVal + "]").attr('selected' , true);
                             $("#user_account_type_id").selectpicker('refresh') ;
 
+                            /*
                             $('#user_session_verify').find("option").attr('selected' , false);
                             $('#user_session_verify').find("option[value="+ data.session_verify + "]").attr('selected' , true);
                             $("#user_session_verify").selectpicker('refresh') ;
+                            */
 
                             $('#user_national_id').val(data.national_id);
 

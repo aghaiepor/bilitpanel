@@ -580,6 +580,12 @@
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
 
+            $(".dropdown-toggle").click(function () {
+                $("#sidebar").css("z-index" , 2) ;
+
+            })
+
+
             /*$('#project').change(function () {
                 var project_id = $('#project').val();
                 $.ajax({

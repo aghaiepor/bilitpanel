@@ -452,7 +452,12 @@
             }
         });
 
+        $("#minimizeSidebar").click(function () {
+            setTimeout(function () {
+                $("#sidebar").css("z-index" , 10) ;
+            } , 1000)
 
+        })
 
         $("#sidebar").mouseover(function () {
             let min_sideBar = $("body").hasClass("sidebar-mini") ;
@@ -462,7 +467,9 @@
                     'width' : "78px" ,
                     'margin'  :  "17px auto 0px" ,
                 });
+                $("#sidebar").css("z-index" , 10) ;
             }
+
         })
         $("#sidebar").mouseout(function () {
             let min_sideBar = $("body").hasClass("sidebar-mini") ;
@@ -472,8 +479,17 @@
                     'width' : "50%" ,
                     'margin'  :  "45px auto 0px" ,
                 });
+
                 $("#project_name").hide();
             }
+            else
+            {
+                setTimeout(function () {
+                    $("#sidebar").css("z-index" , 2) ;
+                } , 2000)
+            }
+
+
         })
         $("#deleteVoucherBtn").click(function (e) {
             $('#loader').css('display' , 'flex');
