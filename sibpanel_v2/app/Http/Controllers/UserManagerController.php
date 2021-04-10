@@ -282,6 +282,7 @@ class UserManagerController extends Controller
 //        return $TerminalTypeList ;
         $SaleTypeList = $this->api->SaleTypeList();
         $GetUserPermission = $this->api->GetUserPermission($id);
+//        return $GetUserPermission ;
         $User_info = $this->api->GetUserInfo( $id);
 //        return $User_info['ContentData'];
 //        return $GetUserPermission["Header"]["MessageCode"] ;
@@ -304,15 +305,19 @@ class UserManagerController extends Controller
     }
     public function AssignPermission(Request $request)
     {
-        $province_id = (is_null($request->get('province_id'))) ? "" : implode(",",$request->get('province_id'));
-        $city_id = (is_null($request->get('city_id'))) ? "" : implode(",",$request->get('city_id'));
-        $location_id =  (is_null($request->get('location_id'))) ? "" : implode(",",$request->get('location_id'));
-        $service_id = (is_null($request->get('service_id'))) ? "" : implode(",",$request->get('service_id'));
-        $voucher_type_id = (is_null($request->get('voucher_type_id'))) ? "" : implode(",",$request->get('voucher_type_id'));
-        $project_id = (is_null($request->get('project_id'))) ? "" : implode(",",$request->get('project_id'));
-        $sale_type_id = (is_null($request->get('sale_type_id'))) ? "" : implode(",",$request->get('sale_type_id'));
-        $terminal_type_id = (is_null($request->get('terminal_type_id'))) ? "" : implode(",",$request->get('terminal_type_id'));
-        $switch_web_service_ids = (is_null($request->get('switch_web_service_ids'))) ? "" : implode(",",$request->get('switch_web_service_ids'));
+
+        $province_id = (is_null($request->get('province_id'))) ? "" : array_map('intval', $request->get('province_id'));
+        $city_id = (is_null($request->get('city_id'))) ? "" : array_map('intval', $request->get('city_id'));
+        $location_id =  (is_null($request->get('location_id'))) ? "" : array_map('intval', $request->get('location_id'));
+        $service_id = (is_null($request->get('service_id'))) ? "" : array_map('intval', $request->get('service_id'));
+        $voucher_type_id = (is_null($request->get('voucher_type_id'))) ? "" : array_map('intval', $request->get('voucher_type_id'));
+//        $project_id = (is_null($request->get('project_id'))) ? "" : implode(",",$request->get('project_id'));
+        $project_id = (is_null($request->get('project_id'))) ? "" : array_map('intval', $request->get('project_id'));
+        $sale_type_id = (is_null($request->get('sale_type_id'))) ? "" : array_map('intval', $request->get('sale_type_id'));
+        $terminal_type_id = (is_null($request->get('terminal_type_id'))) ? "" : array_map('intval', $request->get('terminal_type_id')) ;
+        $switch_web_service_ids = (is_null($request->get('switch_web_service_ids'))) ? "" : array_map('intval', $request->get('switch_web_service_ids'));
+
+
         Log::info($switch_web_service_ids);
         $sib_user_id = $request->get('sib_user_id');
        /* $data =  [
