@@ -182,7 +182,8 @@
                                 <span class="sidebar-normal"> حذف بلیت </span>
                             </a>
                         </li>
-                            @if(session('UserInfo')['account_type_id'] != 9)
+                            @if(session('UserInfo')['account_type_id'] != 9 )
+                                @if(session('UserInfo')['is_superuser'])
                             {{--  Province and city  manager  --}}
                             <li class="nav-item @if(Route::current()->getName() === 'stateMg' )  active  @endif">
                                 <a class="nav-link" href="{{Route('stateMg')}}">
@@ -190,7 +191,7 @@
                                     <span class="sidebar-normal"> مدیریت استان ها و شهر ها </span>
                                 </a>
                             </li>
-
+                            @endif
                             {{--  Type of voucher manager  --}}
                         <li class="nav-item  @if(Route::current()->getName() === 'voucherTypeList' )  active  @endif">
                             <a class="nav-link" href="{{Route('voucherTypeList')}}">
