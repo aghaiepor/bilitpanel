@@ -318,8 +318,8 @@ class UserManagerController extends Controller
         $switch_web_service_ids = (is_null($request->get('switch_web_service_ids'))) ? "" : array_map('intval', $request->get('switch_web_service_ids'));
 
 
-        Log::info($switch_web_service_ids);
-        $sib_user_id = $request->get('sib_user_id');
+//        Log::info($switch_web_service_ids);
+        $sib_user_id = (int)$request->get('sib_user_id');
        /* $data =  [
         '$province_id' => $province_id,
         '$city_id' => $city_id,

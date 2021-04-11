@@ -206,6 +206,13 @@
                                     <option value="Sans"> سانس </option>
                                 </select>
                             </div>
+                            <div class="col-sm text-right">
+                                <label for=""> شناسه </label>
+                                <select id="WarehOffSetting" name="warehoff" class="selectpicker" data-style="btn btn-primary border-dark" title="شناسه">
+                                    <option value="false"> خیر </option>
+                                    <option value="true"> بله </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer mt-4">
@@ -558,10 +565,9 @@
                         if(data.Header.MessageCode == 0)
                         {
                             let type_of_service_sale = data.ContentData.type_of_service_sale ;
-                            $('#TypeOfServiceSale').find("option").attr('selected' , false);
-                            $('#TypeOfServiceSale').find("option[value="+ type_of_service_sale + "]").attr('selected' , true);
-                            $('.selectpicker').selectpicker('refresh');
-
+                            let warehoff = data.ContentData.warehoff ;
+                            $('#TypeOfServiceSale').val(type_of_service_sale).trigger("change");
+                            $("#WarehOffSetting").val([warehoff]).trigger("change");
                         }
                         else {
                             Swal.fire(
@@ -579,6 +585,7 @@
                 e.preventDefault();
                 let project_id = $(this).attr("data-id") ;
                 let TypeOfServiceSale = $("#TypeOfServiceSale").val() ;
+                let warehoff = $("#WarehOffSetting").val() ;
                 $("#loader3").css("display" , "flex");
                 $.ajax({
                     type:'POST',
@@ -588,6 +595,7 @@
                         '_token ': '<?php echo csrf_token() ?>',
                         'project_id' : project_id ,
                         'TypeOfServiceSale' : TypeOfServiceSale ,
+                        'warehoff' : warehoff ,
                     },
                     statusCode: {
                         500: function() {
@@ -626,6 +634,7 @@
                     },
                     success:function(data)
                     {
+                        console.log("data : " , data)
                         $("#loader3").hide();
                         if(data.Header.MessageCode == 0)
                         {

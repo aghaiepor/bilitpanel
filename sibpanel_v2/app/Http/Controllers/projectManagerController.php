@@ -90,8 +90,8 @@ class projectManagerController extends Controller
 
             $image =  $request->file('service_image') ;
             $format = $image->getClientOriginalExtension();
-            $addPicture = $this->api->AddPicture($project_id , 0 , 0 , 0 , $image , "logo" , "" , $format);
-//            return $addPicture ;
+            $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $image , "logo" , "image" , $format);
+            return $addPicture ;
             if($addPicture['Header']['Status'] == 0){
                 $project_image = $addPicture['ContentData']['id'];
                 $main_image_address = $this->api->GetImageAddress($project_image) ;
@@ -221,7 +221,8 @@ class projectManagerController extends Controller
     {
         $type_of_service_sale = $request->get("TypeOfServiceSale");
         $project_id = $request->get("project_id");
-        $EditProjectSetting = $this->api->EditProjectSetting($project_id  , $type_of_service_sale) ;
+        $warehoff = $request->get("warehoff") ;
+        $EditProjectSetting = $this->api->EditProjectSetting($project_id  , $type_of_service_sale , $warehoff) ;
         return $EditProjectSetting ;
     }
 

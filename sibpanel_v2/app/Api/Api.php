@@ -3,6 +3,7 @@
 
 namespace App\Api;
 use Carbon\Carbon;
+use Facade\Ignition\Support\Packagist\Package;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use App\UserJob;
@@ -636,6 +637,7 @@ class Api
         return $response;
     }*/
     public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag , $file_type="image" , $format="png"){
+
         $dataItem =   [
             "project" => $project_id,
             "location" => $location_id,
@@ -643,7 +645,8 @@ class Api
             "voucher_info" => $voucher_info_id,
             "tag" => $tag ,
             "file_type" => $file_type ,
-        ] ;
+        ];
+        $dataItem = array_filter($dataItem);
         $data =  [
             [
                 'name' => 'file',
@@ -654,10 +657,11 @@ class Api
             'name' => 'data',
             'contents' => json_encode($dataItem) ,
             ]
-        ] ;
+        ];
         // for get Session Id form Header
         $seesion_id = $this->getHeader();
         $seesion_id = $seesion_id["Session-Id"];
+//        Log::info($seesion_id);
         // **********
         $client = new Client();
         $result = $client->Post($this->url . 'AddPicture',[
@@ -979,18 +983,19 @@ class Api
         return $response;
     }
     public function AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id , $switch_web_service_id){
-        $data= [
-            'province_id' => $province_id,
-            'city_id' => $city_id,
-            'location_id' => $location_id,
-            "voucher_type_id" => $voucher_type_id,
-            'service_id' => $service_id,
-            'project_id' => $project_id,
-            'sale_type_id' => $sale_type_id,
-            'sib_user_id' => $sib_user_id,
-            'terminal_type_id' => $terminal_type_id,
+        $data = [
+            'province_ids' => $province_id,
+            'city_ids' => $city_id,
+            'location_ids' => $location_id,
+            "voucher_type_ids" => $voucher_type_id,
+            'service_ids' => $service_id,
+            'project_ids' => $project_id,
+            'sale_type_ids' => $sale_type_id,
+            'sib_user_ids' => $sib_user_id,
+            'terminal_type_ids' => $terminal_type_id,
             'switch_web_service_ids' => $switch_web_service_id
         ];
+        // Log::info("AssignPermission : " ,$data);
         $client = new Client();
         $result = $client->post($this->url . 'AssignPermission' ,[
                 'headers'=>$this->getHeader(),
@@ -1749,12 +1754,14 @@ class Api
         return $response;
     }
 
-    public function EditProjectSetting($project_id  , $type_of_service_sale , $type=null)
+    public function EditProjectSetting($project_id  , $type_of_service_sale , $warehoff ,$type=null)
     {
         $data = [
             "project_id" => $project_id,
-            "type_of_service_sale" => $type_of_service_sale
+            "type_of_service_sale" => $type_of_service_sale ,
+            "warehoff" => $warehoff
         ];
+        Log::info($data);
         $client = new Client();
         $result = $client->post($this->url . 'EditProjectSetting' ,[
                 'headers'=>$this->getHeader(),

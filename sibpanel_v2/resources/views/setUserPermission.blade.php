@@ -345,7 +345,7 @@
                                     <hr>
                                 </div>
                                 <div class="card-body">
-                                  {{--  Filter: <input type="text" id="search" /><button id="clear">Clear</button>--}}
+{{--                                    Filter: <input type="text" id="search" /><button id="clear">Clear</button>--}}
                                     <div id="jstree">
                                         <ul>
                                             @foreach($GetInfo as $info)
@@ -413,6 +413,13 @@
         $('#search').on("keyup change", function () {
             $('#jstree').jstree(true).search($(this).val())
         })
+
+        $("#search1, #search2, #search3").click(function () {
+            $("#demo2").jstree("search", $(this).attr("rel"));
+        });
+
+
+
 
         let service = data['service_ids'] ;
 
