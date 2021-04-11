@@ -349,29 +349,35 @@
                                     <div id="jstree">
                                         <ul>
                                             @foreach($GetInfo as $info)
-                                                <li id="P{{$info['province']['id']}}"> {{$info['province']['name']}}
+                                                <li id="P{{$info['id']}}"> {{$info['name']}}
                                                 <ul>
-                                                    @foreach($info['city_info'] as $city)
-                                                            @foreach($city['city'] as $cit)
+                                                    @if(array_key_exists("cities" , $info ))
+                                                        @foreach($info['cities'] as $cit)
+{{--                                                            @foreach($city['city'] as $cit)--}}
                                                                 <li id="C{{$cit['id'] }}"> {{$cit['name'] }}
                                                                     <ul>
-                                                                        @foreach($city['location_info'] as $locInfo)
-                                                                            @foreach($locInfo['location'] as $loc)
+{{--                                                                        @foreach($city['location_info'] as $locInfo)--}}
+                                                                        @if(array_key_exists("locations" , $cit ))
+                                                                            @foreach($cit['locations'] as $loc)
                                                                                 <li id="L{{$loc['id'] }}"> {{$loc['name'] }}
                                                                                 <ul>
-                                                                                    @foreach($locInfo['service_info'] as $servInfo)
-                                                                                        @foreach($servInfo['service'] as $serv)
+{{--                                                                                    @foreach($locInfo['service_info'] as $servInfo)--}}
+                                                                                    @if(array_key_exists("services" , $loc ))
+                                                                                        @foreach($loc['services'] as $serv)
                                                                                             <li id="{{$serv['id'] }}"> {{$serv['name'] }}</li>
                                                                                         @endforeach
-                                                                                    @endforeach
+                                                                                    @endif
+{{--                                                                                    @endforeach--}}
                                                                                 </ul>
                                                                                 </li>
                                                                             @endforeach
-                                                                        @endforeach
+                                                                        @endif
+{{--                                                                        @endforeach--}}
                                                                     </ul>
                                                                 </li>
-                                                            @endforeach
+{{--                                                            @endforeach--}}
                                                     @endforeach
+                                                    @endif
                                                     </ul>
                                                 </li>
                                             @endforeach

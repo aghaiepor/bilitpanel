@@ -956,7 +956,7 @@ class Api
     public function GetInfo($type=null){
         $data=null;
         $client = new Client();
-        $result = $client->post($this->url . 'GetInfo' ,[
+        $result = $client->post($this->url . 'GetLocationTree' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
@@ -984,8 +984,8 @@ class Api
     }
     public function AssignPermission($province_id, $city_id, $location_id, $service_id, $voucher_type_id, $project_id, $sale_type_id, $terminal_type_id, $sib_user_id , $switch_web_service_id){
         $data = [
-            'province_ids' => $province_id,
-            'city_ids' => $city_id,
+//            'province_ids' => $province_id,
+//            'city_ids' => $city_id,
             'location_ids' => $location_id,
             "voucher_type_ids" => $voucher_type_id,
             'service_ids' => $service_id,
