@@ -48,7 +48,11 @@ class provinceController extends Controller
             });
 
             return redirect()->back()->with('success' , ' استان مورد نظر با موفقیت ایجاد گردید . ');
-        }else
+        }else if($AddProvince['Header']['MessageCode'] == 42)
+        {
+            return redirect()->back()->with('error' , ' خطا : استان مورد نظر قبلا ثبت شده است ! ');
+        }
+        else
             return redirect()->back()->with('error' , ' خطا در ایجاد استان ! ');
     }
 

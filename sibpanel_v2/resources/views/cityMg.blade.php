@@ -70,7 +70,7 @@
                                         @foreach($citys as $city)
                                             <tr>
                                                 <td>
-                                                    {{$city['city_name']}}
+                                                    {{$city['name']}}
                                                 </td>
                                                 <td>
                                                     <button data-toggle="modal" id="statebtn" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn btn-success btn-simple">
@@ -92,11 +92,11 @@
                                                                         <div class="form-row ">
                                                                             <div class="col-sm-6 text-right">
                                                                                 <label for=""> نام شهر </label>
-                                                                                <input name="city" value="{{$city['city_name']}}" autocomplete="off" type="text" class="form-control" id="nameStateFa" placeholder="نام  شهر">
+                                                                                <input name="city" value="{{$city['name']}}" autocomplete="off" type="text" class="form-control" id="nameStateFa" placeholder="نام  شهر">
                                                                             </div>
                                                                             <div class="col-sm-6 text-right">
                                                                                 <label for=""> نام شهر به انگليسي </label>
-                                                                                <input name="city_english_name" value="{{$city['city_english_name']}}" autocomplete="off" type="text" class="form-control" id="nameStateEn" placeholder=" نام  شهر به انگلیسی">
+                                                                                <input name="city_english_name" value="{{$city['english_name']}}" autocomplete="off" type="text" class="form-control" id="nameStateEn" placeholder=" نام  شهر به انگلیسی">
                                                                             </div>
                                                                         </div>
                                                                     </div>
