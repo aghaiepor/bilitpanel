@@ -108,10 +108,10 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                 {{--   <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
+                                                    <a href="{{Route("DeleteCity" , [$city['id']])}}" class="btn TableEditBtn btn-danger btn-simple">
                                                         <i class="material-icons">close</i>
                                                         حدف
-                                                    </button>--}}
+                                                    </a>
                                                 </td>
 
                                             </tr>

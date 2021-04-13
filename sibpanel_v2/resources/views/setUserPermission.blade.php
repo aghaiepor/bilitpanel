@@ -143,7 +143,7 @@
                                                         @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || (( count($project_ids) != 0 ) ?  ($project_ids[0] == '*') : '') ))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
-                                                                    <input value=" {{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked value="">
+                                                                    <input value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked >
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
                                                               <span class="check"></span>
@@ -153,7 +153,7 @@
                                                         @else
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
-                                                                    <input value=" {{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" value="">
+                                                                    <input value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox">
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
                                                               <span class="check"></span>
@@ -349,7 +349,7 @@
                                     <div id="jstree">
                                         <ul>
                                             @foreach($GetInfo as $info)
-                                                <li id="P{{$info['id']}}"> {{$info['name']}}
+                                                <li parent-node="1" id="P{{$info['id']}}"> {{$info['name']}}
                                                 <ul>
                                                     @if(array_key_exists("cities" , $info ))
                                                         @foreach($info['cities'] as $cit)
@@ -359,12 +359,12 @@
 {{--                                                                        @foreach($city['location_info'] as $locInfo)--}}
                                                                         @if(array_key_exists("locations" , $cit ))
                                                                             @foreach($cit['locations'] as $loc)
-                                                                                <li id="L{{$loc['id'] }}"> {{$loc['name'] }}
+                                                                                <li data-project="{{$loc["project"]}}"  id="L{{$loc['id'] }}"> {{$loc['name'] }}
                                                                                 <ul>
 {{--                                                                                    @foreach($locInfo['service_info'] as $servInfo)--}}
                                                                                     @if(array_key_exists("services" , $loc ))
                                                                                         @foreach($loc['services'] as $serv)
-                                                                                            <li id="{{$serv['id'] }}"> {{$serv['name'] }}</li>
+                                                                                            <li data-service-project="{{$loc["project"]}}"  id="{{$serv['id'] }}"> {{$serv['name'] }}</li>
                                                                                         @endforeach
                                                                                     @endif
 {{--                                                                                    @endforeach--}}
@@ -397,6 +397,7 @@
     <script src="{{asset('')}}assets/jstree/dist/jstree.min.js"></script>
     <script>
         let data = @json($GetUserPermission);
+        // console.log("data : " , data)
         $('#jstree').jstree({
             'plugins': ['search', 'checkbox' , 'sort'],
             'core': {
@@ -424,73 +425,12 @@
             $("#demo2").jstree("search", $(this).attr("rel"));
         });
 
-
-
-
         let service = data['service_ids'] ;
-
         // console.log(service==null)  ;
         if(service!=null && service[0] == '*')
             $("#jstree").jstree().check_all();
         else
             $("#jstree").jstree().check_node(service);
-
-        if(data.length !=0 )
-        {
-        // check if city set cheacked
-        let undetermined  = $("#jstree").jstree().get_undetermined();
-        console.log("undetermined : " , undetermined)
-        let cityCheack =  data['city_ids'] ;
-        console.log("city cheack  : " , cityCheack)
-        let cit = [] ;
-
-            cityCheack.forEach(function (entry) {
-                let string = "C" + entry ;
-                cit.push(string)
-            });
-
-        cityCheack = cit  ;
-
-        if(cityCheack!=null && cityCheack[0] == '*')
-            $("#jstree").jstree().check_all();
-        else
-            {
-                let check = []
-                $.each(cityCheack, function(i, entry){
-                    if(!undetermined.includes(entry))
-                        check.push(entry);
-                });
-                console.log("check : " , check)
-                $("#jstree").jstree().check_node(check);
-        }
-
-        // check if porvince set cheacked
-        undetermined  = $("#jstree").jstree().get_undetermined();
-        console.log("undetermined : " , undetermined)
-        let provinceCheack =  data['province_ids'] ;
-        let pro = [] ;
-        provinceCheack.forEach(function (entry) {
-            let string = "P" + entry ;
-            pro.push(string)
-        });
-        provinceCheack = pro  ;
-
-        if(provinceCheack!=null && provinceCheack[0] == '*')
-            $("#jstree").jstree().check_all();
-        else
-        {
-            let check = []
-            $.each(provinceCheack, function(i, entry){
-                if(!undetermined.includes(entry))
-                    check.push(entry);
-            });
-            console.log("check : " , check)
-            $("#jstree").jstree().check_node(check);
-        }
-
-        }
-
-
 
 
         $(document).ready(function (){
@@ -499,6 +439,75 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            let Current_project_id = data['project_ids'] ;
+            console.log("Current_project_id : " ,Current_project_id)
+            for(let i = 0 ; i < Current_project_id.length ; i++)
+            {
+                $("li[data-project="+ Current_project_id[i] +"]").each(function () {
+                    $(this).hide(500);
+                    let el_id = $(this).attr("id");
+                    console.log("el_id : " , el_id)
+                    $("#jstree").jstree().uncheck_node(el_id);
+                });
+            }
+
+            // console.log("project_id : " , Current_project_id)
+            let now_projects = Current_project_id;
+            $(document).on("click" , "input[name=project]",  function () {
+                let value = $(this).val() ;
+                let chack = $(this).is(":checked") ;
+
+                if(chack)
+                {
+                    now_projects = [] ;
+                    $("input[name=project]").each(function () {
+                        if($(this).is(":checked"))
+                            now_projects.push($(this).val())
+                    })
+                    $("li[data-project="+ value+ "]").each(function () {
+                        $(this).fadeIn(500) ;
+                    });
+                }
+                else
+                {
+                    now_projects = [] ;
+                    $("input[name=project]").each(function () {
+                        if($(this).is(":checked"))
+                            now_projects.push($(this).val())
+                    })
+
+                    $("li[data-project="+ value+ "]").each(function () {
+                        $(this).fadeOut(500);
+                        let el_id = $(this).attr("id");
+                        $("#jstree").jstree().uncheck_node(el_id);
+                        
+                    });
+                }
+
+            });
+            $("#jstree").on('open_node.jstree', function () {
+                console.log("now_projects : " , now_projects)
+                for(let i = 0 ; i < now_projects.length ; i++)
+                {
+                    $("li[data-project="+ now_projects[i] +"]").each(function () {
+                        $(this).hide();
+                        let el_id = $(this).attr("id");
+                        $("#jstree").jstree().uncheck_node(el_id);
+
+                    });
+                }
+
+            })
+            $("#jstree").on('close_node.jstree', function () {
+                console.log("Close !") ;
+            })
+
+            /*$("#jstree").jstree().open_node(function () {
+
+            });*/
+
+
             let Locations = [] ;
             let City = [] ;
             let Province = [] ;

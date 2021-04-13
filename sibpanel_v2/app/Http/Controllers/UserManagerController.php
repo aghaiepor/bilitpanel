@@ -284,6 +284,7 @@ class UserManagerController extends Controller
         $GetUserPermission = $this->api->GetUserPermission($id);
 //        return $GetUserPermission ;
         $User_info = $this->api->GetUserInfo( $id);
+
 //        return $User_info['ContentData'];
 //        return $GetUserPermission["Header"]["MessageCode"] ;
 //        $GetUserPermission = $GetUserPermission["ContentData"];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\Api;
 use Carbon\Carbon;
+use Facade\Ignition\Support\Packagist\Package;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -307,7 +308,7 @@ class LocationController extends Controller
 //        return $AddDiscountPolicy;
         if($AddDiscountPolicy["Header"]["Status"] == 0 )
             return redirect()->back()->with("success" , " تخفیف مورد نظر ایجاد گردید ");
-        else if($AddDiscountPolicy["Header"]["Message"] == "Permission Denied")
+        else if($AddDiscountPolicy['Header']['MessageCode'] == 133)
             return redirect()->back()->with("error" , "منع دسترسی : شما مجاز به انجام چنین عملیاتی نیستید !   ");
         else if($AddDiscountPolicy["Header"]["MessageCode"] == 158)
             return redirect()->back()->with("error" , "خطا در ايجاد تخفيف : تاريخ وارد شده نامعتبر است !   ");
@@ -622,7 +623,11 @@ class LocationController extends Controller
         $voucher_type_id = $request->get("voucher_type_id") ;
         $amount = $request->get("amount") ;
         $service_ids = $request->get("service_ids") ;
-        $service_ids = array_map('intval', $service_ids);
+        if($request->has("service_ids"))
+            $service_ids = array_map('intval', $service_ids);
+        else
+            return redirect()->back()->with("error" , " خطا : سرويس پيکج مورد نظر را وارد نماييد ! ");
+
         $AddPackage = $this->api->AddPackage($name , $location_id , $service_ids , $amount , $voucher_type_id);
         if($AddPackage["Header"]["Status"] == 0)
         {
@@ -639,8 +644,12 @@ class LocationController extends Controller
         $voucher_type_id = $request->get("voucher_type_id") ;
         $amount = $request->get("amount") ;
         $service_ids = $request->get("service_ids") ;
-        $service_ids = array_map('intval', $service_ids);
-        $AddPackage = $this->api->EditPackage($package_id , $name , $location_id , $service_ids , $amount , $voucher_type_id);
+        if($request->has("service_ids"))
+            $service_ids = array_map('intval', $service_ids);
+        else
+            return redirect()->back()->with("error" , " خطا : سرويس پيکج مورد نظر را وارد نماييد ! ");
+
+        $AddPackage = $this->api->EditPackage("" ,$package_id , $name  , $service_ids , $amount , $voucher_type_id);
         if($AddPackage["Header"]["Status"] == 0)
         {
             return redirect()->back()->with("success" , "تغييرات با موفقيت اعمال گرديد . ");
@@ -648,6 +657,15 @@ class LocationController extends Controller
         else
             return redirect()->back()->with("error" , " خطا در اعمال تغييرات ! ");
 
+    }
+    public function PackageActivation(Request $request){
+        $active = ($request->get("active")) ;
+        Log::info($active);
+        $package_id = $request->get("package_id");
+        $location_id = $request->get("location_id");
+        $getPackage = $this->api->GetPackage($package_id);
+        $Activation = $this->api->EditPackage($active , $package_id , "" , "", "" , "" , "" ,"ajax") ;
+        return $Activation ;
     }
     public function GetPackage(Request $request)
     {

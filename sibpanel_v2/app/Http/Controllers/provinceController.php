@@ -80,6 +80,27 @@ class provinceController extends Controller
         }else
             return redirect()->back()->with('error' , ' خطا در اعمال تغییرات ! ');
     }
+    public function DeleteProvince(Request $request , $id)
+    {
+        $DeleteProvince = $this->api->DeleteProvince($id);
+//        return $DeleteProvince ;
+        if ($DeleteProvince['Header']['Status'] == 0 ){
+            $ProvinceList = Cache::get('ProvinceList' . session('UserInfo')['user_id']);
+            $Index = array_filter($ProvinceList, function ($event) use ($id) {
+                return $event['id'] == $id;
+            });
+            $Index = array_keys($Index) ;
+            unset($ProvinceList[$Index[0]]);
+            Cache::forget('ProvinceList' . session('UserInfo')['user_id']);
+            Cache::rememberForever('ProvinceList' . session('UserInfo')['user_id'], function() use ($ProvinceList){
+                return $ProvinceList;
+            });
+
+            return redirect()->back()->with('success' , ' استان مورد نظر با موفقیت ویرایش گردید . ');
+        }else
+            return redirect()->back()->with('error' , ' خطا در اعمال تغییرات ! ');
+    }
+
 
     public function CityList($id){
         $CityList = $this->api->CityList($id);
@@ -107,4 +128,14 @@ class provinceController extends Controller
         else
             return redirect()->back()->with('error' , ' خطا در ویرایش شهر ! ');
     }
+
+    public function DeleteCity(Request $request , $id)
+    {
+        $DeleteCity = $this->api->DeleteCity($id);
+        if ($DeleteCity['Header']['Status'] == 0 ){
+            return redirect()->back()->with('success' , ' استان مورد نظر با موفقیت ویرایش گردید . ');
+        }else
+            return redirect()->back()->with('error' , ' خطا در اعمال تغییرات ! ');
+    }
+
 }

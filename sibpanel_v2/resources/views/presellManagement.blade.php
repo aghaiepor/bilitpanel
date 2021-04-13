@@ -1299,6 +1299,7 @@
                 },
                 success : function (data) {
                     console.log("data : " , data["ContentData"]);
+
                     let dataLength = data["ContentData"].length ;
                     let account  = data["ContentData"]["location_accounts"] ;
                     let total_inv = data["ContentData"]["total_inventory"] ;

@@ -133,7 +133,7 @@
                                                 <td >
                                                     <div class="togglebutton text-center">
                                                         <label dir="ltr">
-                                                            <input disabled name="activation" data-package="{{$Package['id']}}" type="checkbox" @if($Package['active']) checked @endif>
+                                                            <input name="activation" data-package="{{$Package['id']}}" type="checkbox" @if($Package['active']) checked @endif>
                                                             <span class="toggle"></span>
                                                         </label>
                                                     </div>
@@ -307,9 +307,10 @@
 
             // for Package activation
             $('input[name=activation]').change(function () {
-                var service =$(this).attr('data-service') ;
-                var value = ($(this).is(':checked'));
-                console.log("activation clicked !  " )
+                let package_id =$(this).attr('data-package') ;
+                let value = ($(this).is(':checked'));
+                let el  = $(this) ;
+                console.log("activation value : "  , value )
                 $('#loader').css('display' , 'flex');
                 Swal.fire({
                     title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
@@ -323,12 +324,13 @@
                     if (result.value) {
                         $.ajax({
                             type:'POST',
-                            url:"{{Route('ServiceActivation')}}",
+                            url:"{{Route('PackageActivation')}}",
                             dataType:'json',
                             data:{
                                 '_token ': '<?php echo csrf_token() ?>',
-                                'service' : service ,
-                                'value' : value ,
+                                'package_id' : package_id ,
+                                'active' : value ,
+                                'location_id' : "{{$location_id}}" ,
                             },
                             statusCode: {
                                 500: function() {
@@ -366,8 +368,9 @@
                                 }
                             },
                             success:function(data) {
+                                console.log(data)
                                 $('#loader').hide();
-                                if(data.data)
+                                if(data.Header.Status == 0 )
                                 {
                                     Swal.fire(
                                         'تغییرات با موفقیت اعمال گردید .',
@@ -375,12 +378,12 @@
                                         'success' ,
                                     )
                                 }
-                                else if (data.data == "Permission Denied")
+                                else if (data.Header.MessageCode == 133)
                                 {
                                     if(value)
-                                        $(this).prop( "checked", false );
+                                        el.prop( "checked", false );
                                     else
-                                        $(this).prop( "checked", true );
+                                        el.prop( "checked", true );
 
                                     Swal.fire(
                                         'شما مجاز به انجام چنین عملیاتی نیستید .',
@@ -391,9 +394,9 @@
                                 else {
 
                                     if(value)
-                                        $(this).prop( "checked", false );
+                                        el.prop( "checked", false );
                                     else
-                                        $(this).prop( "checked", true );
+                                        el.prop( "checked", true );
 
                                     Swal.fire(
                                         'خطا در اعمال تفییرات .',

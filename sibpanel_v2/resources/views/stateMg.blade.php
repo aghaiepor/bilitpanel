@@ -80,7 +80,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <button data-toggle="modal" id="statebtn" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn  btn-success btn-simple">
+                                                <button data-toggle="modal" data-target="#edit{{$i}}" type="button" rel="tooltip" class="btn TableEditBtn  btn-success btn-simple">
                                                     <i class="material-icons">edit</i>
                                                     ویرایش
                                                 </button>
@@ -112,11 +112,11 @@
                                                                         </div>--}}
                                                                         <div class="col-sm text-right">
                                                                             <label for=""> نام استان </label>
-                                                                            <input name="name_fa" value="{{$Province['province_name']}}" type="text" class="form-control" id="nameStateFa" placeholder="نام  استان">
+                                                                            <input name="name_fa" value="{{$Province['province_name']}}" type="text" class="form-control"  placeholder="نام  استان">
                                                                         </div>
                                                                         <div class="col-sm text-right">
                                                                             <label for=""> نام استان به انگليسي </label>
-                                                                            <input name="name_en" value="{{$Province['english_name']}}" type="text" class="form-control" id="nameStateEn" placeholder=" نام  استان به انگلیسی">
+                                                                            <input name="name_en" value="{{$Province['english_name']}}" type="text" class="form-control" placeholder=" نام  استان به انگلیسی">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -130,10 +130,10 @@
                                                     </div>
 
                                                 </div>
-                                               {{-- <button type="button" rel="tooltip" class="btn TableEditBtn btn-danger btn-simple">
+                                                <a href="{{Route("DeleteProvince" , [$Province['id']])}}" class="btn TableEditBtn btn-danger btn-simple">
                                                     <i class="material-icons">close</i>
                                                     حدف
-                                                </button>--}}
+                                                </a>
                                             </td>
 
                                         </tr>
@@ -171,11 +171,11 @@
                         </div>--}}
                         <div class="col-sm text-right">
                             <label for="">  نام  استان </label>
-                            <input name="name_fa" type="text" class="form-control" id="nameStateFa" placeholder="نام  استان">
+                            <input name="name_fa" type="text" class="form-control" placeholder="نام  استان">
                         </div>
                         <div class="col-sm text-right">
                             <label for="">   نام  استان به انگلیسی </label>
-                            <input name="name_en" type="text" class="form-control" id="nameStateEn" placeholder=" نام  استان به انگلیسی">
+                            <input name="name_en" type="text" class="form-control"  placeholder=" نام  استان به انگلیسی">
                         </div>
                     </div>
                 </div>

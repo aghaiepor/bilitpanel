@@ -106,6 +106,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/AddPackage/{location_id}' ,'LocationController@AddPackage' )->name('AddPackage');
         Route::post('/DeletePackage/{id}' ,'LocationController@DeletePackage' )->name('DeletePackage');
         Route::post('/EditPackage/{location_id}/{id?}' ,'LocationController@EditPackage' )->name('EditPackage');
+        Route::post('/PackageActivation' ,'LocationController@PackageActivation' )->name('PackageActivation');
 
         // Voucher Route
         Route::post('/AddVoucherInfo/{service_id}/{location_id}' ,'LocationController@AddVoucherInfo' )->name('AddVoucherInfo');
@@ -141,7 +142,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/location_list'  , 'ReportController@location_list' )->name('location_list');
         Route::post('/ServiceListReport'  , 'ReportController@ServiceList' )->name('ServiceListReport');
         Route::post('/ReportTerminalLocationList'  , 'ReportController@TerminalLocationList' )->name('ReportTerminalLocationList');
-        Route::get('/GetStat'  , 'ReportController@GetStat' )->name('GetStat');
+        Route::get('/GetStat' , 'ReportController@GetStat' )->name('GetStat');
         Route::get('/GetTransaction'  , 'ReportController@GetTransaction' )->name('GetTransaction');
 
         // Transaction Route
@@ -153,10 +154,13 @@ Route::middleware(['CheckLogin'])->group(function () {
         // Place & Province Route
         Route::get('/stateMg' , 'provinceController@index')->name('stateMg');
         Route::get('/cityMg/{id}'  , 'provinceController@CityList' )->name('cityMg');
+
         Route::post('/AddProvince'  , 'provinceController@AddProvince' )->name('AddProvince');
         Route::post('/EditProvince/{id}'  , 'provinceController@EditProvince' )->name('EditProvince');
         Route::post('/AddCity/{id}'  , 'provinceController@AddCity' )->name('AddCity');
         Route::post('/EditCity/{id}'  , 'provinceController@EditCity' )->name('EditCity');
+        Route::get('/DeleteCity/{id}'  , 'provinceController@DeleteCity' )->name('DeleteCity');
+        Route::get('/DeleteProvince/{id}'  , 'provinceController@DeleteProvince' )->name('DeleteProvince');
 
         // Sans Route
         Route::get('/group_times/{show?}' , 'SeanceController@group_times')->name('group_times');

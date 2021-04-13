@@ -517,15 +517,16 @@ class Api
         return $response;
 
     }
-    public function EditPackage($package_id , $name , $location_id , $service_ids , $amount , $voucher_type_id){
+    public function EditPackage($active ,$package_id , $name  , $service_ids , $amount , $voucher_type_id,  $ajax=null){
         $data = [
-            "package_id"=> $package_id,
+            "package_id"=> (int)$package_id,
             "name" => $name,
-            "location_id"=> $location_id,
             "service_ids"=> $service_ids,
             "amount"=> $amount,
-            "voucher_type_id"=> $voucher_type_id
+            "voucher_type_id"=> $voucher_type_id ,
+            "active" => $active ,
         ];
+        $data = array_filter($data);
         $client = new Client();
         $result = $client->post($this->url . 'EditPackage' ,[
                 'headers'=>$this->getHeader(),
@@ -533,7 +534,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-        $this->checkError($response);
+        $this->checkError($response , $ajax);
         return $response;
     }
     public function DeletePackage($package_id){
@@ -647,6 +648,7 @@ class Api
             "file_type" => $file_type ,
         ];
         $dataItem = array_filter($dataItem);
+        Log::info("dataItem :" , $dataItem);
         $data =  [
             [
                 'name' => 'file',
@@ -991,7 +993,7 @@ class Api
             'service_ids' => $service_id,
             'project_ids' => $project_id,
             'sale_type_ids' => $sale_type_id,
-            'sib_user_ids' => $sib_user_id,
+            'sib_user_id' => $sib_user_id,
             'terminal_type_ids' => $terminal_type_id,
             'switch_web_service_ids' => $switch_web_service_id
         ];
@@ -1184,8 +1186,8 @@ class Api
     // ******************* Province and City *******************
     public function AddProvince($name_fa, $name_en ,$country_id="1"){
         $data = [
-            'province'=> $name_fa,
-            'province_english_name'=> $name_en,
+            'name'=> $name_fa,
+            'english_name'=> $name_en,
             'country_id'=> $country_id,
         ] ;
         $client = new Client();
@@ -1202,8 +1204,8 @@ class Api
     public function EditProvince($name_fa, $province_id, $name_en){
         $data = [
             'province_id' => $province_id,
-            'province'=> $name_fa,
-            'province_english_name'=> $name_en,
+            'name'=> $name_fa,
+            'english_name'=> $name_en,
         ] ;
         $client = new Client();
         $result = $client->post($this->url . 'EditProvince' ,[
@@ -1216,10 +1218,25 @@ class Api
         $this->checkError($response);
         return $response;
     }
+    public function DeleteProvince($province_id){
+        $data = [
+            'province_id' => $province_id ,
+        ];
+        $client = new Client();
+        Log::info( "DeleteProvince : " ,  $data);
+        $result = $client->post($this->url . 'DeleteProvince' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+        $this->checkError($response);
+        return $response;
+    }
     public function AddCity($city, $city_english_name, $provinceId){
         $data = [
-            'city' => $city,
-            'city_english_name'=> $city_english_name,
+            'name' => $city,
+            'english_name'=> $city_english_name,
             'province_id'=> $provinceId,
         ] ;
         $client = new Client();
@@ -1236,11 +1253,27 @@ class Api
     public function EditCity($city_id, $city, $city_english_name){
         $data = [
             'city_id'=> $city_id,
-            'city' => $city,
-            'city_english_name'=> $city_english_name,
+            'name' => $city,
+            'english_name'=> $city_english_name,
         ];
         $client = new Client();
         $result = $client->post($this->url . 'EditCity' ,[
+                'headers'=>$this->getHeader(),
+                'json'=>$data
+            ]
+        );
+        $response = json_decode($result->getBody(),true);
+
+        $this->checkError($response);
+        return $response;
+    }
+
+    public function DeleteCity($city_id){
+        $data = [
+            'city_id'=> $city_id,
+        ];
+        $client = new Client();
+        $result = $client->post($this->url . 'DeleteCity' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
@@ -2156,17 +2189,18 @@ class Api
     function GetImageAddress($id)
     {
         $GetPicture = $this->GetPicture($id);
+        Log::info("--- GetPicture ---");
         Log::info($GetPicture);
 //        $mime = $GetPicture['type'];
 //        $content = $GetPicture['content'];
 //        $base64   = base64_encode($content);
 //        return ('data:' . $mime . ';base64,' . $base64);
         $file = null ;
-        if(array_key_exists("project_pics"  ,$GetPicture))
-        {
-            if( array_key_exists("file"  ,$GetPicture["project_pics"]) )
-                $file = $GetPicture["ContentData"]["file"];
-        }
+        if( array_key_exists("file"  ,$GetPicture["ContentData"]) )
+            $file = $GetPicture["ContentData"]["file"];
+
+        Log::info("--- File Address ---");
+        Log::info($file);
         return $file;
     }
     function GetDocumentAddress($id , $tag)
