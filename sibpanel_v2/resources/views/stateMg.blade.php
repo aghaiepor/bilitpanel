@@ -130,9 +130,9 @@
                                                     </div>
 
                                                 </div>
-                                                <a href="{{Route("DeleteProvince" , [$Province['id']])}}" class="btn TableEditBtn btn-danger btn-simple">
+                                                <a data-href="{{Route("DeleteProvince" , [$Province['id']])}}" href="#" class="btn TableEditBtn DelBtn btn-danger btn-simple">
                                                     <i class="material-icons">close</i>
-                                                    حدف
+                                                    حذف
                                                 </a>
                                             </td>
 
@@ -191,4 +191,26 @@
 @endsection
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).on("click" , ".DeleteLocationBtn" , function (e) {
+                e.preventDefault();
+                let url = $(this).attr("data-href");
+                Swal.fire({
+                    title: ' از تغییر ایجاد شده مطمئن هستید ؟ ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7bc127',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله' ,
+                    cancelButtonText: 'خیر' ,
+                }).then((result) => {
+                    if (result.value) {
+                        window.location = url ;
+                    }
+
+                })
+            })
+        })
+    </script>
 @endsection

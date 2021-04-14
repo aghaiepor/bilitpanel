@@ -110,7 +110,7 @@
                                                     </div>
                                                     <a href="{{Route("DeleteCity" , [$city['id']])}}" class="btn TableEditBtn btn-danger btn-simple">
                                                         <i class="material-icons">close</i>
-                                                        حدف
+                                                        حذف
                                                     </a>
                                                 </td>
 

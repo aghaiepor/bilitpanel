@@ -191,7 +191,7 @@
                                     <span class="sidebar-normal"> مدیریت استان ها و شهر ها </span>
                                 </a>
                             </li>
-                            @endif
+
                             {{--  Type of voucher manager  --}}
                         <li class="nav-item  @if(Route::current()->getName() === 'voucherTypeList' )  active  @endif">
                             <a class="nav-link" href="{{Route('voucherTypeList')}}">
@@ -206,6 +206,7 @@
                                 <span class="sidebar-normal"> مدیریت متن بلیت </span>
                             </a>
                         </li>
+                                @endif
                             @endif
                             {{--  User manager  --}}
                         <li class="nav-item  @if(Route::current()->getName() === 'UserManager' )  active  @endif">

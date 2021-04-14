@@ -91,7 +91,7 @@ class projectManagerController extends Controller
             $image =  $request->file('service_image') ;
             $format = $image->getClientOriginalExtension();
             $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $image , "logo" , "image" , $format);
-            return $addPicture ;
+//           return $addPicture ;
             if($addPicture['Header']['Status'] == 0){
                 $project_image = $addPicture['ContentData']['id'];
                 $main_image_address = $this->api->GetImageAddress($project_image) ;

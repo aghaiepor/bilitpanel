@@ -140,25 +140,30 @@
                                                     }
                                                     @endphp
                                                     @foreach($projectList as $project)
+                                                        @php
+                                                            $bgColor = "#".dechex( rand(170 , 255)).dechex( rand(170 , 255)).dechex( rand(170 , 255)) ;
+                                                        @endphp
                                                         @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || (( count($project_ids) != 0 ) ?  ($project_ids[0] == '*') : '') ))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
                                                                     <input value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked >
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
-                                                              <span class="check"></span>
-                                                            </span>
+                                                                        <span class="check"></span>
+                                                                    </span>
                                                                 </label>
+{{--                                                                <span class="mr-1" style="background:{{$bgColor}}  " > &nbsp;&nbsp; </span>--}}
                                                             </div>
                                                         @else
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
-                                                                    <input value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox">
+                                                                    <input data-color="{{$bgColor}}" value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox">
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
-                                                              <span class="check"></span>
-                                                            </span>
+                                                                        <span class="check"></span>
+                                                                    </span>
                                                                 </label>
+{{--                                                                <span class="mr-1" style="background:{{$bgColor}}  " > &nbsp;&nbsp; </span>--}}
                                                             </div>
                                                         @endif
 
@@ -426,11 +431,35 @@
         });
 
         let service = data['service_ids'] ;
-        // console.log(service==null)  ;
         if(service!=null && service[0] == '*')
             $("#jstree").jstree().check_all();
         else
             $("#jstree").jstree().check_node(service);
+
+
+        // check if Location set cheacked
+        undetermined  = $("#jstree").jstree().get_undetermined();
+        console.log("undetermined : " , undetermined)
+        let location_ids =  data['location_ids'] ;
+        let loc = [] ;
+        location_ids.forEach(function (entry) {
+            let string = "L" + entry ;
+            loc.push(string)
+        });
+        locCheack = loc  ;
+
+        if(locCheack!=null && locCheack[0] == '*')
+            $("#jstree").jstree().check_all();
+        else
+        {
+            let check = []
+            $.each(locCheack, function(i, entry){
+                if(!undetermined.includes(entry))
+                    check.push(entry);
+            });
+            console.log("check : " , check)
+            $("#jstree").jstree().check_node(check);
+        }
 
 
         $(document).ready(function (){
@@ -441,67 +470,175 @@
             });
 
             let Current_project_id = data['project_ids'] ;
-            console.log("Current_project_id : " ,Current_project_id)
-            for(let i = 0 ; i < Current_project_id.length ; i++)
-            {
-                $("li[data-project="+ Current_project_id[i] +"]").each(function () {
-                    $(this).hide(500);
+            // console.log("Current_project_id : " ,Current_project_id)
+            $("#jstree").jstree().open_all();
+            let now_projects = Current_project_id;
+
+            now_projects = getProject() ;
+            $("li[data-service-project]").each(function () {
+                let data_service_project_id = $(this).attr("data-service-project") ;
+                if(!now_projects.includes(data_service_project_id))
+                {
                     let el_id = $(this).attr("id");
-                    console.log("el_id : " , el_id)
                     $("#jstree").jstree().uncheck_node(el_id);
-                });
-            }
+                }
+            });
+            $("li[data-project]").each(function () {
+                let data_project_id = $(this).attr("data-project") ;
+                if(!now_projects.includes(data_project_id))
+                {
+                    $(this).hide();
+                    let el_id = $(this).attr("id");
+                    $("#jstree").jstree().close_node(el_id);
+                }
+                else
+                {
+                    let el_id = $(this).attr("id");
+                    $("#jstree").jstree().open_node(el_id);
+                    $("#"+el_id).css("background" , "#d9eace")
+                }
+            });
+
+           /* $("li[data-service-project]").each(function () {
+                let data_service_project_id = $(this).attr("data-service-project") ;
+                if(now_projects.includes(data_service_project_id))
+                {
+                    $(this).show(300);
+                    let el_id = $(this).attr("id");
+                }
+            })*/
+
+           /* $("li[data-project]").each(function () {
+                let data_project_id = $(this).attr("data-project") ;
+                if(!now_projects.includes(data_project_id))
+                {
+                    $(this).hide(300);
+                    let el_id = $(this).attr("id");
+                    $("#jstree").jstree().close_node(el_id);
+                }
+            });*/
 
             // console.log("project_id : " , Current_project_id)
-            let now_projects = Current_project_id;
-            $(document).on("click" , "input[name=project]",  function () {
-                let value = $(this).val() ;
+
+
+            $("input[name=project]").on("click" ,  function () {
+                let value = $(this).val()
+                // let color = $(this).attr("data-color") ;
                 let chack = $(this).is(":checked") ;
 
+                let color = getColor() ;
+
+                // console.log("chack : " , chack)
                 if(chack)
                 {
-                    now_projects = [] ;
-                    $("input[name=project]").each(function () {
-                        if($(this).is(":checked"))
-                            now_projects.push($(this).val())
-                    })
-                    $("li[data-project="+ value+ "]").each(function () {
-                        $(this).fadeIn(500) ;
+                    now_projects = getProject()
+                    console.log("new now_projects : " , now_projects)
+                    $("li[data-service-project]").each(function () {
+                        let data_service_project_id = $(this).attr("data-service-project") ;
+                        if(now_projects.includes(data_service_project_id))
+                        {
+                            $(this).show(300);
+                            let el_id = $(this).attr("id");
+
+                        }
+                    });
+
+                    $("li[data-project]").each(function () {
+                        let data_project_id = $(this).attr("data-project") ;
+                        // let index = now_projects.indexOf(data_project_id) ;
+                        // console.log("index : " ,index)
+                        if(now_projects.includes(data_project_id))
+                        {
+                            $(this).show(300);
+                            let el_id = $(this).attr("id");
+                            $("#jstree").jstree().open_node(el_id);
+                            $("#"+el_id).css("background" , "#d9eace");
+                            // $("#jstree").jstree().check_node(el_id);
+                        }
                     });
                 }
                 else
                 {
-                    now_projects = [] ;
-                    $("input[name=project]").each(function () {
-                        if($(this).is(":checked"))
-                            now_projects.push($(this).val())
-                    })
-
-                    $("li[data-project="+ value+ "]").each(function () {
-                        $(this).fadeOut(500);
-                        let el_id = $(this).attr("id");
-                        $("#jstree").jstree().uncheck_node(el_id);
-                        
+                    now_projects = getProject()
+                    $("li[data-service-project]").each(function () {
+                        let data_service_project_id = $(this).attr("data-service-project") ;
+                        if(!now_projects.includes(data_service_project_id))
+                        {
+                            let el_id = $(this).attr("id");
+                            $("#jstree").jstree().uncheck_node(el_id);
+                        }
                     });
-                }
 
+                    $("li[data-project]").each(function () {
+                        let data_project_id = $(this).attr("data-project") ;
+                        if(!now_projects.includes(data_project_id))
+                        {
+                            $(this).hide(300);
+                            let el_id = $(this).attr("id");
+                            $("#"+el_id).css("background" , "");
+                            $("#jstree").jstree().close_node(el_id);
+                        }
+                    });
+
+                }
             });
             $("#jstree").on('open_node.jstree', function () {
-                console.log("now_projects : " , now_projects)
-                for(let i = 0 ; i < now_projects.length ; i++)
-                {
-                    $("li[data-project="+ now_projects[i] +"]").each(function () {
-                        $(this).hide();
+
+                now_projects = getProject() ;
+                $("li[data-service-project]").each(function () {
+                    let data_service_project_id = $(this).attr("data-service-project") ;
+                    if(!now_projects.includes(data_service_project_id))
+                    {
                         let el_id = $(this).attr("id");
                         $("#jstree").jstree().uncheck_node(el_id);
-
-                    });
-                }
+                    }
+                });
+                $("li[data-project]").each(function () {
+                    let data_project_id = $(this).attr("data-project") ;
+                    if(!now_projects.includes(data_project_id))
+                    {
+                        $(this).hide();
+                        let el_id = $(this).attr("id");
+                        $("#jstree").jstree().close_node(el_id);
+                    }
+                });
 
             })
             $("#jstree").on('close_node.jstree', function () {
                 console.log("Close !") ;
             })
+
+            function getProject(){
+                now_projects = [] ;
+                $("input[name=project]").each(function () {
+                    if($(this).is(":checked")) {
+                        now_projects.push($(this).val())
+                        /*now_projects.push({
+                            "value" : $(this).val() ,
+                            "color" : $(this).attr("data-color") ,
+
+                    })*/
+                    }
+                })
+                return now_projects ;
+            }
+
+            function getColor(){
+                now_projects = [] ;
+                $("input[name=project]:checked").each(function () {
+                    if($(this).is(":checked")) {
+                        /*now_projects.push({
+                            "value" : $(this).val() ,
+                            "color" : $(this).attr("data-color") ,
+
+                    })*/
+
+
+                        now_projects.push($(this).attr("data-color"))
+                    }
+                })
+                return now_projects ;
+            }
 
             /*$("#jstree").jstree().open_node(function () {
 

@@ -1075,11 +1075,14 @@
                             }
                         });
 
-                    }else{
+                    }
+                    else
+                    {
                         if(value)
                             $(this).prop( "checked", false );
                         else
                             $(this).prop( "checked", true );
+
                         $('#loader').hide();
                     }
                 })
