@@ -672,7 +672,7 @@
                         $("#cityList").html('');
                         $("#cityList").append(new Option( 'همه' , '',true));
                         for(var i = 0 ; i < data.data.length ; i++){
-                            $("#cityList").append(new Option( data.data[i].city_name , data.data[i].id));
+                            $("#cityList").append(new Option( data.data[i].name , data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh');
                         $("#loader_cityList").hide();
