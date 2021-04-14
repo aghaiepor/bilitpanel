@@ -39,7 +39,15 @@
         .glyphicon-minus:before {
             content: "\2212"
         }
-
+        .TitlePro {
+            position: absolute;
+            padding: 0px 7px 0px 6px;
+            right: 0;
+            font-weight: 400;
+            /*border: solid 1px #e9e9e9;*/
+            border-radius: 5px 0px 0px 5px;
+            font-size: 9pt;
+        }
     </style>
 @endsection
 
@@ -146,24 +154,24 @@
                                                         @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || (( count($project_ids) != 0 ) ?  ($project_ids[0] == '*') : '') ))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
-                                                                    <input data-color="{{$bgColor}}" value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked >
+                                                                    <input data-name="{{$project['project_name']}}" data-color="{{$bgColor}}" value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked >
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
                                                                         <span class="check"></span>
                                                                     </span>
                                                                 </label>
-{{--                                                                <span class="mr-1" style="background:{{$bgColor}}"> &nbsp;&nbsp; </span>--}}
+                                                                <span class="mr-1" style="background:{{$bgColor}}"> &nbsp;&nbsp; </span>
                                                             </div>
                                                         @else
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
-                                                                    <input data-color="{{$bgColor}}" value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox">
+                                                                    <input data-name="{{$project['project_name']}}" data-color="{{$bgColor}}" value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox">
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
                                                                         <span class="check"></span>
                                                                     </span>
                                                                 </label>
-{{--                                                                <span class="mr-1" style="background:{{$bgColor}}  " > &nbsp;&nbsp; </span>--}}
+                                                                <span class="mr-1" style="background:{{$bgColor}}  " > &nbsp;&nbsp; </span>
                                                             </div>
                                                         @endif
 
@@ -365,6 +373,7 @@
                                                                         @if(array_key_exists("locations" , $cit ))
                                                                             @foreach($cit['locations'] as $loc)
                                                                                 <li data-project="{{$loc["project"]}}"  id="L{{$loc['id'] }}"> {{$loc['name'] }}
+                                                                                    <span data-project-title="{{$loc["project"]}}" class="TitlePro"> تست </span>
                                                                                 <ul>
 {{--                                                                                    @foreach($locInfo['service_info'] as $servInfo)--}}
                                                                                     @if(array_key_exists("services" , $loc ))
@@ -478,6 +487,8 @@
             let Current_project_id = data['project_ids'] ;
             $("#jstree").jstree().open_all();
             let now_projects = Current_project_id;
+            let color = getColor() ;
+            let name = getColorName() ;
 
             now_projects = getProject() ;
             $("li[data-service-project]").each(function () {
@@ -490,6 +501,7 @@
             });
             $("li[data-project]").each(function () {
                 let data_project_id = $(this).attr("data-project") ;
+                let indexItem  = now_projects.indexOf(data_project_id) ;
                 if(!now_projects.includes(data_project_id))
                 {
                     $(this).hide();
@@ -500,7 +512,17 @@
                 {
                     let el_id = $(this).attr("id");
                     $("#jstree").jstree().open_node(el_id);
-                    $("#"+el_id).css("background" , "#d9eace")
+                    $("#"+el_id).css("background" , color[indexItem])
+                    $("#"+el_id).find("span").css("background" , color[indexItem])
+                    $("#"+el_id).find("span").text(name[indexItem].substr(0, 5) + "..")
+                    $("#"+el_id).find("span").attr("title" , name[indexItem])
+
+                    /*
+                    $("#"+el_id).pseudo(":after","content"," تست") ;
+                    $("#"+el_id).pseudo(":after","background","#ccc") ;
+                    $("#"+el_id).pseudo(":after","position","absolute") ;
+                    $("#"+el_id).pseudo(":after","left","0") ;
+                    */
                 }
             });
 
@@ -508,18 +530,20 @@
 
                 let chack = $(this).is(":checked") ;
                 let color = getColor() ;
-                console.log("colorArray : " ,color)
+                let name = getColorName() ;
+                // console.log("colorArray : " ,color)
                 if(chack)
                 {
                     now_projects = getProject()
                     console.log("new now_projects : " , now_projects)
                     $("li[data-service-project]").each(function () {
                         let data_service_project_id = $(this).attr("data-service-project") ;
+                        // console.log("index : " , now_projects.filter(item => item.value == data_service_project_id));
+                        // console.log("-------- End Item --------") ;
                         if(now_projects.includes(data_service_project_id))
                         {
                             $(this).show(300);
                             let el_id = $(this).attr("id");
-
                         }
                     });
 
@@ -527,13 +551,16 @@
                         let data_project_id = $(this).attr("data-project") ;
                         // let index = now_projects.indexOf(data_project_id) ;
                         // console.log("index : " ,index)
+                        let indexItem  = now_projects.indexOf(data_project_id) ;
                         if(now_projects.includes(data_project_id))
                         {
                             $(this).show(300);
                             let el_id = $(this).attr("id");
                             $("#jstree").jstree().open_node(el_id);
-                            $("#"+el_id).css("background" , "#d9eace");
-                            // $("#jstree").jstree().check_node(el_id);
+                            $("#"+el_id).css("background" , color[indexItem]);
+                            $("#"+el_id).find("span").css("background" , color[indexItem])
+                            $("#"+el_id).find("span").text(name[indexItem].substr(0, 6))
+                            $("#"+el_id).find("span").attr("title" , name[indexItem])
                         }
                     });
                 }
@@ -593,11 +620,7 @@
                 now_projects = [] ;
                 $("input[name=project]").each(function () {
                     if($(this).is(":checked")) {
-                    /*    now_projects.push({
-                            "value" : $(this).val() ,
-                            "color" : $(this).attr("data-color")
-                    })*/
-                    now_projects.push($(this).val())
+                        now_projects.push($(this).val())
                     }
                 })
                 return now_projects ;
@@ -609,12 +632,24 @@
                     if($(this).is(":checked"))
                     {
                         let color = $(this).attr("data-color");
-                        console.log("color : " , color)
                         colors.push(color)
                     }
                 })
                 return colors ;
             }
+            function getColorName(){
+                let names = [] ;
+                $("input[name=project]").each(function () {
+                    if($(this).is(":checked"))
+                    {
+                        let name = $(this).attr("data-name");
+                        console.log("name : " , name)
+                        names.push(name)
+                    }
+                })
+                return names ;
+            }
+
 
             /*
             $("#jstree").jstree().open_node(function () {

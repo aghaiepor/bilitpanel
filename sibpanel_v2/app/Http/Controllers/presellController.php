@@ -129,7 +129,8 @@ class presellController extends Controller
         $FromDate = $request->get("FromDate");
         if(is_null($ToDate) && is_null($FromDate) )
             $date = ["",""] ;
-        else{
+        else
+            {
             if ($FromDate !='')
                 $FromDate = Verta::parse($this->fa2en($FromDate).' 00:00:00')->timestamp ;
             if($ToDate != "")
@@ -141,7 +142,7 @@ class presellController extends Controller
         $images_url = [] ;
         if($type == "charge"){
             $GetChargeTransaction = $this->Api->GetChargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax" ) ;
-            Log::info("GetChargeTransaction presell controller => " , $GetChargeTransaction);
+//            Log::info("GetChargeTransaction presell controller => " , $GetChargeTransaction);
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
             $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
@@ -149,6 +150,7 @@ class presellController extends Controller
         else{
             $GetChargeTransaction = $this->Api->GetDechargeTransaction($page ,$account_id, $trace_number , $reference_number , $date , "ajax") ;
 //            return $GetChargeTransaction;
+//            Log::info("GetChargeTransaction presell controller => " , $GetChargeTransaction);
             $total_pages = $GetChargeTransaction["ContentData"]["total_pages"] ;
             $Header =  $GetChargeTransaction ;
             $GetChargeTransactions =  $GetChargeTransaction["ContentData"]["log"] ;
