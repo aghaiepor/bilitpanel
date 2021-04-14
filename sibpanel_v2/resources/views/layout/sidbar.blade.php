@@ -21,7 +21,15 @@
 
     <div class="logo">
 {{--        <img id="logo_image" src="{{asset('')}}assets/img/mirasw_logo.png" style="width: 78px;margin: 15px auto 0px;display: block;">--}}
-        <img id="logo_image" src="{{ session('logoAddress')}}" style="width: 78px;margin: 15px auto 0px;display: block;">
+        @php
+            $imageAddress = session('logoAddress');
+            if(session('UserInfo')['projects'][0]["name"] == "IranFun")
+                $imageAddress = asset("") . "assets/img/iran_fun.png";
+            elseif(session('UserInfo')['projects'][0]["name"] == "TourismSystem")
+                $imageAddress = asset("") . "assets/img/mirasw_logo.png";
+        @endphp
+
+        <img id="logo_image" src="{{ $imageAddress }}" style="width: 78px;margin: 15px auto 0px;display: block;">
         <a href="http://www.creative-tim.com" class="simple-text logo-mini">
 
         </a>
