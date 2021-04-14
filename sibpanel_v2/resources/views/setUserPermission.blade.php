@@ -373,7 +373,7 @@
                                                                         @if(array_key_exists("locations" , $cit ))
                                                                             @foreach($cit['locations'] as $loc)
                                                                                 <li data-project="{{$loc["project"]}}"  id="L{{$loc['id'] }}"> {{$loc['name'] }}
-                                                                                    <span data-project-title="{{$loc["project"]}}" class="TitlePro"> تست </span>
+                                                                                    <span data-project-title="{{$loc["project"]}}" class="TitlePro"> </span>
                                                                                 <ul>
 {{--                                                                                    @foreach($locInfo['service_info'] as $servInfo)--}}
                                                                                     @if(array_key_exists("services" , $loc ))
