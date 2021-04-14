@@ -146,13 +146,13 @@
                                                         @if(count($GetUserPermission) != 0 && (in_array( $project['project_id'] , $project_ids ) || (( count($project_ids) != 0 ) ?  ($project_ids[0] == '*') : '') ))
                                                             <div class="form-check form-check-inline">
                                                                 <label class="form-check-label">
-                                                                    <input value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked >
+                                                                    <input data-color="{{$bgColor}}" value="{{$project['project_id']}}" name="project" class="form-check-input pr" type="checkbox" checked >
                                                                     {{$project['project_name']}}
                                                                     <span class="form-check-sign">
                                                                         <span class="check"></span>
                                                                     </span>
                                                                 </label>
-{{--                                                                <span class="mr-1" style="background:{{$bgColor}}  " > &nbsp;&nbsp; </span>--}}
+{{--                                                                <span class="mr-1" style="background:{{$bgColor}}"> &nbsp;&nbsp; </span>--}}
                                                             </div>
                                                         @else
                                                             <div class="form-check form-check-inline">
@@ -422,32 +422,37 @@
                 'show_only_matches_children': true
             }
         } )
-        $('#search').on("keyup change", function () {
+       /*
+       $('#search').on("keyup change", function () {
             $('#jstree').jstree(true).search($(this).val())
         })
 
         $("#search1, #search2, #search3").click(function () {
             $("#demo2").jstree("search", $(this).attr("rel"));
         });
+        */
 
+        // ****** service checked ******
         let service = data['service_ids'] ;
         if(service!=null && service[0] == '*')
             $("#jstree").jstree().check_all();
         else
             $("#jstree").jstree().check_node(service);
 
-
-        // check if Location set cheacked
+        // check if Location set checked ******
         undetermined  = $("#jstree").jstree().get_undetermined();
         console.log("undetermined : " , undetermined)
         let location_ids =  data['location_ids'] ;
+        console.log("location_ids" , location_ids)
         let loc = [] ;
-        location_ids.forEach(function (entry) {
-            let string = "L" + entry ;
-            loc.push(string)
-        });
+        if(location_ids != null )
+        {
+            location_ids.forEach(function (entry) {
+                let string = "L" + entry ;
+                loc.push(string)
+            });
+        }
         locCheack = loc  ;
-
         if(locCheack!=null && locCheack[0] == '*')
             $("#jstree").jstree().check_all();
         else
@@ -461,6 +466,7 @@
             $("#jstree").jstree().check_node(check);
         }
 
+        //****** checked ******
 
         $(document).ready(function (){
             $.ajaxSetup({
@@ -470,7 +476,6 @@
             });
 
             let Current_project_id = data['project_ids'] ;
-            // console.log("Current_project_id : " ,Current_project_id)
             $("#jstree").jstree().open_all();
             let now_projects = Current_project_id;
 
@@ -499,36 +504,11 @@
                 }
             });
 
-           /* $("li[data-service-project]").each(function () {
-                let data_service_project_id = $(this).attr("data-service-project") ;
-                if(now_projects.includes(data_service_project_id))
-                {
-                    $(this).show(300);
-                    let el_id = $(this).attr("id");
-                }
-            })*/
-
-           /* $("li[data-project]").each(function () {
-                let data_project_id = $(this).attr("data-project") ;
-                if(!now_projects.includes(data_project_id))
-                {
-                    $(this).hide(300);
-                    let el_id = $(this).attr("id");
-                    $("#jstree").jstree().close_node(el_id);
-                }
-            });*/
-
-            // console.log("project_id : " , Current_project_id)
-
-
             $("input[name=project]").on("click" ,  function () {
-                let value = $(this).val()
-                // let color = $(this).attr("data-color") ;
+
                 let chack = $(this).is(":checked") ;
-
                 let color = getColor() ;
-
-                // console.log("chack : " , chack)
+                console.log("colorArray : " ,color)
                 if(chack)
                 {
                     now_projects = getProject()
@@ -582,6 +562,7 @@
 
                 }
             });
+
             $("#jstree").on('open_node.jstree', function () {
 
                 now_projects = getProject() ;
@@ -612,37 +593,33 @@
                 now_projects = [] ;
                 $("input[name=project]").each(function () {
                     if($(this).is(":checked")) {
-                        now_projects.push($(this).val())
-                        /*now_projects.push({
+                    /*    now_projects.push({
                             "value" : $(this).val() ,
-                            "color" : $(this).attr("data-color") ,
-
+                            "color" : $(this).attr("data-color")
                     })*/
+                    now_projects.push($(this).val())
                     }
                 })
                 return now_projects ;
             }
 
             function getColor(){
-                now_projects = [] ;
-                $("input[name=project]:checked").each(function () {
-                    if($(this).is(":checked")) {
-                        /*now_projects.push({
-                            "value" : $(this).val() ,
-                            "color" : $(this).attr("data-color") ,
-
-                    })*/
-
-
-                        now_projects.push($(this).attr("data-color"))
+                colors = [] ;
+                $("input[name=project]").each(function () {
+                    if($(this).is(":checked"))
+                    {
+                        let color = $(this).attr("data-color");
+                        console.log("color : " , color)
+                        colors.push(color)
                     }
                 })
-                return now_projects ;
+                return colors ;
             }
 
-            /*$("#jstree").jstree().open_node(function () {
-
-            });*/
+            /*
+            $("#jstree").jstree().open_node(function () {
+            });
+            */
 
 
             let Locations = [] ;
