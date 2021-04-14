@@ -2714,15 +2714,69 @@
                     gender='تک جنسیتی';
 
                 let day = "";
+
+                let oldStart ="" ;
+                let oldEnd="" ;
+                let oldGender="" ;
+                let oldCapacity="";
+
+
                 $("#seances tr[sansid=" + sanse_id +"]").each(function () {
                     // convert date
-                    day = $(this).find("td[class=seance_start]").attr("day-value")
+
+                    oldStart = $(this).find("td[class=seance_start]").attr("value") ;
+                    oldEnd = $(this).find("td[class=seance_end]").attr("value") ;
+                    oldGender = $(this).find("td[class=seance_gender]").attr("value") ;
+                    oldCapacity = $(this).find("td[class=seance_capacity]").attr("value") ;
+                    day = $(this).find("td[class=seance_start]").attr("day-value") ;
                     let dt = day.split('-').map(Number);
                     let y = dt[0];
                     let m = dt[1];
                     let d = dt[2];
                     day = new persianDate([eval(y) , eval(m),eval(d)]).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD') ;
                 });
+
+                let ChangeNum = 4 ;
+                let startTime = day + " " +  start ;
+                let EndTimeVal = day + " " +  end ;
+                oldStart = oldStart.split(":");
+                let OldFistTime = (eval(oldStart[0]) * 100) + eval(oldStart[1]);
+                oldEnd = oldEnd.split(":");
+                let OldEndTime = (eval(oldEnd[0])  * 100 )+ eval(oldEnd[1]);
+
+                if( OldFistTime == FistTime )
+                {
+                    startTime = "" ;
+                    ChangeNum-- ;
+                }
+                if( OldEndTime == EndTime )
+                {
+                    EndTimeVal = "";
+                    ChangeNum-- ;
+                }
+
+                if( oldGender == gender_val )
+                {
+                    gender_val = "";
+                    ChangeNum-- ;
+                }
+                if( oldCapacity == total_capacity )
+                {
+                    total_capacity = "";
+                    ChangeNum-- ;
+                }
+
+                if(ChangeNum == 0 )
+                {
+                    Swal.fire(
+                        ' تغییراتی صورت نگرفته است ! ',
+                        ' ',
+                        'warning'
+                    )
+                    $("#loader1").hide();
+                    return ;
+                }
+
                 $.ajax({
                     type:'POST',
                     url:"{{Route('EditSans')}}" ,
@@ -2731,8 +2785,8 @@
                         '_token ': '<?php echo csrf_token() ?>',
                         'service_time_id' : sanse_id ,
                         'sex' : gender_val ,
-                        'start' : day + " " +  start ,
-                        'end' : day + " " +  end ,
+                        'start' : startTime ,
+                        'end' : EndTimeVal ,
                         'total_capacity' : total_capacity ,
                     },
                     statusCode: {

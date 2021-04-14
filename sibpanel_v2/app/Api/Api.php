@@ -1441,6 +1441,8 @@ class Api
             "total_capacity" => $total_capacity,
 	        "voucher_infos" => $voucher_infos
         ];
+        $data = array_filter($data);
+        Log::info("EditServiceTime : " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditServiceTime' ,[
                 'headers'=>$this->getHeader(),
