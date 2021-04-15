@@ -647,24 +647,29 @@ class Api
             "tag" => $tag ,
             "file_type" => $file_type ,
         ];
-//        $dataItem = array_filter($dataItem);
-        $name = time()."." . $format ;
+        // for remove empty index value
+        $dataItem = array_filter($dataItem);
+        // ******
+
+        $name = time()."_" . $pic_str->getClientOriginalName() ;
         $data =  [
             [
                 'name' => 'file',
-                'contents' => $pic_str,
-                'filename' =>  $name,
+                'filename' => $name,
+                'Mime-Type' => $pic_str->getMimeType('image'),
+                'contents' =>fopen($pic_str->getPath() , "r"),
             ],
             [
-            'name' => 'data',
+            'name' => 'form-data',
             'contents' => json_encode($dataItem) ,
             ]
         ];
         Log::info($data);
-        // for get Session Id form Header
+
+        // get Session Id form Header
         $seesion_id = $this->getHeader();
         $seesion_id = $seesion_id["Session-Id"];
-//        // Log::info($seesion_id);
+         // Log::info($seesion_id);
         // **********
         $client = new Client();
         $result = $client->post($this->url . 'AddPicture',[
