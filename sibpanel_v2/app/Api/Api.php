@@ -5,8 +5,8 @@ namespace App\Api;
 use Carbon\Carbon;
 use Facade\Ignition\Support\Packagist\Package;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 use App\UserJob;
+use Illuminate\Support\Facades\Log;
 
 class Api
 {
@@ -29,7 +29,7 @@ class Api
         $this->session_from_job = $session_from_job;
     }
 
-    public function login($username, $password, $debug = false)
+    public function Login($username, $password, $debug = false)
     {
         $client = new Client();
         $result = $client->post($this->url.'Login',[
@@ -43,7 +43,7 @@ class Api
         ]);
         $response = json_decode($result->getBody(),true);
 
-//        Log::debug($response);
+//        // Log::debug($response);
         if ($response['Header']['Status'] == 0 && $response['ContentData']['panel_access']){
             session(['SessionId' => $response['ContentData']['SessionId']]);
             session(['UserInfo' => $response['ContentData']] );
@@ -83,7 +83,7 @@ class Api
         );
         $response = json_decode($result->getBody(),true);
         $this->checkError($response , $type);
-        Log::info("LocationList : " , $data);
+        // Log::info("LocationList : " , $data);
         return $response;
     }
     public function ServiceList($id = null , $type = null , $include_service_times = false){
@@ -112,8 +112,8 @@ class Api
             "total_capacity" => $total_capacity,
             "voucher_infos" => $voucher_infos
         ];
-        Log::info("AddServiceTime => " , $data);
-//        Log::info(gettype($voucher_infos) );
+        // Log::info("AddServiceTime => " , $data);
+//        // Log::info(gettype($voucher_infos) );
         $client = new Client();
         $result = $client->post($this->url . 'AddServiceTime' ,[
                 'headers'=>$this->getHeader(),
@@ -199,7 +199,7 @@ class Api
             "location_priority"=> $location_priority,
         ];
         $client = new Client();
-        Log::info($data);
+        // Log::info($data);
         $result = $client->post($this->url . 'EditLocation' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -361,7 +361,7 @@ class Api
             "normal_sale" => $normal_sale ,
             "type_of_service_sale" => $TypeOfServiceSale,
         ];
-        Log::info("EditService : " , $data);
+        // Log::info("EditService : " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditService' ,[
                 'headers'=>$this->getHeader(),
@@ -378,7 +378,7 @@ class Api
         $data = [
             "service_id" => $service_id,
         ];
-        Log::info("DeleteService => " , $data);
+        // Log::info("DeleteService => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'DeleteService' ,[
                 'headers'=>$this->getHeader(),
@@ -396,7 +396,7 @@ class Api
             "service_id" => $service_id,
             "service_activation"=> $service_activation,
         ];
-        Log::info("erviceActivation" , $data);
+        // Log::info("erviceActivation" , $data);
         $client = new Client();
         $result = $client->post($this->url . 'ServiceActivation' ,[
                 'headers'=>$this->getHeader(),
@@ -445,7 +445,7 @@ class Api
             "validity_period"=> $validity_period,
             "expiration_date"=> $expiration_date,
         ];
-        Log::info("EditVoucherInfo " , $data);
+        // Log::info("EditVoucherInfo " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditVoucherInfo' ,[
                 'headers'=>$this->getHeader(),
@@ -504,8 +504,8 @@ class Api
             "voucher_type_id"=> $voucher_type_id
         ];
         $client = new Client();
-        Log::info(gettype($service_ids));
-        Log::info("AddPackage : " , $data);
+        // Log::info(gettype($service_ids));
+        // Log::info("AddPackage : " , $data);
         $result = $client->post($this->url . 'AddPackage' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -580,7 +580,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-//        Log::info($response);
+//        // Log::info($response);
         $this->checkError($response , "");
         return $response;
     }
@@ -598,7 +598,7 @@ class Api
             ]
         );
         $response = json_decode($result->getBody(),true);
-        Log::info($response);
+        // Log::info($response);
         $this->checkError($response);
         return $response;
     }
@@ -626,7 +626,7 @@ class Api
             "tag" => $tag ,
             "file_type" => $file_type ,
         ];
-        Log::info("AddPicture" , $data);
+        // Log::info("AddPicture" , $data);
         $client = new Client();
         $result = $client->Post($this->url . 'AddPicture',[
                 'headers'=>$this->getHeader(),
@@ -640,33 +640,34 @@ class Api
     public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag , $file_type="image" , $format="png"){
 
         $dataItem =   [
-            "project" => $project_id,
-            "location" => $location_id,
-            "service" => $service_id,
-            "voucher_info" => $voucher_info_id,
+            "project" => (int)$project_id,
+            "location" => (int)$location_id,
+            "service" => (int)$service_id,
+            "voucher_info" => (int)$voucher_info_id,
             "tag" => $tag ,
             "file_type" => $file_type ,
         ];
-        $dataItem = array_filter($dataItem);
-        Log::info("dataItem :" , $dataItem);
+//        $dataItem = array_filter($dataItem);
+        $name = time()."." . $format ;
         $data =  [
             [
                 'name' => 'file',
                 'contents' => $pic_str,
-                'filename' => time()."." . $format ,
+                'filename' =>  $name,
             ],
             [
             'name' => 'data',
             'contents' => json_encode($dataItem) ,
             ]
         ];
+        Log::info($data);
         // for get Session Id form Header
         $seesion_id = $this->getHeader();
         $seesion_id = $seesion_id["Session-Id"];
-//        Log::info($seesion_id);
+//        // Log::info($seesion_id);
         // **********
         $client = new Client();
-        $result = $client->Post($this->url . 'AddPicture',[
+        $result = $client->post($this->url . 'AddPicture',[
                 'multipart' => $data  ,
                 "headers" =>  [
                     'Authorization'=>$this->AUTHORIZATION,
@@ -895,7 +896,7 @@ class Api
                 'sib_user_id'=> $user_id
             ];
         }
-        Log::info("user data => " , $data);
+        // Log::info("user data => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'RegisterUser' ,[
                 'headers'=>$this->getHeader(),
@@ -912,8 +913,8 @@ class Api
             'sib_user_id' =>  (int)$sib_user_id,
             'activation' => $activation ,
         ];
-        Log::info(json_encode(gettype($data["activation"])));
-        Log::info(json_encode($data["activation"]));
+        // Log::info(json_encode(gettype($data["activation"])));
+        // Log::info(json_encode($data["activation"]));
         $client = new Client();
         $result = $client->post($this->url . 'UserActivation' ,[
                 'headers'=>$this->getHeader(),
@@ -997,7 +998,7 @@ class Api
             'terminal_type_ids' => $terminal_type_id,
             'switch_web_service_ids' => $switch_web_service_id
         ];
-        // Log::info("AssignPermission : " ,$data);
+        // // Log::info("AssignPermission : " ,$data);
         $client = new Client();
         $result = $client->post($this->url . 'AssignPermission' ,[
                 'headers'=>$this->getHeader(),
@@ -1078,14 +1079,14 @@ class Api
             "project_id" => $project_id
         ];
         $client = new Client();
-        Log::info("location data => " , $data);
+        // Log::info("location data => " , $data);
         $result = $client->post($this->url . 'LocationList' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
         );
         $response = json_decode($result->getBody(),true);
-        Log::info("CityList => " , $this->getHeader());
+        // Log::info("CityList => " , $this->getHeader());
         $this->checkError($response , $type);
         return $response;
     }
@@ -1133,7 +1134,7 @@ class Api
             "key"=> $key,
             "values"=> $values,
         ] ;
-        Log::info('req get stat : ',$data);
+        // Log::info('req get stat : ',$data);
 
         $client = new Client();
         $result = $client->post($this->url . 'GetStat' ,[
@@ -1169,7 +1170,7 @@ class Api
             "key"=> $key,
             "values"=> $values,
         ] ;
-        Log::info('req get stat : ',$data);
+        // Log::info('req get stat : ',$data);
 
         $client = new Client();
         $result = $client->post($this->url . 'GetTransaction' ,[
@@ -1223,7 +1224,7 @@ class Api
             'province_id' => $province_id ,
         ];
         $client = new Client();
-        Log::info( "DeleteProvince : " ,  $data);
+        // Log::info( "DeleteProvince : " ,  $data);
         $result = $client->post($this->url . 'DeleteProvince' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -1418,7 +1419,7 @@ class Api
                 'json'=>$data
             ]
         );
-        Log::info("DeleteService : " , $data);
+        // Log::info("DeleteService : " , $data);
         $response = json_decode($result->getBody(),true);
 
         $this->checkError($response , $ajax);
@@ -1442,14 +1443,14 @@ class Api
 	        "voucher_infos" => $voucher_infos
         ];
         $data = array_filter($data);
-        Log::info("EditServiceTime : " , $data);
+//        // Log::info("EditServiceTime : " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditServiceTime' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]
         );
-        Log::info("EditServiceTime : " , $data);
+//        // Log::info("EditServiceTime : " , $data);
         $response = json_decode($result->getBody(),true);
         $this->checkError($response , $ajax);
         return $response;
@@ -1490,7 +1491,7 @@ class Api
                 'json'=>$data
             ]
         );
-        Log::info("ImportExportServiceTimes => " , $data);
+        // Log::info("ImportExportServiceTimes => " , $data);
         $response = json_decode($result->getBody(),true);
         $this->checkError($response , $ajax);
         return $response;
@@ -1565,7 +1566,7 @@ class Api
         $data = [
             "service_time_ids" => $service_time_ids ,
         ];
-        Log::info("GetServiceTimes => " , $data);
+        // Log::info("GetServiceTimes => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GetServiceTimes' ,[
                 'headers'=>$this->getHeader(),
@@ -1582,7 +1583,7 @@ class Api
             "service_time_id" => (int)$service_time_id ,
             "activation" => $activation ,
         ];
-        Log::info("ServiceTimeActivation => " , $data);
+        // Log::info("ServiceTimeActivation => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'ServiceTimeActivation' ,[
                 'headers'=>$this->getHeader(),
@@ -1622,7 +1623,7 @@ class Api
             "description" => $description,
             "importance"=> $importance
         ];
-        Log::info("Alert data => " , $data);
+        // Log::info("Alert data => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'AddAlert' ,[
                 'headers'=>$this->getHeader(),
@@ -1679,7 +1680,7 @@ class Api
         $data = [
             'otp' => $otp,
         ];
-        Log::info("otp =>" , $data);
+        // Log::info("otp =>" , $data);
         $client = new Client();
         $result = $client->post($this->url . 'VerifyOtp' ,[
                 'headers'=>$this->getHeader(),
@@ -1695,7 +1696,7 @@ class Api
         $data = [
             "user_id" => $user_id
         ];
-        Log::info("GenerateOtp =>" , $data);
+        // Log::info("GenerateOtp =>" , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GenerateOtp' ,[
                 'headers'=>$this->getHeader(),
@@ -1796,7 +1797,7 @@ class Api
             "type_of_service_sale" => $type_of_service_sale ,
             "warehoff" => $warehoff
         ];
-        Log::info($data);
+        // Log::info($data);
         $client = new Client();
         $result = $client->post($this->url . 'EditProjectSetting' ,[
                 'headers'=>$this->getHeader(),
@@ -1839,7 +1840,7 @@ class Api
                 "activation_date"=> $activation_date ,
                 "expiration_date"=> $expiration_date ,
         ];
-        Log::info("AddDiscountPolicy => " , $data);
+        // Log::info("AddDiscountPolicy => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'AddDiscountPolicy' ,[
                 'headers'=>$this->getHeader(),
@@ -1860,7 +1861,7 @@ class Api
                 "voucher_info_id"=> $voucher_info_id,
                 "sib_user_id"=> $sib_user_id,
         ];
-//        Log::info("GetDiscountPolicyList => " , $data);
+//        // Log::info("GetDiscountPolicyList => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GetDiscountPolicyList' ,[
                 'headers'=>$this->getHeader(),
@@ -1882,7 +1883,7 @@ class Api
             "activation_date"=> $activation_date ,
             "expiration_date"=> $expiration_date ,
         ];
-        Log::info("EditDiscountPolicy => " , $data);
+        // Log::info("EditDiscountPolicy => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'EditDiscountPolicy' ,[
                 'headers'=>$this->getHeader(),
@@ -1899,7 +1900,7 @@ class Api
         $data = [
             "discount_policy_id" =>$discount_policy_id,
         ];
-        Log::info("GetDiscountPolicy => " , $data);
+        // Log::info("GetDiscountPolicy => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GetDiscountPolicy' ,[
                 'headers'=>$this->getHeader(),
@@ -1950,7 +1951,7 @@ class Api
             "activation" => $activation
         ];
         $client = new Client();
-        Log::info("location account actiavion : " , $data);
+        // Log::info("location account actiavion : " , $data);
         $result = $client->post($this->url . 'LocationAccountActivation' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -1966,7 +1967,7 @@ class Api
             "account_id" => $account_id,
             "activation" => $activation
         ];
-        Log::info("AccountActivation => "  , $data);
+        // Log::info("AccountActivation => "  , $data);
         $client = new Client();
         $result = $client->post($this->url . 'LocationAccountActivation' ,[
                 'headers'=>$this->getHeader(),
@@ -2036,7 +2037,7 @@ class Api
                         "date" => $date ,
                     ]
             ];
-        Log::info("GetChargeTransaction Log : " , $data);
+        // Log::info("GetChargeTransaction // Log : " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'GetChargeTransaction' ,[
                 'headers'=>$this->getHeader(),
@@ -2066,7 +2067,7 @@ class Api
                 ]
         ];
         $client = new Client();
-        Log::info("GetDechargeTransaction Log : " , $data);
+        // Log::info("GetDechargeTransaction // Log : " , $data);
         $result = $client->post($this->url . 'GetDechargeTransaction' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
@@ -2088,7 +2089,7 @@ class Api
             "description" => $description,
             "tag" => $tag
         ];
-        Log::info( "Charge data : " ,  $data);
+        // Log::info( "Charge data : " ,  $data);
         $client = new Client();
         $result = $client->post($this->url . 'ChargeAccount' ,[
                 'headers'=>$this->getHeader(),
@@ -2170,15 +2171,15 @@ class Api
             {
                 \App::abort(400);
             }
-            Log::info("requset was ajax ");
+            // Log::info("requset was ajax ");
         }
 
         if ($this->from != 'job' && $response['Header']['MessageCode'] == 141) {
             session()->forget('SessionId');
             session()->forget('UserInfo');
-//            return Redirect::to('login')->with('message', 'your message');
+//            return Redirect::to('// Login')->with('message', 'your message');
             try {
-                \App::abort(302, 'test', ['Location' => '/logout']);
+                \App::abort(302, 'test', ['Location' => '/ Logout']);
             } catch (\Exception $exception) {
                 $previousErrorHandler = set_exception_handler(function () {
                 });
@@ -2191,8 +2192,8 @@ class Api
     function GetImageAddress($id)
     {
         $GetPicture = $this->GetPicture($id);
-        Log::info("--- GetPicture ---");
-        Log::info($GetPicture);
+        // Log::info("--- GetPicture ---");
+        // Log::info($GetPicture);
 //        $mime = $GetPicture['type'];
 //        $content = $GetPicture['content'];
 //        $base64   = base64_encode($content);
@@ -2201,21 +2202,21 @@ class Api
         if( array_key_exists("file"  ,$GetPicture["ContentData"]) )
             $file = $GetPicture["ContentData"]["file"];
 
-        Log::info("--- File Address ---");
-        Log::info($file);
+        // Log::info("--- File Address ---");
+        // Log::info($file);
         return $file;
     }
     function GetDocumentAddress($id , $tag)
     {
 
         $GetPicture = $this->GetChargeDocument($id);
-        Log::info("GetPicture : " ,$GetPicture );
+        // Log::info("GetPicture : " ,$GetPicture );
         if($tag == "pdf"){
             $base64 =  base64_encode($GetPicture['content']);
             return ('data:application/pdf;base64,'. $base64);
         }
 
-        Log::info("GetPicture : " ,$GetPicture );
+        // Log::info("GetPicture : " ,$GetPicture );
         $mime = $GetPicture['type'];
         $content = $GetPicture['content'];
         $base64   = base64_encode($content);
