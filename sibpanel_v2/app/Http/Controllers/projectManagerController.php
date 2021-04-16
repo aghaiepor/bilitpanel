@@ -91,13 +91,15 @@ class projectManagerController extends Controller
         $project_id = (int)$id;
         if ($request->hasFile('service_image')){
             $file = $request->file('service_image') ;
+            $mimeType = $file->getmimeType();
 //            $image =  $file->store('tmp') ;
             $name = time() . "_" . $file->getClientOriginalName() ;
-            $image = $file->move(public_path() . "/tmp/" ,$name);
+            $path = public_path() . "/tmp/" ;
+            $image = $file->move($path,$name);
 //            return $image ;
 //            return Image::make($image)->response();
             $format = $file->getClientOriginalExtension();
-            $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $image , "logo" , "image" , $format);
+            $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $path,$name , "other" , "image" , $mimeType);
             // return for test and show api result
             return $addPicture ;
             if($addPicture['Header']['Status'] == 0){

@@ -639,39 +639,43 @@ class Api
         $this->checkError($response);
         return $response;
     }*/
-    public  function AddPicture($project_id , $location_id , $service_id , $voucher_info_id , $pic_str , $tag , $file_type="image" , $format="png"){
+    public  function AddPicture($project_id, $location_id, $service_id, $voucher_info_id,
+                                $path, $filename, $tag, $file_type="image", $mimeType){
 
-        $dataItem =   [
-            "project" => (int)$project_id,
-            "location" => (int)$location_id,
-            "service" => (int)$service_id,
-            "voucher_info" => (int)$voucher_info_id,
-            "tag" => $tag ,
-            "file_type" => $file_type ,
-        ];
-        // for remove empty index value
-        $dataItem = array_filter($dataItem);
-        // ******
 
-        $name = time()."." . $format ;
-//        return Image::make($pic_str)->response();
         $data =  [
             [
-                'name' => 'file',
-                'filename' => $name,
-//                'Mime-Type' => $pic_str->getMimeType('image'),
-//                'contents' => $pic_str,
-//                'contents' => fopen(Storage::get($pic_str) , "r"),
-                'contents' => fopen(Image::make($pic_str), "r"),
+                'name'     => 'project',
+                'contents' => (int)$project_id,
             ],
             [
-            'name' => 'form-data',
-            'contents' => json_encode($dataItem) ,
+                'name'     => 'location',
+                'contents' => (int)$location_id,
+            ],
+            [
+                'name'     => 'service',
+                'contents' => (int)$service_id,
+            ],
+            [
+                'name'     => 'voucher_info',
+                'contents' => (int)$voucher_info_id,
+            ],
+            [
+                'name'     => 'tag',
+                'contents' => $tag,
+            ],
+            [
+                'name'     => 'file_type',
+                'contents' => $file_type,
+            ],
+            [
+                'name' => 'file',
+                'contents' => fopen($path.'/'.$filename, "r"),
             ]
         ];
-        Log::info($data);
-        unlink($pic_str) ;
-        // get Session Id form Header
+
+
+        Log::info($data);        // get Session Id form Header
         $seesion_id = $this->getHeader();
         $seesion_id = $seesion_id["Session-Id"];
          // Log::info($seesion_id);
@@ -681,12 +685,17 @@ class Api
                 'multipart' => $data  ,
                 "headers" =>  [
                     'Authorization'=>$this->AUTHORIZATION,
-                    'Session-Id' => $seesion_id
+                    'Session-Id' => $seesion_id,
                 ] ,
             ]
         );
         $response = json_decode($result->getBody(),true);
         $this->checkError($response);
+
+        // remove image after upload
+        unlink($path.'/'.$filename);
+
+
         return $response;
     }
     public  function DeletePicture($picture_id){
