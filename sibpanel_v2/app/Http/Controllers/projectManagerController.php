@@ -7,6 +7,9 @@ use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class projectManagerController extends Controller
 {
@@ -87,11 +90,16 @@ class projectManagerController extends Controller
             return redirect()->back();
         $project_id = (int)$id;
         if ($request->hasFile('service_image')){
-
-            $image =  $request->file('service_image') ;
-            $format = $image->getClientOriginalExtension();
+            $file = $request->file('service_image') ;
+//            $image =  $file->store('tmp') ;
+            $name = time() . "_" . $file->getClientOriginalName() ;
+            $image = $file->move(public_path() . "/tmp/" ,$name);
+//            return $image ;
+//            return Image::make($image)->response();
+            $format = $file->getClientOriginalExtension();
             $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $image , "logo" , "image" , $format);
-//           return $addPicture ;
+            // return for test and show api result
+            return $addPicture ;
             if($addPicture['Header']['Status'] == 0){
                 $project_image = $addPicture['ContentData']['id'];
                 $main_image_address = $this->api->GetImageAddress($project_image) ;

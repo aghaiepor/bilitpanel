@@ -7,6 +7,8 @@ use Facade\Ignition\Support\Packagist\Package;
 use GuzzleHttp\Client;
 use App\UserJob;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class Api
 {
@@ -651,13 +653,16 @@ class Api
         $dataItem = array_filter($dataItem);
         // ******
 
-        $name = time()."_" . $pic_str->getClientOriginalName() ;
+        $name = time()."." . $format ;
+//        return Image::make($pic_str)->response();
         $data =  [
             [
                 'name' => 'file',
                 'filename' => $name,
-                'Mime-Type' => $pic_str->getMimeType('image'),
-                'contents' =>fopen($pic_str->getPath() , "r"),
+//                'Mime-Type' => $pic_str->getMimeType('image'),
+//                'contents' => $pic_str,
+//                'contents' => fopen(Storage::get($pic_str) , "r"),
+                'contents' => fopen(Image::make($pic_str), "r"),
             ],
             [
             'name' => 'form-data',
@@ -665,7 +670,7 @@ class Api
             ]
         ];
         Log::info($data);
-
+        unlink($pic_str) ;
         // get Session Id form Header
         $seesion_id = $this->getHeader();
         $seesion_id = $seesion_id["Session-Id"];
@@ -2196,9 +2201,11 @@ class Api
     }
     function GetImageAddress($id)
     {
+//         Log::info("--- GetId ---");
+//        Log::info( $id);
         $GetPicture = $this->GetPicture($id);
         // Log::info("--- GetPicture ---");
-        // Log::info($GetPicture);
+//         Log::info($GetPicture);
 //        $mime = $GetPicture['type'];
 //        $content = $GetPicture['content'];
 //        $base64   = base64_encode($content);
