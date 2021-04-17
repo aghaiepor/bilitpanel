@@ -604,6 +604,7 @@ class LocationController extends Controller
             return $event['location_id'] == $locationID;
         });
         $GetServices = array_values($GetServices) ;
+//        return $GetServices ;
         $VoucherTypes = Cache::get('VoucherTypeList' . session('UserInfo')['user_id']);
 //        return  $VoucherTypes ;
 //      return $GetServices ;
@@ -616,6 +617,33 @@ class LocationController extends Controller
         ]);
 
     }
+    public function getServiceWtihVoucherType(Request $request){
+        $locationID = $request->get("location_id") ;
+        $voucher_type_id = $request->get("voucher_type_id") ;
+
+        $GetServices = Cache::get('ServiceList' . session('UserInfo')['user_id']);
+        $GetServices = array_filter($GetServices, function ($event) use ($locationID) {
+            return $event['location_id'] == $locationID;
+        });
+        $service_voucher = [];
+        foreach ($GetServices as $Services)
+        {
+            $VoucherInfoList = $this->api->VoucherInfoList($Services["service_id"]);
+            foreach ($VoucherInfoList["ContentData"] as $VoucherInfo)
+            {
+                if($voucher_type_id == $VoucherInfo["voucher_type_id"])
+                {
+                    array_push($service_voucher ,  [
+                        "ServicesName" => $Services["service_name"] ,
+                        "ServicesId" => $Services["service_id"] ,
+                        "VoucherAmount" => $VoucherInfo["amount"]
+                    ]) ;
+                }
+            }
+        }
+        return $service_voucher ;
+    }
+
     public function AddPackage(Request $request , $location_id)
     {
 //      return $request->all();
