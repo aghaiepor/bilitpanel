@@ -22,11 +22,12 @@
     <div class="logo">
 {{--        <img id="logo_image" src="{{asset('')}}assets/img/mirasw_logo.png" style="width: 78px;margin: 15px auto 0px;display: block;">--}}
         @php
-            $imageAddress = session('logoAddress');
-            if(session('UserInfo')['projects'][0]["name"] == "IranFun")
-                $imageAddress = asset("") . "assets/img/iran_fun.png";
-            elseif(session('UserInfo')['projects'][0]["name"] == "TourismSystem")
-                $imageAddress = asset("") . "assets/img/mirasw_logo.png";
+
+            if( str_contains( session('logoAddress') , "img/placeholder.jpg" ) )
+                $imageAddress = session('logoAddress');
+            else
+                $imageAddress = getenv("API_ADDRESS") . session('logoAddress')
+
         @endphp
 
         <img id="logo_image" src="{{ $imageAddress }}" style="width: 78px;margin: 15px auto 0px;display: block;">

@@ -9,6 +9,7 @@ use Dotenv\Dotenv;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use ReCaptcha\ReCaptcha;
 
@@ -200,7 +201,43 @@ class AuthController extends Controller
     }
     public function test(){
 
-        $logo_id = 1;
+        $content = fopen(Storage::path("var.txt"),'r');
+        $str = "" ;
+        $items = [] ;
+
+        while(!feof($content)) {
+            $line = fgets($content) ;
+            $line = str_replace(" " , "" , $line);
+            $line = str_replace("\n" , "" , $line);
+
+
+            $item = explode("=" ,$line);
+            if(count($item) > 1)
+            {
+                if($item[1] == "true")
+                    $item[1] = true;
+                else if ($item[1] == "false")
+                    $item[1] = false;
+
+                $item = [ $item[0] => $item[1]] ;
+            }
+
+            array_push($items , $item) ;
+        }
+        $combined = [] ;
+        foreach ($items as $item)
+        {
+            $combined = array_merge($combined, $item);
+        }
+
+//        dd($combined);
+
+       if($combined["APP_DEBUG"])
+       {
+           echo "yes";
+       }
+
+      /*  $logo_id = 1;
         $address = $this->api->GetPicturesInfo(0,0,$logo_id,0) ;
 //                return $address ;
         if($address["Header"]["Status"] == 0 )
@@ -224,7 +261,7 @@ class AuthController extends Controller
             $main_image_address = null ;
         }
 
-        return $main_image_address;
+        return $main_image_address;*/
 
 //        $test = [
 //            [

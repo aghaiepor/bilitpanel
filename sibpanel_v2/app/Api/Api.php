@@ -2210,21 +2210,12 @@ class Api
     }
     function GetImageAddress($id)
     {
-//         Log::info("--- GetId ---");
-//        Log::info( $id);
         $GetPicture = $this->GetPicture($id);
-        // Log::info("--- GetPicture ---");
-//         Log::info($GetPicture);
-//        $mime = $GetPicture['type'];
-//        $content = $GetPicture['content'];
-//        $base64   = base64_encode($content);
-//        return ('data:' . $mime . ';base64,' . $base64);
         $file = null ;
+
         if( array_key_exists("file"  ,$GetPicture["ContentData"]) )
             $file = $GetPicture["ContentData"]["file"];
 
-        // Log::info("--- File Address ---");
-        // Log::info($file);
         return $file;
     }
     function GetDocumentAddress($id , $tag)

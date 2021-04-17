@@ -92,16 +92,12 @@ class projectManagerController extends Controller
         if ($request->hasFile('service_image')){
             $file = $request->file('service_image') ;
             $mimeType = $file->getmimeType();
-//            $image =  $file->store('tmp') ;
             $name = time() . "_" . $file->getClientOriginalName() ;
             $path = public_path() . "/tmp/" ;
-            $image = $file->move($path,$name);
-//            return $image ;
-//            return Image::make($image)->response();
-            $format = $file->getClientOriginalExtension();
-            $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $path,$name , "other" , "image" , $mimeType);
+            $file->move($path,$name) ;
+            $addPicture = $this->api->AddPicture($project_id , "" , "" , "" , $path,$name , "logo" , "image" , $mimeType);
             // return for test and show api result
-            return $addPicture ;
+//            return $addPicture ;
             if($addPicture['Header']['Status'] == 0){
                 $project_image = $addPicture['ContentData']['id'];
                 $main_image_address = $this->api->GetImageAddress($project_image) ;

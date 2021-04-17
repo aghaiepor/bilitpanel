@@ -126,7 +126,6 @@
                                                         $project_id =  $Project["project_id"];
                                                         $ImageInfo  = $api->GetPicturesInfo(0,0,$project_id,0) ;
                                                         $ImageInfo = $ImageInfo["ContentData"]["project_pics"];
-                                                        \Illuminate\Support\Facades\Log::info("ImageInfo" , $ImageInfo);
                                                         $project_image = null;
                                                     @endphp
                                                     @if(count($ImageInfo) == 0 )
@@ -136,9 +135,10 @@
                                                             @if($pic['tag'] == "logo")
                                                             @php
                                                                 $project_image = $pic['picture_id'];
-                                                                 $main_image_address = $api->GetImageAddress($project_image)
+                                                                 $main_image_address = $api->GetImageAddress($project_image) ;
+
                                                             @endphp
-                                                            <img project_id="{{ $Project["project_id"] }}" image_id="{{$pic['picture_id']}}" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{$main_image_address}}" rel="main_image">
+                                                            <img project_id="{{ $Project["project_id"] }}" image_id="{{$pic['picture_id']}}" data-toggle="modal" data-target="#image_modal" class="citzen_main_img" src="{{getenv("API_ADDRESS") . $main_image_address}}" rel="main_image">
                                                             @endif
                                                         @endforeach
                                                         @if($project_image == null)
