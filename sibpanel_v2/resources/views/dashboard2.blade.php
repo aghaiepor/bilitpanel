@@ -76,6 +76,7 @@
                 @endif
                 @if(session('UserInfo')['account_type_id'] != 2 )
                     @if(session('UserInfo')['account_type_id'] != 9 )
+                        @if(session('UserInfo')['is_superuser'])
                         {{-- Province manager --}}
                         <div class="col-lg-3 cards">
                         <div class="card card-pricing card-raised">
@@ -88,6 +89,7 @@
                             </div>
                         </div>
                     </div>
+                        @endif
                     @endif
                 {{-- location manager --}}
                 <div class="col-lg-3 cards">
@@ -115,6 +117,7 @@
                 </div>
                 @if(session('UserInfo')['account_type_id'] != 9 )
                     {{-- Text voucher manager --}}
+                            @if(session('UserInfo')['is_superuser'])
                     <div class="col-lg-3 cards">
                     <div class="card card-pricing card-raised">
                         <div class="card-body">
@@ -138,6 +141,7 @@
                         </div>
                     </div>
                 </div>
+                            @endif
                 @endif
                 {{-- User manager --}}
                 <div class="col-lg-3 cards">
