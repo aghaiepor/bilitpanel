@@ -2198,7 +2198,7 @@ class Api
             session()->forget('UserInfo');
 //            return Redirect::to('// Login')->with('message', 'your message');
             try {
-                \App::abort(302, 'test', ['Location' => '/Logout']);
+                \App::abort(302, 'test', ['Location' => '/logout']);
             } catch (\Exception $exception) {
                 $previousErrorHandler = set_exception_handler(function () {
                 });
