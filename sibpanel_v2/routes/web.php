@@ -107,6 +107,7 @@ Route::middleware(['CheckLogin'])->group(function () {
         Route::post('/DeletePackage/{id}' ,'LocationController@DeletePackage' )->name('DeletePackage');
         Route::post('/EditPackage/{location_id}/{id?}' ,'LocationController@EditPackage' )->name('EditPackage');
         Route::post('/PackageActivation' ,'LocationController@PackageActivation' )->name('PackageActivation');
+        Route::post('/getServiceWtihVoucherType' ,'LocationController@getServiceWtihVoucherType' )->name('getServiceWtihVoucherType');
 
         // Voucher Route
         Route::post('/AddVoucherInfo/{service_id}/{location_id}' ,'LocationController@AddVoucherInfo' )->name('AddVoucherInfo');
