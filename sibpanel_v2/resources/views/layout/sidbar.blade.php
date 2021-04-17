@@ -467,8 +467,9 @@
             setTimeout(function () {
                 $("#sidebar").css("z-index" , 10) ;
             } , 1000)
-
         })
+
+
 
         $("#sidebar").mouseover(function () {
             let min_sideBar = $("body").hasClass("sidebar-mini") ;

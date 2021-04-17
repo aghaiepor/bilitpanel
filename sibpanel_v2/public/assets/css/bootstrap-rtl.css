@@ -52,6 +52,10 @@
     src: url(../IRANSans/WebFonts/fonts/woff2/IRANSansWeb_Medium.woff2);
     font-weight: 400;
 }
+@font-face {
+    font-family: iransansFarsi;
+    src: url(../IRANSans/Farsi_numerals/IRANSansFaNum.ttf);
+}
 html {
   direction: rtl;
 }

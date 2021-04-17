@@ -12,6 +12,7 @@
         .dropdown-menu{
             min-width: 100% !important;
         }
+        table { font-family: "iransansFarsi"}
     </style>
     <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
 @endsection
@@ -187,7 +188,7 @@
                             <label for=""> نوع بليت </label>
                             <select name="voucher_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع بليت">
                                 @foreach($VoucherTypes as $VoucherType)
-                                    <option value="{{$VoucherType["voucher_type_id"]}}"> {{$VoucherType["voucher_type"]}} </option>
+                                    <option data-price="" value="{{$VoucherType["voucher_type_id"]}}"> {{$VoucherType["voucher_type"]}} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -204,6 +205,16 @@
                         <div class="col-sm text-right">
                             <label for="">  قيمت پکيج </label>
                             <input name="amount" type="text" class="form-control"  placeholder="قيمت پکيج ">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-sm">
+                            <table class="table text-right table-bordered">
+                                <tr>
+                                    <td> جمع قیمت سرویس ها </td>
+                                    <td  id="totalPrice" class="text-center"> 12,300 </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
