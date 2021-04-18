@@ -692,7 +692,7 @@
                 }else{
                     $("#DelBtn").show();
                     $("#insertBtn").hide();
-                    let deleteUrl = "{{Route("imageRemove")}}/" + image_id + "/project" ;
+                    let deleteUrl = "{{Route("imageRemove")}}/" + image_id + "/project/" +project_id  ;
                     $("#DelBtn").attr('href',deleteUrl);
                 }
 

@@ -101,8 +101,12 @@ class projectManagerController extends Controller
             if($addPicture['Header']['Status'] == 0){
                 $project_image = $addPicture['ContentData']['id'];
                 $main_image_address = $this->api->GetImageAddress($project_image) ;
+                if (session('UserInfo')['projects'][0]["id"] == $project_id)
+                {
+                    session(["logoAddress" =>  $main_image_address]);
+                }
 //                return  $main_image_address ;
-                session(["logoAddress" =>  $main_image_address]);
+
                 return redirect()->back()->with('success' , ' تصویر مورد نظر آپلود گردید . ');
 //                return $addPicture['ContentData']['picture_id'];
 

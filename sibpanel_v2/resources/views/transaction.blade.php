@@ -407,8 +407,8 @@
                                                 <td>
                                                     {{ number_format($result['ticket_number'] , 0 , '.' , ',')}}
                                                 </td>
-                                                <td>
-                                                    {{$result['get_voucher_date_jalali'] }}
+                                                <td dir="ltr">
+                                                    {{ str_replace("-" , "/" , $result['get_voucher_date_jalali'])  }}
                                                 </td>
                                              {{--   <td>
                                                     @if(request('reportType') == 1)

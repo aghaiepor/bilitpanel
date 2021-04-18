@@ -56,6 +56,35 @@
     font-family: iransansFarsi;
     src: url(../IRANSans/Farsi_numerals/IRANSansFaNum.ttf);
 }
+
+@font-face {
+    font-family: iransansFarsi;
+    src: url(../IRANSans/Farsi_numerals/IRANSansFaNum_UltraLight.ttf);
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: iransansFarsi;
+    src: url(../IRANSans/Farsi_numerals/IRANSansFaNum_Light.ttf);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: iransansFarsi;
+    src: url(../IRANSans/Farsi_numerals/IRANSansFaNum_Medium.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: iransansFarsi;
+    src: url(../IRANSans/Farsi_numerals/IRANSansFaNum_Bold.ttf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: iransansFarsi;
+    src: url(../IRANSans/Farsi_numerals/IRANSansFaNum_Black.ttf);
+    font-weight: 500;
+}
 html {
   direction: rtl;
 }
@@ -64,6 +93,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4{
 }
 body {
   direction: rtl;
+}
+table {
+    font-family: iransansFarsi;
 }
 .bgPer{
     background: linear-gradient(60deg, #ec407a, #d81b60);
