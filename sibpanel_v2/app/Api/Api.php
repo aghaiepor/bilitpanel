@@ -915,7 +915,8 @@ class Api
                 'sib_user_id'=> $user_id
             ];
         }
-        // Log::info("user data => " , $data);
+//        $data = array_filter($data) ;
+         Log::info("user data => " , $data);
         $client = new Client();
         $result = $client->post($this->url . 'RegisterUser' ,[
                 'headers'=>$this->getHeader(),

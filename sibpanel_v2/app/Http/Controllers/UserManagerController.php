@@ -176,7 +176,11 @@ class UserManagerController extends Controller
 //        return json_encode($request->all());
         if($id == null)
             $id="";
+
         $name = $request->get('name'); //
+        if(is_null($name))
+            $name = "";
+
         $last_name = $request->get('last_name'); //
         if(is_null($last_name))
             $last_name = "";
@@ -186,7 +190,21 @@ class UserManagerController extends Controller
         $national_id = $request->get('national_id'); //
         if(is_null($national_id))
             $national_id = "";
+
+        $account_type =  explode("-" ,$request->get('account_type_id') ) ; //
+        $account_type_id = $account_type[0]; //
+        $account_type_Name = $account_type[1] . " " . $account_type[2] ; //
+
+        $imei = $request->get('imei');
+        if(is_null($imei))
+            $imei = "" ;
+
         $username = $request->get('username'); //
+        if(is_null($username))
+            $username = "" ;
+
+
+
         $password = $request->get('password'); //
         if(is_null($password))
             $password = "";
@@ -199,15 +217,15 @@ class UserManagerController extends Controller
         if(is_null($session_verify))
             $session_verify = "";
 
-        $account_type =  explode("-" ,$request->get('account_type_id') ) ; //
-//        return $account_type ;
-        $account_type_id = $account_type[0]; //
-        $account_type_Name = $account_type[1] . " " . $account_type[2] ; //
+        if($account_type_id == 4 || $account_type_id == 3 || $account_type_id == 13 || $account_type_id == 5)
+            $username = $imei ;
+
+
         $otp_verify = $request->get('otp_verify');
         $subset_users ="";  /*$request->get('subset_users')*/
         $panel_access = false ;  /*$request->get('panel_access');*/
         $pre_sell = $request->get('pre_sell');
-        $imei = $request->get('imei');
+
         $SellerUserList = $this->api->RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password, $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei ,$session_verify , $id);
 //       return $SellerUserList;
 
@@ -284,15 +302,7 @@ class UserManagerController extends Controller
         $GetUserPermission = $this->api->GetUserPermission($id);
 //        return $GetUserPermission ;
         $User_info = $this->api->GetUserInfo( $id);
-
-//        return $User_info['ContentData'];
-//        return $GetUserPermission["Header"]["MessageCode"] ;
-//        $GetUserPermission = $GetUserPermission["ContentData"];
 //        $terminal_type_ids = (!is_null($GetUserPermission)) ?  $GetUserPermission['terminal_type_ids'] : [];
-//        dd(count($GetUserPermission));
-//        return $GetUserPermission['ContentData'];
-//        http://127.0.0.1:8000/setUserPermission/533
-//        return is_null($GetUserPer  ) ;LocationAccountActivation
         $GetSwitchWebServiceList = $this->api->GetSwitchWebServiceList();
 //        return $GetSwitchWebServiceList["ContentData"] ;
         $GetInfo = Cache::get('GetInfo' . session('UserInfo')['user_id']);

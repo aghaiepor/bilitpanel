@@ -241,30 +241,26 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-row mt-3">
-                        <div class="col-sm-6 text-right">
+                <div  class="modal-body">
+                    <div id="AddUserArea" class="form-row">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> نام </label>
                             <input id="addUser_name" name="name" type="text" class="form-control"  placeholder="نام  ">
                         </div>
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> نام خانوادگی </label>
                             <input id="addUser_lastname" name="last_name" type="text" class="form-control"  placeholder=" نام خانوادگی">
                         </div>
-                    </div>
 
-                    <div class="form-row mt-3 text-right" >
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> نام کاربری </label>
                             <input id="addUser_username" autocomplete="false" name="username" type="text" class="form-control"  placeholder="نام کاربری  ">
                         </div>
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> شماره موبایل </label>
                             <input id="addUser_mobile" name="cellphone" type="number" class="form-control"  placeholder="شماره موبایل">
                         </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> نوع اکانت </label>
                             <select id="addUser_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option value="" disabled selected>  انتخاب کنید </option>
@@ -273,36 +269,30 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for="">کد ملی</label>
                             <input id="addUser_ssn" name="national_id" type="number" class="form-control"  placeholder="شمار ملی">
                         </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> ایمیل </label>
                             <input name="email" type="email" class="form-control"  placeholder="ایمیل ">
                         </div>
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for="">   رمزعبور </label>
                             <input id="addUser_password" autocomplete="new-password" name="password" type="password" class="form-control"  placeholder="کلمه عبور">
                         </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> IEMI </label>
                             <input id="addUser_imei" name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
                         </div>
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> دسترسی به پیش فروش </label>
                             <select id="addUser_presell" name="pre_sell" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option selected value="0"> خیر</option>
                                 <option value="1"> بله</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-6 text-right mt-3">
                             <label for=""> فعال سازی otp </label>
                             <select id="addUser_otp_verify" name="otp_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                 <option selected value="0"> خیر</option>
@@ -342,28 +332,24 @@
                         <div id="loader3" style="position: fixed;z-index: 9999999;left: 0;right: 0;top: 0;bottom: 0;display: flex;justify-content: center;align-items: center;background: #ffffff61; display: none">
                             <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
                         </div>
-                        <div class="form-row mt-3">
-                            <div class="col-sm-6 text-right">
+                        <div id="EditUserArea" class="form-row">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> نام </label>
                                 <input id="user_first_name" name="name" type="text" class="form-control"  placeholder="نام  ">
                             </div>
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> نام خانوادگی </label>
                                 <input id="user_last_name" name="last_name" type="text" class="form-control"  placeholder=" نام خانوادگی">
                             </div>
-                        </div>
-                        <div class="form-row mt-3 text-right" >
-                            <div class="col-sm-6">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> نام کاربری </label>
                                 <input id="user_username" autocomplete="false" name="username" type="text" class="form-control"  placeholder="نام کاربری  ">
                             </div>
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> شماره موبایل </label>
                                 <input id="user_mobile" name="cellphone" type="number" class="form-control"  placeholder="شماره موبایل">
                             </div>
-                        </div>
-                        <div class="form-row mt-3">
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> نوع اکانت </label>
                                 <select id="user_account_type_id" name="account_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                     @foreach($AccountTypeList as $AccountType)
@@ -371,30 +357,26 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for="">کد ملی</label>
                                 <input id="user_national_id" name="national_id" type="number" class="form-control"  placeholder="شمار ملی">
                             </div>
-                        </div>
-                        <div class="form-row mt-3">
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> ایمیل </label>
                                 <input id="user_email" name="email" type="email" class="form-control"  placeholder="ایمیل ">
                             </div>
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> دسترسی به پیش فروش </label>
                                 <select id="user_pre_sell" name="pre_sell" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                     <option selected value="0"> خیر</option>
                                     <option value="1"> بله</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row mt-3">
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> IEMI </label>
                                 <input id="user_imei" name="imei" type="text" class="form-control"  placeholder="imei برای کاربر استند و گیشه ">
                             </div>
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <div dir="ltr" class="togglebutton">
                                     <label>
                                         <input name="pass" type="checkbox">
@@ -404,9 +386,7 @@
                                 </div>
                                 <input id="user_password" autocomplete="false" name="password" type="password" class="form-control "  placeholder="کلمه عبور">
                             </div>
-                        </div>
-                        <div class="form-row mt-3">
-                            <div class="col-sm-6 text-right">
+                            <div class="col-sm-6 text-right mt-3">
                                 <label for=""> فعال سازی otp </label>
                                 <select id="user_otp_verify" name="otp_verify" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
                                     <option selected value="0"> خیر</option>
@@ -444,7 +424,32 @@
 
             $("#addUser_password").val("")
 
+            $("#addUser_account_type_id").change(function () {
+                let value = $(this).val();
+                value = value.split("-") ;
+                let value_id = value[0] ;
+                if(value_id == 4 || value_id == 3 || value_id == 13 || value_id == 5) {
+                    $("#AddUserArea").children().each(function () {
+
+                        if($(this).find("select").attr("id") == "addUser_account_type_id"
+                            || $(this).find("input").attr("id") == "addUser_imei"  || $(this).find("input").attr("id") == "addUser_name" )
+                        {
+                            $(this).fadeIn();
+                        }
+                        else
+                            $(this).fadeOut();
+                    })
+                }
+                else
+                {
+                    $("#AddUserArea").children().each(function () {
+                        $(this).fadeIn();
+                    })
+                }
+            })
+
             $("#addUser").click( function (e) {
+                e.preventDefault();
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
                 let Mobule_pattern = /^[0][9][0-9]+$/ ;
                 let error = 0 ;
@@ -453,13 +458,19 @@
                 let addUser_username = $("#addUser_username").val();
                 let addUser_password = $("#addUser_password").val();
                 let addUser_account_type_id = $("#addUser_account_type_id").val();
+                if(addUser_account_type_id != null)
+                {
+                    addUser_account_type_id = addUser_account_type_id.split("-") ;
+                    addUser_account_type_id = addUser_account_type_id[0] ;
+                }
                 let addUser_imei = $("#addUser_imei").val();
                 let addUser_mobile = $("#addUser_mobile").val();
                 let addUser_otp_verify = $("#addUser_otp_verify").val();
                 let errorMessage = " لطفا فيلد ها مشخص شده را تکميل نماييد . " ;
                 // console.log('addUser_account_type_id' , addUser_account_type_id == null);
                 // console.log('addUser_lastname : ' , addUser_lastname == "")
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 || addUser_mobile =="" || addUser_otp_verify == 1){
+
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || !addUser_password.match(pattern) || addUser_account_type_id == null || addUser_mobile =="" || addUser_otp_verify == 1 || eval(addUser_account_type_id) == 4 || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 13 || eval(addUser_account_type_id) == 5){
                     e.preventDefault();
                     if(!addUser_name.match(pattern)) {
                         error++;
@@ -525,64 +536,97 @@
                         $("#addUser_account_type_id").removeAttr("style");
                         $("#addUser_account_type_id").parent().prev().removeAttr("style") ;
                     }
-                    let NOTcashUser =true ;
-                    if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
-                        if (addUser_imei == "" || addUser_imei != addUser_username ) {
+                    let IsCashUser = false ;
+                    if((eval(addUser_account_type_id) == 4 || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 13 || eval(addUser_account_type_id) == 5) )
+                    {
+                        IsCashUser = true ;
+                        if(addUser_imei == "" || !addUser_name.match(pattern))
+                        {
                             error++;
-
-                            if(addUser_imei != addUser_username)
-                                NOTcashUser = false ;
-
-                            $("#addUser_imei").css("cssText", "border : solid 2px #e91e63 !important");
-                            $("#addUser_imei").parent().prev().css("color", "#e91e63");
-                        } else {
+                            if(addUser_imei == "")
+                            {
+                                $("#addUser_imei").css("cssText", "border : solid 2px #e91e63 !important");
+                                $("#addUser_imei").parent().prev().css("color", "#e91e63");
+                            }
+                            else
+                            {
+                                $("#addUser_imei").removeAttr("style");
+                                $("#addUser_imei").parent().prev().removeAttr("style");
+                            }
+                        }
+                        else
+                        {
                             $("#addUser_imei").removeAttr("style");
                             $("#addUser_imei").parent().prev().removeAttr("style");
+                            error = 0 ;
                         }
                     }
-                    console.log("error => " , error)
-                    if (NOTcashUser){
-                        if(error == 0 )
-                            $("#addUserSubmit").submit();
-                        else{
-                            Swal.fire(
-                                'خطا ! ',
-                                errorMessage,
-                                'error'
-                            )
-                        }
-                    } else
+                    else
                     {
+                        $("#addUser_imei").removeAttr("style");
+                        $("#addUser_imei").parent().prev().removeAttr("style");
+                    }
+
+                    if(error == 0 )
+                        $("#addUserSubmit").submit();
+                    else{
                         Swal.fire(
                             'خطا ! ',
-                            'نام کاربري با IMEI برابر نيست . ',
+                            "فیلد های مشخص شده را پر نمایید.",
                             'error'
                         )
                     }
+                }
 
-                }
-                else
-                {
-                    $("#addUserSubmit").submit();
-                }
 
             });
 
+
+            $("#user_account_type_id").change(function () {
+                let value = $(this).val();
+                value = value.split("-") ;
+                let value_id = value[0] ;
+                if(value_id == 4 || value_id == 3 || value_id == 13 || value_id == 5) {
+                    $("#EditUserArea").children().each(function () {
+                        if($(this).find("select").attr("id") == "user_account_type_id" ||
+                            $(this).find("input").attr("id") == "user_imei"  ||
+                            $(this).find("input").attr("id") == "user_first_name")
+                        {
+                            $(this).fadeIn();
+                        }
+                        else
+                            $(this).fadeOut();
+                    })
+                }
+                else
+                {
+                    $("#EditUserArea").children().each(function () {
+                        $(this).fadeIn();
+                    })
+                }
+            })
             $("#edit_form_btn").click( function (e) {
+                e.preventDefault();
                 let pattern = /^[0-9a-zيA-Zآا-ی][a-zيA-Z0-9_.-آا-ی ]+$/ ;
                 let Mobule_pattern = /^[0][9][0-9]+$/ ;
                 let addUser_name = $("#user_first_name").val();
                 let addUser_username = $("#user_username").val();
                 let error = 0 ;
                 let addUser_account_type_id = $("#user_account_type_id").val();
+                if(addUser_account_type_id != null)
+                {
+                    addUser_account_type_id = addUser_account_type_id.split("-") ;
+                    addUser_account_type_id = addUser_account_type_id[0] ;
+                }
                 let user_mobile = $("#user_mobile").val();
                 let user_otp_verify = $("#user_otp_verify").val();
 
                 let errorMessage = "لطفا فيلد ها مشخص شده را تکميل نماييد ." ;
                 console.log("user_mobile => " , user_mobile)
                 let addUser_imei = $("#user_imei").val();
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || (eval(addUser_account_type_id) == 3) || (eval(addUser_account_type_id) == 4) || user_mobile != "" || user_otp_verify == 1 ){
-                    e.preventDefault();
+
+                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || user_mobile != "" || user_otp_verify == 1  || eval(addUser_account_type_id) == 4 || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 13 || eval(addUser_account_type_id) == 5  ){
+
                     if(!addUser_name.match(pattern)) {
                         error++ ;
                         $("#user_first_name").css("cssText" , "border : solid 2px #e91e63 !important" ) ;
@@ -636,44 +680,47 @@
                         $("#user_account_type_id").removeAttr("style");
                         $("#user_account_type_id").parent().prev().removeAttr("style") ;
                     }
-                    let NOTcashUser =true ;
-                    if (eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 4 ) {
-                        if (addUser_imei == "" || addUser_imei != addUser_username) {
-                            error++ ;
-                            if(addUser_imei != addUser_username)
-                                NOTcashUser = false ;
-
-                            $("#user_imei").css("cssText", "border : solid 2px #e91e63 !important");
-                            $("#user_imei").parent().prev().css("color", "#e91e63");
-                        } else {
+                    let IsCashUser = false ;
+                    if((eval(addUser_account_type_id) == 4 || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 13 || eval(addUser_account_type_id) == 5) )
+                    {
+                        IsCashUser = true ;
+                        if(addUser_imei == "" || !addUser_name.match(pattern))
+                        {
+                            error++;
+                            if(addUser_imei == "")
+                            {
+                                $("#user_imei").css("cssText", "border : solid 2px #e91e63 !important");
+                                $("#user_imei").parent().prev().css("color", "#e91e63");
+                            }
+                            else
+                            {
+                                $("#user_imei").removeAttr("style");
+                                $("#user_imei").parent().prev().removeAttr("style");
+                            }
+                        }
+                        else
+                        {
                             $("#user_imei").removeAttr("style");
                             $("#user_imei").parent().prev().removeAttr("style");
+                            error = 0 ;
                         }
                     }
-                    if (NOTcashUser){
-                        if(error == 0 )
-                            $("#form_edit").submit();
-                        else{
-                            Swal.fire(
-                                'خطا ! ',
-                                errorMessage,
-                                'error'
-                            )
-                        }
-                    } else
+                    else
                     {
+                        $("#user_imei").removeAttr("style");
+                        $("#user_imei").parent().prev().removeAttr("style");
+                    }
+
+
+                    if(error == 0 )
+                        $("#form_edit").submit();
+                    else{
                         Swal.fire(
                             'خطا ! ',
-                            'نام کاربري با IMEI برابر نيست . ',
+                            "فیلد های مشخص شده را پر نمایید.",
                             'error'
                         )
                     }
-
-
-                }
-                else
-                {
-                    $("#form_edit").submit();
                 }
                 // if(error == 0)
                 // {
@@ -840,9 +887,7 @@
 
                             let accountTypeVal = data.account_type_id + "-" + data.account_type ;
                             accountTypeVal = accountTypeVal.replace(" " , "-");
-                            $('#user_account_type_id').find("option").attr('selected' , false);
-                            $('#user_account_type_id').find("option[value="+ accountTypeVal + "]").attr('selected' , true);
-                            $("#user_account_type_id").selectpicker('refresh') ;
+                            $('#user_account_type_id').val(accountTypeVal).trigger("change")
 
                             /*
                             $('#user_session_verify').find("option").attr('selected' , false);
@@ -858,19 +903,16 @@
                                 otp_verify = 1 ;
                             }
                             console.log( "otp_verify => " , otp_verify)
-
-                            $('#user_otp_verify').find("option").attr('selected' , false);
-                            $('#user_otp_verify').find("option[value="+ otp_verify + "]").attr('selected' , true);
+                            $('#user_otp_verify').val(otp_verify).trigger("change")
 
                             $('#user_email').val(data.email);
                             let pre_sale = (data.presell)  ? '1' : '0' ;
-                            $('#user_pre_sell').find("option").attr('selected' , false);
-                            $('#user_pre_sell').find("option[value="+ pre_sale + "]").attr('selected' , true);
+
+                            $('#user_pre_sell').val(pre_sale).trigger("change")
                             // Element.find("input[name=pre_sell]").val(data.presell);
                             // console.log(data.presell);
                             $('#user_imei').val((data.imei == "None" ) ? "" : data.imei );
                             $('#user_password').val('');
-                            $('.selectpicker').selectpicker('refresh');
                             $('#loader3').hide();
                         }
                     });
