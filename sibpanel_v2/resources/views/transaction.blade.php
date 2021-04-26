@@ -263,6 +263,11 @@
                                 @endif
                                 {{-- **** Voucher Number  **** --}}
                                 <div class="col-md-3 text-right">
+                                    <label for="">  شماره کارت تخفیف </label>
+                                    <input  name="card_number" value="{{request('card_number')}}" type="text" class="form-control" placeholder="شماره کارت تخفیف">
+                                </div>
+                                {{-- **** Voucher Number  **** --}}
+                                <div class="col-md-3 text-right">
                                     <label for="">  شماره بلیت </label>
                                     <input  name="voucher_number" value="{{request('voucher_number')}}" type="text" class="form-control" placeholder="شماره بلیت">
                                 </div>

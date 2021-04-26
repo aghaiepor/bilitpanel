@@ -291,11 +291,15 @@ class ReportController extends Controller
         if($voucher_number == 0)
             $voucher_number = "";
 
+        $card_number = (int)$request->get('card_number',"");
+        if($card_number == 0)
+            $card_number = "";
+
         $rrn = $request->get('rrn',"");
         if(is_null($rrn))
             $rrn = "";
 
-        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id ,$rrn , $voucher_number);
+        $GetStat = $this->api->GetTransaction($page,$location_id, $key, $values, $status_codeArray, $service_id, $operator_id, $sell_type_id, $sale_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id ,$rrn , $voucher_number , $card_number);
 //        return redirect()->back()->with('data' , $GetStat['ContentData'])->withInput();
 //        return $GetStat ;
         $SaleTypeList = Cache::get('SaleTypeList' . session('UserInfo')['user_id'] );

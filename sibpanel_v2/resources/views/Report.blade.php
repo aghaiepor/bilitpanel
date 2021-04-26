@@ -10,20 +10,22 @@
     </title>
     <link rel="stylesheet" href="{{asset('')}}assets/js/persian-datepicker.min.css">
     <style>
-        .bootstrap-select{
+        .bootstrap-select {
             width: 100% !important;
         }
-        .dropdown-menu{
-            width:  270px !important ;
-            min-width: 270px !important ;
-            max-width: 270px !important ;
+
+        .dropdown-menu {
+            width: 270px !important;
+            min-width: 270px !important;
+            max-width: 270px !important;
         }
-        .datepicker-navigator .title{
+
+        .datepicker-navigator .title {
             margin: 0 !important;
             min-height: 0 !important;
         }
-        .SelectSpinner
-        {
+
+        .SelectSpinner {
             width: 30px;
             height: 30px;
             color: #fff !important;
@@ -80,7 +82,10 @@
                                     </h4>
                                 </div>
                                 <div class="col-md">
-                                    <a {{--onclick="history.go(-1);"--}} href="{{Route("dashboard")}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
+                                    <a {{--onclick="history.go(-1);"--}} href="{{Route("dashboard")}}"
+                                       class="btn btn-dark  mt-2 pl-1"> بازگشت
+                                        <i class="material-icons"> arrow_back</i>
+                                    </a>
 
                                 </div>
                             </div>
@@ -90,30 +95,57 @@
                                     {{--  category --}}
                                     <div class="col-md-3 text-right">
                                         <label for=""> نحوه دسته بندی </label>
-                                        <select name="key" class="selectpicker" data-style="btn btn-primary border-dark" title="Single Select">
-                                            <option @if(request('key') == "province" || is_null(request('key')) ) selected @endif value="province">استان</option>
-                                            <option @if(request('key') == "city") selected @endif value="city">شهر</option>
-                                            <option @if(request('key') == "service_time_id") selected @endif value="service_time_id">سانس</option>
-                                            <option @if(request('key') == "sale_type") selected @endif value="sale_type">نوع پرداخت</option>
-                                            <option @if(request('key') == "voucher_type") selected @endif value="voucher_type">نوع بلیت</option>
-                                            <option @if(request('key') == "sell_model") selected @endif value="sell_model">نوع فروش</option>
-                                            <option @if(request('key') == "operator") selected @endif value="operator">اپراتور</option>
-                                            <option @if(request('key') == "location") selected @endif value="location">مکان</option>
-                                            <option @if(request('key') == "service") selected @endif value="service">موزه</option>
+                                        <select name="key" class="selectpicker" data-style="btn btn-primary border-dark"
+                                                title="Single Select">
+                                            <option
+                                                @if(request('key') == "province" || is_null(request('key')) ) selected
+                                                @endif value="province">استان
+                                            </option>
+                                            <option @if(request('key') == "city") selected @endif value="city">شهر
+                                            </option>
+                                            <option @if(request('key') == "service_time_id") selected
+                                                    @endif value="service_time_id">سانس
+                                            </option>
+                                            <option @if(request('key') == "sale_type") selected
+                                                    @endif value="sale_type">نوع پرداخت
+                                            </option>
+                                            <option @if(request('key') == "voucher_type") selected
+                                                    @endif value="voucher_type">نوع بلیت
+                                            </option>
+                                            <option @if(request('key') == "sell_model") selected
+                                                    @endif value="sell_model">نوع فروش
+                                            </option>
+                                            <option @if(request('key') == "operator") selected @endif value="operator">
+                                                اپراتور
+                                            </option>
+                                            <option @if(request('key') == "location") selected @endif value="location">
+                                                مکان
+                                            </option>
+                                            <option @if(request('key') == "service") selected @endif value="service">
+                                                موزه
+                                            </option>
+                                            <option @if(request('key') == "card_number") selected
+                                                    @endif value="card_number">کارت تخفیف
+                                            </option>
                                         </select>
                                     </div>
                                     {{--  Project --}}
                                     @if(count($ProjectList) > 1)
                                         <div class="col-md-3 text-right">
-                                            <label for="">  پروژه </label>
-                                            <select id="project" name="project_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
+                                            <label for=""> پروژه </label>
+                                            <select id="project" name="project_id" class="selectpicker"
+                                                    data-live-search="true" data-style="btn btn-primary border-dark"
+                                                    title="اپراتور">
                                                 @foreach($ProjectList as $Project)
                                                     @if(is_null(request('project_id')) &&  $Project['project_id'] == 1 )
-                                                        <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                        <option selected
+                                                                value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
                                                     @elseif(request('project_id') == $Project['project_id'])
-                                                        <option selected value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                        <option selected
+                                                                value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
                                                     @else
-                                                        <option value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
+                                                        <option
+                                                            value="{{$Project['project_id']}}">{{$Project['project_name']}}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -121,14 +153,18 @@
                                     @endif
                                     {{--  province --}}
                                     <div class="col-md-3 text-right">
-                                        <label for=""> انتخاب استان  </label>
-                                        <select name="province_id" id="province" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="Single Select">
-                                            <option value="" selected> همه </option>
+                                        <label for=""> انتخاب استان </label>
+                                        <select name="province_id" id="province" class="selectpicker"
+                                                data-live-search="true" data-style="btn btn-primary border-dark"
+                                                title="Single Select">
+                                            <option value="" selected> همه</option>
                                             @foreach($ProvinceList as $Province)
                                                 @if(request('province_id') == $Province['id'])
-                                                    <option selected value="{{$Province['id']}}"> {{$Province['province_name']}} </option>
+                                                    <option selected
+                                                            value="{{$Province['id']}}"> {{$Province['province_name']}} </option>
                                                 @else
-                                                    <option value="{{$Province['id']}}"> {{$Province['province_name']}} </option>
+                                                    <option
+                                                        value="{{$Province['id']}}"> {{$Province['province_name']}} </option>
                                                 @endif
 
                                             @endforeach
@@ -145,15 +181,19 @@
                                         $citys = [] ;
                                     @endphp
                                     <div class="col-md-3 text-right position-relative">
-                                        <div id="loader_cityList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                        <div id="loader_cityList"
+                                             style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
                                             <div class="spinner-border SelectSpinner mx-auto d-block mb-3"></div>
                                         </div>
-                                        <label for=""> انتخاب شهر  </label>
-                                        <select name="city_id" id="cityList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب شهر">
-                                            <option value=""> همه </option>
+                                        <label for=""> انتخاب شهر </label>
+                                        <select name="city_id" id="cityList" class="selectpicker"
+                                                data-live-search="true" data-style="btn btn-primary border-dark"
+                                                title="انتخاب شهر">
+                                            <option value=""> همه</option>
                                             @foreach($citys as $city )
                                                 @if($city["id"] == request("city_id"))
-                                                    <option selected value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
+                                                    <option selected
+                                                            value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
                                                 @else
                                                     <option value="{{$city["id"]}}"> {{$city["city_name"]}} </option>
                                                 @endif
@@ -172,17 +212,22 @@
                                         $location_lists = [] ;
                                     @endphp
                                     <div class="col-md-3 text-right">
-                                        <div id="loader_locationList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
-                                            <div class="spinner-border SelectSpinner mx-auto d-block mb-3 " ></div>
+                                        <div id="loader_locationList"
+                                             style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                            <div class="spinner-border SelectSpinner mx-auto d-block mb-3 "></div>
                                         </div>
-                                        <label for=""> انتخاب مکان   </label>
-                                        <select name="location_id" id="locationList" class="selectpicker"  data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب مکان">
-                                            <option value=""> همه </option>
+                                        <label for=""> انتخاب مکان </label>
+                                        <select name="location_id" id="locationList" class="selectpicker"
+                                                data-live-search="true" data-style="btn btn-primary border-dark"
+                                                title="انتخاب مکان">
+                                            <option value=""> همه</option>
                                             @foreach($location_lists as $location_list )
                                                 @if($location_list["id"] == request("location_id"))
-                                                    <option selected value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
+                                                    <option selected
+                                                            value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
                                                 @else
-                                                    <option value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
+                                                    <option
+                                                        value="{{$location_list["id"]}}"> {{$location_list["location_name"]}} </option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -198,54 +243,66 @@
                                         $ServiceLists = [] ;
                                     @endphp
                                     <div class="col-md-3 text-right">
-                                        <div id="loader_ServiceList" style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
+                                        <div id="loader_ServiceList"
+                                             style="position: absolute;z-index: 35;left: 0;right: 0;top: 0px;bottom: 0;justify-content: center;align-items: center;background: #ffffff99;cursor: not-allowed; display: none; padding-top: 41px;">
                                             <div class="spinner-border SelectSpinner mx-auto d-block mb-3"></div>
                                         </div>
                                         <label for=""> انتخاب موزه </label>
-                                        <select name="service_id" id="ServiceList" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="انتخاب موزه ">
-                                            <option value=""> همه </option>
+                                        <select name="service_id" id="ServiceList" class="selectpicker"
+                                                data-live-search="true" data-style="btn btn-primary border-dark"
+                                                title="انتخاب موزه ">
+                                            <option value=""> همه</option>
                                             @foreach($ServiceLists as $ServiceList )
                                                 @if($ServiceList["service_id"] == request("service_id"))
-                                                    <option selected value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
+                                                    <option selected
+                                                            value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
                                                 @else
-                                                    <option value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
+                                                    <option
+                                                        value="{{$ServiceList["service_id"]}}"> {{$ServiceList["service_name"]}} </option>
                                                 @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     @if(env("HAS_TERMINAL"))
-                                    {{--  Terminal --}}
-                                    <div class="col-md-3 text-right">
-                                        <label for="">  ترمینال </label>
-                                        <select id="terminal_id" name="terminal_id" class="selectpicker"  data-style="btn btn-primary border-dark" title="Single Select">
-                                            <option selected value="">همه</option>
-                                        </select>
-                                    </div>
+                                        {{--  Terminal --}}
+                                        <div class="col-md-3 text-right">
+                                            <label for=""> ترمینال </label>
+                                            <select id="terminal_id" name="terminal_id" class="selectpicker"
+                                                    data-style="btn btn-primary border-dark" title="Single Select">
+                                                <option selected value="">همه</option>
+                                            </select>
+                                        </div>
                                     @endif
                                     {{--  Voucher --}}
                                     <div class="col-md-3 text-right">
-                                        <label for="">  نوع بلیت </label>
-                                        <select name="voucher_type_id" class="selectpicker"  data-style="btn btn-primary border-dark" title="Single Select">
+                                        <label for=""> نوع بلیت </label>
+                                        <select name="voucher_type_id" class="selectpicker"
+                                                data-style="btn btn-primary border-dark" title="Single Select">
                                             <option selected value="">همه</option>
                                             @foreach($tikcetType as $ticket)
                                                 @if(request('voucher_type_id') == $ticket['voucher_type_id'])
-                                                    <option selected value="{{$ticket['voucher_type_id']}}"> {{$ticket['voucher_type']}} </option>
+                                                    <option selected
+                                                            value="{{$ticket['voucher_type_id']}}"> {{$ticket['voucher_type']}} </option>
                                                 @else
-                                                    <option value="{{$ticket['voucher_type_id']}}"> {{$ticket['voucher_type']}} </option>
+                                                    <option
+                                                        value="{{$ticket['voucher_type_id']}}"> {{$ticket['voucher_type']}} </option>
                                                 @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     {{--  type payement --}}
                                     <div class="col-md-3 text-right">
-                                        <label for="">  نوع پرداخت </label>
-                                        <select name="sell_type_id" class="selectpicker" data-style="btn btn-primary border-dark" title="نوع پرداخت ">
+                                        <label for=""> نوع پرداخت </label>
+                                        <select name="sell_type_id" class="selectpicker"
+                                                data-style="btn btn-primary border-dark" title="نوع پرداخت ">
                                             <option selected value="">همه</option>
                                             @foreach($SaleTypeList as $SaleType)
-                                            @if(request('sell_type_id') == $SaleType['sale_type_id'] )
-                                                <option selected value="{{$SaleType['sale_type_id']}}">{{$SaleType['sale_type']}}</option>
+                                                @if(request('sell_type_id') == $SaleType['sale_type_id'] )
+                                                    <option selected
+                                                            value="{{$SaleType['sale_type_id']}}">{{$SaleType['sale_type']}}</option>
                                                 @else
-                                                <option value="{{$SaleType['sale_type_id']}}">{{$SaleType['sale_type']}}</option>
+                                                    <option
+                                                        value="{{$SaleType['sale_type_id']}}">{{$SaleType['sale_type']}}</option>
                                                 @endif
                                             @endforeach
 
@@ -253,24 +310,37 @@
                                     </div>
                                     {{--  State voucher --}}
                                     <div class="col-md-3 text-right">
-                                        <label for="">  وضعیت بلیت </label>
-                                        <select name="status_code" class="selectpicker" data-style="btn btn-primary border-dark" title="وضعیت بلیت">
-                                            <option @if(request('status_code') == "255" || request('status_code') == "" ) selected @endif value="255">همه</option>
-                                            <option @if(request('status_code') == "1") selected @endif value="1">استفاده نشده</option>
-                                            <option @if(request('status_code') == "3") selected @endif value="3">حذف شده</option>
-                                            <option @if(request('status_code') == "5") selected @endif value="5">استفاده شده</option>
+                                        <label for=""> وضعیت بلیت </label>
+                                        <select name="status_code" class="selectpicker"
+                                                data-style="btn btn-primary border-dark" title="وضعیت بلیت">
+                                            <option
+                                                @if(request('status_code') == "255" || request('status_code') == "" ) selected
+                                                @endif value="255">همه
+                                            </option>
+                                            <option @if(request('status_code') == "1") selected @endif value="1">استفاده
+                                                نشده
+                                            </option>
+                                            <option @if(request('status_code') == "3") selected @endif value="3">حذف
+                                                شده
+                                            </option>
+                                            <option @if(request('status_code') == "5") selected @endif value="5">استفاده
+                                                شده
+                                            </option>
                                         </select>
                                     </div>
                                     {{--  Operator --}}
                                     <div class="col-md-3 text-right">
-                                        <label for="">  اپراتور </label>
-                                        <select name="operator_id" class="selectpicker" data-live-search="true" data-style="btn btn-primary border-dark" title="اپراتور">
-                                            <option value="" selected> همه  </option>
+                                        <label for=""> اپراتور </label>
+                                        <select name="operator_id" class="selectpicker" data-live-search="true"
+                                                data-style="btn btn-primary border-dark" title="اپراتور">
+                                            <option value="" selected> همه</option>
                                             @foreach($SellerUsersList as $Seller)
                                                 @if(request('operator_id') == $Seller['sib_user_id'])
-                                                    <option selected value="{{$Seller['sib_user_id']}}">{{$Seller['first_name']}}</option>
+                                                    <option selected
+                                                            value="{{$Seller['sib_user_id']}}">{{$Seller['first_name']}}</option>
                                                 @else
-                                                    <option value="{{$Seller['sib_user_id']}}">{{$Seller['first_name']}}</option>
+                                                    <option
+                                                        value="{{$Seller['sib_user_id']}}">{{$Seller['first_name']}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -300,25 +370,30 @@
                                     @endphp
                                     {{--  Start Date --}}
                                     <div class="col-md-3 text-right">
-                                        <label for="">  تاریخ شروع  </label>
-                                        <input autocomplete="off" value="{{$time}}" name="startDate" id="FromDate" type="text" class="form-control" placehrequester="از تاریخ">
+                                        <label for=""> تاریخ شروع </label>
+                                        <input autocomplete="off" value="{{$time}}" name="startDate" id="FromDate"
+                                               type="text" class="form-control" placehrequester="از تاریخ">
                                     </div>
                                     {{--  End Date --}}
                                     <div class="col-md-3 text-right">
-                                        <label for="">  تاریخ پایان  </label>
-                                        <input autocomplete="off"  value="{{$time_endtDate}}" name="endDate" id="ToDate" type="text" class="form-control" placehrequester="تا تاریخ">
+                                        <label for=""> تاریخ پایان </label>
+                                        <input autocomplete="off" value="{{$time_endtDate}}" name="endDate" id="ToDate"
+                                               type="text" class="form-control" placehrequester="تا تاریخ">
                                     </div>
                                     @if($report_type == 0)
                                         {{-- sale type --}}
                                         <div class="col-md-3 text-right">
-                                            <label for="">  نوع فروش  </label>
-                                            <select name="pre_sale" class="selectpicker" data-style="btn btn-primary border-dark" title="ییش فروش">
-                                                <option value="" selected> همه  </option>
+                                            <label for=""> نوع فروش </label>
+                                            <select name="pre_sale" class="selectpicker"
+                                                    data-style="btn btn-primary border-dark" title="ییش فروش">
+                                                <option value="" selected> همه</option>
                                                 @foreach($SellModelList as $SellModel)
                                                     @if(request('pre_sale') == $SellModel["sell_model_id"])
-                                                        <option value="{{$SellModel["sell_model_id"]}}"> {{$SellModel["sell_model"]}} </option>
-                                                        @else
-                                                        <option value="{{$SellModel["sell_model_id"]}}"> {{$SellModel["sell_model"]}} </option>
+                                                        <option
+                                                            value="{{$SellModel["sell_model_id"]}}"> {{$SellModel["sell_model"]}} </option>
+                                                    @else
+                                                        <option
+                                                            value="{{$SellModel["sell_model_id"]}}"> {{$SellModel["sell_model"]}} </option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -329,7 +404,9 @@
                                     {{-- Search btn --}}
                                     <div class="col-md-3 mr-auto">
                                         <label for="" class="text-white"> .</label>
-                                        <button class="btn bgPer btn-block"> جست و جو <i class="material-icons"> search</i> </button>
+                                        <button class="btn bgPer btn-block"> جست و جو
+                                            <i class="material-icons"> search</i>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -341,173 +418,186 @@
                             $count = [] ;
                         @endphp
                         @if(Route::current()->getName() == "GetStat")
-                        <div class="card-body">
-                            <div class="table-responsive table-striped">
-                                <table id="reportTable" class="table text-center">
-                                    <thead class=" text-primary">
-                                    <tr class="">
-                                        <th >
-                                            نام دسته
-                                        </th>
-                                        <th >
-                                           تعداد
-                                        </th>
-                                        <th >
-                                            جمع (ریال)
-                                            {{--<div class="form-row align-items-center">
-                                                <div class="col">
-                                                    <span>
+                            <div class="card-body">
+                                <div class="table-responsive table-striped">
+                                    <table id="reportTable" class="table text-center">
+                                        <thead class=" text-primary">
+                                            <tr class="">
+                                                <th>
+                                                    نام دسته
+                                                </th>
+                                                <th>
+                                                    تعداد
+                                                </th>
+                                                <th>
+                                                    جمع (ریال)
+                                                    {{--<div class="form-row align-items-center">
+                                                        <div class="col">
+                                                            <span>
 
-                                                    </span>
-                                                </div>
-                                                <div class="col-auto">
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-auto">
 
-                                                </div>
-                                            </div>--}}
-                                        </th>
-                                       {{-- <th>
-                                            قیمت بدون تخفیف
-                                        </th>--}}
-                                        <th width="50">
-                                            <button onclick="export2excel()" type="button" class="btn btn-success">
-                                                دانلود اکسل
-                                                <i class="material-icons"> vertical_align_bottom </i>
-                                            </button>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                                                        </div>
+                                                    </div>--}}
+                                                </th>
+                                                {{-- <th>
+                                                     قیمت بدون تخفیف
+                                                 </th>--}}
+                                                <th width="50">
+                                                    <button onclick="export2excel()" type="button"
+                                                            class="btn btn-success">
+                                                        دانلود اکسل
+                                                        <i class="material-icons"> vertical_align_bottom</i>
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    @if($data == null || count($data['result']) == 0 )
-                                        <tr>
-                                            <td colspan="5">
-                                                <h6 class="text-center py-5"> موردی یافت نشد ! </h6>
-                                            </td>
-                                        </tr>
-                                    @else
-                                        @foreach($data['result'] as $result)
-                                            @php
-                                                $name = " - ";
-                                                if(request('key') == "service_time_id")
-                                                {
-                                                    $serviceTimeId = $result[request('key')];
-
-                                                    //dd($result[request('key')]);
-                                                    if(!is_null($serviceTimeId))
+                                            @if($data == null || count($data['result']) == 0 )
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <h6 class="text-center py-5"> موردی یافت نشد !</h6>
+                                                    </td>
+                                                </tr>
+                                            @else
+                                                @foreach($data['result'] as $result)
+                                                    @php
+                                                        $name = " - ";
+                                                        if(request('key') == "service_time_id")
                                                         {
-                                                            $ServiceTimes = $api->GetServiceTimes([(int)$serviceTimeId]);
-                                                            $ServiceTimes = $ServiceTimes["ContentData"][0];
-                                                            if(count($ServiceTimes) > 0)
+                                                            $serviceTimeId = $result[request('key')];
+
+                                                            //dd($result[request('key')]);
+                                                            if(!is_null($serviceTimeId))
                                                                 {
-                                                                    $start = new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($ServiceTimes["start"])->format("Y-n-j H:i") )  ;
-                                                                    $end = new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($ServiceTimes["end"])->format("Y-n-j H:i"))  ;
+                                                                    $ServiceTimes = $api->GetServiceTimes([(int)$serviceTimeId]);
+                                                                    $ServiceTimes = $ServiceTimes["ContentData"][0];
+                                                                    if(count($ServiceTimes) > 0)
+                                                                        {
+                                                                            $start = new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($ServiceTimes["start"])->format("Y-n-j H:i") )  ;
+                                                                            $end = new \Hekmatinasser\Verta\Verta(\Carbon\Carbon::parse($ServiceTimes["end"])->format("Y-n-j H:i"))  ;
 
-                                                                $name = $start . " - " .  $end ;
-                                                                array_push($City, $name);
+                                                                        $name = $start . " - " .  $end ;
+                                                                        array_push($City, $name);
+                                                                        }
+
                                                                 }
-
+                                                            else
+                                                                array_push($City, $serviceTimeId);
                                                         }
-                                                    else
-                                                        array_push($City, $serviceTimeId);
-                                                }
-                                                else
-                                                    array_push($City, $result[request('key').'_name']);
+                                                        elseif(request('key') == "card_number")
+                                                        {
+                                                            $name = $result[request('key')] ;
+                                                            if( is_null($name))
+                                                                $name = " بدون کارت تخفيف " ;
+                                                            array_push($City, $name);
+                                                        }
+                                                        else
+                                                            array_push($City, $result[request('key').'_name']);
 
+                                                        array_push($count, $result['count']);
+                                                    @endphp
+                                                    <tr>
+                                                        <td>
+                                                            @if(request('key') == "service_time_id" || request('key') == "card_number")
+                                                                {{$name}}
+                                                            @else
+                                                                {{$result[request('key').'_name']}}
+                                                            @endif
 
-                                                array_push($count, $result['count']);
-                                            @endphp
-                                            <tr>
-                                                <td>
-                                                    {{ (request('key') == "service_time_id" ) ?  ($name)  : ($result[request('key').'_name']) }}
+                                                        </td>
+                                                        <td>
 
-                                                </td>
-                                                <td>
+                                                            {{ number_format($result['count'] , 0 , '.' , ',')}}
+                                                        </td>
+                                                        {{--  <td>
+                                                              {{ number_format($result['amount_without_discount'] , 0 , '.' , ',')}}
+                                                          </td>--}}
+                                                        <td>
+                                                            @if(request('reportType') == 1)
+                                                                {{number_format($result['amount'] * 0.85 , 0 ,'.' , ',' )}}
+                                                            @else
+                                                                {{number_format($result['amount'] , 0 ,'.' , ',' )}}
+                                                            @endif
+                                                        </td>
+                                                        <td></td>
+                                                    </tr>
+                                                @endforeach
 
-                                                    {{ number_format($result['count'] , 0 , '.' , ',')}}
-                                                </td>
-                                              {{--  <td>
-                                                    {{ number_format($result['amount_without_discount'] , 0 , '.' , ',')}}
-                                                </td>--}}
-                                                <td>
-                                                    @if(request('reportType') == 1)
-                                                        {{number_format($result['amount'] * 0.85 , 0 ,'.' , ',' )}}
-                                                    @else
-                                                        {{number_format($result['amount'] , 0 ,'.' , ',' )}}
-                                                    @endif
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                        @endforeach
+                                                <tr class="bg-light">
+                                                    <th>
+                                                        جمع
+                                                    </th>
+                                                    <th>
+                                                        {{ number_format($data['total_count'] , 0 , '.' , ',')}}
+                                                    </th>
+                                                    <th>
+                                                        @if(request('reportType') == 1)
+                                                            {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}
+                                                            ریال &nbsp;
+                                                        @else
+                                                            {{ number_format($data['total_amount'] , 0 , '.' , ',')}}
+                                                            ریال &nbsp;
+                                                        @endif
+                                                    </th>
+                                                    {{-- <th>
+                                                         @if(request('reportType') == 1)
+                                                             {{ number_format($data['total_amount_without_discount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
+                                                         @else
+                                                             {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
+                                                         @endif
+                                                     </th>--}}
+                                                    <th>
 
-                                            <tr class="bg-light">
-                                                <th >
-                                                    جمع
-                                                </th>
-                                                <th >
-                                                    {{ number_format($data['total_count'] , 0 , '.' , ',')}}
-                                                </th>
-                                                <th>
-                                                    @if(request('reportType') == 1)
-                                                        {{ number_format($data['total_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
-                                                    @else
-                                                        {{ number_format($data['total_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
-                                                    @endif
-                                                </th>
-                                               {{-- <th>
-                                                    @if(request('reportType') == 1)
-                                                        {{ number_format($data['total_amount_without_discount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
-                                                    @else
-                                                        {{ number_format($data['total_amount_without_discount'] , 0 , '.' , ',')}}   ریال &nbsp;
-                                                    @endif
-                                                </th>--}}
-                                                <th>
+                                                        {{--مبلغ پرداختی :
+                                                        @if(request('reportType') == 1)
+                                                            {{ number_format($data['total_paid_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
+                                                        @else
+                                                            {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
+                                                        @endif
+                                                        --}}
+                                                    </th>
+                                                </tr>
 
-                                                    {{--مبلغ پرداختی :
-                                                    @if(request('reportType') == 1)
-                                                        {{ number_format($data['total_paid_amount'] * 0.85 , 0 , '.' , ',')}}   ریال &nbsp;
-                                                    @else
-                                                        {{ number_format($data['total_paid_amount'] , 0 , '.' , ',')}}   ریال &nbsp;
-                                                    @endif
-                                                    --}}
-                                                </th>
-                                            </tr>
-
-                                    @endif
-                                    </tbody>
-                                </table>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
                         @endif
                     </div>
                 </div>
             </div>
-                @if(Route::current()->getName() == "GetStat")
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header card-header-icon card-header-rose pb-2 border-bottom">
-                            <div class="row">
-                                <div class="col-md">
-                                    <div class="card-icon float-right ml-3 mr-0">
-                                        <i class="material-icons">insert_chart</i>
+            @if(Route::current()->getName() == "GetStat")
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-icon card-header-rose pb-2 border-bottom">
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="card-icon float-right ml-3 mr-0">
+                                            <i class="material-icons">insert_chart</i>
+                                        </div>
+                                        <h4 class="card-title text-right font-weight-bold "> گزارش نموداری</h4>
                                     </div>
-                                    <h4 class="card-title text-right font-weight-bold "> گزارش نموداری </h4>
                                 </div>
+                                <!-- Modal -->
                             </div>
-                            <!-- Modal -->
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col py-3" style="height: 500px" >
-                                    <h6 class="text-center"> تعداد فروش </h6>
-                                    <canvas id="myChart" width="350" height="400"></canvas>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col py-3" style="height: 500px">
+                                        <h6 class="text-center"> تعداد فروش</h6>
+                                        <canvas id="myChart" width="350" height="400"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-                    @endif
+            @endif
         </div>
     </div>
 @endsection
@@ -518,53 +608,53 @@
     <script src="{{asset('')}}assets/js/tableToExcel.js"></script>
     <script type="text/javascript">
         console.log("ok")
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#FromDate').persianDatepicker({
                 initialValue: true,
-                autoClose : true ,
+                autoClose: true,
                 format: 'YYYY/MM/DD',
-                calendar:{
-                    persian:{
+                calendar: {
+                    persian: {
                         locale: 'fa'
                     }
-                },navigator:{
-                    scroll:{
-                        enabled:false
+                }, navigator: {
+                    scroll: {
+                        enabled: false
                     }
-                },navigator:{
-                    text:{
-                        btnNextText:'بعدی',
-                        btnPrevText:'قبلی'
+                }, navigator: {
+                    text: {
+                        btnNextText: 'بعدی',
+                        btnPrevText: 'قبلی'
                     }
                 }
             });
             $('#ToDate').persianDatepicker({
                 initialValue: true,
-                autoClose : true ,
+                autoClose: true,
                 format: 'YYYY/MM/DD',
-                calendar:{
-                    persian:{
+                calendar: {
+                    persian: {
                         locale: 'fa'
                     }
-                },navigator:{
-                    scroll:{
-                        enabled:false
+                }, navigator: {
+                    scroll: {
+                        enabled: false
                     }
-                },navigator:{
-                    text:{
-                        btnNextText:'بعدی',
-                        btnPrevText:'قبلی'
+                }, navigator: {
+                    text: {
+                        btnNextText: 'بعدی',
+                        btnPrevText: 'قبلی'
                     }
                 }
 
             });
 
             let start = "{{request('startDate')}}";
-            if(start != '')
+            if (start != '')
                 $("#FromDate").val(start);
 
             let end = "{{request('endDate')}}";
-            if(end != '')
+            if (end != '')
                 $("#ToDate").val(end);
         });
     </script>
@@ -576,12 +666,12 @@
                 }
             });
             let session_fall = true;
-            province= "{{request('province_id')}}";
+            province = "{{request('province_id')}}";
             cityList = "{{request('city_id')}}";
             locationList = "{{request('location_id')}}";
 
             $(".dropdown-toggle").click(function () {
-                $("#sidebar").css("z-index" , 2) ;
+                $("#sidebar").css("z-index", 2);
 
             })
 
@@ -646,54 +736,54 @@
                 var province_id = $('#province').val();
                 $("#loader_cityList").css("display", "flex");
                 $.ajax({
-                    type:'POST',
-                    url:"{{Route('CityList')}}",
-                    dataType:'json',
-                    data:{
+                    type: 'POST',
+                    url: "{{Route('CityList')}}",
+                    dataType: 'json',
+                    data: {
                         '_token ': '<?php echo csrf_token() ?>',
-                        'province_id' : province_id ,
+                        'province_id': province_id,
                     },
                     statusCode: {
-                        500: function() {
+                        500: function () {
                             $("#loader").hide();
                             Swal.fire(
                                 'خطا در دريافت اطلاعات ! ',
                                 'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                                 'error'
                             )
-                        } ,
-                        400: function() {
+                        },
+                        400: function () {
                             let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                            let x = 1 ;
+                            let x = 1;
                             let dots = "";
                             setInterval(function () {
                                 dots += ".";
-                                x++  ;
+                                x++;
                                 // console.log(x)
-                                if(x >= 8 ){
-                                    x = 1 ;
+                                if (x >= 8) {
+                                    x = 1;
                                     dots = ".";
                                 }
                                 $("#dots").html(dots)
-                            } , 300)
+                            }, 300)
                             $("#loader").hide();
                             Swal.fire(
                                 'نشست  شما پایان یافته است ! ',
                                 html,
-                                'warning' ,
+                                'warning',
                             )
                             setTimeout(function () {
                                 window.location.href = "{{Route("logout")}}";
-                            } , 1500)
-                            session_fall = false ;
+                            }, 1500)
+                            session_fall = false;
 
                         }
                     },
-                    success:function(data) {
+                    success: function (data) {
                         $("#cityList").html('');
-                        $("#cityList").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i < data.data.length ; i++){
-                            $("#cityList").append(new Option( data.data[i].name , data.data[i].id));
+                        $("#cityList").append(new Option('همه', '', true));
+                        for (var i = 0; i < data.data.length; i++) {
+                            $("#cityList").append(new Option(data.data[i].name, data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh')
                         $("#loader_cityList").hide();
@@ -705,59 +795,59 @@
                 var city_id = $('#cityList').val();
                 $("#loader_locationList").css("display", "flex");
                 $.ajax({
-                    type:'POST',
-                    url:"{{Route('location_list')}}",
-                    dataType:'json',
-                    data:{
+                    type: 'POST',
+                    url: "{{Route('location_list')}}",
+                    dataType: 'json',
+                    data: {
                         '_token ': '<?php echo csrf_token() ?>',
-                        'province_id' : province_id ,
-                        'city_id' : city_id ,
+                        'province_id': province_id,
+                        'city_id': city_id,
                     },
                     statusCode: {
-                        500: function() {
+                        500: function () {
                             $("#loader").hide();
                             Swal.fire(
                                 'خطا در دريافت اطلاعات ! ',
                                 'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                                 'error'
                             )
-                        } ,
-                        400: function() {
-                             if (session_fall) {
-                                 let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                 let x = 1;
-                                 let dots = "";
-                                 setInterval(function () {
-                                     dots += ".";
-                                     x++;
-                                     // console.log(x)
-                                     if (x >= 8) {
-                                         x = 1;
-                                         dots = ".";
-                                     }
-                                     $("#dots").html(dots)
-                                 }, 300)
-                                 $("#loader").hide();
-                                 Swal.fire(
-                                     'نشست  شما پایان یافته است ! ',
-                                     html,
-                                     'warning',
-                                 )
-                                 setTimeout(function () {
-                                     window.location.href = "{{Route("logout")}}";
-                                 }, 1500)
-                                 session_fall = false;
-                             }
+                        },
+                        400: function () {
+                            if (session_fall) {
+                                let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                let x = 1;
+                                let dots = "";
+                                setInterval(function () {
+                                    dots += ".";
+                                    x++;
+                                    // console.log(x)
+                                    if (x >= 8) {
+                                        x = 1;
+                                        dots = ".";
+                                    }
+                                    $("#dots").html(dots)
+                                }, 300)
+                                $("#loader").hide();
+                                Swal.fire(
+                                    'نشست  شما پایان یافته است ! ',
+                                    html,
+                                    'warning',
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "{{Route("logout")}}";
+                                }, 1500)
+                                session_fall = false;
+                            }
                         }
                     },
-                    success:function(data) {
+                    success: function (data) {
                         $("#locationList").html('');
-                        $("#locationList").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i< data.data.length ; i++){
-                            if(city_id == data.data[i].id )
-                                $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id , true));
+                        $("#locationList").append(new Option('همه', '', true));
+                        for (var i = 0; i < data.data.length; i++) {
+                            if (city_id == data.data[i].id)
+                                $("#locationList").append(new Option(data.data[i].location_name, data.data[i].id, true));
                             else
-                                $("#locationList").append(new Option( data.data[i].location_name , data.data[i].id));
+                                $("#locationList").append(new Option(data.data[i].location_name, data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh');
                         $("#loader_locationList").hide();
@@ -769,57 +859,57 @@
                 // console.log("in the terminal location id is :  " + locationID)
                 $("#loader_ServiceList").css("display", "flex");
                 $.ajax({
-                    type:'POST',
-                    url:"{{Route('ServiceListReport')}}",
-                    dataType:'json',
-                    data:{
+                    type: 'POST',
+                    url: "{{Route('ServiceListReport')}}",
+                    dataType: 'json',
+                    data: {
                         '_token ': '<?php echo csrf_token() ?>',
-                        'locationID' : locationID ,
+                        'locationID': locationID,
                     },
                     statusCode: {
-                        500: function() {
+                        500: function () {
                             $("#loader").hide();
                             Swal.fire(
                                 'خطا در دريافت اطلاعات ! ',
                                 'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                                 'error'
                             )
-                        } ,
-                        400: function() {
-                            if(session_fall){
+                        },
+                        400: function () {
+                            if (session_fall) {
                                 let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                let x = 1 ;
+                                let x = 1;
                                 let dots = "";
                                 setInterval(function () {
                                     dots += ".";
-                                    x++  ;
+                                    x++;
                                     // console.log(x)
-                                    if(x >= 8 ){
-                                        x = 1 ;
+                                    if (x >= 8) {
+                                        x = 1;
                                         dots = ".";
                                     }
                                     $("#dots").html(dots)
-                                } , 300)
+                                }, 300)
                                 $("#loader").hide();
                                 Swal.fire(
                                     'نشست  شما پایان یافته است ! ',
                                     html,
-                                    'warning' ,
+                                    'warning',
                                 )
                                 setTimeout(function () {
                                     window.location.href = "{{Route("logout")}}";
-                                } , 1500)
-                                session_fall = false ;
+                                }, 1500)
+                                session_fall = false;
                             }
 
 
                         }
                     },
-                    success:function(data) {
+                    success: function (data) {
                         $("#ServiceList").html('');
-                        $("#ServiceList").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i< data.array_keys.length ; i++){
-                            $("#ServiceList").append(new Option( data.data[[data.array_keys[i]]].service_name , data.data[[data.array_keys[i]]].service_id));
+                        $("#ServiceList").append(new Option('همه', '', true));
+                        for (var i = 0; i < data.array_keys.length; i++) {
+                            $("#ServiceList").append(new Option(data.data[[data.array_keys[i]]].service_name, data.data[[data.array_keys[i]]].service_id));
                         }
                         $('.selectpicker').selectpicker('refresh');
                         $("#loader_ServiceList").hide();
@@ -827,57 +917,57 @@
                 });
 
                 $.ajax({
-                    type:'POST',
-                    url:"{{Route('ReportTerminalLocationList')}}",
-                    dataType:'json',
-                    data:{
+                    type: 'POST',
+                    url: "{{Route('ReportTerminalLocationList')}}",
+                    dataType: 'json',
+                    data: {
                         '_token ': '<?php echo csrf_token() ?>',
-                        'locationID' : locationID ,
-                    },statusCode: {
-                        500: function() {
+                        'locationID': locationID,
+                    }, statusCode: {
+                        500: function () {
                             $("#loader").hide();
                             Swal.fire(
                                 'خطا در دريافت اطلاعات ! ',
                                 'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
                                 'error'
                             )
-                        } ,
-                        400: function() {
-                            if (session_fall){
+                        },
+                        400: function () {
+                            if (session_fall) {
                                 let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                let x = 1 ;
+                                let x = 1;
                                 let dots = "";
                                 setInterval(function () {
                                     dots += ".";
-                                    x++  ;
+                                    x++;
                                     // console.log(x)
-                                    if(x >= 8 ){
-                                        x = 1 ;
+                                    if (x >= 8) {
+                                        x = 1;
                                         dots = ".";
                                     }
                                     $("#dots").html(dots)
-                                } , 300)
+                                }, 300)
                                 $("#loader").hide();
                                 Swal.fire(
                                     'نشست  شما پایان یافته است ! ',
                                     html,
-                                    'warning' ,
+                                    'warning',
                                 )
                                 setTimeout(function () {
                                     window.location.href = "{{Route("logout")}}";
-                                } , 1500)
-                                session_fall = false ;
+                                }, 1500)
+                                session_fall = false;
                             }
 
 
                         }
                     },
-                    success:function(data) {
+                    success: function (data) {
                         console.log(data.data)
                         $("#terminal_id").html('');
-                        $("#terminal_id").append(new Option( 'همه' , '',true));
-                        for(var i = 0 ; i< data.data.length ; i++){
-                            $("#terminal_id").append(new Option( data.data[i].service_name , data.data[i].id));
+                        $("#terminal_id").append(new Option('همه', '', true));
+                        for (var i = 0; i < data.data.length; i++) {
+                            $("#terminal_id").append(new Option(data.data[i].service_name, data.data[i].id));
                         }
                         $('.selectpicker').selectpicker('refresh');
                     }
@@ -887,6 +977,7 @@
             $('.selectpicker').selectpicker('refresh');
 
         });
+
         function export2excel() {
             TableToExcel.convert(document.getElementById("reportTable"));
         }
@@ -910,7 +1001,7 @@
             continuity: 1
         };
 
-        let colors = [] ;
+        let colors = [];
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -919,7 +1010,7 @@
                 // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: false,
-                    maxBarThickness : 80 ,
+                    maxBarThickness: 80,
                     data: @json($count),
 
                     // data: [12, 19, 3, 5, 2, 3],
@@ -934,11 +1025,11 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                legend:{
-                    display:false ,
+                legend: {
+                    display: false,
                     labels: {
-                        defaultFontFamily : "iransans" ,
-                        fontColor: 'black' ,
+                        defaultFontFamily: "iransans",
+                        fontColor: 'black',
                     }
                 },
                 title: {
@@ -958,16 +1049,17 @@
                 }
             }
         });
+
         function changeColor(array) {
-            len = array.length ;
-            for(let i =0 ; i < len ; i++){
-                if(i % 2 == 0)
+            len = array.length;
+            for (let i = 0; i < len; i++) {
+                if (i % 2 == 0)
                     colors.push('#ec407a')
                 else
                     colors.push('#494c6b')
             }
-            console.log(colors);
-            return colors ;
+            // console.log(colors);
+            return colors;
         }
     </script>
 

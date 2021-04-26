@@ -31,3 +31,10 @@
         </div>
     </div>
 </footer>
+@if(!getenv("APP_DEBUG"))
+<script>
+    $(document).ready(function () {
+        console.clear();
+    })
+</script>
+@endif
