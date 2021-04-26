@@ -339,7 +339,7 @@ class LocationController extends Controller
             return $event['location_id'] == $locationID;
         });
         $GetServices = array_values($GetServices) ;
-
+//        return $GetServices ;
         $service_pics = [];
         $service_id_image = [];
 
@@ -452,6 +452,7 @@ class LocationController extends Controller
                     $GetServices[$Service[0]]["description"] =$description ;
                     $GetServices[$Service[0]]["type_of_service_sale"] =$TypeOfServiceSale ;
                     $GetServices[$Service[0]]["normal_sale"] =($request->get("normal_sale") == 'on') ? true : false ;
+                    $GetServices[$Service[0]]["model_id"] = $model_id ;
 
                     Cache::forget('ServiceList' . session('UserInfo')['user_id']);
                     Cache::rememberForever('ServiceList' . session('UserInfo')['user_id'], function() use ($GetServices){
