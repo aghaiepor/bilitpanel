@@ -2,13 +2,10 @@
 
 
 namespace App\Api;
-use Carbon\Carbon;
-use Facade\Ignition\Support\Packagist\Package;
-use GuzzleHttp\Client;
 use App\UserJob;
+use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class Api
 {
@@ -915,6 +912,7 @@ class Api
                 'sib_user_id'=> $user_id
             ];
         }
+
 //        $data = array_filter($data) ;
          Log::info("user data => " , $data);
         $client = new Client();
@@ -1154,7 +1152,7 @@ class Api
             "key"=> $key,
             "values"=> $values,
         ] ;
-        // Log::info('req get stat : ',$data);
+         Log::info('req get stat : ',$data);
 
         $client = new Client();
         $result = $client->post($this->url . 'GetStat' ,[
@@ -1168,7 +1166,7 @@ class Api
         return $response;
     }
     public function GetTransaction($page , $location_id, $key, $values, $status_code, $service_id,
-     $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id,$rrn , $voucher_number){
+     $operator_id, $sale_type_id, $sell_type_id, $voucher_type_id, $date, $province_id, $city_id , $project_id,$rrn , $voucher_number , $card_number){
         $conditions = [
             'location_id'=> $location_id,
             'procedure_status' =>$status_code,
@@ -1183,6 +1181,7 @@ class Api
             'project_id'=> $project_id,
             'rrn'=> $rrn ,
             'voucher_number'=> $voucher_number,
+            'card_number'=> $card_number,
         ];
         $data = [
             "page" => $page ,
@@ -1949,10 +1948,12 @@ class Api
     }
 
     // ******************** Presell ****************
-    public function GetAccountProvince($province_id , $type=null){
+    public function GetAccountProvince($province_id , $type=null , $sort_by_location=false){
         $data = [
             'province_id' => $province_id,
+            'sort_by_location' => $sort_by_location,
         ];
+        Log::info("GetAccountProvince => " , $data );
         $client = new Client();
         $result = $client->post($this->url . 'GetAccountProvince' ,[
                 'headers'=>$this->getHeader(),
@@ -2143,16 +2144,16 @@ class Api
     // ******************** Accounts ****************
     public function AddAccount($account_name ,$shaba ,$payment_id , $project_id , $account_id , $pan , $pin_block , $type=null){
         $data = [
-            "account_name" => "esi_test",
-            "shaba" => "123456789123456798",
-            "payment_id" => "987654321987654321",
-            "project_id" => 1,
-            "account_id" => 0,
-            "pan" => "",
-            "pin_block" => ""
+            "account_name" => $account_name,
+            "shaba" => $shaba,
+            "payment_id" => $payment_id,
+            "project_id" => $project_id,
+            "account_id" => $account_id,
+            "pan" => $pan,
+            "pin_block" => $pin_block
         ];
         $client = new Client();
-        $result = $client->post($this->url . 'GetAccountProvince' ,[
+        $result = $client->post($this->url . 'AddAccount' ,[
                 'headers'=>$this->getHeader(),
                 'json'=>$data
             ]

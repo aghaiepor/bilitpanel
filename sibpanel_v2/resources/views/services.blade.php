@@ -82,13 +82,13 @@
                                 <div class="col-sm">
                                     <span data-toggle="modal" id="statebtn" data-target="#test" class="btn btn-success  mt-2 pr-1"><i class="material-icons"> add_circle_outline </i>  افزودن جاذبه جدید </span>
                                     @php
-
-                                        if (url()->current() != url()->previous() && url()->previous() != Route("loading")) {
-                                            session(['backPlace' => url()->previous()]);
-                                            $url = url()->previous() ;
-                                        }
-                                        else
-                                           session(['backPlace' => Route("places")]);
+                                            if (url()->current() != url()->previous() && url()->previous() != Route("loading") && strpos(url()->previous(), 'add_group_time') == 0 && strpos(url()->previous(), 'VoucherInfoList') == 0  )
+                                            {
+                                                session(['backPlace' => url()->previous()]);
+                                                $url = url()->previous() ;
+                                            }
+                                            else
+                                               session(['backPlace' => Route("places")]);
                                     @endphp
                                     <a href="{{session('backPlace')}}" class="btn btn-dark  mt-2 pl-1"> بازگشت <i class="material-icons"> arrow_back </i>  </a>
 

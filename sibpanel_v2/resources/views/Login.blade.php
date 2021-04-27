@@ -2,36 +2,45 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-   <title> ورود به حساب کاربری </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title> ورود به حساب کاربری</title>
 
-    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport'/>
     <!--     Fonts and icons     -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-    <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '../assets/FontAwesome/css/all.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+    <script type="text/javascript"> (function () {
+            var css = document.createElement('link');
+            css.href = '../assets/FontAwesome/css/all.min.css';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })(); </script>
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap-rtl.css" rel="stylesheet">
-    <link href="../assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+    <link href="../assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet"/>
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link href="../assets/demo/demo.css" rel="stylesheet"/>
     <script src='https://www.google.com/recaptcha/api.js?hl=fa'></script>
     <style>
-        .g-recaptcha iframe{
+        .g-recaptcha iframe {
             margin-top: 12px;
             width: 100%;
             margin-right: 8px;
         }
-       iframe .rc-anchor-light{
+
+        iframe .rc-anchor-light {
             color: #495057;
             border: #495057 solid 1px !important;
         }
+
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
         input:-webkit-autofill:focus,
-        input:-webkit-autofill:active  {
+        input:-webkit-autofill:active {
             -webkit-box-shadow: 0 0 0 30px white inset !important;
         }
     </style>
@@ -40,14 +49,15 @@
 
 <body class="off-canvas-sidebar">
 <div class="wrapper wrapper-full-page">
-    <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('../../assets/img/login.jpg'); background-size: cover; background-position: top center;">
+    <div class="page-header login-page header-filter" filter-color="black"
+         style="background-image: url('../../assets/img/login.jpg'); background-size: cover; background-position: top center;">
         <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
         @if(session('error'))
             <div style="position: absolute ; top: 15px;right: 15px; z-index: 100;" class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 text-right" style="min-width: 380px;font-weight: 400;">
                     <div style="padding-top: 15px" class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ session('error') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <button type="button" class="close mr-auto ml-3 mt-2" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -57,11 +67,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-                    <form id="loginForm" action="{{Route('login')}}" method="post" >
+                    <form id="loginForm" action="{{Route('login')}}" method="post">
                         @csrf
                         <div class="card card-login card-hidden">
                             <div style="padding: 53px;" class="card-header card-header-rose text-center">
-{{--                                <h4 class="card-title"> ورود </h4>--}}
+                                {{--                                <h4 class="card-title"> ورود </h4>--}}
                                 <img width="100" src="{{asset('')}}assets/img/mirasw_logo.png" alt="">
                             </div>
                             <input type="hidden" value="{{$previous_url}}" name="previous_url">
@@ -83,20 +93,25 @@
                                           <i class="material-icons">lock</i>
                                         </span>
                                       </div>
-                                      <input name="password" type="password" class="form-control" placeholder=" رمز عبور">
+                                      <input name="password" type="password" class="form-control"
+                                             placeholder=" رمز عبور">
                                     </div>
                                 </span>
 
                                 @if(env('HAS_CAPTCHA'))
-                                <div class="form-row">
-                                    <div class="col-md">
-                                        <div class="g-recaptcha" {{--data-theme="dark"--}} data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                                    <div class="form-row">
+                                        <div class="col-md">
+                                            <div class="g-recaptcha"
+                                                 {{--data-theme="dark"--}} data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                                        </div>
                                     </div>
-                                </div>
                                 @endif
                                 <div class="card-footer justify-content-end mt-2 ml-0">
-{{--                                    <button class="g-recaptcha" data-sitekey="reCAPTCHA_site_key" data-callback='onSubmit' data-action='submit'>Submit</button>--}}
-                                    <button class="btn btn-primary px-5" {{--class="g-recaptcha btn btn-primary px-5" data-sitekey="6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj" data-callback='onSubmit' data-action='submit'--}} type="submit" > ورود </button>
+                                    {{--                                    <button class="g-recaptcha" data-sitekey="reCAPTCHA_site_key" data-callback='onSubmit' data-action='submit'>Submit</button>--}}
+                                    <button class="btn btn-primary px-5"
+                                            {{--class="g-recaptcha btn btn-primary px-5" data-sitekey="6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj" data-callback='onSubmit' data-action='submit'--}} type="submit">
+                                        ورود
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -131,11 +146,10 @@
                     </ul>--}}
                 </nav>
                 <div class="copyright">
-                    &copy;
-                     تمامی حقوق برای شرکت آتی شهر هوشمند ایرانیان محفوظ است.
+                    &copy; تمامی حقوق برای شرکت آتی شهر هوشمند ایرانیان محفوظ است.
                     <br>
                     <small>
-                        نسخه  :  {{ config('app.APP_VER') }}
+                        نسخه : {{ config('app.APP_VER') }}
                     </small>
                 </div>
             </div>
@@ -157,8 +171,8 @@
     }
 </script>
 <script>
-    $(document).ready(function() {
-        $().ready(function() {
+    $(document).ready(function () {
+        $().ready(function () {
             $sidebar = $('.sidebar');
 
             $sidebar_img_container = $sidebar.find('.sidebar-background');
@@ -178,7 +192,7 @@
 
             }
 
-            $('.fixed-plugin a').click(function(event) {
+            $('.fixed-plugin a').click(function (event) {
                 // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
                 if ($(this).hasClass('switch-trigger')) {
                     if (event.stopPropagation) {
@@ -189,7 +203,7 @@
                 }
             });
 
-            $('.fixed-plugin .active-color span').click(function() {
+            $('.fixed-plugin .active-color span').click(function () {
                 $full_page_background = $('.full-page-background');
 
                 $(this).siblings().removeClass('active');
@@ -210,7 +224,7 @@
                 }
             });
 
-            $('.fixed-plugin .background-color .badge').click(function() {
+            $('.fixed-plugin .background-color .badge').click(function () {
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
 
@@ -221,7 +235,7 @@
                 }
             });
 
-            $('.fixed-plugin .img-holder').click(function() {
+            $('.fixed-plugin .img-holder').click(function () {
                 $full_page_background = $('.full-page-background');
 
                 $(this).parent('li').siblings().removeClass('active');
@@ -231,7 +245,7 @@
                 var new_image = $(this).find("img").attr('src');
 
                 if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-                    $sidebar_img_container.fadeOut('fast', function() {
+                    $sidebar_img_container.fadeOut('fast', function () {
                         $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
                         $sidebar_img_container.fadeIn('fast');
                     });
@@ -240,7 +254,7 @@
                 if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
                     var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
 
-                    $full_page_background.fadeOut('fast', function() {
+                    $full_page_background.fadeOut('fast', function () {
                         $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
                         $full_page_background.fadeIn('fast');
                     });
@@ -259,7 +273,7 @@
                 }
             });
 
-            $('.switch-sidebar-image input').change(function() {
+            $('.switch-sidebar-image input').change(function () {
                 $full_page_background = $('.full-page-background');
 
                 $input = $(this);
@@ -291,7 +305,7 @@
                 }
             });
 
-            $('.switch-sidebar-mini input').change(function() {
+            $('.switch-sidebar-mini input').change(function () {
                 $body = $('body');
 
                 $input = $(this);
@@ -306,7 +320,7 @@
 
                     $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('body').addClass('sidebar-mini');
 
                         md.misc.sidebar_mini_active = true;
@@ -314,12 +328,12 @@
                 }
 
                 // we simulate the window Resize so the charts will get updated in realtime.
-                var simulateWindowResize = setInterval(function() {
+                var simulateWindowResize = setInterval(function () {
                     window.dispatchEvent(new Event('resize'));
                 }, 180);
 
                 // we stop the simulation of Window Resize after the animations are completed
-                setTimeout(function() {
+                setTimeout(function () {
                     clearInterval(simulateWindowResize);
                 }, 1000);
 
@@ -328,15 +342,15 @@
     });
 </script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         md.checkFullPageBackgroundImage();
-        setTimeout(function() {
+        setTimeout(function () {
             // after 1000 ms we add the class animated to the login/register card
             $('.card').removeClass('card-hidden');
         }, 700);
     });
 
-    $('iframe').on('click', function(event) {
+    $('iframe').on('click', function (event) {
         alert("iframe clicked");
     });
 </script>

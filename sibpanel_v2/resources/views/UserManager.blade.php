@@ -568,7 +568,59 @@
                     }
 
                     if(error == 0 )
+                    {
+                        $.ajax({
+                                type:'POST',
+                                url:"{{Route('AddUsermange')}}",
+                                dataType:'json',
+                                data:{
+                                    '_token ': '<?php echo csrf_token() ?>',
+                                    'value' : value ,
+                                },
+                                statusCode: {
+                                    500: function() {
+                                        $("#loader2").hide();
+                                        Swal.fire(
+                                            'خطا در دريافت اطلاعات ! ',
+                                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                            'error'
+                                        )
+                                    } ,
+                                    400: function() {
+                                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                        let x = 1 ;
+                                        let dots = "";
+                                        setInterval(function () {
+                                            dots += ".";
+                                            x++  ;
+                                            // console.log(x)
+                                            if(x >= 8 ){
+                                                x = 1 ;
+                                                dots = ".";
+                                            }
+                                            $("#dots").html(dots)
+                                        } , 300)
+                                        $("#loader2").hide();
+                                        Swal.fire(
+                                            'نشست  شما پایان یافته است ! ',
+                                            html,
+                                            'warning' ,
+                                        )
+                                        setTimeout(function () {
+                                            window.location.href = "{{Route("logout")}}";
+                                        } , 1500)
+                                        session_fall = false ;
+
+                                    }
+                                },
+                                success:function(data) {
+                                    $("#loader2").hide();
+
+                                }
+                        })
                         $("#addUserSubmit").submit();
+                    }
+
                     else{
                         Swal.fire(
                             'خطا ! ',

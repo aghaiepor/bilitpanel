@@ -270,7 +270,10 @@ class presellController extends Controller
     public function GetAccountProvince(Request $request)
     {
         $province_id = $request->get("id");
-        $AccountList = $this->Api->GetAccountProvince($province_id);
+        $sort_by_location = $request->get("sort_by_location") ;
+        if(is_null($sort_by_location))
+            $sort_by_location= false ;
+        $AccountList = $this->Api->GetAccountProvince($province_id , "ajax" , $sort_by_location) ;
         return $AccountList ;
     }
     public function SetAccountSetting(Request $request , $id=null , $province_id=null)

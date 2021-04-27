@@ -28,7 +28,6 @@ Route::middleware(['CheckLogin'])->group(function () {
     Route::get('/otp' , 'AuthController@otpIndex')->name('otp');
     Route::post('/VerifyOtp' , 'AuthController@VerifyOtp')->name('VerifyOtp');
     Route::post('/VerifyOtpNew' , 'AuthController@VerifyOtpNew')->name('VerifyOtpNew');
-
 //    Route::middleware(['otp'])->group(function () {
 
         // loading Route
@@ -55,6 +54,7 @@ Route::middleware(['CheckLogin'])->group(function () {
                 return  view('dashboard2') ;
 
         })->name('dashboard');
+
 
         Route::get('loading' , 'LoadingController@index')->name('loading');
         // terminals Route

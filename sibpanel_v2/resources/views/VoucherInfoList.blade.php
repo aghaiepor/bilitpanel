@@ -8,6 +8,9 @@
         .bootstrap-select{
             width: 100% !important;
         }
+        .dropdown-menu{
+            min-width: 100% !important;
+        }
         .citzen_main_img{
             width: 70px;
             height: 70px;
