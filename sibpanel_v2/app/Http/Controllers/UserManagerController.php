@@ -227,7 +227,7 @@ class UserManagerController extends Controller
         $pre_sell = $request->get('pre_sell');
 
         $SellerUserList = $this->api->RegisterUser($name, $last_name, $cellphone, $national_id, $username, $password, $email, $account_type_id, $otp_verify, $subset_users, $panel_access, $pre_sell, $imei ,$session_verify , $id);
-//       return $SellerUserList;
+
 
         $success_message = ($id == "") ?   "کاربر جدید اضافه گردید." : "کاربر مورد نظر ویرایش گردید .  ";
         $error_message = ($id == "") ?   "خطا در ثبت کاربر جديد !" : "خطا در ویرایش کاربر !  ";
@@ -277,13 +277,23 @@ class UserManagerController extends Controller
                 return $GetSubUser;
             });
 
-            return redirect()->back()->with('success' , $success_message);
+//            return redirect()->back()->with('success' , $success_message);
         }
-        else if($SellerUserList['Header']['MessageCode']  == 133){
+        return $SellerUserList;
+
+       /* else if($SellerUserList['Header']['MessageCode']  == 133){
+            if( $id =="" )
+                return $SellerUserList;
             return redirect()->back()->with('error' , "خطا : شما مجاز به انجام اين عمليات نيستيد .");
         }
         else
+        {
+            if( $id =="" )
+                return $SellerUserList;
+
             return redirect()->back()->with('error' , $error_message);
+        }*/
+
     }
     public function GetUserInfo(Request $request  ){
         $id = $request->get('UserId');
