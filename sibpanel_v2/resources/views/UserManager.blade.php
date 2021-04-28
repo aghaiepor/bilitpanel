@@ -242,6 +242,9 @@
                     </button>
                 </div>
                 <div  class="modal-body">
+                    <div id="loader4" style="position: fixed; z-index: 9999999; inset: 0px; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.38); display: none;">
+                        <div class="spinner-border mx-auto d-block mb-3" style="width: 80px;height: 80px;color: #5e5e5e;"></div>
+                    </div>
                     <div id="AddUserArea" class="form-row">
                         <div class="col-sm-6 text-right mt-3">
                             <label for=""> نام </label>
@@ -413,6 +416,7 @@
 @section('AddJs')
     <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="../assets/js/plugins/sweetalert2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
     <script>
 
         $(document).ready(function () {
@@ -569,56 +573,88 @@
 
                     if(error == 0 )
                     {
-                        $.ajax({
-                                type:'POST',
-                                url:"{{Route('AddUsermange')}}",
-                                dataType:'json',
-                                data:{
-                                    '_token ': '<?php echo csrf_token() ?>',
-                                    'value' : value ,
-                                },
-                                statusCode: {
-                                    500: function() {
-                                        $("#loader2").hide();
-                                        Swal.fire(
-                                            'خطا در دريافت اطلاعات ! ',
-                                            'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
-                                            'error'
-                                        )
-                                    } ,
-                                    400: function() {
-                                        let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
-                                        let x = 1 ;
-                                        let dots = "";
-                                        setInterval(function () {
-                                            dots += ".";
-                                            x++  ;
-                                            // console.log(x)
-                                            if(x >= 8 ){
-                                                x = 1 ;
-                                                dots = ".";
-                                            }
-                                            $("#dots").html(dots)
-                                        } , 300)
-                                        $("#loader2").hide();
-                                        Swal.fire(
-                                            'نشست  شما پایان یافته است ! ',
-                                            html,
-                                            'warning' ,
-                                        )
-                                        setTimeout(function () {
-                                            window.location.href = "{{Route("logout")}}";
-                                        } , 1500)
-                                        session_fall = false ;
+                        $("#loader4").css("display" , "flex");
+                       $.ajax({
+                               type:'POST',
+                               url:"{{Route('RegisterUser')}}",
+                               dataType:'json',
+                                data : $("#addUserSubmit").serialize()  ,
+                               statusCode: {
+                                   500: function() {
+                                       $("#loader2").hide();
+                                       Swal.fire(
+                                           'خطا در دريافت اطلاعات ! ',
+                                           'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                           'error'
+                                       )
+                                   } ,
+                                   400: function() {
+                                       let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                       let x = 1 ;
+                                       let dots = "";
+                                       setInterval(function () {
+                                           dots += ".";
+                                           x++  ;
+                                           // console.log(x)
+                                           if(x >= 8 ){
+                                               x = 1 ;
+                                               dots = ".";
+                                           }
+                                           $("#dots").html(dots)
+                                       } , 300)
+                                       $("#loader2").hide();
+                                       Swal.fire(
+                                           'نشست  شما پایان یافته است ! ',
+                                           html,
+                                           'warning' ,
+                                       )
+                                       setTimeout(function () {
+                                           window.location.href = "{{Route("logout")}}";
+                                       } , 1500)
+                                       session_fall = false ;
 
+                                   }
+                               },
+                               success:function(data) {
+                                   $("#loader4").hide();
+                                    if(data.Header.Status == 0 )
+                                    {
+                                        Swal.fire(
+                                            'تغییر مورد نظر اعمال گردید',
+                                            '',
+                                            'success'
+                                        )
+                                        location.reload();
                                     }
-                                },
-                                success:function(data) {
-                                    $("#loader2").hide();
+                                    else if(data.Header.MessageCode  == 153)
+                                    {
+                                        Swal.fire(
+                                            ' خطا! ',
+                                            'نام کاربری وارد شده تکراری می باشد !',
+                                            'warning'
+                                        )
+                                    }
+                                    else if(data.Header.MessageCode  == 133)
+                                    {
+                                        Swal.fire(
+                                            ' خطا! ',
+                                            'شما مجاز به انجام این عملیات نمی باشید .',
+                                            'warning'
+                                        )
+                                    }
+                                    else
+                                    {
+                                        Swal.fire(
+                                            ' خطا در ایجاد کاربر ! ',
+                                            ' لطفا دورباره سعی نمایید .',
+                                            'warning'
+                                        )
+                                    }
 
-                                }
-                        })
-                        $("#addUserSubmit").submit();
+
+                               }
+                       })
+                        // $("#addUserSubmit").submit();
                     }
 
                     else{
@@ -674,10 +710,9 @@
                 let user_otp_verify = $("#user_otp_verify").val();
 
                 let errorMessage = "لطفا فيلد ها مشخص شده را تکميل نماييد ." ;
-                console.log("user_mobile => " , user_mobile)
                 let addUser_imei = $("#user_imei").val();
 
-                if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || user_mobile != "" || user_otp_verify == 1  || eval(addUser_account_type_id) == 4 || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 13 || eval(addUser_account_type_id) == 5  ){
+                // if(!addUser_name.match(pattern) || !addUser_username.match(pattern) || addUser_account_type_id == null  || user_mobile != "" || user_otp_verify == 1  || eval(addUser_account_type_id) == 4 || eval(addUser_account_type_id) == 3 || eval(addUser_account_type_id) == 13 || eval(addUser_account_type_id) == 5  ){
 
                     if(!addUser_name.match(pattern)) {
                         error++ ;
@@ -762,10 +797,89 @@
                         $("#user_imei").removeAttr("style");
                         $("#user_imei").parent().prev().removeAttr("style");
                     }
-
-
                     if(error == 0 )
-                        $("#form_edit").submit();
+                    {
+
+                        $("#loader3").css("display" , "flex") ;
+                        $.ajax({
+                            type:'POST',
+                            url: $("#form_edit").attr("action") ,
+                            dataType:'json',
+                            data : $("#form_edit").serialize()  ,
+                            statusCode: {
+                                500: function() {
+                                    $("#loader2").hide();
+                                    Swal.fire(
+                                        'خطا در دريافت اطلاعات ! ',
+                                        'اتصال خود به اینترنت را بررسی کنید یا یک بار از پنل خارج شوید و دوباره وارد شوید .',
+                                        'error'
+                                    )
+                                } ,
+                                400: function() {
+                                    let html = "<p > درحال انتقال به صفحه لاگین <span id='dots'>.</span> </p><!--<div class=\"spinner-border mx-auto d-block mb-3\" style=\"color: #5e5e5e;\"></div>-->"
+                                    let x = 1 ;
+                                    let dots = "";
+                                    setInterval(function () {
+                                        dots += ".";
+                                        x++  ;
+                                        // console.log(x)
+                                        if(x >= 8 ){
+                                            x = 1 ;
+                                            dots = ".";
+                                        }
+                                        $("#dots").html(dots)
+                                    } , 300)
+                                    $("#loader2").hide();
+                                    Swal.fire(
+                                        'نشست  شما پایان یافته است ! ',
+                                        html,
+                                        'warning' ,
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "{{Route("logout")}}";
+                                    } , 1500)
+                                    session_fall = false ;
+
+                                }
+                            },
+                            success:function(data) {
+                                $("#loader3").hide();
+                                if(data.Header.Status == 0 )
+                                {
+                                    Swal.fire(
+                                        'تغییر مورد نظر اعمال گردید',
+                                        '',
+                                        'success'
+                                    )
+                                    location.reload();
+                                }
+                                else if(data.Header.MessageCode  == 153)
+                                {
+                                    Swal.fire(
+                                        ' خطا! ',
+                                        'نام کاربری وارد شده تکراری می باشد !',
+                                        'warning'
+                                    )
+                                }
+                                else if(data.Header.MessageCode  == 133)
+                                {
+                                    Swal.fire(
+                                        ' خطا! ',
+                                        'شما مجاز به انجام این عملیات نمی باشید .',
+                                        'warning'
+                                    )
+                                }
+                                else
+                                {
+                                    Swal.fire(
+                                        ' خطا در ایجاد کاربر ! ',
+                                        ' لطفا دورباره سعی نمایید .',
+                                        'warning'
+                                    )
+                                }
+                            }
+                        })
+                    }
                     else{
                         Swal.fire(
                             'خطا ! ',
@@ -773,7 +887,7 @@
                             'error'
                         )
                     }
-                }
+                // }
                 // if(error == 0)
                 // {
                 //     $("#edit").submit();
