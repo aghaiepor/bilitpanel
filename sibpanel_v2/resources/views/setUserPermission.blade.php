@@ -351,13 +351,23 @@
                         </div>
                         <div class="col-6 text-right" dir="rtl">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header ">
                                     <h5 class="font-weight-bold">
                                         تخصیص سطح دسترسی
+
                                     </h5>
                                     <hr>
                                 </div>
                                 <div class="card-body">
+                                    <div id="loader3" style="position: absolute;z-index: 9999999;inset: 0px;justify-content: center;align-items: first;background: rgba(255, 255, 255, 0.8);display: flex;">
+                                        <div class="spinner-border mx-auto d-block mb-3" style="width: 40px;height: 40px;color: #5e5e5e;"></div>
+                                    </div>
+                                    <div style="display: none" id="no_item_project" class="row">
+                                        <div class="col-md">
+                                            <h6 class="text-center text-dark bg-light py-5"> موردی یافت نشد. </h6>
+                                        </div>
+                                    </div>
+
 {{--                                    Filter: <input type="text" id="search" /><button id="clear">Clear</button>--}}
                                     <div id="jstree">
                                         <ul>
@@ -471,7 +481,7 @@
                 if(!undetermined.includes(entry))
                     check.push(entry);
             });
-            console.log("check : " , check)
+            // console.log("check : " , check)
             $("#jstree").jstree().check_node(check);
         }
 
@@ -506,6 +516,10 @@
                 {
                     $(this).hide();
                     let el_id = $(this).attr("id");
+                    let parent_id = $("#jstree").jstree().get_parent(el_id)
+                    $("#"+parent_id).hide(300);
+                    let parent_parent_id = $("#jstree").jstree().get_parent(parent_id)
+                    $("#"+parent_parent_id).hide(300);
                     $("#jstree").jstree().close_node(el_id);
                 }
                 else
@@ -526,11 +540,15 @@
                 }
             });
 
+            // let test = nodes.filter((node) => node.style.display != "none");
+            // console.log("lengthShow : " , test.length)
+
             $("input[name=project]").on("click" ,  function () {
 
                 let chack = $(this).is(":checked") ;
                 let color = getColor() ;
                 let name = getColorName() ;
+                $("#loader3").css("display" , "flex") ;
                 // console.log("colorArray : " ,color)
                 if(chack)
                 {
@@ -557,12 +575,19 @@
                             $(this).show(300);
                             let el_id = $(this).attr("id");
                             $("#jstree").jstree().open_node(el_id);
+
+                            let parent_id = $("#jstree").jstree().get_parent(el_id)
+                            $("#"+parent_id).show(300);
+                            let parent_parent_id = $("#jstree").jstree().get_parent(parent_id)
+                            $("#"+parent_parent_id).show(300);
+
                             $("#"+el_id).css("background" , color[indexItem]);
                             $("#"+el_id).find("span").css("background" , color[indexItem])
                             $("#"+el_id).find("span").text(name[indexItem].substr(0, 6))
                             $("#"+el_id).find("span").attr("title" , name[indexItem])
                         }
                     });
+                    no_item_project(300);
                 }
                 else
                 {
@@ -582,11 +607,16 @@
                         {
                             $(this).hide(300);
                             let el_id = $(this).attr("id");
+                            let parent_id = $("#jstree").jstree().get_parent(el_id)
+                            $("#"+parent_id).hide(300);
+                            let parent_parent_id = $("#jstree").jstree().get_parent(parent_id)
+                            $("#"+parent_parent_id).hide(300);
                             $("#"+el_id).css("background" , "");
                             $("#jstree").jstree().close_node(el_id);
+
                         }
                     });
-
+                    no_item_project(300);
                 }
             });
 
@@ -615,6 +645,29 @@
             $("#jstree").on('close_node.jstree', function () {
                 console.log("Close !") ;
             })
+
+            no_item_project(300);
+
+            function no_item_project(time){
+                $("#loader3").css("display" , "flex") ;
+                setTimeout(function () {
+                    let lengthShow = $("#jstree li[parent-node=1]") ;
+                    let nodes = Array.prototype.slice.call(lengthShow);
+                    let test = nodes.filter((node) => node.style.display != "none");
+                    if(test.length == 0 )
+                    {
+                        $("#no_item_project").fadeIn(300) ;
+                    }
+                    else
+                        $("#no_item_project").hide();
+
+                } , time)
+
+                setTimeout(function () {
+                    $("#loader3").hide() ;
+                } , 500)
+
+            }
 
             function getProject(){
                 now_projects = [] ;
