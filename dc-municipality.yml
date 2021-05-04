@@ -2,7 +2,7 @@ version: "3.7"
 services:
   sibpanel-v2-app:
     build:
-      context: ./Dockerfile_Tourism
+      context: ./Dockerfile_Municipality
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
