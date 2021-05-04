@@ -1,10 +1,8 @@
 version: "3.7"
 services:
-  sib-panel-v2-app:
+  sibpanel-v2-app:
     build:
       context: .
-      #    image: sib-panel-v2
-    container_name: sib-panel-v2
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
@@ -14,17 +12,17 @@ services:
     networks:
       - app_network
 
-  sib-panel-v2-supervisor:
-      build:
-        context: ./supervisor/.
-      restart: unless-stopped
-      depends_on:
-      - sib-panel-v2-app
-      working_dir: /var/www/
-      volumes:
-        - ./sibpanel_v2:/var/www/
+# sib-panel-v2-supervisor:
+#     build:
+#       context: ./supervisor/.
+#      restart: unless-stopped
+#      depends_on:
+#      - sib-panel-v2-app
+#      working_dir: /var/www/
+#      volumes:
+#        - ./sibpanel_v2:/var/www/
 
-  sib-panel-v2-nginx:
+  sibpanel-v2-nginx:
     build:
       context: ./nginx/.
     restart: unless-stopped
@@ -32,7 +30,7 @@ services:
       - 5009:80
       - 1012:443
     environment:
-      NGINX_FPM_HOST: sib-panel-v2-app
+      NGINX_FPM_HOST: sibpanel-v2-app
       NGINX_ROOT: /var/www/public
     volumes:
       - ./sibpanel_v2/public:/var/www/public
@@ -42,7 +40,6 @@ services:
       - sib-panel-v2-app
     networks:
       - app_network
-    command: sed -i "s|# Gzip Settings|server_tokens off;|g" /etc/nginx/nginx.conf
 networks:
   app_network:
     driver: bridge
