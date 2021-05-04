@@ -3,32 +3,17 @@ APP_ENV=local
 APP_KEY=base64:+u0if2M2YA/EHvzzjFf0wPsBlrm8M2PRA39yUMobu0Q=
 APP_DEBUG=true
 APP_URL=http://localhost:8000
-PROJECT_NAME="سامانه گردشگری1"
+PROJECT_NAME="شهردازی گردشگری"
 APP_VER=2.0.0
-# this is a main address
-API_ADDRESS="http://185.129.170.10:5002/"
-#API_ADDRESS="http://185.129.170.10:6012/"
-#API_ADDRESS="http://185.129.170.10:5012/"
-# this is a test address
-#API_ADDRESS="http://192.168.171.2:5002/"
-# main server
-#API_ADDRESS="185.129.170.17:12000/"
-#IranFan
-#API_ADDRESS="185.129.170.10:5012/"
+# municipality test
+API_ADDRESS="http://10.255.145.190:8081/"
 
 
 LOG_CHANNEL=stack
 
 DB_CONNECTION=sqlite
-#use this for debug
-#DB_DATABASE=/Users/samad/laravel/sibpanel_v2_dockerized/sibpanel_v2/database/db.sqlite
-DB_DATABASE=/mnt/c/xampp/htdocs/sibpanel_v2_dockerized/sibpanel_v2/database/db.sqlite
-#DB_DATABASE=/var/www/database/db.sqlite
+DB_DATABASE=/var/www/database/db.sqlite
 DB_FOREIGN_KEYS=true
-
-#use this for docker
-#DB_DATABASE=/var/www/database/db.sqlite
-#DB_FOREIGN_KEYS=true
 
 BROADCAST_DRIVER=log
 CACHE_DRIVER=file
@@ -65,7 +50,7 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 CAPTCHA_KEY=6LfvIZUUAAAAAOtkFZ5ZfwDxqf4OOsOhlqawyLvZ
 CAPTCHA_SECRET=6LfvIZUUAAAAAPfAyHi5Gm1hzTEQkUo5c0v0uQzj
 
-HAS_CAPTCHA = true
+HAS_CAPTCHA = false
 HAS_TERMINAL = false
 HAS_OFFICE_NO = false
 HAS_ALARM = true
