@@ -2,13 +2,13 @@ version: "3.7"
 services:
   sibpanel-v2-app:
     build:
-      context: ./Dockerfile_Tourism
+      context: .
+      dockerfile: Dockerfile_Tourism
     restart: unless-stopped
-    working_dir: /var/www/
     volumes:
       - ./sibpanel_v2:/var/www/
-    env_file:
-      - variables.env
+        #    env_file:
+        #      - variables.env
     networks:
       - app_network
 
@@ -27,8 +27,7 @@ services:
       context: ./nginx/.
     restart: unless-stopped
     ports:
-      - 5009:80
-      - 1012:443
+      - 5008:80
     environment:
       NGINX_FPM_HOST: sibpanel-v2-app
       NGINX_ROOT: /var/www/public
@@ -37,9 +36,10 @@ services:
       - ./nginx.conf:/etc/nginx/site-avalibale/default
       - ./ssls:/etc/ssl/
     depends_on:
-      - sib-panel-v2-app
+      - sibpanel-v2-app
     networks:
       - app_network
+
 networks:
   app_network:
     driver: bridge
