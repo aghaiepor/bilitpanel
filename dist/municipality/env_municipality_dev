@@ -6,7 +6,9 @@ APP_URL=http://localhost:8000
 PROJECT_NAME="شهردازی گردشگری"
 APP_VER=2.0.0
 # municipality test
-API_ADDRESS="http://10.255.145.190:8081/"
+#API_ADDRESS="http://10.255.145.190:8081/"
+API_ADDRESS="http://192.168.171.2:5003/"
+
 
 
 LOG_CHANNEL=stack
