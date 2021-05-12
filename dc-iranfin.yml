@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  sibpanel-v2:
+    build:
+      context: .
+      dockerfile: ./dist/iranfun/Dockerfile_Iranfun
+    restart: always
+    volumes:
+      - ./sibpanel_v2:/var/www/
+    ports:
+      - 5008:80
