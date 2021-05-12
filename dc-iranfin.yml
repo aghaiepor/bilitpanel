@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: ./dist/iranfun/Dockerfile_Iranfun
     restart: always
+    extra_hosts:
+      - "tcore.tafrihati.com:192.168.171.2"
     volumes:
       - ./sibpanel_v2:/var/www/
     ports:
