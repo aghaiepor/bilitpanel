@@ -94,3 +94,11 @@ RUN ls -l  /var/www/database
 COPY ./entrypoint.sh /opt/entrypoint.sh
 EXPOSE 80
 ENTRYPOINT ["bash", "/opt/entrypoint.sh"]
+# copy and run
+COPY ./laravel.ini /usr/local/etc/php/conf.d/laravel.ini
+COPY ./sibpanel_v2 /var/www/
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./dist/tourism/default.conf /etc/nginx/conf.d/
+COPY ./entrypoint.sh ./db.sqlite ./dist/tourism/env_tourism_env /opt/
+EXPOSE 80
+ENTRYPOINT ["bash", "/opt/entrypoint.sh"]

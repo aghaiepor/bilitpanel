@@ -84,13 +84,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # copy and run
 COPY ./laravel.ini /usr/local/etc/php/conf.d/laravel.ini
 COPY ./sibpanel_v2 /var/www/
-COPY ./dist/iranfun/env_iranfun /var/www/.env
-#RUN rm -f /etc/nginx/nginx.conf
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./dist/iranfun/default.conf /etc/nginx/conf.d/
-COPY ../../db.sqlite /var/www/database/
-#RUN chown -R www-data:www-data /var/www/database /var/www/storage
-RUN ls -l  /var/www/database 
-COPY ./entrypoint.sh /opt/entrypoint.sh
+COPY ./entrypoint.sh ./db.sqlite ./dist/iranfun/env_iranfun /opt/
 EXPOSE 80
 ENTRYPOINT ["bash", "/opt/entrypoint.sh"]
