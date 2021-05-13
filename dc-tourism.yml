@@ -3,11 +3,11 @@ services:
   sibpanel-v2:
     build:
       context: .
-      dockerfile: ./dist/municipality/Dockerfile_Municipality
+      dockerfile: ./dist/tourism/Dockerfile_Tourism
     restart: always
     extra_hosts:
       - "tcore.tafrihati.com:192.168.171.2"
     volumes:
       - ./sibpanel_v2:/var/www/
     ports:
-      - 5001:80
+      - 5008:80
