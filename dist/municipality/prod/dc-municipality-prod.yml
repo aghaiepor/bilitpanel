@@ -1,46 +1,17 @@
 version: "3.7"
 services:
-  sibpanel-v2-app:
+  sibpanel-v2:
     build:
-      context: ./
-      dockerfile: Dockerfile_Municipality
-    restart: unless-stopped
-    working_dir: /var/www/
+      context: .
+      dockerfile: ./dist/municipality/prod/Dockerfile_Municipality
+    restart: always
+    extra_hosts:
+      - "bilit.tehran.iri:31.24.236.164"
     volumes:
       - ./sibpanel_v2:/var/www/
-    env_file:
-      - variables.env
-    tty: true
-    networks:
-      - app_network
-
-# sib-panel-v2-supervisor:
-#     build:
-#       context: ./supervisor/.
-#      restart: unless-stopped
-#      depends_on:
-#      - sib-panel-v2-app
-#      working_dir: /var/www/
-#      volumes:
-#        - ./sibpanel_v2:/var/www/
-
-  sibpanel-v2-nginx:
-    build:
-      context: ./nginx/.
-    restart: unless-stopped
     ports:
-      - 8087:80
-    environment:
-      NGINX_FPM_HOST: sibpanel-v2-app
-      NGINX_ROOT: /var/www/public
-    volumes:
-      - ./sibpanel_v2/public:/var/www/public
-      - ./nginx.conf:/etc/nginx/site-avalibale/default
-      - ./ssls:/etc/ssl/
-    depends_on:
-      - sib-panel-v2-app
-    networks:
-      - app_network
+      - 80:80
+      - 443:443
 networks:
    app_network:
       ipam:

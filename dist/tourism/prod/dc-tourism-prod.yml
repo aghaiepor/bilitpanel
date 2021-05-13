@@ -1,45 +1,14 @@
 version: "3.7"
 services:
-  sibpanel-v2-app:
+  sibpanel-v2:
     build:
       context: .
-      dockerfile: Dockerfile_Tourism
-    restart: unless-stopped
+      dockerfile: ./dist/tourism/prod/Dockerfile_Tourism
+    restart: always
+    extra_hosts:
+      - "panel.tafrihati.com:185.129.169.235"
     volumes:
       - ./sibpanel_v2:/var/www/
-        #    env_file:
-        #      - variables.env
-    networks:
-      - app_network
-
-# sib-panel-v2-supervisor:
-#     build:
-#       context: ./supervisor/.
-#      restart: unless-stopped
-#      depends_on:
-#      - sib-panel-v2-app
-#      working_dir: /var/www/
-#      volumes:
-#        - ./sibpanel_v2:/var/www/
-
-  sibpanel-v2-nginx:
-    build:
-      context: ./nginx/.
-    restart: unless-stopped
+      - /etc/ssls:/etc/ssl/
     ports:
-      - 5008:80
-    environment:
-      NGINX_FPM_HOST: sibpanel-v2-app
-      NGINX_ROOT: /var/www/public
-    volumes:
-      - ./sibpanel_v2/public:/var/www/public
-      - ./nginx.conf:/etc/nginx/site-avalibale/default
-      - ./ssls:/etc/ssl/
-    depends_on:
-      - sibpanel-v2-app
-    networks:
-      - app_network
-
-networks:
-  app_network:
-    driver: bridge
+      - 1012:443
