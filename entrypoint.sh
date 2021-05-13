@@ -1,6 +1,7 @@
 #!/bin/bash
 composer install
+cp /opt/db.sqlite /var/www/database/
+cp /opt/larav_env /var/www/.env
 chown -R www-data:www-data database storage
 service php7.4-fpm start
-service --status-all
 nginx -g "daemon off;"
