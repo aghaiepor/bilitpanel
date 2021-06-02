@@ -6,33 +6,16 @@ APP_DEBUG=true
 APP_URL=http://localhost:8000
 PROJECT_NAME="سامانه گردشگری"
 APP_VER=2.0.0
-# this is a main address
-API_ADDRESS="http://192.168.171.2:5002/"
-#API_ADDRESS="http://185.129.170.10:6012/"
-#API_ADDRESS="http://185.129.170.10:5012/"
-# this is a test addresss
-#API_ADDRESS="http://192.168.171.2:5002/"
-# main server
-#API_ADDRESS="185.129.170.17:12000/"
-#API_ADDRESS="http://185.129.169.64:5000/"
-#API_ADDRESS="http://185.129.170.38:5000/"
-#IranFan
-#API_ADDRESS="185.129.170.10:5012/"
-#API_ADDRESS="http://185.129.170.38:5000/"
-#API_ADDRESS="http://10.255.145.190:8081/"
 
-#Toriest
+API_ADDRESS="http://192.168.171.3:6002/"
+
 AUTHORIZATION='basic aG9zc2VpbjpAZG1pbjEyMw=='
 
-#Shahdari
-#AUTHORIZATION='basic cGFuZWxhZG1pbjpwYWFkODUy'
+IMAGE_ADDRESS = assets/img/mirasw_logo.png
 
 LOG_CHANNEL=stack
 
 DB_CONNECTION=sqlite
-#use this for debug
-#DB_DATABASE=/Users/samad/laravel/sibpanel_v2_dockerized/sibpanel_v2/database/db.sqlite
-#DB_DATABASE=/mnt/c/xampp/htdocs/sibpanel_v2_dockerized/sibpanel_v2/database/db.sqlite
 DB_DATABASE=/var/www/database/db.sqlite
 DB_FOREIGN_KEYS=true
 

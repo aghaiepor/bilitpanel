@@ -3,12 +3,12 @@ services:
   sibpanel-v2:
     build:
       context: .
-      dockerfile: ./dist/municipality/Dockerfile_Municipality
+      dockerfile: ./dist/municipality/Dockerfile
     restart: always
     extra_hosts:
       - "test-bilit.tehran.iri:10.255.145.190"
     volumes:
-      - ./sibpanel_v2:/var/www/
+      - /front/municipality/sibpanel_v2:/var/www/
     ports:
       - 8083:80
 networks:

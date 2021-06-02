@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  sibpanel-v2:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    extra_hosts:
+      - "tcore.tafrihati.com:192.168.171.3"
+    volumes:
+      - /front/iranfun/sibpanel_v2:/var/www/
+    ports:
+      - 6005:80

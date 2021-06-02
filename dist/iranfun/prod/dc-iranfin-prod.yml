@@ -3,12 +3,12 @@ services:
   sibpanel-v2:
     build:
       context: .
-      dockerfile: ./dist/iranfun/prod/Dockerfile_Iranfun
+      dockerfile: ./Dockerfile
     restart: always
     extra_hosts:
       - "iranfun.tafrihati.com:192.168.156.20"
     volumes:
-      - ./sibpanel_v2:/var/www/
+      - /front/iranfun/sibpanel_v2:/var/www/
       - /etc/ssls:/etc/ssl/
     ports:
       - 80:80

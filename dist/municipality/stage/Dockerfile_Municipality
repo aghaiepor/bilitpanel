@@ -1,0 +1,89 @@
+FROM dr.atishahr.net:8090/ubuntu
+
+# packages and tools
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    build-essential \
+    software-properties-common \
+    libonig-dev \
+    libxml2-dev \
+    libpng-dev \
+    net-tools \
+    telnet \
+    nginx \
+    unzip \
+    curl \
+    zip \
+    vim 
+     
+# installing php8
+#RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
+RUN apt-key fingerprint 
+RUN add-apt-repository ppa:ondrej/php -y && DEBIAN_FRONTEND=noninteractive
+RUN apt-key fingerprint 
+#RUN add-apt-repository "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main"
+#RUN echo "" > /etc/apt/sources.list.d/php8.list
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+#    php8.0-fpm \
+#    php8.0-common \
+#    php8.0-cli  \
+#    php8.0-bz2 \
+#    php8.0-curl \
+#    php8.0-intl \
+#    php8.0-readline \
+#    php8.0-xml \
+#    php8.0-sqlite \
+#    php8.0-gd \
+#    php8.0-mbstring \
+#    php8.0-bcmath \
+#    php8.0-exif 
+#RUN service php8.0-fpm start
+    php7.4-fpm \
+    php7.4-common \
+    php7.4-cli  \
+    php7.4-bz2 \
+    php7.4-curl \
+    php7.4-intl \
+    php7.4-readline \
+    php7.4-xml \
+    php7.4-sqlite \
+    php7.4-gd \
+    php7.4-mbstring \
+    php7.4-bcmath \
+    php7.4-exif \
+    php7.4-json \
+    php7.4-zip
+
+#    docker-php-ext-install  docker-php-ext-configure  exif bcmath mbstring gd
+#    && docker-php-ext-configure gd  --with-jpeg=/usr/include/ --with-freetype=/usr/include/ \
+#    && docker-php-ext-configure zip \
+#    && docker-php-ext-install \
+#        gd \
+#        exif \
+#        opcache \
+#        pdo_mysql \
+#        pdo_pgsql \
+#        pcntl \
+#        zip \
+
+WORKDIR /var/www/
+
+
+# Installing composer
+#RUN curl -sS https://getcomposer.org/installer -o composer-setup.php | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+--install-dir=/usr/bin --filename=composer && chmod +x /usr/bin/composer 
+
+# Set timezone
+ENV TZ=Asia/Tehran
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# copy and run
+COPY /front/municipality/laravel.ini /usr/local/etc/php/conf.d/laravel.ini
+COPY /front/municipality/sibpanel_v2 /var/www/
+COPY /front/municipality/nginx.conf /etc/nginx/nginx.conf
+COPY ./dist/municipa`lity/test/default.conf /etc/nginx/conf.d/
+COPY /front/municipality/entrypoint.sh /front/municipality/db.sqlite /front/municipality/dist/municipality/test/larav_env /opt/
+EXPOSE 80
+ENTRYPOINT ["bash", "/opt/entrypoint.sh"]

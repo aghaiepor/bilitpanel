@@ -3,12 +3,12 @@ services:
   sibpanel-v2:
     build:
       context: .
-      dockerfile: ./dist/tourism/prod/Dockerfile_Tourism
+      dockerfile: ./Dockerfile
     restart: always
     extra_hosts:
       - "panel.tafrihati.com:185.129.169.235"
     volumes:
-      - ./sibpanel_v2:/var/www/
-      - /etc/ssls:/etc/ssl/
+      - /front/tourism/sibpanel_v2:/var/www/
+      - /etc/ssls:/etc/ssls/
     ports:
       - 1012:443

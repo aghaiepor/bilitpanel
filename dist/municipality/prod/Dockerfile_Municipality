@@ -15,7 +15,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     zip \
     vim 
-#    git 
      
 # installing php8
 #RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
@@ -81,10 +80,10 @@ ENV TZ=Asia/Tehran
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # copy and run
-COPY ./laravel.ini /usr/local/etc/php/conf.d/laravel.ini
-COPY ./sibpanel_v2 /var/www/
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY /front/municipality/laravel.ini /usr/local/etc/php/conf.d/laravel.ini
+COPY /front/municipality/sibpanel_v2 /var/www/
+COPY /front/municipality/nginx.conf /etc/nginx/nginx.conf
 COPY ./dist/municipality/prod/default.conf /etc/nginx/conf.d/
-COPY ./entrypoint.sh ./db.sqlite ./dist/municipality/prod/larav_env /opt/
+COPY /front/municipality/entrypoint.sh /front/municipality/db.sqlite ./dist/municipality/prod/larav_env /opt/
 EXPOSE 80
 ENTRYPOINT ["bash", "/opt/entrypoint.sh"]
