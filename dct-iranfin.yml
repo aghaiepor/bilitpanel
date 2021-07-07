@@ -3,7 +3,7 @@ services:
   sibpanel-v2:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./dist/iranfun/test/Dockerfile
     restart: always
     extra_hosts:
       - "tcore.tafrihati.com:192.168.171.2"

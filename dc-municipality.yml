@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  sibpanel-v2:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - ./sibpanel_v2:/var/www/
+    ports:
+      - 8087:80
+networks:
+   app_network:
+      ipam:
+         driver: default
+         config:
+           - subnet: 10.16.0.0/24
