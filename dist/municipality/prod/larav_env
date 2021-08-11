@@ -57,3 +57,5 @@ HAS_CAPTCHA = false
 HAS_TERMINAL = false
 HAS_OFFICE_NO = false
 HAS_ALARM = true
+HAS_INFO = true
+HAS_LDAP - true

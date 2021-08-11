@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.3"
 services:
   sibpanel-v2:
     build:
@@ -8,8 +8,8 @@ services:
     extra_hosts:
       - "bilit.tehran.iri:31.24.236.158"
     volumes:
-      - /front/municipality/sibpanel_v2:/var/www/
-      - /etc/ssls:/etc/ssls/
+      - ./sibpanel_v2:/var/www/
+      - ./dist/municipality/prod/ssls:/etc/ssls/
     ports:
       - 80:80
       - 443:443

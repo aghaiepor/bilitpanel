@@ -1,14 +1,18 @@
-version: "3.7"
+version: "3.3"
 services:
   sibpanel-v2:
     build:
       context: .
       dockerfile: ./Dockerfile
     restart: always
+    extra_hosts:
+      - "bilit.tehran.iri:31.24.236.158"
     volumes:
       - ./sibpanel_v2:/var/www/
+      - /etc/ssls:/etc/ssls/
     ports:
-      - 8087:80
+      - 80:80
+      - 443:443
 networks:
    app_network:
       ipam:

@@ -10,3 +10,6 @@ after then for update just type `git submodule update --remote`
 
 ##### P.S:
 *proj_name* is `iranfun` or `municipality` or `tourism`
+
+## run ->
+`checkout` to each branch for up and running.
