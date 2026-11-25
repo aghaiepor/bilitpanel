@@ -4,15 +4,18 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      args:
+        APT_MIRROR: ${APT_MIRROR:-http://archive.ubuntu.com/ubuntu}
+    image: sibpanel-v2-local
     restart: always
-    extra_hosts:
-      - "bilit.tehran.iri:31.24.236.158"
-    volumes:
-      - ./sibpanel_v2:/var/www/
-      - /etc/ssls:/etc/ssls/
     ports:
-      - 80:80
-      - 443:443
+      - "127.0.0.1:8081:80"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 networks:
    app_network:
       ipam:
